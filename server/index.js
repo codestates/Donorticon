@@ -1,29 +1,29 @@
-import express, { Application, Request, Response, NextFunction } from 'express';
-require('dotenv').config();
+require("dotenv").config();
 const fs = require("fs");
-const app: Application = express();
-const https = require('https');
+const https = require("https");
 const cors = require("cors");
+const express = require("express");
+const app = express();
+const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
-    credentials: true,
-    methods: ["GET", "POST", "OPTIONS"],
+	origin: [clientUrl],
+	credentials: true,
+	methods: ["GET", "POST", "OPTIONS"],
   })
 );
 
-app.get('/', (req: Request, res: Response, next: NextFunction) => {
-    res.send('Hello world');
-});
-
-const HTTPS_PORT = process.env.SERVER_PORT || 4000;
+app.get('/', (req, res) => {
+	console.log('Server Running In Port 4000');
+  res.send('Hello World');
+})
+const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 let server;
-
-if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
+if(fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")){
 
   const privateKey = fs.readFileSync(__dirname + "/key.pem", "utf8");
   const certificate = fs.readFileSync(__dirname + "/cert.pem", "utf8");
@@ -35,6 +35,4 @@ if (fs.existsSync("./key.pem") && fs.existsSync("./cert.pem")) {
 } else {
   server = app.listen(HTTPS_PORT)
 }
-
 module.exports = server;
-
