@@ -1,18 +1,14 @@
-import styled from 'styled-components';
-
-const TestDiv = styled.div`
-  color: ${({ theme }) => theme.color.error};
-  font-size: 50px;
-`;
-
-const TestButton = styled.button``;
+import { ThemeProvider } from 'styled-components';
+import Router from './Router';
+import GlobalStyle from './styles/global-styles';
+import Theme from './styles/theme';
 
 const App = () => {
   return (
-    <>
-      <TestDiv>hello world</TestDiv>
-      <TestButton>button</TestButton>
-    </>
+    <ThemeProvider theme={Theme}>
+      <GlobalStyle />
+      <Router />
+    </ThemeProvider>
   );
 };
 
