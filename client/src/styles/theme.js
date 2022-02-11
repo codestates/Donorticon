@@ -1,6 +1,4 @@
-import { DefaultTheme } from 'styled-components';
-
-const theme: DefaultTheme = {
+const theme = {
   basicWidth: '100vw',
   color: {
     main: '#FFCE44',
