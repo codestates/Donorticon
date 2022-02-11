@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.ts",
+    "start": "nodemon index.js",
     "build": "tsc -p ."
   },
   "keywords": [],
