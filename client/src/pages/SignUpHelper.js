@@ -6,12 +6,12 @@ const Content = styled.div`
   font-size: 30px;
 `;
 
-const Signup = () => {
+const SignUpHelper = () => {
   return (
     <Container>
-      <Content>Signup</Content>
+      <Content>SignUpHelper</Content>
     </Container>
   );
 };
 
-export default Signup;
+export default SignUpHelper;

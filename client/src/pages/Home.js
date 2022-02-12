@@ -1,7 +1,11 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { login, logout, setWho, userSelector } from '../redux/user/userSlice';
-import { setIsModalOpen, utilSelector } from '../redux/util/utilSlice';
+import {
+  setIsModalOpen,
+  setNextPage,
+  utilSelector,
+} from '../redux/util/utilSlice';
 import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
 
@@ -30,16 +34,24 @@ const Text = styled.div`
 
 const Home = () => {
   const userState = useSelector(userSelector);
+  const utilState = useSelector(utilSelector);
   const dispatch = useDispatch();
-  console.log(userState);
+  // console.log(userState);
+
   const handleSignInButton = () => {
     if (userState.isLoggedIn) {
       // 로그아웃
       dispatch(logout());
     } else {
       // 로그인
+      dispatch(setNextPage('/login'));
       dispatch(setIsModalOpen());
     }
+  };
+
+  const handleSignUpButton = () => {
+    dispatch(setNextPage('/signup'));
+    dispatch(setIsModalOpen());
   };
 
   return (
@@ -52,14 +64,13 @@ const Home = () => {
           <Button>마이페이지</Button>
         </Link>
       ) : (
-        <Link to="/signup">
-          <Button>회원가입</Button>
-        </Link>
+        <Button onClick={handleSignUpButton}>회원가입</Button>
       )}
       <Modal
         content={'hi'}
         buttonList={['Giver', 'Helper']}
-        nextPage={'/login'}
+        nextPage={utilState.nextPage}
+        buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
         callback={setWho}
       />
     </Container>
