@@ -4,6 +4,7 @@ const https = require("https");
 const cors = require("cors");
 const express = require("express");
 const app = express();
+const router = require("./router");
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
 app.use(express.json());
@@ -16,10 +17,8 @@ app.use(
   })
 );
 
-app.get('/', (req, res) => {
-	console.log('Server Running In Port 4000');
-  res.send('Hello World');
-})
+app.use('/',router);
+
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 let server;
