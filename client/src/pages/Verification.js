@@ -17,7 +17,6 @@ const Verification = () => {
   
   const handleVerification = async () => {
     const request = await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {headers: {email: "swim1720@gmail.com"}});
-    console.log(request);
   }
 
   return (

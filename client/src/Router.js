@@ -5,6 +5,7 @@ import Mypage from './pages/Mypage';
 import SignUpHelper from './pages/SignUpHelper';
 import SignUpGiver from './pages/SignUpGiver';
 import Verification from './pages/Verification';
+import VerifyRedir from './pages/VerifyRedir';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
@@ -17,6 +18,7 @@ const Router = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/mypage" element={<Mypage />} />
         <Route path="/verification" element={<Verification />} />
+        <Route path="/verifyRedir/:type/:id/:code" element={<VerifyRedir />} />
       </Routes>
     </BrowserRouter>
   );
