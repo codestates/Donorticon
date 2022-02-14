@@ -30,7 +30,7 @@ const Button = styled.div`
 const Wrapper = styled.div``;
 
 const Div = styled.div`
-  font-size: 250px;
+  font-size: 100px;
 `;
 
 const Home = () => {
