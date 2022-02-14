@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class score extends Model {
     /**
@@ -12,20 +10,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       score.belongsTo(models.giver, {
-        foreignKey: 'giver_id'
-      })
-      giver.belongsTo(models.grade, {
-        foreignKey: 'helper_id'
-      })
+        foreignKey: 'giver_id',
+      });
+      score.belongsTo(models.helper, {
+        foreignKey: 'helper_id',
+      });
     }
   }
-  score.init({
-    giver_id: DataTypes.INTEGER,
-    helper_id: DataTypes.INTEGER,
-    point: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'score',
-  });
+  score.init(
+    {
+      giver_id: DataTypes.INTEGER,
+      helper_id: DataTypes.INTEGER,
+      point: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: 'score',
+    },
+  );
   return score;
 };
