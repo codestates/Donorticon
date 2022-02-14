@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { sha256 } from 'js-sha256';
-import axios from 'axios';
 import {
   login,
   setEmail,
   setPassword,
   userSelector,
-} from '../redux/user/userSlice';
+} from '../../redux/user/userSlice';
 
 const LoginContainer = styled.div`
   color: ${(props) => props.theme.color.main};
@@ -24,7 +23,7 @@ const LoginButton = styled.button`
   margin-left: 10px;
 `;
 
-const Login = (props) => {
+const SignIn = (props) => {
   const dispatch = useDispatch();
   const state = useSelector(userSelector);
   console.log(state);
@@ -67,4 +66,4 @@ const Login = (props) => {
   );
 };
 
-export default Login;
+export default SignIn;
