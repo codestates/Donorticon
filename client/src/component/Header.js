@@ -24,7 +24,7 @@ const Header = () => {
 
   return (
     <HeaderContainer>
-      <StyledLink to="/" onClick={handleToggle}>
+      <StyledLink to="/" onClick={handleToggle} style={{ paddingLeft: '20px' }}>
         <LogoContainer src={logo} />
       </StyledLink>
       {/* 컴퓨터/태블릿 헤더 */}
