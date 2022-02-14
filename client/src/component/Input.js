@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { ErrorMessage } from './styledComponents';
 
 const ContentTitle = styled.div``;
 
@@ -20,7 +19,7 @@ const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />
-      {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
+      {/* {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null} */}
     </>
   );
 };
