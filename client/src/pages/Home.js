@@ -8,13 +8,13 @@ import {
 } from '../redux/util/utilSlice';
 import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
-import Header from '../component/Header';
 
 // 아래 styled 먹인 것들은 추후 수정예정
 // 임시로 기능 확인 위해서 설정해 놓은 것
 const Container = styled.div`
-  color: ${(props) => props.theme.color.main};
+  /* color: ${(props) => props.theme.color.main}; */
   // color: ${({ theme }) => theme.color.main};
+  padding: 0 20px; // 이 값은 HEADER 값과 동일해야함!!
 `;
 
 const Button = styled.div`
@@ -23,14 +23,14 @@ const Button = styled.div`
   cursor: pointer;
   font-size: 30px;
   &:hover {
-    color: black;
+    color: ${(props) => props.theme.color.main};
   }
 `;
 
-const Text = styled.div`
-  color: black;
-  font-size: 15px;
-  padding-top: 50px;
+const Wrapper = styled.div``;
+
+const Div = styled.div`
+  font-size: 250px;
 `;
 
 const Home = () => {
@@ -45,7 +45,7 @@ const Home = () => {
       dispatch(logout());
     } else {
       // 로그인
-      dispatch(setNextPage('/login'));
+      dispatch(setNextPage('/signin'));
       dispatch(setIsModalOpen());
     }
   };
@@ -57,24 +57,32 @@ const Home = () => {
 
   return (
     <Container>
-      <Header />
-      <Button onClick={handleSignInButton}>
-        {userState.isLoggedIn ? '로그아웃' : '로그인'}
-      </Button>
-      {userState.isLoggedIn ? (
-        <Link to="/mypage">
-          <Button>마이페이지</Button>
-        </Link>
-      ) : (
-        <Button onClick={handleSignUpButton}>회원가입</Button>
-      )}
-      <Modal
-        content={'hi'}
-        buttonList={['Giver', 'Helper']}
-        nextPage={utilState.nextPage}
-        buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
-        callback={setWho}
-      />
+      <Wrapper>
+        <Button onClick={handleSignInButton}>
+          {userState.isLoggedIn ? '로그아웃' : '로그인'}
+        </Button>
+        {userState.isLoggedIn ? (
+          <Link to="/mypage">
+            <Button>마이페이지</Button>
+          </Link>
+        ) : (
+          <Button onClick={handleSignUpButton}>회원가입</Button>
+        )}
+        <Modal
+          content={'hi'}
+          buttonList={['Giver', 'Helper']}
+          nextPage={utilState.nextPage}
+          buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
+          callback={setWho}
+        />
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+        <Div>TEST</Div>
+      </Wrapper>
     </Container>
   );
 };

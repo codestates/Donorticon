@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import Header from './component/Header';
+import Footer from './component/Footer';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn/SignIn';
 import Mypage from './pages/Mypage';
@@ -11,6 +13,7 @@ import SignUpHelper from './pages/SignUp/SignUpHelper';
 const Router = () => {
   return (
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/signup/giver" element={<SignUpGiver />} />
@@ -20,6 +23,7 @@ const Router = () => {
         <Route path="/verification" element={<Verification />} />
         <Route path="/verifyRedir/:type/:id/:code" element={<VerifyRedir />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 };
