@@ -1,18 +1,18 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Input from '../component/Input';
+import Input from '../../component/Input';
 import {
   giverSelector,
   setGiverInfo,
   setStateInitialize,
-} from '../redux/user/giverSlice';
+} from '../../redux/user/giverSlice';
 import axios from 'axios';
 import {
   initializeIsSignUpError,
   setIsSignUpError,
   utilSelector,
-} from '../redux/util/utilSlice';
+} from '../../redux/util/utilSlice';
 
 const Container = styled.div``;
 
