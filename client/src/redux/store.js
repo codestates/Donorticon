@@ -6,11 +6,13 @@ import { utilSlice } from './util/utilSlice';
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import { pageSlice } from './page/pageSlice';
+import { giverSlice } from './user/giverSlice';
 
 const reducers = combineReducers({
   user: userSlice.reducer,
   util: utilSlice.reducer,
-  page: pageSlice.reducer
+  page: pageSlice.reducer,
+  giver: giverSlice.reducer,
 });
 
 const persistConfig = {
