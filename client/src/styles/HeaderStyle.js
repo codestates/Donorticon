@@ -7,7 +7,6 @@ export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 20px;
   @media ${({ theme }) => theme.device.mobile} {
     flex-wrap: wrap;
   }
@@ -24,6 +23,7 @@ export const LogoContainer = styled.div`
   width: 100px;
   height: 52px;
   cursor: pointer;
+  padding-left: 20px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 80px;
     height: 41px;
@@ -68,7 +68,6 @@ export const ListContainer = styled.ul`
     top: 75px;
     transition: 0.5s all;
     margin: 0;
-    padding-right: 40px;
     background-color: #fff;
   }
 `;
