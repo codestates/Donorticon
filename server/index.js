@@ -18,11 +18,7 @@ app.use(
   }),
 );
 
-// app.use('/',router);
-app.get('/', async (req, res) => {
-  const helperList = await helper.findAll();
-  console.log(helperList);
-});
+app.use('/',router);
 
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 

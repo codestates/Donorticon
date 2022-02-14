@@ -2,8 +2,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn/SignIn';
 import Mypage from './pages/Mypage';
-import Verification from './pages/Verification';
-import VerifyRedir from './pages/VerifyRedir';
+import Verification from './pages/Verification/Verification';
+import VerifyRedir from './pages/Verification/VerifyRedir';
 import SignUpGiver from './pages/SignUp/SignUpGiver';
 import SignUpHelper from './pages/SignUp/SignUpHelper';
 

@@ -3,11 +3,13 @@ const crypto = require('crypto');
 require("dotenv").config();
 const hbs = require('nodemailer-express-handlebars')
 const path = require('path');
+const { giver, helper } = require('../../models')
 
 
 module.exports = {
 
   get: async (req, res) => {
+
     const transporter = nodemailer.createTransport({
       service: 'Naver',
       host: 'smtp.naver.com',
@@ -37,7 +39,7 @@ module.exports = {
       template: "email", 
       context: {
         src: `${process.env.BUCKET}/aintgottime.jpg`,
-        redirection: `${process.env.CLIENT_URL}/type=1/id=1/code=${code}`
+        redirection: `${process.env.CLIENT_URL}/type=${req.headers.type}/id=${req.headers.id}/code=${code}`
       } 
     };
 
@@ -51,6 +53,28 @@ module.exports = {
   },
 
   put: async (req, res) => {
-    res.status(200).json({message: 'ok'});
+    const [type, id, code] = req.headers;
+    if (type === 1) {
+      let userInfo = await giver.findOne({
+        where: {id: id}
+      });
+      if (userInfo.verify_hash === code) {
+        await giver.update({verification: true}, {where: {id: id}});
+        res.status(200).json({message: 'Verified', verification: true});
+      } else {
+        res.status(400).json({message: 'Invalid Request', verification: false});
+      }
+    } 
+    else if (type === 2) {
+      let userInfo = await helper.findOne({
+        where: {id: id}
+      });
+      if (userInfo.verify_hash === code) {
+        await helper.update({verification: true}, {where: {id: id}});
+        res.status(200).json({message: 'Verified', verification: true});
+      } else {
+        res.status(400).json({message: 'Invalid Request', verification: false});
+      }
+    }
   }
 }
