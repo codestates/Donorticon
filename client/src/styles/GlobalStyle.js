@@ -16,7 +16,7 @@ const GlobalStyle = createGlobalStyle`
         cursor: pointer;
     }
     button {
-        all:unset;
+        all:unset;  
     }
 `;
 
