@@ -6,7 +6,6 @@ const express = require('express');
 const app = express();
 const router = require('./router');
 const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
-const { helper } = require('./models');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
