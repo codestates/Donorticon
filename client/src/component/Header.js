@@ -13,6 +13,7 @@ import {
 } from '../styles/HeaderStyle';
 import logo from '../img/logo.png';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+import ButtonModal from './ButtonModal';
 
 const Header = () => {
   const { isLoggedIn } = useSelector(userSelector);
@@ -20,6 +21,11 @@ const Header = () => {
 
   const handleToggle = () => {
     setIsToggled(false);
+  };
+
+  const [isOpen, setIsOpen] = useState(false);
+  const handleSignInModal = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -49,9 +55,7 @@ const Header = () => {
             <StyledLink to="/helperlist">
               <ListItem>기부하기</ListItem>
             </StyledLink>
-            <StyledLink to="/signin">
-              <ListItem>로그인</ListItem>
-            </StyledLink>
+            <ListItem onClick={handleSignInModal}>로그인</ListItem>
             <StyledLink to="/signup">
               <ListItem>회원가입</ListItem>
             </StyledLink>
@@ -89,13 +93,19 @@ const Header = () => {
           <StyledLink to="/helperlist" onClick={handleToggle}>
             <ListItem>기부하기</ListItem>
           </StyledLink>
-          <StyledLink to="/signin" onClick={handleToggle}>
-            <ListItem>로그인</ListItem>
-          </StyledLink>
+          <ListItem onClick={handleSignInModal}>로그인</ListItem>
           <StyledLink to="/signup" onClick={handleToggle}>
             <ListItem>회원가입</ListItem>
           </StyledLink>
         </ListContainer>
+      ) : null}
+      {isOpen ? (
+        <ButtonModal
+          giverText={'giver 로그인'}
+          helperText={'helper 로그인'}
+          page={'signin'}
+          setIsOpen={setIsOpen}
+        />
       ) : null}
     </HeaderContainer>
   );
