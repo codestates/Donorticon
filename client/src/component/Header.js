@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { userSelector } from '../redux/user/userSlice';
 import {
   NavContainer,
   HeaderContainer,
@@ -16,7 +15,7 @@ import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import ButtonModal from './ButtonModal';
 
 const Header = () => {
-  const { isLoggedIn } = useSelector(userSelector);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const [isToggled, setIsToggled] = useState(false);
 
   const handleToggle = () => {
