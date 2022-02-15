@@ -5,6 +5,10 @@ const { gifticon } = require('../controller/gifticon');
 const { user } = require('../controller');
 
 router.post('/signup/giver', user.signup_giver);
+router.post('/signup/helper', user.signup_helper);
+router.post('/signin/giver', user.signin_giver);
+router.post('/signin/helper', user.signin_helper);
+
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
 router.get('/gifticon', gifticon.get);
