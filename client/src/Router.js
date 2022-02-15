@@ -9,6 +9,7 @@ import VerifyRedir from './pages/Verification/VerifyRedir';
 import SignUpGiver from './pages/SignUp/SignUpGiver';
 import SignUpHelper from './pages/SignUp/SignUpHelper';
 import Gifticon from './pages/Gifticon/Gifticon';
+import Google from './pages/socialLogin/Google';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
@@ -24,6 +25,7 @@ const Router = () => {
         <Route path="/verification" element={<Verification />} />
         <Route path="/verifyRedir/:type/:id/:code" element={<VerifyRedir />} />
         <Route path="/gifticon" element={<Gifticon />} />
+        <Route path="/google/signin" element={<Google />} />
       </Routes>
       <Footer />
     </BrowserRouter>

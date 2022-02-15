@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut, userSelector } from '../redux/user/userSlice';
 import {
   NavContainer,
   HeaderContainer,
@@ -14,18 +14,31 @@ import {
 import logo from '../img/logo.png';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import ButtonModal from './ButtonModal';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const { isLoggedIn } = useSelector(userSelector);
-  const [isToggled, setIsToggled] = useState(false);
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [isToggled, setIsToggled] = useState(false);
   const handleToggle = () => {
     setIsToggled(false);
   };
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
   const handleSignInModal = () => {
-    setIsOpen(true);
+    setIsSignInOpen(true);
+  };
+
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const handleSignUpModal = () => {
+    setIsSignUpOpen(true);
+  };
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate('/');
   };
 
   return (
@@ -46,9 +59,7 @@ const Header = () => {
             <StyledLink to="/mypage">
               <ListItem>마이페이지</ListItem>
             </StyledLink>
-            <StyledLink to="/signout">
-              <ListItem>로그아웃</ListItem>
-            </StyledLink>
+            <ListItem onClick={handleSignOut}>로그아웃</ListItem>
           </ListContainer>
         ) : (
           <ListContainer>
@@ -56,9 +67,7 @@ const Header = () => {
               <ListItem>기부하기</ListItem>
             </StyledLink>
             <ListItem onClick={handleSignInModal}>로그인</ListItem>
-            <StyledLink to="/signup">
-              <ListItem>회원가입</ListItem>
-            </StyledLink>
+            <ListItem onClick={handleSignUpModal}>회원가입</ListItem>
           </ListContainer>
         )}
       </NavContainer>
@@ -99,12 +108,18 @@ const Header = () => {
           </StyledLink>
         </ListContainer>
       ) : null}
-      {isOpen ? (
+      {isSignInOpen ? (
         <ButtonModal
           giverText={'giver 로그인'}
           helperText={'helper 로그인'}
-          page={'signin'}
-          setIsOpen={setIsOpen}
+          setIsSignInOpen={setIsSignInOpen}
+        />
+      ) : null}
+      {isSignUpOpen ? (
+        <ButtonModal
+          giverText={'giver 회원가입'}
+          helperText={'helper 회원가입'}
+          setIsSignUpOpen={setIsSignUpOpen}
         />
       ) : null}
     </HeaderContainer>

@@ -5,6 +5,8 @@ const ContentTitle = styled.div``;
 
 const ContentInput = styled.input``;
 
+const ErrorMessage = styled.div``;
+
 const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
   const [isError, setIsError] = useState(false);
 
@@ -16,10 +18,11 @@ const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
     <>
       <ContentTitle>{title}</ContentTitle>
       <ContentInput
+        type={title.includes('비밀번호') ? 'password' : 'text'}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />
-      {/* {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null} */}
+      {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
     </>
   );
 };

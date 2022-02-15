@@ -1,15 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { login, logout, setWho, userSelector } from '../redux/user/userSlice';
-import {
-  setIsModalOpen,
-  setNextPage,
-  utilSelector,
-} from '../redux/util/utilSlice';
 import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { isAllOf } from '@reduxjs/toolkit';
 import Loader from '../component/Loader';
 import Banner from '../component/landing/Banner';
 import HowToUse from '../component/landing/HowToUse';
@@ -45,27 +38,6 @@ const Div = styled.div`
 const Home = () => {
   // isLoading 값 일단은 수동으로 true/false 값 관리
   const [isLoading, setIsLoading] = useState(false);
-
-  const userState = useSelector(userSelector);
-  const utilState = useSelector(utilSelector);
-  const dispatch = useDispatch();
-  // console.log(userState);
-
-  const handleSignInButton = () => {
-    if (userState.isLoggedIn) {
-      // 로그아웃
-      dispatch(logout());
-    } else {
-      // 로그인
-      dispatch(setNextPage('/signin'));
-      dispatch(setIsModalOpen());
-    }
-  };
-
-  const handleSignUpButton = () => {
-    dispatch(setNextPage('/signup'));
-    dispatch(setIsModalOpen());
-  };
 
   return (
     <>

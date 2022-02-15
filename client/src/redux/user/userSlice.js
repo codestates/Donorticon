@@ -1,33 +1,58 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const initialState = {
   isLoggedIn: false,
-  email: '',
-  password: '',
-  who: 'Guest'
+  user: {
+    email: '',
+    name: '',
+    who: '',
+  },
 };
 
 export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    login: (state) => {
+    googleSignIn: (state, action) => {
       state.isLoggedIn = true;
     },
-    logout: (state) => initialState,
-    setEmail: (state, action) => {
-      state.email = action.payload;
+    setGoogleUser: (state, action) => {
+      state.user = action.payload;
     },
-    setPassword: (state, action) => {
-      state.password = action.payload;
-    },
-    setWho: (state, action) => {
-      state.who = action.payload;
+    signOut: (state, action) => {
+      state.isLoggedIn = false;
+      state.user = initialState.user;
     },
   },
+  extraReducers: (builder) =>
+    builder
+      .addCase(signupGiver.fulfilled, (state, action) => {
+        state.isLoggedIn = false;
+      })
+      .addCase(signupGiver.rejected, (state, action) => {
+        state.isLoggedIn = false;
+      }),
 });
 
-export const { login, logout, setEmail, setPassword, setWho } =
-  userSlice.actions;
+axios.defaults.baseURL = 'https://localhost:4000';
+// axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
-export const userSelector = (state) => state.user;
+// 회원가입
+export const signupGiver = createAsyncThunk(
+  '/signup/giver',
+  async (data, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signup/giver', data);
+      console.log(response);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data);
+    }
+  },
+);
+
+export const { googleSignIn, setGoogleUser, signOut } = userSlice.actions;
+
+export default userSlice;

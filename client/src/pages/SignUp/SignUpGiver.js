@@ -1,18 +1,8 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Input from '../../component/Input';
-import {
-  giverSelector,
-  setGiverInfo,
-  setStateInitialize,
-} from '../../redux/user/giverSlice';
 import axios from 'axios';
-import {
-  initializeIsSignUpError,
-  setIsSignUpError,
-  utilSelector,
-} from '../../redux/util/utilSlice';
+import sha256 from 'js-sha256';
 
 const Container = styled.div``;
 
@@ -33,25 +23,26 @@ const SignUpButton = styled.button`
 
 const SignUpGiver = () => {
   const [isOn, setIsOn] = useState(false);
-  const dispatch = useDispatch();
-  const utilState = useSelector(utilSelector);
-  const giverState = useSelector(giverSelector);
+  const [giverInfo, setGiverInfo] = useState({
+    email: '',
+    name: '',
+    password: '',
+    mobile: '',
+  });
+  const [isValid, setIsValid] = useState([false, false, false, false, true]);
   const input = [
     {
       title: '이메일',
       inputPlaceHolder: '이메일을 입력해주세요',
       callback: (e) => {
-        const stateChanger = {};
-        stateChanger['email'] = e.target.value;
-        dispatch(setGiverInfo(stateChanger));
+        setGiverInfo(Object.assign(giverInfo, { email: e.target.value }));
         const form = new RegExp(
           '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
         );
-        const isError = !form.test(e.target.value);
-        stateChanger['idx'] = 0;
-        stateChanger['check'] = isError;
-        dispatch(setIsSignUpError(stateChanger));
-        return isError;
+        const validList = [...isValid];
+        validList[0] = form.test(e.target.value);
+        setIsValid(validList);
+        return !form.test(e.target.value);
       },
       errorMessage: '이메일 형식이 맞지 않습니다',
     },
@@ -59,13 +50,10 @@ const SignUpGiver = () => {
       title: '이름',
       inputPlaceHolder: '8자 이내로 입력해주세요',
       callback: (e) => {
-        const stateChanger = {};
-        stateChanger['name'] = e.target.value;
-        dispatch(setGiverInfo(stateChanger));
-        const isError = !(e.target.value.length <= 8);
-        stateChanger['idx'] = 1;
-        stateChanger['check'] = isError;
-        dispatch(setIsSignUpError(stateChanger));
+        setGiverInfo(Object.assign(giverInfo, { name: e.target.value }));
+        const validList = [...isValid];
+        validList[1] = e.target.value.length <= 8;
+        setIsValid(validList);
         return !(e.target.value.length <= 8);
       },
       errorMessage: '8자 이상의 이름입니다',
@@ -74,14 +62,13 @@ const SignUpGiver = () => {
       title: '비밀번호',
       inputPlaceHolder: '비밀번호를 입력해주세요',
       callback: (e) => {
-        const stateChanger = {};
-        stateChanger['password'] = e.target.value;
-        dispatch(setGiverInfo(stateChanger));
-        const isError = !(e.target.value.length >= 1);
-        console.log(isError);
-        stateChanger['idx'] = 2;
-        stateChanger['check'] = isError;
-        dispatch(setIsSignUpError(stateChanger));
+        setGiverInfo(
+          Object.assign(giverInfo, { password: sha256(e.target.value) }),
+        );
+        const validList = [...isValid];
+        validList[2] = e.target.value.length >= 1;
+        setIsValid(validList);
+        return !(e.target.value.length >= 1);
       },
       errorMessage: '비밀번호를 입력해주세요',
     },
@@ -89,12 +76,10 @@ const SignUpGiver = () => {
       title: '비밀번호 확인',
       inputPlaceHolder: '비밀번호를 확인해주세요',
       callback: (e) => {
-        const stateChanger = {};
-        const isError = e.target.value !== giverState.password;
-        stateChanger['idx'] = 3;
-        stateChanger['check'] = isError;
-        dispatch(setIsSignUpError(stateChanger));
-        return e.target.value !== giverState.password;
+        const validList = [...isValid];
+        validList[3] = sha256(e.target.value) === giverInfo.password;
+        setIsValid(validList);
+        return sha256(e.target.value) !== giverInfo.password;
       },
       errorMessage: '비밀번호가 일치하지 않습니다',
     },
@@ -102,35 +87,27 @@ const SignUpGiver = () => {
       title: '휴대전화',
       inputPlaceHolder: '010-0000-0000 형식으로 입력해주세요',
       callback: (e) => {
-        const stateChanger = {};
-        stateChanger['mobile'] = e.target.value;
-        dispatch(setGiverInfo(stateChanger));
+        setGiverInfo(Object.assign(giverInfo, { mobile: e.target.value }));
         const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
-        const isError = e.target.value ? !form.test(e.target.value) : false;
-        stateChanger['idx'] = 4;
-        stateChanger['check'] = isError;
-        dispatch(setIsSignUpError(stateChanger));
-        return isError;
+        const validList = [...isValid];
+        validList[4] = e.target.value ? form.test(e.target.value) : true;
+        setIsValid(validList);
+        return e.target.value ? !form.test(e.target.value) : false;
       },
       errorMessage: '전화번호 형식이 맞지 않습니다',
     },
   ];
-
-  const handleSingUpButton = () => {
-    // console.log(utilState.isSignUpError);
-    const isError = utilState.isSignUpError.reduce((prev, cur) => prev || cur);
-    // console.log(isError);
-    setIsOn(isError);
-    // console.log(giverState);
-    if (!isError) {
+  console.log(giverInfo);
+  const handleSingUpButton = async () => {
+    setIsOn(isValid.includes(false));
+    if (!isValid.includes(false)) {
       try {
-        axios.post(`${process.env.REACT_APP_SERVER}/signup`, giverState);
+        const result = await axios.post('/signup/giver', giverInfo);
+        console.log(result);
       } catch (e) {
-        // console.log(e);
+        console.log(e);
       }
     }
-    dispatch(initializeIsSignUpError());
-    dispatch(setStateInitialize());
   };
   return (
     <Container>
