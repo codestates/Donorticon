@@ -30,12 +30,10 @@ module.exports = {
       });
       const data = googleUser.data;
 
-      const { email, name } = data;
-
       const [newGiver, created] = await giver.findOrCreate({
         where: {
-          email,
-          name,
+          email: data.email,
+          name: data.name ? data.name : '',
           user_type: 'giver',
         },
       });
