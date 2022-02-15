@@ -5,6 +5,8 @@ const ContentTitle = styled.div``;
 
 const ContentInput = styled.input``;
 
+const ErrorMessage = styled.div``;
+
 const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
   const [isError, setIsError] = useState(false);
 
@@ -19,7 +21,7 @@ const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />
-      {/* {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null} */}
+      {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
     </>
   );
 };

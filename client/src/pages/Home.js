@@ -1,15 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { login, logout, setWho, userSelector } from '../redux/user/userSlice';
-import {
-  setIsModalOpen,
-  setNextPage,
-  utilSelector,
-} from '../redux/util/utilSlice';
 import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { isAllOf } from '@reduxjs/toolkit';
 import Loader from '../component/Loader';
 
 // 아래 styled 먹인 것들은 추후 수정예정
@@ -40,27 +33,6 @@ const Home = () => {
   // isLoading 값 일단은 수동으로 true/false 값 관리
   const [isLoading, setIsLoading] = useState(false);
 
-  const userState = useSelector(userSelector);
-  const utilState = useSelector(utilSelector);
-  const dispatch = useDispatch();
-  // console.log(userState);
-
-  const handleSignInButton = () => {
-    if (userState.isLoggedIn) {
-      // 로그아웃
-      dispatch(logout());
-    } else {
-      // 로그인
-      dispatch(setNextPage('/signin'));
-      dispatch(setIsModalOpen());
-    }
-  };
-
-  const handleSignUpButton = () => {
-    dispatch(setNextPage('/signup'));
-    dispatch(setIsModalOpen());
-  };
-
   return (
     <>
       {isLoading ? (
@@ -68,23 +40,6 @@ const Home = () => {
       ) : (
         <Container>
           <Wrapper>
-            <Button onClick={handleSignInButton}>
-              {userState.isLoggedIn ? '로그아웃' : '로그인'}
-            </Button>
-            {userState.isLoggedIn ? (
-              <Link to="/mypage">
-                <Button>마이페이지</Button>
-              </Link>
-            ) : (
-              <Button onClick={handleSignUpButton}>회원가입</Button>
-            )}
-            <Modal
-              content={'hi'}
-              buttonList={['Giver', 'Helper']}
-              nextPage={utilState.nextPage}
-              buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
-              callback={setWho}
-            />
             <Div>TEST</Div>
             <Div>TEST</Div>
             <Div>TEST</Div>
