@@ -7,6 +7,7 @@ export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 99;
   @media ${({ theme }) => theme.device.mobile} {
     flex-wrap: wrap;
   }

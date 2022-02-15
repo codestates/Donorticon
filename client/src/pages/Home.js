@@ -11,6 +11,12 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { isAllOf } from '@reduxjs/toolkit';
 import Loader from '../component/Loader';
+import Banner from '../component/landing/Banner';
+import HowToUse from '../component/landing/HowToUse';
+import Helpers from '../component/landing/Helpers';
+import Reviews from '../component/landing/Reviews';
+import Cases from '../component/landing/Cases';
+import FloatingButton from '../component/landing/FloatingButton';
 
 // 아래 styled 먹인 것들은 추후 수정예정
 // 임시로 기능 확인 위해서 설정해 놓은 것
@@ -33,7 +39,7 @@ const Button = styled.div`
 const Wrapper = styled.div``;
 
 const Div = styled.div`
-  font-size: 100px;
+  font-size: 5rem;
 `;
 
 const Home = () => {
@@ -85,13 +91,12 @@ const Home = () => {
               buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
               callback={setWho}
             />
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
+            <Div><Banner /></Div>
+            <Div><HowToUse /></Div>
+            <Div><Helpers /></Div>
+            <Div><Reviews /></Div>
+            <Div><Cases /></Div>
+            <Div><FloatingButton /></Div>
           </Wrapper>
         </Container>
       )}
