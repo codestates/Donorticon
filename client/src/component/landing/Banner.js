@@ -1,5 +1,5 @@
 import ilu2 from '../../img/ilu2.jpg'
-import { BannerContainer, Img, TextContainer, Title, Text } from '../../styles/LandingStyle';
+import { BannerContainer, Img, TextContainer, Title, Text } from '../../styles/landing/BannerStyle';
 
 const Banner = () => {
   return (

@@ -1,6 +1,12 @@
+import { Button, StyledLink } from "../../styles/landing/FloatingButtonStyle";
+
 const FloatingButton = () => {
   return (
-    <div>button</div>
+    <StyledLink to='/helperlist'>
+      <Button>
+      Go to Donate
+      </Button>
+    </StyledLink>
   );
 };
 

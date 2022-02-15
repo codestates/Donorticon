@@ -23,7 +23,7 @@ import FloatingButton from '../component/landing/FloatingButton';
 const Container = styled.div`
   /* color: ${(props) => props.theme.color.main}; */
   // color: ${({ theme }) => theme.color.main};
-  padding: 0 20px; // 이 값은 HEADER 값과 동일해야함!!
+  margin-top: -75px; // 이 값은 HEADER 값과 동일해야함!!
 `;
 
 const Button = styled.div`
@@ -74,16 +74,6 @@ const Home = () => {
       ) : (
         <Container>
           <Wrapper>
-            <Button onClick={handleSignInButton}>
-              {userState.isLoggedIn ? '로그아웃' : '로그인'}
-            </Button>
-            {userState.isLoggedIn ? (
-              <Link to="/mypage">
-                <Button>마이페이지</Button>
-              </Link>
-            ) : (
-              <Button onClick={handleSignUpButton}>회원가입</Button>
-            )}
             <Modal
               content={'hi'}
               buttonList={['Giver', 'Helper']}
@@ -96,8 +86,8 @@ const Home = () => {
             <Div><Helpers /></Div>
             <Div><Reviews /></Div>
             <Div><Cases /></Div>
-            <Div><FloatingButton /></Div>
           </Wrapper>
+          <FloatingButton />
         </Container>
       )}
     </>
