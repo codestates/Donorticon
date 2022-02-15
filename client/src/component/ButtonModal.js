@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from '../styles/utils/Button';
@@ -28,22 +29,42 @@ const ButtonContainer = styled.div`
   }
 `;
 
-const ButtonModal = ({ giverText, helperText, page, setIsOpen }) => {
+const ButtonModal = ({
+  giverText,
+  helperText,
+  setIsSignInOpen,
+  setIsSignUpOpen,
+}) => {
   const navigate = useNavigate();
-  const handleSignIn = () => {
-    setIsOpen(false);
-    navigate('/signin');
+  const user = useSelector((state) => state.user);
+
+  const handleButton = (e) => {
+    const text = e.target.innerText.split(' ');
+    // 회원가입
+    if (text[1] === '회원가입' && text[0] === 'giver') {
+      setIsSignUpOpen(false);
+      navigate('/signup/giver');
+    } else if (text[1] === '회원가입' && text[0] === 'helper') {
+      setIsSignUpOpen(false);
+      navigate('/signup/helper');
+    }
+    // 로그인
+    if (text[1] === '로그인' && text[0] === 'giver') {
+      setIsSignInOpen(false);
+      user.who = 'giver';
+      navigate('/signin');
+    } else if (text[1] === '로그인' && text[0] === 'helper') {
+      setIsSignInOpen(false);
+      user.who = 'helper';
+      navigate('/signin');
+    }
   };
 
   return (
     <ModalBackground>
       <ButtonContainer>
-        <Button onClick={page === 'signin' ? handleSignIn : null}>
-          {giverText}
-        </Button>
-        <Button onClick={page === 'signin' ? handleSignIn : null}>
-          {helperText}
-        </Button>
+        <Button onClick={handleButton}>{giverText}</Button>
+        <Button onClick={handleButton}>{helperText}</Button>
       </ButtonContainer>
     </ModalBackground>
   );

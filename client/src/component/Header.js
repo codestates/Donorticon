@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { userSelector } from '../redux/user/userSlice';
 import {
   NavContainer,
   HeaderContainer,
@@ -22,11 +23,15 @@ const Header = () => {
     setIsToggled(false);
   };
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
   const handleSignInModal = () => {
-    setIsOpen(true);
+    setIsSignInOpen(true);
   };
 
+  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const handleSignUpModal = () => {
+    setIsSignUpOpen(true);
+  };
   return (
     <HeaderContainer>
       <StyledLink to="/" onClick={handleToggle} style={{ paddingLeft: '20px' }}>
@@ -55,9 +60,7 @@ const Header = () => {
               <ListItem>기부하기</ListItem>
             </StyledLink>
             <ListItem onClick={handleSignInModal}>로그인</ListItem>
-            <StyledLink to="/signup">
-              <ListItem>회원가입</ListItem>
-            </StyledLink>
+            <ListItem onClick={handleSignUpModal}>회원가입</ListItem>
           </ListContainer>
         )}
       </NavContainer>
@@ -98,12 +101,18 @@ const Header = () => {
           </StyledLink>
         </ListContainer>
       ) : null}
-      {isOpen ? (
+      {isSignInOpen ? (
         <ButtonModal
           giverText={'giver 로그인'}
           helperText={'helper 로그인'}
-          page={'signin'}
-          setIsOpen={setIsOpen}
+          setIsSignInOpen={setIsSignInOpen}
+        />
+      ) : null}
+      {isSignUpOpen ? (
+        <ButtonModal
+          giverText={'giver 회원가입'}
+          helperText={'helper 회원가입'}
+          setIsSignUpOpen={setIsSignUpOpen}
         />
       ) : null}
     </HeaderContainer>
