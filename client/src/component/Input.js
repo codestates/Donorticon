@@ -18,6 +18,7 @@ const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
     <>
       <ContentTitle>{title}</ContentTitle>
       <ContentInput
+        type={title.includes('비밀번호') ? 'password' : 'text'}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />

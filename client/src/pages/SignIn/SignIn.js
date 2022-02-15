@@ -4,7 +4,6 @@ import { sha256 } from 'js-sha256';
 import styled from 'styled-components';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { Input } from '../../styles/utils/Input';
 import { Button } from '../../styles/utils/Button';
 
 const LoginContainer = styled.div`

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Input from '../../component/Input';
 import axios from 'axios';
+import sha256 from 'js-sha256';
 
 const Container = styled.div``;
 
@@ -61,7 +62,9 @@ const SignUpGiver = () => {
       title: '비밀번호',
       inputPlaceHolder: '비밀번호를 입력해주세요',
       callback: (e) => {
-        setGiverInfo(Object.assign(giverInfo, { password: e.target.value }));
+        setGiverInfo(
+          Object.assign(giverInfo, { password: sha256(e.target.value) }),
+        );
         const validList = [...isValid];
         validList[2] = e.target.value.length >= 1;
         setIsValid(validList);
@@ -74,9 +77,9 @@ const SignUpGiver = () => {
       inputPlaceHolder: '비밀번호를 확인해주세요',
       callback: (e) => {
         const validList = [...isValid];
-        validList[3] = e.target.value === giverInfo.password;
+        validList[3] = sha256(e.target.value) === giverInfo.password;
         setIsValid(validList);
-        return e.target.value !== giverInfo.password;
+        return sha256(e.target.value) !== giverInfo.password;
       },
       errorMessage: '비밀번호가 일치하지 않습니다',
     },
@@ -97,11 +100,13 @@ const SignUpGiver = () => {
   console.log(giverInfo);
   const handleSingUpButton = async () => {
     setIsOn(isValid.includes(false));
-    try {
-      const result = await axios.post('/signup/giver', giverInfo);
-      console.log(result);
-    } catch (e) {
-      console.log(e);
+    if (!isValid.includes(false)) {
+      try {
+        const result = await axios.post('/signup/giver', giverInfo);
+        console.log(result);
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
   return (
