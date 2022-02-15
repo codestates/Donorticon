@@ -46,13 +46,6 @@ const Home = () => {
       ) : (
         <Container>
           <Wrapper>
-            <Modal
-              content={'hi'}
-              buttonList={['Giver', 'Helper']}
-              nextPage={utilState.nextPage}
-              buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
-              callback={setWho}
-            />
             <Div><Banner /></Div>
             <Div><HowToUse /></Div>
             <Div><Helpers /></Div>
