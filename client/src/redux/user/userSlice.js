@@ -14,10 +14,10 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    googleSignIn: (state, action) => {
+    socialSignIn: (state, action) => {
       state.isLoggedIn = true;
     },
-    setGoogleUser: (state, action) => {
+    setSocialUser: (state, action) => {
       state.user = action.payload;
     },
     signOut: (state, action) => {
@@ -53,6 +53,6 @@ export const signupGiver = createAsyncThunk(
   },
 );
 
-export const { googleSignIn, setGoogleUser, signOut } = userSlice.actions;
+export const { socialSignIn, setSocialUser, signOut } = userSlice.actions;
 
 export default userSlice;

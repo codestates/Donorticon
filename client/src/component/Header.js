@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { signOut, userSelector } from '../redux/user/userSlice';
+import { signOut } from '../redux/user/userSlice';
 import {
   NavContainer,
   HeaderContainer,
@@ -15,9 +15,11 @@ import logo from '../img/logo.png';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import ButtonModal from './ButtonModal';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Header = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,9 +38,16 @@ const Header = () => {
     setIsSignUpOpen(true);
   };
 
-  const handleSignOut = () => {
-    dispatch(signOut());
-    navigate('/');
+  const handleSignOut = async () => {
+    try {
+      const result = await axios.post(`/signout`);
+      if (result.status === 205) {
+        localStorage.removeItem('token');
+        dispatch(signOut());
+      }
+    } catch (e) {
+      console.log(3);
+    }
   };
 
   return (

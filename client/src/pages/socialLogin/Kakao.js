@@ -1,27 +1,33 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
+import {
+  googleSignIn,
+  setGoogleUser,
+  setSocialUser,
+  socialSignIn,
+} from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
-const Google = () => {
+const KaKao = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [token, setToken] = useState();
 
-  const getGoogleCode = () => {
-    const googleCode = new URL(window.location.href).searchParams.get('code');
-    if (googleCode) {
-      getToken(googleCode);
+  const getKakaoCode = () => {
+    const kakaoCode = new URL(window.location.href).searchParams.get('code');
+    if (kakaoCode) {
+      getToken(kakaoCode);
     }
   };
 
   const getToken = async (code) => {
     try {
-      const data = await axios.post('/google/signin', {
+      const data = await axios.post('/kakao/signin', {
         code,
       });
-      setToken(data.data.access_token);
+      const accessToken = data.data.access_token;
+      setToken(accessToken);
     } catch (e) {
       console.log(e);
     }
@@ -29,7 +35,7 @@ const Google = () => {
 
   const getUserInfo = async (token) => {
     try {
-      const data = await axios.get(`/google/user?accessToken=${token}`);
+      const data = await axios.get(`/kakao/user?accessToken=${token}`);
       if (data) {
         const { email, name, user_type: who } = data.data.userInfo;
         dispatch(socialSignIn());
@@ -42,7 +48,7 @@ const Google = () => {
     }
   };
 
-  useEffect(() => getGoogleCode(), []);
+  useEffect(() => getKakaoCode(), []);
 
   useEffect(() => getUserInfo(token), [token]);
 
@@ -53,4 +59,4 @@ const Google = () => {
   );
 };
 
-export default Google;
+export default KaKao;
