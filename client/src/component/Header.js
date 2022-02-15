@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { userSelector } from '../redux/user/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut, userSelector } from '../redux/user/userSlice';
 import {
   NavContainer,
   HeaderContainer,
@@ -14,11 +14,14 @@ import {
 import logo from '../img/logo.png';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import ButtonModal from './ButtonModal';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
-  const [isToggled, setIsToggled] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [isToggled, setIsToggled] = useState(false);
   const handleToggle = () => {
     setIsToggled(false);
   };
@@ -32,6 +35,12 @@ const Header = () => {
   const handleSignUpModal = () => {
     setIsSignUpOpen(true);
   };
+
+  const handleSignOut = () => {
+    dispatch(signOut());
+    navigate('/');
+  };
+
   return (
     <HeaderContainer>
       <StyledLink to="/" onClick={handleToggle} style={{ paddingLeft: '20px' }}>
@@ -50,9 +59,7 @@ const Header = () => {
             <StyledLink to="/mypage">
               <ListItem>마이페이지</ListItem>
             </StyledLink>
-            <StyledLink to="/signout">
-              <ListItem>로그아웃</ListItem>
-            </StyledLink>
+            <ListItem onClick={handleSignOut}>로그아웃</ListItem>
           </ListContainer>
         ) : (
           <ListContainer>

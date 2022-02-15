@@ -5,7 +5,7 @@ const initialState = {
   isLoggedIn: false,
   user: {
     email: '',
-    password: '',
+    name: '',
     who: '',
   },
 };
@@ -13,7 +13,18 @@ const initialState = {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    googleSignIn: (state, action) => {
+      state.isLoggedIn = true;
+    },
+    setGoogleUser: (state, action) => {
+      state.user = action.payload;
+    },
+    signOut: (state, action) => {
+      state.isLoggedIn = false;
+      state.user = initialState.user;
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(signupGiver.fulfilled, (state, action) => {
@@ -41,5 +52,7 @@ export const signupGiver = createAsyncThunk(
     }
   },
 );
+
+export const { googleSignIn, setGoogleUser, signOut } = userSlice.actions;
 
 export default userSlice;
