@@ -4,13 +4,19 @@ import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Loader from '../component/Loader';
+import Banner from '../component/landing/Banner';
+import HowToUse from '../component/landing/HowToUse';
+import Helpers from '../component/landing/Helpers';
+import Reviews from '../component/landing/Reviews';
+import Cases from '../component/landing/Cases';
+import FloatingButton from '../component/landing/FloatingButton';
 
 // 아래 styled 먹인 것들은 추후 수정예정
 // 임시로 기능 확인 위해서 설정해 놓은 것
 const Container = styled.div`
   /* color: ${(props) => props.theme.color.main}; */
   // color: ${({ theme }) => theme.color.main};
-  padding: 0 20px; // 이 값은 HEADER 값과 동일해야함!!
+  margin-top: -75px; // 이 값은 HEADER 값과 동일해야함!!
 `;
 
 const Button = styled.div`
@@ -26,7 +32,7 @@ const Button = styled.div`
 const Wrapper = styled.div``;
 
 const Div = styled.div`
-  font-size: 100px;
+  font-size: 5rem;
 `;
 
 const Home = () => {
@@ -40,14 +46,20 @@ const Home = () => {
       ) : (
         <Container>
           <Wrapper>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
-            <Div>TEST</Div>
+            <Modal
+              content={'hi'}
+              buttonList={['Giver', 'Helper']}
+              nextPage={utilState.nextPage}
+              buttonEndPoint={utilState.nextPage === '/signup' ? true : false}
+              callback={setWho}
+            />
+            <Div><Banner /></Div>
+            <Div><HowToUse /></Div>
+            <Div><Helpers /></Div>
+            <Div><Reviews /></Div>
+            <Div><Cases /></Div>
           </Wrapper>
+          <FloatingButton />
         </Container>
       )}
     </>
