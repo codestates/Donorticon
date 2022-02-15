@@ -24,9 +24,9 @@ app.use('/', router);
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 let server;
-if (fs.existsSync('../key.pem') && fs.existsSync('../cert.pem')) {
-  const privateKey = fs.readFileSync(__dirname + '/../key.pem', 'utf8');
-  const certificate = fs.readFileSync(__dirname + '/../cert.pem', 'utf8');
+if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
+  const privateKey = fs.readFileSync(__dirname + '/key.pem', 'utf8');
+  const certificate = fs.readFileSync(__dirname + '/cert.pem', 'utf8');
   const credentials = { key: privateKey, cert: certificate };
 
   server = https.createServer(credentials, app);
