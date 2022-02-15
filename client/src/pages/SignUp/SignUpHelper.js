@@ -12,6 +12,7 @@ import {
   Label,
   CheckList,
 } from '../../styles/SignUpStyle';
+import { ErrorMessage } from '../../component/Input';
 import sha256 from 'js-sha256';
 import axios from 'axios';
 
@@ -37,6 +38,7 @@ const SignUpHelper = () => {
   ]);
   const [percent, setPercent] = useState(0);
   const [page, setPage] = useState(0);
+  const [buttonAble, setButtonAble] = useState(false);
   const signUpForm = [
     {
       contentGuide: '어떤 분들을 돕고 계신가요?',
@@ -141,6 +143,7 @@ const SignUpHelper = () => {
   ];
 
   const handleCheckBox = (e) => {
+    console.log(buttonAble);
     if (e.target.checked) {
       setHeperInfo(
         Object.assign(helperInfo, {
@@ -155,6 +158,18 @@ const SignUpHelper = () => {
           ),
         }),
       );
+    }
+    if (page < 2) {
+      const validChange = [...isValid];
+      if (helperInfo[e.target.name].length !== 0) {
+        validChange[page] = true;
+        setButtonAble(true);
+      } else {
+        setButtonAble(false);
+        validChange[page] = false;
+      }
+      setIsValid(validChange);
+    } else {
     }
   };
 
@@ -201,9 +216,14 @@ const SignUpHelper = () => {
             ))
           : null}
         <ButtonContainer>
-          <SignUpButton onClick={handleButton}>이전</SignUpButton>
-          <SignUpButton onClick={handleButton}>다음</SignUpButton>
+          <SignUpButton onClick={handleButton} disabled={page === 0}>
+            이전
+          </SignUpButton>
+          <SignUpButton onClick={handleButton} disabled={!buttonAble}>
+            다음
+          </SignUpButton>
         </ButtonContainer>
+        <ErrorMessage>입력하세요</ErrorMessage>
       </ContentBox>
     </Container>
   );
