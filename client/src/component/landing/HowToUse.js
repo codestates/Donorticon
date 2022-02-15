@@ -33,7 +33,7 @@ const HowToUse = () => {
   return (
     <Container>
     {list.map((item, index) => (
-        <Slide>
+        <Slide key={index}>
           <Wrapper>
             <Img src={item.img}></Img>
             <TextWrapper>
@@ -46,7 +46,7 @@ const HowToUse = () => {
           </TextWrapper>
           <BulletWrapper>
           {list.map((item, index) => (
-            <Bullet />
+            <Bullet key={index}/>
           ))}
           </BulletWrapper>
         </Wrapper>
