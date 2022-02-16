@@ -212,16 +212,21 @@ const SignUpHelper = () => {
         try {
           const result = await axios.post('/signup/helper', helperInfo);
           console.log(result);
-          if (result) { 
-            const userInfo = {email: helperInfo.email, name: helperInfo.name, type: 2, id: result.data.id};
+          if (result) {
+            const userInfo = {
+              email: helperInfo.email,
+              name: helperInfo.name,
+              type: 2,
+              id: result.data.id,
+            };
             dispatch(setSocialUser(userInfo));
-            await axios.get(
-              `${process.env.REACT_APP_SERVER}/verification`,
-              { headers: userInfo },
-            );        
+            await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
+              headers: userInfo,
+            });
             navigate(`../../verification`);
           }
         } catch (e) {
+          console.log('error');
           console.log(e);
         }
       }
