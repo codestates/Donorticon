@@ -40,7 +40,7 @@ module.exports = {
         redirection: `${process.env.CLIENT_URL}/verifyRedir/type=${req.headers.type}/id=${req.headers.id}/code=${code}`
       } 
     };
-
+    console.log(req.headers)
     if(req.headers.type === '1') {
       await giver.update({verify_hash: code},{where: {id: req.headers.id}})
       await transporter.sendMail(message, (err, info) => {
