@@ -1,6 +1,5 @@
-import List from '../../component/HelperList';
-
 import styled from 'styled-components';
+import CardList from '../../component/CardList';
 
 const HelperContainer = styled.div`
   display: flex;
@@ -15,8 +14,7 @@ const HelperList = () => {
       <div>HELPER</div>
       <div>first filtering</div>
       <div>second filtering</div>
-      <List />
-      <div>pagination</div>
+      <CardList />
     </HelperContainer>
   );
 };
