@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import Input from '../../component/Input';
+import InputSet from '../../component/Input';
 import axios from 'axios';
 import sha256 from 'js-sha256';
 
@@ -22,7 +22,7 @@ const SignUpButton = styled.button`
 `;
 
 const SignUpGiver = () => {
-  const [isOn, setIsOn] = useState(false);
+  const [isCheckStart, setIsCheckStart] = useState(false);
   const [giverInfo, setGiverInfo] = useState({
     email: '',
     name: '',
@@ -99,7 +99,7 @@ const SignUpGiver = () => {
   ];
   console.log(giverInfo);
   const handleSingUpButton = async () => {
-    setIsOn(isValid.includes(false));
+    setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
       try {
         const result = await axios.post('/signup/giver', giverInfo);
@@ -109,19 +109,20 @@ const SignUpGiver = () => {
       }
     }
   };
+
   return (
     <Container>
       <Title>G I V E R</Title>
       <SubTitle>JOIN</SubTitle>
       <ContentBox>
         {input.map((card, idx) => (
-          <Input
+          <InputSet
             key={idx}
             title={card.title}
             inputPlaceHolder={card.inputPlaceHolder}
             callback={card.callback}
             errorMessage={card.errorMessage}
-            check={isOn}
+            check={isCheckStart}
           />
         ))}
         <SignUpButton onClick={handleSingUpButton}>회원 가입</SignUpButton>
