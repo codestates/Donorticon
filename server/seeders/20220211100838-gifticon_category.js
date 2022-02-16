@@ -4,42 +4,42 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('gifticon_categories', [
       {
-        name: 'food',
+        name: '식품',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'cosmetic',
+        name: '화장품',
         createdAt: new Date(),
         updatedAt: new Date()     
       },
       {
-        name: 'children',
+        name: '임신/출산/유아 용품',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'electrical device',
+        name: '디지털/가전',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'cloth',
+        name: '의류',
         createdAt: new Date(),
         updatedAt: new Date() 
       },
       {
-        name: 'kitchen',
+        name: '리빙/주방/꽃',
         createdAt: new Date(),
         updatedAt: new Date() 
       },
       {
-        name: 'sport',
+        name: '레저/스포츠',
         createdAt: new Date(),
         updatedAt: new Date() 
       },
       {
-        name: 'movie',
+        name: '상품권/영화/도서',
         createdAt: new Date(),
         updatedAt: new Date() 
       }

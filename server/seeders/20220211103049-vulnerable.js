@@ -4,37 +4,37 @@ module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('vulnerables', [
       {
-        name: 'children',
+        name: '아동청소년',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'elderly',
+        name: '어르신',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'physical challenged',
+        name: '장애인',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'multicultural',
+        name: '다문화',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'female',
+        name: '가족/여성',
         createdAt: new Date(),
         updatedAt: new Date() 
       },
       {
-        name: 'psychologically challenged',
+        name: '정신질환자',
         createdAt: new Date(),
         updatedAt: new Date() 
       },
       {
-        name: 'etc',
+        name: '그 외',
         createdAt: new Date(),
         updatedAt: new Date() 
       }
