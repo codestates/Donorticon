@@ -3,7 +3,7 @@ const { helper, vulnerable, helper_vulnerable, gifticon_category, helper_giftico
 module.exports = async (req, res) => {
   console.log(req.body);
   const { name, email, password, img, location, slogan, description, vulnerableName, gifticonCategoryName } = req.body;
-  if (name && email && password && location && slogan && description && vulnerableName && gifticonCategoryName) { 
+  if (name && email && password && location && vulnerableName && gifticonCategoryName) { 
     try {
       const [helperFound, helperCreated] = await helper.findOrCreate({
         where: { name, email },
@@ -27,10 +27,9 @@ module.exports = async (req, res) => {
       //   });
       //   return vulnerableid;
       // })
-      console.log(vulnerableName)
       const [vulnerableFound, vulnerableCreated] = await helper_vulnerable.findOrCreate({
         where: { helper_id: helperId },
-        defaults: { vulnerable_id: vulnerableName }
+        defaults: { vulnerable_id: vulnerableName.slice(4) }
       });
 
       const gifticonCategoryRow = await gifticon_category.findOne({
