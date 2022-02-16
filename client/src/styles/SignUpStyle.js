@@ -44,8 +44,15 @@ export const SignUpButton = styled.button`
     color: red;
   }
 `;
-export const CheckList = styled.div``;
+export const CheckList = styled.div`
+  margin: 5px;
+`;
 
 export const Input = styled.input``;
 
-export const Label = styled.label``;
+export const Label = styled.label`
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
+`;
