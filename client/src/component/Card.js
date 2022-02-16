@@ -8,14 +8,16 @@ import {
 } from '../styles/CardStyle';
 
 const Card = ({ id, name, img, slogan }) => {
+  //TODO: slogan 문구 길이가 예를들어 20개 이상인경우 slice 걸어야함
+
   return (
     <CardBox>
       <CardGallery />
       <CardContent>
         <Img src={img} />
         <Name>{name}</Name>
-        <Slogan>{slogan}</Slogan>
       </CardContent>
+      <Slogan>{slogan}</Slogan>
     </CardBox>
   );
 };
