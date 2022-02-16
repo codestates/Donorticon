@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import Modal from '../component/Modal';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Loader from '../component/Loader';
@@ -46,11 +45,21 @@ const Home = () => {
       ) : (
         <Container>
           <Wrapper>
-            <Div><Banner /></Div>
-            <Div><HowToUse /></Div>
-            <Div><Helpers /></Div>
-            <Div><Reviews /></Div>
-            <Div><Cases /></Div>
+            <Div>
+              <Banner />
+            </Div>
+            <Div>
+              <HowToUse />
+            </Div>
+            <Div>
+              <Helpers />
+            </Div>
+            <Div>
+              <Reviews />
+            </Div>
+            <Div>
+              <Cases />
+            </Div>
           </Wrapper>
           <FloatingButton />
         </Container>
