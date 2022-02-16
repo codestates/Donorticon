@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  padding-top: 5rem;
+  padding-top: 15rem;
   background-image: linear-gradient(180deg, pink 0%, white 20%);
 `;
 
