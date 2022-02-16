@@ -15,23 +15,23 @@ import { ErrorMessage } from '../../component/Input';
 import InputSet from '../../component/Input';
 import sha256 from 'js-sha256';
 import axios from 'axios';
-import Mapping from '../../component/Map';
+import Adresser from '../../component/AdressFinder';
 
 const SignUpHelper = () => {
   const [helperInfo, setHelperInfo] = useState({
-    vulunable: [],
-    gifticon_category: [],
-    location: '',
     email: '',
-    name: '',
     password: '',
+    name: '',
     mobile: '',
+    location: '',
+    vulnerableName: [],
+    gifticonCategoryName: [],
   });
 
   const [isValid, setIsValid] = useState([
     false, // 도움이필요한 사람
     false, // 기프티콘
-    true, // 주소
+    false, // 주소
     false, // 이메일
     false, // 이름
     false, // 패스워드
@@ -45,7 +45,7 @@ const SignUpHelper = () => {
   const signUpForm = [
     {
       contentGuide: '어떤 분들을 돕고 계신가요?',
-      name: 'vulunable',
+      name: 'vulnerableName',
       lists: [
         '아동청소년',
         '어르신',
@@ -55,10 +55,11 @@ const SignUpHelper = () => {
         '정신질환자',
         '그 외',
       ],
+      errorMessage: '최소 하나를 선택해 주세요',
     },
     {
       contentGuide: '무엇을 지원 받고 싶으신가요?',
-      name: 'gifticon_category',
+      name: 'gifticonCategoryName',
       lists: [
         '식품',
         '화장품',
@@ -69,9 +70,18 @@ const SignUpHelper = () => {
         '레저/스포츠',
         '상품권/영화/도서',
       ],
+      errorMessage: '최소 하나를 선택해 주세요',
     },
     {
       contentGuide: '주요 활동지역을 알려주세요',
+      callback: (adress) => {
+        setHelperInfo(Object.assign(helperInfo, { location: adress }));
+        const validList = [...isValid];
+        validList[2] = true;
+        setIsValid(validList);
+        setButtonAble(true);
+      },
+      errorMessage: '주소를 입력해주세요',
     },
     {
       contentGuide: '마지막으로 필수 정보를 입력해 주세요',
@@ -230,7 +240,7 @@ const SignUpHelper = () => {
             </CheckList>
           ))
         ) : page === 2 ? (
-          <Mapping />
+          <Adresser callback={signUpForm[2].callback} />
         ) : (
           signUpForm[page].input.map((card, idx) => (
             <InputSet
@@ -243,6 +253,9 @@ const SignUpHelper = () => {
             />
           ))
         )}
+        <ErrorMessage>
+          {page < 3 && !isValid[page] ? signUpForm[page].errorMessage : ''}
+        </ErrorMessage>
         <ButtonContainer>
           <SignUpButton onClick={handleButton} disabled={page === 0}>
             이전
@@ -251,7 +264,6 @@ const SignUpHelper = () => {
             {page === 3 ? '가입하기' : '다음'}
           </SignUpButton>
         </ButtonContainer>
-        <ErrorMessage>입력하세요</ErrorMessage>
       </ContentBox>
     </Container>
   );
