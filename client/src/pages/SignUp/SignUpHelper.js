@@ -7,6 +7,7 @@ import {
   ContentBox,
   ButtonContainer,
   SignUpButton,
+  Content,
   Input,
   Label,
   CheckList,
@@ -247,6 +248,7 @@ const SignUpHelper = () => {
           signUpForm[page].lists.map((list, idx) => (
             <CheckList key={page * 7 + idx}>
               <Input
+                id={page * 7 + idx}
                 name={signUpForm[page].name}
                 value={list}
                 type={'checkbox'}
@@ -255,7 +257,7 @@ const SignUpHelper = () => {
                   list,
                 )}
               />
-              <Label>{list}</Label>
+              <Label htmlFor={page * 7 + idx}>{list}</Label>
             </CheckList>
           ))
         ) : page === 2 ? (

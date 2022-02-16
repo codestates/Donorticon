@@ -6,6 +6,7 @@ import sha256 from 'js-sha256';
 import { useNavigate } from 'react-router-dom';
 import { setSocialUser } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
+import { ErrorMessage } from '../../component/Input';
 
 const Container = styled.div``;
 
@@ -35,6 +36,7 @@ const SignUpGiver = () => {
     mobile: '',
   });
   const [isValid, setIsValid] = useState([false, false, false, false, true]);
+  const [errorMessage, setErrorMessage] = useState('');
   const input = [
     {
       title: '이메일',
@@ -108,17 +110,27 @@ const SignUpGiver = () => {
     if (!isValid.includes(false)) {
       try {
         const result = await axios.post('/signup/giver', giverInfo);
-        if (result) { 
-          const userInfo = {email: giverInfo.email, name: giverInfo.name, type: 1, id: result.data.id};
+        if (result) {
+          const userInfo = {
+            email: giverInfo.email,
+            name: giverInfo.name,
+            type: 1,
+            id: result.data.id,
+          };
           dispatch(setSocialUser(userInfo));
-          await axios.get(
-            `${process.env.REACT_APP_SERVER}/verification`,
-            { headers: userInfo },
-          );        
+          await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
+            headers: userInfo,
+          });
           navigate(`../../verification`);
         }
       } catch (e) {
-        console.log(e);
+        if (e.response.status === '409') {
+          setErrorMessage('이미 회원가입 된 이메일입니다');
+        } else if (e.response.status === '500') {
+          setErrorMessage('다시 시도해주세요');
+        } else if (e.response.status === '422') {
+          setErrorMessage('입력 정보를 확인해 주세요');
+        }
       }
     }
   };
@@ -138,6 +150,7 @@ const SignUpGiver = () => {
             check={isCheckStart}
           />
         ))}
+        <ErrorMessage>{errorMessage}</ErrorMessage>
         <SignUpButton onClick={handleSingUpButton}>회원 가입</SignUpButton>
       </ContentBox>
     </Container>

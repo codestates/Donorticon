@@ -56,7 +56,11 @@ const SignIn = () => {
         // console.log(result);
         dispatch(socialSignIn());
         localStorage.setItem('token', accessToken);
-        navigate(prev);
+        if (who === 'helper') {
+          navigate('/mypage');
+        } else {
+          navigate(prev);
+        }
       } catch (e) {
         switch (e.response.status) {
           case 404: {
