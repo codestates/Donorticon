@@ -5,9 +5,15 @@ const ContentTitle = styled.div``;
 
 const ContentInput = styled.input``;
 
-const ErrorMessage = styled.div``;
+export const ErrorMessage = styled.div``;
 
-const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
+const InputSet = ({
+  title,
+  inputPlaceHolder,
+  callback,
+  errorMessage,
+  check,
+}) => {
   const [isError, setIsError] = useState(false);
 
   const handleInputContent = (e) => {
@@ -27,4 +33,4 @@ const Input = ({ title, inputPlaceHolder, callback, errorMessage, check }) => {
   );
 };
 
-export default Input;
+export default InputSet;

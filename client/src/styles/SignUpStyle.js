@@ -40,6 +40,9 @@ export const SignUpButton = styled.button`
     background-color: ${({ theme }) => theme.color.main};
     transition: 0.7s;
   }
+  &:disabled {
+    color: red;
+  }
 `;
 export const CheckList = styled.div``;
 
