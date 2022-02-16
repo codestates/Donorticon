@@ -11,6 +11,7 @@ import SignUpHelper from './pages/SignUp/SignUpHelper';
 import Gifticon from './pages/Gifticon/Gifticon';
 import Google from './pages/SocialLogin/Google';
 import KaKao from './pages/SocialLogin/Kakao';
+import HelperList from './pages/HelperList/HelperList';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
@@ -28,6 +29,7 @@ const Router = () => {
         <Route path="/gifticon" element={<Gifticon />} />
         <Route path="/google/signin" element={<Google />} />
         <Route path="/kakao/signin" element={<KaKao />} />
+        <Route path="/helperlist" element={<HelperList />} />
       </Routes>
       <Footer />
     </BrowserRouter>

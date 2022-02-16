@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon } = require('../controller/gifticon');
-const { user } = require('../controller');
+const { user, helperlist } = require('../controller');
 
 router.post('/signup/giver', user.signup_giver);
 router.post('/signup/helper', user.signup_helper);
@@ -17,5 +17,6 @@ router.get('/google/user?', user.googleLogin.getUser);
 router.post('/kakao/signin', user.kakaoLogin.getToken);
 router.get('/kakao/user?', user.kakaoLogin.getUser);
 router.post('/signout', user.signout.signout);
+router.get('/helperlist?', helperlist.helperlist.getList);
 
 module.exports = router;
