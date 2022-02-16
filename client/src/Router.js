@@ -9,8 +9,8 @@ import VerifyRedir from './pages/Verification/VerifyRedir';
 import SignUpGiver from './pages/SignUp/SignUpGiver';
 import SignUpHelper from './pages/SignUp/SignUpHelper';
 import Gifticon from './pages/Gifticon/Gifticon';
-import Google from './pages/socialLogin/Google';
-import KaKao from './pages/socialLogin/Kakao';
+import Google from './pages/SocialLogin/Google';
+import KaKao from './pages/SocialLogin/Kakao';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
