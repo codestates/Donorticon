@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import InputSet from '../../component/Input';
 import axios from 'axios';
 import sha256 from 'js-sha256';
+import { useNavigate } from 'react-router-dom';
+import { setSocialUser } from '../../redux/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 const Container = styled.div``;
 
@@ -22,6 +25,8 @@ const SignUpButton = styled.button`
 `;
 
 const SignUpGiver = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [isCheckStart, setIsCheckStart] = useState(false);
   const [giverInfo, setGiverInfo] = useState({
     email: '',
@@ -103,7 +108,15 @@ const SignUpGiver = () => {
     if (!isValid.includes(false)) {
       try {
         const result = await axios.post('/signup/giver', giverInfo);
-        console.log(result);
+        if (result) { 
+          const userInfo = {email: giverInfo.email, name: giverInfo.name, type: 1, id: result.data.id};
+          dispatch(setSocialUser(userInfo));
+          await axios.get(
+            `${process.env.REACT_APP_SERVER}/verification`,
+            { headers: userInfo },
+          );        
+          navigate(`../../verification`);
+        }
       } catch (e) {
         console.log(e);
       }
