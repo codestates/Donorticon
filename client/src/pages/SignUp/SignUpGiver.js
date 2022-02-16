@@ -97,7 +97,7 @@ const SignUpGiver = () => {
       errorMessage: '전화번호 형식이 맞지 않습니다',
     },
   ];
-  console.log(giverInfo);
+
   const handleSingUpButton = async () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {

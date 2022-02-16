@@ -24,6 +24,9 @@ export const userSlice = createSlice({
       state.isLoggedIn = false;
       state.user = initialState.user;
     },
+    setWho: (state, action) => {
+      state.user.who = action.payload;
+    },
   },
   extraReducers: (builder) =>
     builder
@@ -53,6 +56,7 @@ export const signupGiver = createAsyncThunk(
   },
 );
 
-export const { socialSignIn, setSocialUser, signOut } = userSlice.actions;
+export const { socialSignIn, setSocialUser, signOut, setWho } =
+  userSlice.actions;
 
 export default userSlice;
