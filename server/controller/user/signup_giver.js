@@ -1,7 +1,7 @@
 const { giver } = require('../../models')
 
 module.exports = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   if ( req.body.name && req.body.email && req.body.password) { 
     let mobile;
     if ( req.body.mobile ) {
@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
         defaults: { password, mobile, user_type: 1 }
       }); 
       if ( created ) {
-        res.status(201).json({ message: `welcome ${req.body.name}! you have sucessfully signed up` });
+        res.status(201).json({ message: `welcome ${req.body.name}! you have sucessfully signed up`, id: userInfo.dataValues.id});
       } else {
         res.status(409).json({ message: 'email already exists' });
       }

@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
         defaults: { gifticon_category_id: gifticonCategoryId }
       });
       if (helperCreated && vulnerableCreated && gifticonCategoryCreated) {
-        return res.status(200).json('successfully signed up');
+        return res.status(200).json({ message: `welcome ${req.body.name}! you have sucessfully signed up`, id: userInfo.dataValues.id});
       } 
     } catch(err) {
       res.send(err);

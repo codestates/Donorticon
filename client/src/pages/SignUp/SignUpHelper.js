@@ -16,8 +16,13 @@ import InputSet from '../../component/Input';
 import sha256 from 'js-sha256';
 import axios from 'axios';
 import Adresser from '../../component/AdressFinder';
+import { useNavigate } from 'react-router-dom';
+import { setSocialUser } from '../../redux/user/userSlice';
+import { useDispatch } from 'react-redux';
 
 const SignUpHelper = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [helperInfo, setHelperInfo] = useState({
     email: '',
     password: '',
@@ -207,6 +212,15 @@ const SignUpHelper = () => {
         try {
           const result = await axios.post('/signup/helper', helperInfo);
           console.log(result);
+          if (result) { 
+            const userInfo = {email: helperInfo.email, name: helperInfo.name, type: 2, id: result.data.id};
+            dispatch(setSocialUser(userInfo));
+            await axios.get(
+              `${process.env.REACT_APP_SERVER}/verification`,
+              { headers: userInfo },
+            );        
+            navigate(`../../verification`);
+          }
         } catch (e) {
           console.log(e);
         }
