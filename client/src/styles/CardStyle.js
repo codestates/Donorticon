@@ -13,7 +13,7 @@ export const CardContainer = styled.div`
 `;
 
 export const CardBox = styled.div`
-  padding: 10px;
+  padding: 20px;
   width: 250px;
   height: 350px;
   text-align: center;
@@ -22,6 +22,7 @@ export const CardBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 export const CardGallery = styled.div`
   justify-content: center;
   align-items: center;
@@ -29,12 +30,27 @@ export const CardGallery = styled.div`
   height: 200px;
   border: 1px solid #000;
 `;
-export const CardContent = styled.div``;
+
+export const CardContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
+  padding-bottom: 10px;
+`;
+
 export const Img = styled.div`
+  border-radius: 50%;
   width: 50px;
   height: 50px;
   background-image: url(${(props) => props.src});
   background-size: cover;
 `;
-export const Name = styled.div``;
-export const Slogan = styled.div``;
+export const Name = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+`;
+export const Slogan = styled.div`
+  text-align: left;
+  font-size: 18px;
+`;

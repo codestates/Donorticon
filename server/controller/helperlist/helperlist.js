@@ -48,7 +48,7 @@ module.exports = {
 
       // 총 페이지 개수 구하기
       const maxPage = Math.ceil(count / limit);
-      res.send({ list, maxPage });
+      res.send({ list, maxPage, count });
     } catch (e) {
       console.log(e);
     }
