@@ -55,6 +55,7 @@ const SignUpHelper = () => {
         '정신질환자',
         '그 외',
       ],
+      errorMessage: '최소 하나를 선택해 주세요',
     },
     {
       contentGuide: '무엇을 지원 받고 싶으신가요?',
@@ -69,6 +70,7 @@ const SignUpHelper = () => {
         '레저/스포츠',
         '상품권/영화/도서',
       ],
+      errorMessage: '최소 하나를 선택해 주세요',
     },
     {
       contentGuide: '주요 활동지역을 알려주세요',
@@ -79,6 +81,7 @@ const SignUpHelper = () => {
         setIsValid(validList);
         setButtonAble(true);
       },
+      errorMessage: '주소를 입력해주세요',
     },
     {
       contentGuide: '마지막으로 필수 정보를 입력해 주세요',
@@ -250,6 +253,9 @@ const SignUpHelper = () => {
             />
           ))
         )}
+        <ErrorMessage>
+          {page < 3 && !isValid[page] ? signUpForm[page].errorMessage : ''}
+        </ErrorMessage>
         <ButtonContainer>
           <SignUpButton onClick={handleButton} disabled={page === 0}>
             이전
@@ -258,7 +264,6 @@ const SignUpHelper = () => {
             {page === 3 ? '가입하기' : '다음'}
           </SignUpButton>
         </ButtonContainer>
-        <ErrorMessage>입력하세요</ErrorMessage>
       </ContentBox>
     </Container>
   );
