@@ -20,6 +20,8 @@ export const Img = styled.img`
 
 export const PrevButton = styled.div`
   position:relative;
+  padding: 2em;     
+  margin: -2em;
   left: 25px;
   opacity: 0.5;
   z-index: 1; 
@@ -31,6 +33,8 @@ export const PrevButton = styled.div`
 
 export const NextButton = styled.div`
   position:relative;
+  padding: 2em;     
+  margin: -2em;
   right: 25px;
   opacity: 0.5;
   z-index: 1; 

@@ -12,18 +12,27 @@ import {
 } from '../styles/ImgSliderStyle';
 import ilu1 from '../img/ilu1.jpg';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const ImgSlider = ({ data }) => {
-  const list = [ilu1, ilu1, ilu1, ilu1];
+  const list = data;
   const [imageIdx, SetImageIdx] = useState(0);
-  // const imageIdx = useRef(0);
-
   const moveLeft = () => {
-    SetImageIdx(imageIdx - 1);
+    if (imageIdx === 0) {
+      SetImageIdx(list.length-1);  
+    } else {
+      SetImageIdx(imageIdx - 1);
+    }
   };
   const moveRight = () => {
-    SetImageIdx(imageIdx + 1);
+    if (imageIdx === list.length-1) {
+      SetImageIdx(0);  
+    } else {
+      SetImageIdx(imageIdx + 1);
+    }
+  };
+  const changeImg = (e) => {
+    SetImageIdx(e);  
   };
 
   return (
@@ -54,9 +63,10 @@ const ImgSlider = ({ data }) => {
                   src={thum}
                   key={index}
                   className="current"
+                  onClick={()=>changeImg(index)}
                 ></Thumbnail>
               ) : (
-                <Thumbnail src={thum} key={index}></Thumbnail>
+                <Thumbnail src={thum} key={index} onClick={()=>changeImg(index)}></Thumbnail>
               ),
             )}
           </ThumbnailWrapper>
