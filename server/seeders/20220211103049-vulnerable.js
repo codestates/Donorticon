@@ -29,6 +29,11 @@ module.exports = {
         updatedAt: new Date() 
       },
       {
+        name: 'psychologically challenged',
+        createdAt: new Date(),
+        updatedAt: new Date() 
+      },
+      {
         name: 'etc',
         createdAt: new Date(),
         updatedAt: new Date() 
