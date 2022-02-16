@@ -1,6 +1,11 @@
 const { helper, vulnerable, helper_vulnerable, gifticon_category, helper_gifticon_category } = require('../../models');
 const convertToArr = (param) => {
-  let list = param.split(",");
+  if (param.length === 1) {
+    let list = param;
+  } else {
+    let list = param.split(",");
+  }
+  let list = param
   list[0] = list[0].substring(1);
   list[list.length - 1] = list[list.length - 1].substring(
     0,
@@ -71,12 +76,12 @@ module.exports = async (req, res) => {
         defaults: { gifticon_category_id: gifticonCategoryList }
       });
       if (helperCreated && vulnerableCreated && gifticonCategoryCreated) {
-        return res.status(200).json({ message: `welcome ${req.body.name}! you have sucessfully signed up`, id: userInfo.dataValues.id});
+        return res.status(201).json({id: helperFound.dataValues.id});
       } 
     } catch(err) {
-      res.send(err);
+      console.log(err);
     }
   } else {
-    return res.status(422).json('insufficient parameter supplied') 
+    return res.status(422).json('insufficient parameter supplied')
   }  
 }
