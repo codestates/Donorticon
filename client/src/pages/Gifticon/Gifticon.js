@@ -36,7 +36,6 @@ const Gifticon = () => {
         { headers: { authorization: token } },
       );
       const { list: gifticonList, maxPage, count } = data;
-
       setList(gifticonList);
       setMaxPage(maxPage);
       setCount(count);
@@ -51,6 +50,7 @@ const Gifticon = () => {
   // }, []);
 
   useEffect(() => getList(), [currentPage]);
+
   return (
     <GifticonContainer>
       <Div>GIFTICON FILTERING 있어야 해</Div>

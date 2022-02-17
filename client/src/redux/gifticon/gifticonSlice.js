@@ -7,6 +7,7 @@ const initialState = {
   status: '',
   img: '',
   report: '',
+  textStyle: '',
 };
 
 export const gifticonSlice = createSlice({

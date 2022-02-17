@@ -1,4 +1,4 @@
-const { helper } = require('../../models')
+const { helper } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
@@ -12,20 +12,23 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'Invalid user' });
     } else {
       const helperInfo = helperFinder.dataValues;
-      if (giverInfo.verification) {
+      if (helperInfo.verification) {
         const accessToken = jwt.sign(helperInfo, process.env.ACCESS_SECRET, {
           expiresIn: '1h',
         });
         const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
           expiresIn: '12h',
         });
-        res.status(200).json({ accessToken, messeage: 'successfully signed in', data: { id: helperInfo.id }});
-      }else {
-        res.status(401).json({message: 'verify your email'})
+        res.status(200).json({
+          accessToken,
+          messeage: 'successfully signed in',
+          data: { id: helperInfo.id },
+        });
+      } else {
+        res.status(401).json({ message: 'verify your email' });
       }
     }
   } catch (e) {
     console.log(e);
   }
 };
-
