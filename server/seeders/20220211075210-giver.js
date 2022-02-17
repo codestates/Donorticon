@@ -1,5 +1,9 @@
 'use strict';
 
+const getRandomNumber = (min, max) => {
+  return parseInt(Math.random() * (Number(max) - Number(min) + 2));
+};
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.bulkInsert('givers', [{
