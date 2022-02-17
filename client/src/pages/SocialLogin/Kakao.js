@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import {
-  googleSignIn,
-  setGoogleUser,
-  setSocialUser,
-  socialSignIn,
-} from '../../redux/user/userSlice';
+import { setSocialUser, socialSignIn } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 const KaKao = () => {

@@ -33,19 +33,36 @@ module.exports = {
           Authorization: `Bearer ${token}`,
         },
       });
-      const { nickname: name } = kakaoUser.data.properties;
-      const { email } = kakaoUser.data.kakao_account;
-
-      const [newGiver, created] = await giver.findOrCreate({
-        where: {
-          email,
-          name: name ? name : '',
-          user_type: 'giver_kakao',
-        },
+      console.log(kakaoUser);
+      // const { nickname: name } = kakaoUser.data.properties;
+      const giverFound = await giver.findOne({
+        where: { email: kakaoUser.data.kakao_account.email },
       });
-      const userInfo = newGiver.dataValues;
-      const accessToken = jwt.sign(userInfo, process.env.ACCESS_SECRET);
-      res.send({ accessToken, userInfo });
+
+      console.log(giverFound);
+      // if (giverFound) {
+      // } else {
+      //  const newGiver = await giver.create({
+      //    email: user.email,
+      //    name: user.name === '' ? '' : user.name,
+      //    user_type: 1,
+      //  });
+      //  console.log(newGiver);
+      //  const { id, email, name, user_type } = newGiver.dataValues;
+      //  const giverInfo = { id, email, name, user_type };
+      //  const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+      //  res.send({ accessToken, giverInfo });
+      // }
+      // const [newGiver, created] = await giver.findOrCreate({
+      //   where: {
+      //     email,
+      //     name: name ? name : '',
+      //     user_type: 1,
+      //   },
+      // });
+      // const userInfo = newGiver.dataValues;
+      // const accessToken = jwt.sign(userInfo, process.env.ACCESS_SECRET);
+      // res.send({ accessToken, userInfo });
     } catch (e) {
       console.log(e);
     }
