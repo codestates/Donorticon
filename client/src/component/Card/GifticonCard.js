@@ -2,14 +2,8 @@ import { useEffect, useState } from 'react';
 import { CardBox, CardGallery } from '../../styles/CardStyle';
 import { Button } from '../../styles/utils/Button';
 
-const GifticonCard = ({ data }) => {
-  const {
-    helper: { name },
-    img,
-    report,
-    status,
-    createdAt,
-  } = data;
+const GifticonCard = ({ data, name }) => {
+  const { img, report, status, createdAt } = data;
 
   return (
     <CardBox>
