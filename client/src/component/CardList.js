@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loader from './Loader';
-import Card from './Card';
+import HelperCard from './Card/HelperCard';
 import { CardContainer } from '../styles/CardStyle';
 import Pagination from './Pagination/Pagination';
 
@@ -17,7 +17,7 @@ const HelperList = () => {
         `/helperlist?page=${currentPage}&limit=9`,
       );
       const { list: helperlist, maxPage, count } = data;
-      // console.log(helperlist);
+
       setList(helperlist);
       setMaxPage(maxPage);
       setCount(count);
@@ -36,7 +36,7 @@ const HelperList = () => {
           <CardContainer>
             {list.map((helper) => {
               return (
-                <Card
+                <HelperCard
                   id={helper.id}
                   name={helper.name}
                   img={helper.img}
