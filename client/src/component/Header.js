@@ -44,6 +44,7 @@ const Header = () => {
       if (result.status === 205) {
         localStorage.removeItem('token');
         dispatch(signOut());
+        navigate('/');
       }
     } catch (e) {
       console.log(3);
