@@ -3,11 +3,11 @@ import ProgressBar from '../../component/ProgressBar';
 import {
   Container,
   Title,
+  SubTitle,
   ContentGuider,
   ContentBox,
   ButtonContainer,
   SignUpButton,
-  Content,
   Input,
   Label,
   CheckList,
@@ -16,7 +16,7 @@ import { ErrorMessage } from '../../component/Input';
 import InputSet from '../../component/Input';
 import sha256 from 'js-sha256';
 import axios from 'axios';
-import Adresser from '../../component/AdressFinder';
+import Addresser from '../../component/AddressFinder';
 import { useNavigate } from 'react-router-dom';
 import { setSocialUser } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
@@ -240,8 +240,9 @@ const SignUpHelper = () => {
 
   return (
     <Container>
+      <Title>HELPER</Title>
+      <SubTitle>JOIN</SubTitle>
       <ContentBox>
-        <Title>H E L P E R</Title>
         <ProgressBar percent={percent} />
         <ContentGuider>{signUpForm[page].contentGuide}</ContentGuider>
         {page < 2 ? (
@@ -261,7 +262,7 @@ const SignUpHelper = () => {
             </CheckList>
           ))
         ) : page === 2 ? (
-          <Adresser callback={signUpForm[2].callback} />
+          <Addresser callback={signUpForm[2].callback} />
         ) : (
           signUpForm[page].input.map((card, idx) => (
             <InputSet

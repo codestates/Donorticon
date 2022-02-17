@@ -3,23 +3,36 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  text-align: center;
-  width: 100%;
+  width: 50%;
+  margin: 0 auto;
+  margin-bottom: 10%;
 `;
 
-export const Title = styled.div``;
+export const Title = styled.div`
+  color: ${({ theme }) => theme.color.main};
+  font-size: 30px;
+  letter-spacing: 15px;
+  margin: 0 auto;
+`;
 
-export const SubTitle = styled.div``;
+export const SubTitle = styled.div`
+  font-size: 20px;
+  letter-spacing: 15px;
+  margin: 3% auto;
+`;
 
-export const ContentGuider = styled.div``;
+export const ContentGuider = styled.div`
+  margin: 0 auto;
+  text-align: center;
+  font-size: 20px;
+`;
 
 export const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
   width: 50%;
   height: 500px;
-  text-align: center;
   margin: 0 auto;
+  border-top: solid;
+  border-top-color: ${({ theme }) => theme.color.main};
 `;
 
 export const ButtonContainer = styled.div`
@@ -29,11 +42,10 @@ export const ButtonContainer = styled.div`
 `;
 
 export const SignUpButton = styled.button`
-  flex: 1, 1, 1;
+  width: 100%;
   border: 1px solid ${({ theme }) => theme.color.main};
   cursor: pointer;
   padding: 10px 0;
-  margin: 10px 10px;
   text-align: center;
   &:hover {
     background: #fff;
@@ -45,7 +57,8 @@ export const SignUpButton = styled.button`
   }
 `;
 export const CheckList = styled.div`
-  margin: 5px;
+  width: 50%;
+  margin: 5% auto;
 `;
 
 export const Input = styled.input``;

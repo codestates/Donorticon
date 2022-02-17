@@ -17,14 +17,25 @@ const ModalBackground = styled.div`
   justify-content: center;
 `;
 
-const ButtonContainer = styled.div`
+const ModalFrame = styled.div`
   text-align: center;
+  align-items: center;
+  width: 30%;
+  height: 50%;
+  padding: 10px;
+  background-color: #fff;
+  @media ${({ theme }) => theme.device.mobile} {
+  }
+`;
+
+const ButtonContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 30%;
-  height: 50%;
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
   padding: 10px;
   background-color: #fff;
   @media ${({ theme }) => theme.device.mobile} {
@@ -76,10 +87,12 @@ const ButtonModal = ({
 
   return (
     <ModalBackground onClick={ModalClose}>
-      <ButtonContainer>
-        <Button onClick={handleButton}>{giverText}</Button>
-        <Button onClick={handleButton}>{helperText}</Button>
-      </ButtonContainer>
+      <ModalFrame>
+        <ButtonContainer>
+          <Button onClick={handleButton}>{giverText}</Button>
+          <Button onClick={handleButton}>{helperText}</Button>
+        </ButtonContainer>
+      </ModalFrame>
     </ModalBackground>
   );
 };

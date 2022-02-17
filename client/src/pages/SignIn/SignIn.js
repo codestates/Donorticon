@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { sha256 } from 'js-sha256';
-import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from '../../styles/utils/Button';
 import { Input } from '../../styles/utils/Input';
 import axios from 'axios';
 import { ErrorMessage } from '../../component/Input';
-import { socialSignIn } from '../../redux/user/userSlice';
+import { setWho, socialSignIn } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
 import {
   Container,
@@ -81,6 +80,32 @@ const SignIn = () => {
     }
   };
 
+  const handleGuest = async () => {
+    if (who === 'giver') {
+      try {
+        dispatch(setWho('giver_guest'));
+        const result = await axios.post('/guest/giver');
+        const { token } = result.data;
+        localStorage.setItem('token', token);
+        dispatch(socialSignIn());
+        navigate(prev);
+      } catch (e) {
+        console.log(e);
+      }
+    } else if (who === 'helper') {
+      try {
+        dispatch(setWho('helper_guest'));
+        const result = await axios.post('/guest/helper');
+        const { token } = result.data;
+        localStorage.setItem('token', token);
+        dispatch(socialSignIn());
+        navigate('/mypage');
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
   const handleGoogle = () => {
     const GOOGLE_LOGIN_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&redirect_uri=${process.env.REACT_APP_GOOGLE_REDIRECT_URI}&response_type=code&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
     window.location.assign(GOOGLE_LOGIN_URL);
@@ -104,7 +129,7 @@ const SignIn = () => {
         />
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <Button onClick={handleSignin}>로그인</Button>
-        <Button>게스트로그인</Button>
+        <Button onClick={handleGuest}>게스트로그인</Button>
         {who === 'giver' ? (
           <>
             <Button onClick={handleGoogle}>구글로그인</Button>

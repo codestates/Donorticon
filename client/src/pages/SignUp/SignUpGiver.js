@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import InputSet from '../../component/Input';
 import axios from 'axios';
 import sha256 from 'js-sha256';
@@ -7,23 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { setSocialUser } from '../../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { ErrorMessage } from '../../component/Input';
-
-const Container = styled.div``;
-
-const Title = styled.div``;
-
-const SubTitle = styled.div``;
-
-const ContentBox = styled.div`
-  font-size: 15px;
-`;
-
-const SignUpButton = styled.button`
-  cursor: pointer;
-  &:hover {
-    color: blue;
-  }
-`;
+import {
+  Container,
+  Title,
+  SubTitle,
+  ContentBox,
+  SignUpButton,
+} from '../../styles/SignUpStyle';
 
 const SignUpGiver = () => {
   const navigate = useNavigate();
