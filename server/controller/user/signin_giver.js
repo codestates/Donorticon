@@ -12,13 +12,17 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'Invalid user' });
     } else {
       const giverInfo = giverFinder.dataValues;
-      const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET, {
-        expiresIn: '1h',
-      });
-      const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
-        expiresIn: '12h',
-      });
-      res.status(200).json({ accessToken, messeage: 'successfully signed in', data: { id: giverInfo.id }});
+      if (giverInfo.verification) {
+        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET, {
+          expiresIn: '1h',
+        });
+        const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
+          expiresIn: '12h',
+        });
+        res.status(200).json({ accessToken, messeage: 'successfully signed in', data: { id: giverInfo.id }});
+      } else {
+        res.status(401).json({message: 'verify your email'})
+      }
     }
   } catch (e) {
     console.log(e);
