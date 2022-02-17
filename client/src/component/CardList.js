@@ -3,7 +3,7 @@ import axios from 'axios';
 import Loader from './Loader';
 import Card from './Card';
 import { CardContainer } from '../styles/CardStyle';
-import Pagenation from './Pagenation/Pagenation';
+import Pagination from './Pagination/Pagination';
 
 const HelperList = () => {
   const [list, setList] = useState([]);
@@ -17,7 +17,7 @@ const HelperList = () => {
         `/helperlist?page=${currentPage}&limit=9`,
       );
       const { list: helperlist, maxPage, count } = data;
-      console.log(helperlist);
+      // console.log(helperlist);
       setList(helperlist);
       setMaxPage(maxPage);
       setCount(count);
@@ -46,7 +46,7 @@ const HelperList = () => {
               );
             })}
           </CardContainer>
-          <Pagenation
+          <Pagination
             maxPage={maxPage}
             currentPage={currentPage}
             count={count}

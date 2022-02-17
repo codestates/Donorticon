@@ -1,25 +1,30 @@
 import styled from 'styled-components';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import { useEffect, useState } from 'react';
-import createPagination from './createPagenation';
+import createPagination from './createPagination';
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
-  padding-top: 100px;
+
+  padding: 40px 0;
 `;
 
 const Ul = styled.ul`
   list-style: none;
   padding: 0px;
   display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  .disabled {
+    color: #e0e0e0;
+    pointer-events: none;
+  }
+
   li {
     padding: 10px 15px;
     margin-right: 4px;
     border-radius: 10px;
-
-    font-size: 1.1rem;
-    // min-width: 20px;
     text-align: center;
     user-select: none;
 
@@ -30,9 +35,7 @@ const Ul = styled.ul`
     &:not(.active):not(.disabled) {
       cursor: pointer;
     }
-    // &:not(.active):not(.disabled):hover{
-    //   background: #D65DB1;
-    // }
+
     &:not(.active):not(.disabled):active {
       border: 1px solid ${({ theme }) => theme.color.main};
     }
@@ -50,7 +53,7 @@ const Ul = styled.ul`
 
 const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
   const { pagination } = createPagination({
-    numberOfButtons: 5,
+    numberOfPageNumBtn: 5,
     currentPage,
     maxPage,
   });
@@ -59,13 +62,12 @@ const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
   return (
     <Container>
       <Ul>
-        <li
+        <FaAngleLeft
+          size="18"
+          style={{ marginRight: '5px' }}
           className={`${pagination[0] === currentPage && 'disabled'}`}
           onClick={handleClick.bind(null, currentPage - 1)}
-        >
-          Prev
-          {/* <i class="fa fa-chevron-left" aria-hidden="true" /> */}
-        </li>
+        />
         {pagination.map((page) => (
           <li
             className={`${currentPage === page && 'active'}`}
@@ -74,12 +76,12 @@ const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
             {page}
           </li>
         ))}
-        <li
+        <FaAngleRight
+          size="18"
+          style={{ marginLeft: '5px' }}
           className={`${pagination.reverse()[0] === currentPage && 'disabled'}`}
           onClick={handleClick.bind(null, currentPage + 1)}
-        >
-          Next
-        </li>
+        />
       </Ul>
     </Container>
   );
