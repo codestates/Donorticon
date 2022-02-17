@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 
 const AdressContainer = styled.input`
-  width: 70%;
+  width: 100%;
   text-align: center;
-  margin: 5px auto;
+  margin: 7px auto;
 `;
 
-const Adresser = ({ callback }) => {
+const Addresser = ({ callback }) => {
   const { daum } = window;
   const findAddr = () => {
     new daum.Postcode({
@@ -51,4 +51,4 @@ const Adresser = ({ callback }) => {
   );
 };
 
-export default Adresser;
+export default Addresser;

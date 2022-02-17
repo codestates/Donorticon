@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 const Container = styled.div`
   height: 20px;
   display: flex;
@@ -6,6 +7,7 @@ const Container = styled.div`
   align-items: center;
   background-color: #eeeeee;
   border-radius: 10px;
+  margin: 3% auto;
 `;
 
 const Progress = styled.div`
