@@ -32,7 +32,6 @@ const KaKao = () => {
     try {
       const data = await axios.get(`/kakao/user?accessToken=${token}`);
       if (data) {
-        console.log(data);
         const { email, name, user_type: who } = data.data.giverInfo;
         dispatch(socialSignIn());
         dispatch(setSocialUser({ email, name, who }));
