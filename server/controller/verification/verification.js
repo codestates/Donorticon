@@ -9,7 +9,6 @@ const { giver, helper } = require('../../models')
 module.exports = {
 
   get: async (req, res) => {
-
     const transporter = nodemailer.createTransport({
       service: 'Naver',
       host: 'smtp.naver.com',
@@ -23,15 +22,14 @@ module.exports = {
     // point to the template folder
     const handlebarOptions = {
       viewEngine: {
-          partialsDir: path.resolve('./controller/'),
+          partialsDir: path.resolve('./controller/verification'),
           defaultLayout: false,
       },
-      viewPath: path.resolve('./controller/'),
+      viewPath: path.resolve('./controller/verification'),
     };
     transporter.use('compile', hbs(handlebarOptions))
 
     const code = crypto.randomBytes(127).toString('hex');
-
     const message = {
       from: "swim1720@naver.com",
       to: `${req.headers.email}`,
@@ -39,22 +37,38 @@ module.exports = {
       template: "email", 
       context: {
         src: `${process.env.BUCKET}/aintgottime.jpg`,
-        redirection: `${process.env.CLIENT_URL}/type=${req.headers.type}/id=${req.headers.id}/code=${code}`
+        redirection: `${process.env.CLIENT_URL}/verifyRedir/type=${req.headers.type}/id=${req.headers.id}/code=${code}`
       } 
     };
-
-    const mailer = await transporter.sendMail(message, (err, info) => {
+    console.log(req.headers)
+    if(req.headers.type === '1') {
+      await giver.update({verify_hash: code},{where: {id: req.headers.id}})
+      await transporter.sendMail(message, (err, info) => {
       if (err) {
         console.log(err);
-      } else {
-        console.log(info);
-      }
-    });
+        } else {
+        console.log(info)
+        res.status(200).json({Message: "Success"});
+        }
+      })
+    } else if (req.headers.type === '2'){
+      await helper.update({verify_hash: code},{where: {id: req.headers.id}});
+      await transporter.sendMail(message, (err, info) => {
+        if (err) {
+            console.log(err);
+          } else {
+            console.log(info)
+            res.status(200).json({Message: "Success"});
+          }
+      })
+    }
   },
 
   put: async (req, res) => {
-    const [type, id, code] = req.headers;
-    if (type === 1) {
+    const type = req.body.headers.type;
+    const id = req.body.headers.id;
+    const code = req.body.headers.code;
+    if (type === '1') {
       let userInfo = await giver.findOne({
         where: {id: id}
       });
@@ -65,7 +79,7 @@ module.exports = {
         res.status(400).json({message: 'Invalid Request', verification: false});
       }
     } 
-    else if (type === 2) {
+    else if (type === '2') {
       let userInfo = await helper.findOne({
         where: {id: id}
       });

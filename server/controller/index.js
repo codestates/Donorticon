@@ -1,3 +1,5 @@
 module.exports = {
-  verification: require( './verification' )
-}
+  user: require('./user'),
+  verification: require('./verification'),
+  helperlist: require('./helperlist'),
+};
