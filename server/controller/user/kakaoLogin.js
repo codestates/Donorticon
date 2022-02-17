@@ -33,19 +33,30 @@ module.exports = {
           Authorization: `Bearer ${token}`,
         },
       });
-      const { nickname: name } = kakaoUser.data.properties;
-      const { email } = kakaoUser.data.kakao_account;
 
-      const [newGiver, created] = await giver.findOrCreate({
-        where: {
-          email,
-          name: name ? name : '',
-          user_type: 'giver_kakao',
-        },
+      // const { nickname: name } = kakaoUser.data.properties;
+      const user = kakaoUser.data;
+
+      const giverFound = await giver.findOne({
+        where: { email: user.kakao_account.email },
       });
-      const userInfo = newGiver.dataValues;
-      const accessToken = jwt.sign(userInfo, process.env.ACCESS_SECRET);
-      res.send({ accessToken, userInfo });
+
+      if (giverFound) {
+        const giverInfo = giverFound.dataValues;
+        delete giverInfo.password;
+        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+        res.send({ accessToken, giverInfo });
+      } else {
+        const newGiver = await giver.create({
+          email: user.kakao_account.email,
+          name: user.properties.nickname === '' ? '' : user.properties.nickname,
+          user_type: 1,
+        });
+        const { id, email, name, user_type } = newGiver.dataValues;
+        const giverInfo = { id, email, name, user_type };
+        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+        res.send({ accessToken, giverInfo });
+      }
     } catch (e) {
       console.log(e);
     }
