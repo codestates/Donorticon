@@ -4,7 +4,7 @@ const { giver, helper, gifticon } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
-    console.log(req.headers.authorization);
+    // console.log(req.headers.authorization);
     const token = req.headers.authorization;
     if (token) {
       // 로그인한 유저 정보 가져오기
@@ -19,13 +19,11 @@ module.exports = {
 
       const skip = (page - 1) * limit;
 
-      // 1. 로그인한 유저가 giver 일때
       let gifticonList;
 
+      // 1. 로그인한 유저가 giver 일때
       if (Number(user_type) === 1) {
-        // 어떤 helper에게 기부했는지 그 helper 이름이 필요함
         try {
-          console.log('기버임다');
           gifticonList = await gifticon.findAll({
             where: { giver_id: id },
           });
@@ -37,7 +35,6 @@ module.exports = {
       // 2. 로그인한 유저가 helper 일때
       if (Number(user_type) === 2) {
         try {
-          console.log('헬퍼여유');
           gifticonList = await gifticon.findAll({
             where: { helper_id: id },
           });
@@ -53,22 +50,33 @@ module.exports = {
           include: {
             model: Number(user_type) === 1 ? helper : giver,
             required: true,
-            attributes: {
-              exclude: [
-                'password',
-                'slogan',
-                'description',
-                'location',
-                'createdAt',
-                'updatedAt',
-                'mobile',
-                'user_type',
-                'verification',
-                'verify_hash',
-              ],
-            },
+            attributes: Number(user_type === 1)
+              ? {
+                  exclude: [
+                    'password',
+                    'slogan',
+                    'description',
+                    'location',
+                    'createdAt',
+                    'updatedAt',
+                    'mobile',
+                    'user_type',
+                    'verification',
+                    'verify_hash',
+                  ],
+                }
+              : {
+                  exclude: [
+                    'password',
+                    'mobile',
+                    'user_type',
+                    'verification',
+                    'verify_hash',
+                  ],
+                },
           },
         });
+        // console.log(result.rows[0]);
         const { count, rows: list } = result;
         const maxPage = Math.ceil(count / limit);
         res.status(200).send({ list, maxPage, count });
