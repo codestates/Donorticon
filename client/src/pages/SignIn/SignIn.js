@@ -8,14 +8,12 @@ import axios from 'axios';
 import { ErrorMessage } from '../../component/Input';
 import { socialSignIn } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
-
-const Container = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import {
+  Container,
+  Title,
+  SubTitle,
+  ContentBox,
+} from '../../styles/SignInStyle';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -94,24 +92,26 @@ const SignIn = () => {
   };
   return (
     <Container>
-      <div>이메일</div>
-      <Input name="email" placeholder="이메일" onChange={handleInput} />
-      <div>비밀번호</div>
-      <Input
-        name="password"
-        type={'password'}
-        placeholder="비밀번호"
-        onChange={handleInput}
-      />
-      <ErrorMessage>{errorMessage}</ErrorMessage>
-      <Button onClick={handleSignin}>로그인</Button>
-      <Button>게스트로그인</Button>
-      {who === 'giver' ? (
-        <>
-          <Button onClick={handleGoogle}>구글로그인</Button>
-          <Button onClick={handleKakao}>카카오로그인</Button>
-        </>
-      ) : null}
+      <Title>{who === 'giver' ? 'G I V E R' : 'H E L P E R'}</Title>
+      <SubTitle>L O G I N</SubTitle>
+      <ContentBox>
+        <Input name="email" placeholder="이메일" onChange={handleInput} />
+        <Input
+          name="password"
+          type={'password'}
+          placeholder="비밀번호"
+          onChange={handleInput}
+        />
+        <ErrorMessage>{errorMessage}</ErrorMessage>
+        <Button onClick={handleSignin}>로그인</Button>
+        <Button>게스트로그인</Button>
+        {who === 'giver' ? (
+          <>
+            <Button onClick={handleGoogle}>구글로그인</Button>
+            <Button onClick={handleKakao}>카카오로그인</Button>
+          </>
+        ) : null}
+      </ContentBox>
     </Container>
   );
 };
