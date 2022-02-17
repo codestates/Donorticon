@@ -5,10 +5,12 @@ import { userSlice } from './user/userSlice';
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import { pageSlice } from './page/pageSlice';
+import gifticonSlice from './gifticon/gifticonSlice';
 
 const reducers = combineReducers({
   user: userSlice.reducer,
   page: pageSlice.reducer,
+  gifticon: gifticonSlice.reducer,
 });
 
 const persistConfig = {
