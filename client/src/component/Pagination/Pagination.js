@@ -68,8 +68,9 @@ const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
           className={`${pagination[0] === currentPage && 'disabled'}`}
           onClick={handleClick.bind(null, currentPage - 1)}
         />
-        {pagination.map((page) => (
+        {pagination.map((page, idx) => (
           <li
+            key={idx}
             className={`${currentPage === page && 'active'}`}
             onClick={handleClick.bind(null, page)}
           >
