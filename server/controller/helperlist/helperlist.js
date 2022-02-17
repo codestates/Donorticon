@@ -13,7 +13,7 @@ module.exports = {
     page = !isNaN(page) ? page : 1;
     limit = !isNaN(limit) ? limit : 9;
 
-    console.log(page, limit);
+    // console.log(page, limit);
 
     // 5. Promise 앞에 await키워드를 사용하면,
     // 해당 Promise가 완료될 때까지 다음 코드로 진행하지 않고 기다렸다가
