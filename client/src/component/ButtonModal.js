@@ -66,8 +66,12 @@ const ButtonModal = ({
     }
   };
 
+  const ModalClose = () => {
+    setIsSignInOpen(false);
+  };
+
   return (
-    <ModalBackground>
+    <ModalBackground onClick={ModalClose}>
       <ButtonContainer>
         <Button onClick={handleButton}>{giverText}</Button>
         <Button onClick={handleButton}>{helperText}</Button>
