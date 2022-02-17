@@ -48,7 +48,7 @@ const createPagination = (params) => {
         .slice(0, sideBtn + rest)
         .reverse(),
       rest: function () {
-        console.log(sideBtn, this);
+        // console.log(sideBtn, this);
         return sideBtn - this.array.length;
       },
     };
