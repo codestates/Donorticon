@@ -10,7 +10,7 @@ module.exports = {
       },
       user_type: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       name: { // 게스트 로그인이 있을 수도 있으므로 allowNull을 아래 전부 표기하지 않았음
         type: Sequelize.STRING
