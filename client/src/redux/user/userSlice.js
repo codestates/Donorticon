@@ -38,7 +38,7 @@ export const userSlice = createSlice({
       }),
 });
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = 'https://donorticon.shop';
 // axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 // 회원가입
