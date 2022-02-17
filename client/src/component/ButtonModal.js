@@ -67,7 +67,11 @@ const ButtonModal = ({
   };
 
   const ModalClose = () => {
-    setIsSignInOpen(false);
+    if (setIsSignInOpen) {
+      setIsSignInOpen(false);
+    } else {
+      setIsSignUpOpen(false);
+    }
   };
 
   return (
