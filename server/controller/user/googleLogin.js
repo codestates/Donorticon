@@ -28,18 +28,27 @@ module.exports = {
           authorization: `Bearer ${token}`,
         },
       });
-      const data = googleUser.data;
+      const user = googleUser.data;
 
-      const [newGiver, created] = await giver.findOrCreate({
-        where: {
-          email: data.email,
-          name: data.name ? data.name : '',
-          user_type: 'giver',
-        },
-      });
-      const userInfo = newGiver.dataValues;
-      const accessToken = jwt.sign(userInfo, process.env.ACCESS_SECRET);
-      res.send({ accessToken, userInfo });
+      const giverFound = await giver.findOne({ where: { email: user.email } });
+
+      if (giverFound) {
+        const giverInfo = giverFound.dataValues;
+        delete giverInfo.password;
+        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+        res.send({ accessToken, giverInfo });
+      } else {
+        const newGiver = await giver.create({
+          email: user.email,
+          name: user.name === '' ? '' : user.name,
+          user_type: 1,
+        });
+        console.log(newGiver);
+        const { id, email, name, user_type } = newGiver.dataValues;
+        const giverInfo = { id, email, name, user_type };
+        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+        res.send({ accessToken, giverInfo });
+      }
     } catch (e) {
       console.log(e);
     }
