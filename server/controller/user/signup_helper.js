@@ -1,24 +1,8 @@
 const { helper, vulnerable, helper_vulnerable, gifticon_category, helper_gifticon_category } = require('../../models');
-const convertToArr = (param) => {
-  if (param.length === 1) {
-    let list = param;
-  } else {
-    let list = param.split(",");
-  }
-  let list = param
-  list[0] = list[0].substring(1);
-  list[list.length - 1] = list[list.length - 1].substring(
-    0,
-    list[list.length - 1].length - 1
-  );
-  list.forEach((x, i) => {
-    list[i] = list[i].includes('"') ? list[i].replaceAll('"', "").trim()
-       : list[i].replaceAll("'", "").trim();
-  });
-  return list;
-}; // "['children', 'elderly', 'female']" 과 같은 형식으로 데이터가 들어오는 데 이는 JSON 형식이 아님 따라서 별도의 변환 함수를 지정함
+
 const getIdList = async (listToConvert, modelName) => {
-  let idList = convertToArr(listToConvert);
+  // let idList = convertToArr(listToConvert);
+  let idList = listToConvert;
   idList = idList.map(el => { return { name: el }});
   const { Op } = require("sequelize");
   idList = await modelName.findAll({
@@ -46,19 +30,8 @@ module.exports = async (req, res) => {
       });
       const helperId = helperRow.id;
 
-      // let vulnerableList = convertToArr(vulnerableName);
- 
-      // vulnerableList = vulnerableList.map(el => { return { name: el }});
-
-      // const { Op } = require("sequelize");
-      // vulnerableList = await vulnerable.findAll({
-      //   where: {
-      //     [Op.or]: vulnerableList
-      //   }
-      // });
-
-      // vulnerableList = vulnerableList.map(el => el.dataValues.id);
       let vulnerableList = await getIdList(vulnerableName, vulnerable);
+      console.log(vulnerableList);
 
       const [vulnerableFound, vulnerableCreated] = await helper_vulnerable.findOrCreate({
         where: { helper_id: helperId },
@@ -67,21 +40,17 @@ module.exports = async (req, res) => {
 
       let gifticonCategoryList = await getIdList(gifticonCategoryName, gifticon_category);
 
-      // const gifticonCategoryRow = await gifticon_category.findOne({
-      //   where: { id: gifticonCategoryName }
-      // });
-      // const gifticonCategoryId = gifticonCategoryRow.id;
       const [gifticonCategoryFound, gifticonCategoryCreated] = await helper_gifticon_category.findOrCreate({
-        where: { helper_id: helperId},
+        where: { helper_id: helperId },
         defaults: { gifticon_category_id: gifticonCategoryList }
       });
       if (helperCreated && vulnerableCreated && gifticonCategoryCreated) {
-        return res.status(201).json({id: helperFound.dataValues.id});
+        return res.status(200).json('successfully signed up');
       } 
     } catch(err) {
-      console.log(err);
+      console.log(err)
     }
   } else {
-    return res.status(422).json('insufficient parameter supplied')
+    return res.status(422).json('insufficient parameter supplied') 
   }  
 }
