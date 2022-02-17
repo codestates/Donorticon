@@ -25,7 +25,7 @@ const HelperList = () => {
       console.log(e);
     }
   };
-  // console.log(list);
+
   useEffect(() => getList(), [currentPage]);
   return (
     <>
