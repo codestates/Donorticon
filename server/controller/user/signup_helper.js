@@ -1,7 +1,6 @@
 const { helper, vulnerable, helper_vulnerable, gifticon_category, helper_gifticon_category } = require('../../models');
 
 const getIdList = async (listToConvert, modelName) => {
-  // let idList = convertToArr(listToConvert);
   let idList = listToConvert;
   idList = idList.map(el => { return { name: el }});
   const { Op } = require("sequelize");
