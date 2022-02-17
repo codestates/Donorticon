@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
       const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
         expiresIn: '12h',
       });
-      res.status(200).json({ accessToken, messeage: 'successfully signed in' });
+      res.status(200).json({ accessToken, messeage: 'successfully signed in', data: { id: giverInfo.id }});
     }
   } catch (e) {
     console.log(e);
