@@ -47,13 +47,14 @@ const SignIn = () => {
 
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
+      const whoIs = who === 1 ? 'giver' : 'helper';
       try {
-        const result = await axios.post(`/signin/${who}`, userInfo);
+        const result = await axios.post(`/signin/${whoIs}`, userInfo);
         const { accessToken } = result.data;
         // console.log(result);
         dispatch(socialSignIn());
         localStorage.setItem('token', accessToken);
-        if (who === 'helper') {
+        if (whoIs === 'helper') {
           navigate('/mypage');
         } else {
           navigate(prev);
@@ -81,7 +82,7 @@ const SignIn = () => {
   };
 
   const handleGuest = async () => {
-    if (who === 'giver') {
+    if (who === 1) {
       try {
         dispatch(setWho('giver_guest'));
         const result = await axios.post('/guest/giver');
@@ -92,7 +93,7 @@ const SignIn = () => {
       } catch (e) {
         console.log(e);
       }
-    } else if (who === 'helper') {
+    } else if (who === 2) {
       try {
         dispatch(setWho('helper_guest'));
         const result = await axios.post('/guest/helper');
@@ -117,7 +118,7 @@ const SignIn = () => {
   };
   return (
     <Container>
-      <Title>{who === 'giver' ? 'G I V E R' : 'H E L P E R'}</Title>
+      <Title>{who === 1 ? 'G I V E R' : 'H E L P E R'}</Title>
       <SubTitle>L O G I N</SubTitle>
       <ContentBox>
         <Input name="email" placeholder="이메일" onChange={handleInput} />
@@ -130,7 +131,7 @@ const SignIn = () => {
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <Button onClick={handleSignin}>로그인</Button>
         <Button onClick={handleGuest}>게스트로그인</Button>
-        {who === 'giver' ? (
+        {who === 1 ? (
           <>
             <Button onClick={handleGoogle}>구글로그인</Button>
             <Button onClick={handleKakao}>카카오로그인</Button>

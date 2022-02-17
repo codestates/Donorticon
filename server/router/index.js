@@ -8,6 +8,7 @@ router.post('/signup/giver', user.signup_giver);
 router.post('/signup/helper', user.signup_helper);
 router.post('/signin/giver', user.signin_giver);
 router.post('/signin/helper', user.signin_helper);
+router.get('/mypage/giver', user.mypage_giver.get);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
