@@ -4,7 +4,7 @@ const { giver, helper, gifticon } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
-    // console.log(req.headers.authorization);
+    //TODO: token이 없는 경우 추가해야함
     const token = req.headers.authorization;
     if (token) {
       // 로그인한 유저 정보 가져오기
