@@ -76,10 +76,4 @@ export const SignUpButton = styled.button`
     background-color: ${({ theme }) => theme.color.main};
     transition: 0.5s;
   }
-  &:hover:disabled {
-    color: ${({ theme }) => theme.color.error};
-    background-color: #fff;
-    border: 1px solid ${({ theme }) => theme.color.error};
-    transition: 0.5s;
-  }
 `;
