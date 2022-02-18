@@ -1,71 +1,85 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  margin: 0 auto;
-  margin-bottom: 10%;
+export const SignUpContainer = styled.div`
+  width: 450px;
+  padding: 100px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 80%;
+    padding: 50px 0;
+  }
 `;
 
-export const Title = styled.div`
-  color: ${({ theme }) => theme.color.main};
-  font-size: 30px;
-  letter-spacing: 15px;
-  margin: 0 auto;
+export const ContentContainer = styled.div`
+  padding-top: 40px;
+  border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
 `;
 
-export const SubTitle = styled.div`
-  font-size: 20px;
-  letter-spacing: 15px;
-  margin: 3% auto;
-`;
-
-export const ContentGuider = styled.div`
-  margin: 0 auto;
-  text-align: center;
+export const ContentTitle = styled.div`
+  padding: 40px 0;
+  font-weight: 500;
   font-size: 20px;
 `;
 
-export const ContentBox = styled.div`
-  width: 50%;
-  height: 500px;
-  margin: 0 auto;
-  border-top: solid;
-  border-top-color: ${({ theme }) => theme.color.main};
+// checkbox
+export const CheckBoxContainer = styled.div`
+  text-align: left;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.color.progressBar};
+  border-bottom: none;
 `;
 
+export const Box = styled.div`
+  position: relative;
+`;
+
+export const CheckBox = styled.input.attrs({
+  type: 'checkbox',
+})`
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid ${({ theme }) => theme.color.lightGrey};
+  cursor: pointer;
+  &:checked {
+    border: none;
+    background-color: ${({ theme }) => theme.color.main};
+  }
+`;
+
+export const Label = styled.label`
+  cursor: pointer;
+  position: absolute;
+  top: 4px;
+  left: 30px;
+  font-size: 14px;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
+`;
+
+// button
 export const ButtonContainer = styled.div`
-  flex: 1, 0, 0;
+  padding-top: 20px;
   display: flex;
-  margin: 0 auto;
+  justify-content: space-between;
 `;
 
 export const SignUpButton = styled.button`
-  width: 100%;
+  width: 45%;
   border: 1px solid ${({ theme }) => theme.color.main};
+  background-color: ${({ theme }) => theme.color.main};
   cursor: pointer;
   padding: 10px 0;
   text-align: center;
   &:hover {
-    background: #fff;
+    background-color: #fff;
     background-color: ${({ theme }) => theme.color.main};
-    transition: 0.7s;
+    transition: 0.5s;
   }
-  &:disabled {
-    color: red;
-  }
-`;
-export const CheckList = styled.div`
-  width: 50%;
-  margin: 5% auto;
-`;
-
-export const Input = styled.input``;
-
-export const Label = styled.label`
-  cursor: pointer;
-  &:hover {
-    color: ${({ theme }) => theme.color.main};
+  &:hover:disabled {
+    color: ${({ theme }) => theme.color.error};
+    background-color: #fff;
+    border: 1px solid ${({ theme }) => theme.color.error};
+    transition: 0.5s;
   }
 `;

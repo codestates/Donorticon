@@ -1,18 +1,19 @@
-import { useState } from 'react';
-import InputSet from '../../component/Input';
 import axios from 'axios';
-import sha256 from 'js-sha256';
-import { useNavigate } from 'react-router-dom';
-import { setSocialUser } from '../../redux/user/userSlice';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ErrorMessage } from '../../component/Input';
+import { useNavigate } from 'react-router-dom';
+import sha256 from 'js-sha256';
+import { setSocialUser } from '../../redux/user/userSlice';
+import InputSet from '../../component/InputComponent';
+import { SignUpContainer } from '../../styles/SignUpStyle';
 import {
   Container,
-  Title,
+  SubContainer,
   SubTitle,
-  ContentBox,
-  SignUpButton,
-} from '../../styles/SignUpStyle';
+  Title,
+} from '../../styles/utils/Container';
+import { Button } from '../../styles/utils/Button';
+import { InputBox, InputContainer, InputLabel } from '../../styles/utils/Input';
 
 const SignUpGiver = () => {
   const navigate = useNavigate();
@@ -126,22 +127,31 @@ const SignUpGiver = () => {
 
   return (
     <Container>
-      <Title>G I V E R</Title>
-      <SubTitle>JOIN</SubTitle>
-      <ContentBox>
-        {input.map((card, idx) => (
-          <InputSet
-            key={idx}
-            title={card.title}
-            inputPlaceHolder={card.inputPlaceHolder}
-            callback={card.callback}
-            errorMessage={card.errorMessage}
-            check={isCheckStart}
-          />
-        ))}
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-        <SignUpButton onClick={handleSingUpButton}>회원 가입</SignUpButton>
-      </ContentBox>
+      <SignUpContainer>
+        <SubContainer>
+          <Title>GIVER</Title>
+          <SubTitle>회원가입</SubTitle>
+        </SubContainer>
+        <InputContainer>
+          {input.map((card, idx) => (
+            <InputBox key={idx}>
+              <InputLabel>
+                {card.title === '휴대전화' ? card.title : `${card.title} *`}
+              </InputLabel>
+              <InputSet
+                title={card.title}
+                inputPlaceHolder={card.inputPlaceHolder}
+                callback={card.callback}
+                errorMessage={card.errorMessage}
+                check={isCheckStart}
+              />
+            </InputBox>
+          ))}
+        </InputContainer>
+        <Button style={{ marginTop: '40px' }} onClick={handleSingUpButton}>
+          회원 가입
+        </Button>
+      </SignUpContainer>
     </Container>
   );
 };
