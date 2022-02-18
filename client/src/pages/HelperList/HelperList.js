@@ -10,7 +10,7 @@ const HelperContainer = styled.div`
 
 const HelperList = () => {
   return (
-    <HelperContainer>
+    <HelperContainer >
       <div>HELPER</div>
       <div>first filtering</div>
       <div>second filtering</div>

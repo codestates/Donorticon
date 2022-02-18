@@ -4,12 +4,14 @@ import Loader from './Loader';
 import HelperCard from './Card/HelperCard';
 import { CardContainer } from '../styles/CardStyle';
 import Pagination from './Pagination/Pagination';
+import { useNavigate } from 'react-router-dom';
 
 const HelperList = () => {
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [count, setCount] = useState(0);
+  const navigate = useNavigate();
 
   const getList = async () => {
     try {
@@ -33,7 +35,7 @@ const HelperList = () => {
         <Loader />
       ) : (
         <>
-          <CardContainer>
+          <CardContainer >
             {list.map((helper) => {
               return (
                 <HelperCard
