@@ -1,7 +1,6 @@
 'use strict';
 require('dotenv').config();
 const axios = require('axios');
-const { create } = require('domain');
 const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
 
@@ -43,7 +42,6 @@ module.exports = {
           name: user.name === '' ? '' : user.name,
           user_type: 1,
         });
-        console.log(newGiver);
         const { id, email, name, user_type } = newGiver.dataValues;
         const giverInfo = { id, email, name, user_type };
         const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);

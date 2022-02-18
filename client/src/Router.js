@@ -3,7 +3,7 @@ import Header from './component/Header';
 import Footer from './component/Footer';
 import Home from './pages/Home';
 import SignIn from './pages/SignIn/SignIn';
-import Mypage from './pages/Mypage';
+import Mypage from './pages/Mypage/Mypage';
 import Verification from './pages/Verification/Verification';
 import VerifyRedir from './pages/Verification/VerifyRedir';
 import SignUpGiver from './pages/SignUp/SignUpGiver';
