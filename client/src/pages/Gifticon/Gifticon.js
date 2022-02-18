@@ -1,11 +1,12 @@
-import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loader from '../../component/Loader';
-import { CardContainer } from '../../styles/CardStyle';
 import Pagination from '../../component/Pagination/Pagination';
 import GifticonCard from '../../component/Card/GifticonCard';
-import { useSelector } from 'react-redux';
+import { CardContainer } from '../../styles/CardStyle';
+
+import styled from 'styled-components';
 
 const GifticonContainer = styled.div`
   display: flex;
@@ -33,7 +34,7 @@ const Gifticon = () => {
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
-        { headers: { authorization: token } },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       const { list: gifticonList, maxPage, count } = data;
       setList(gifticonList);

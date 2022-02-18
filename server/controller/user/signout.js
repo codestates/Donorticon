@@ -1,10 +1,10 @@
 module.exports = {
-  signout: async (req, res) => {
+  signout: async (_, res) => {
     try {
-      res.status(205).json({ message: 'successfully signed out' });
+      res.status(205).send({ message: 'successfully logged out' });
     } catch (e) {
       console.log(e);
-      res.status(500).json({ message: 'server error' });
+      res.status(500).send({ message: 'server error' });
     }
   },
 };
