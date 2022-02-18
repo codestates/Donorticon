@@ -50,7 +50,11 @@ const SignIn = () => {
         if (whoIs === 'helper') {
           navigate('/mypage');
         } else {
-          navigate('/helperlist');
+          if (prev.includes('verifyRedir')) {
+            navigate('/helperlist');
+          } else {
+            navigate(prev);
+          }
         }
       } catch (e) {
         if (e.response.status === 401) {

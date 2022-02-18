@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sha256 } from 'js-sha256';
 import { setSocialUser } from '../../redux/user/userSlice';
@@ -29,6 +29,7 @@ import { ErrorMessage } from '../../styles/utils/Input';
 const SignUpHelper = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { prev } = useSelector((state) => state.page);
   const [helperInfo, setHelperInfo] = useState({
     email: '',
     password: '',
@@ -208,7 +209,13 @@ const SignUpHelper = () => {
         setButtonAble(page === 2 ? true : isValid[page + 1]);
       }
     } else if (e.target.textContent === '이전') {
-      if (page >= 1) {
+      if (page === 0) {
+        if (prev.includes('verifyRedir')) {
+          navigate('/');
+        } else {
+          navigate(prev);
+        }
+      } else if (page >= 1) {
         setPercent(percent - 25);
         setPage(page - 1);
         setButtonAble(isValid[page - 1]);
@@ -296,9 +303,7 @@ const SignUpHelper = () => {
             : ''}
         </ErrorMessage>
         <ButtonContainer>
-          <SignUpButton onClick={handleButton} disabled={page === 0}>
-            이전
-          </SignUpButton>
+          <SignUpButton onClick={handleButton}>이전</SignUpButton>
           <SignUpButton
             onClick={(e) => {
               if (buttonAble) {

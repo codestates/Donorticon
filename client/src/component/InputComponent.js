@@ -11,7 +11,7 @@ const InputSet = ({
   name,
 }) => {
   const [isError, setIsError] = useState(false);
-  const titleCheck = title === '비밀번호' ? 'password' : 'text';
+  const titleCheck = title.includes('비밀번호') ? 'password' : 'text';
 
   const handleInputContent = (e) => {
     setIsError(callback(e));
