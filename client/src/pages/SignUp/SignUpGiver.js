@@ -114,11 +114,11 @@ const SignUpGiver = () => {
           navigate(`../../verification`);
         }
       } catch (e) {
-        if (e.response.status === '409') {
+        if (e.response.status === 409) {
           setErrorMessage('이미 회원가입 된 이메일입니다');
-        } else if (e.response.status === '500') {
+        } else if (e.response.status === 500) {
           setErrorMessage('다시 시도해주세요');
-        } else if (e.response.status === '422') {
+        } else if (e.response.status === 422) {
           setErrorMessage('입력 정보를 확인해 주세요');
         }
       }
