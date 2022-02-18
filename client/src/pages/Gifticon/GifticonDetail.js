@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import GifticonStatusModal from '../../component/GifticonStatusModal';
 import { CardGallery } from '../../styles/CardStyle';
@@ -21,13 +21,13 @@ const GifticonDetail = () => {
       <div>기프티콘 상세정보</div>
       <CardGallery style={{ width: '200px', height: '300px' }} />
       <div>
-        {who === 'giver' ? 'helper' : 'giver'} {name}
+        {who === 1 ? 'helper' : 'giver'} {name}
       </div>
       <div>기부날짜 {createdAt}</div>
       <div>
         진행상태
         <GifticonButton
-          style={{ cursor: who === 'helper' ? 'pointer' : 'not-allowed' }}
+          style={{ cursor: who === 1 ? 'not-allowed' : 'pointer' }}
           text={status}
           textStyle={textStyle}
           onClick={handleBtnClick}
@@ -35,7 +35,7 @@ const GifticonDetail = () => {
           {status}
         </GifticonButton>
       </div>
-      {isModalOpen && who === 'helper' ? (
+      {isModalOpen && who === 2 ? (
         <GifticonStatusModal
           isModalOpen={isModalOpen}
           setIsModalOpen={setIsModalOpen}

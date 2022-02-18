@@ -61,32 +61,40 @@ const btnList = [
 
 const GifticonStatusModal = ({ isModalOpen, setIsModalOpen }) => {
   const dispatch = useDispatch();
-  const who = useSelector((state) => state.user.user.who);
-  const { status, id, textStyle } = useSelector((state) => state.gifticon);
+  const gifticon = useSelector((state) => state.gifticon);
 
   const token = localStorage.getItem('token');
-  const printList = btnList.filter((x) => x.name !== status);
+  const printList = btnList.filter((x) => x.name !== gifticon.status);
+
   const handleButton = async (e) => {
+    const btnText = e.target.innerText;
     try {
-      const { data } = await axios.put(
-        `/gifticon/detail/${id}`,
+      const {
+        data: { updated },
+      } = await axios.put(
+        `/gifticon/detail/${gifticon.id}`,
         {
-          status: e.target.innerText,
+          status: btnText,
         },
         {
-          headers: { authorization: token },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
-      if (data.status === 'used') {
-        dispatch(setInfo({ ...setInfo, status: '사용함', textStyle: 1 }));
-      } else if (data.status === 'accepted') {
-        dispatch(setInfo({ ...setInfo, status: '수락함', textStyle: 1 }));
-      } else if (data.status === 'checking') {
-        dispatch(setInfo({ ...setInfo, status: '확인중', textStyle: 1 }));
-      } else if (data.status === 'rejected') {
-        dispatch(setInfo({ ...setInfo, status: '확인중', textStyle: 2 }));
-      } else if (data.status === 'expired') {
-        dispatch(setInfo({ ...setInfo, status: '만료됨', textStyle: 2 }));
+
+      if (updated.status === 'used') {
+        dispatch(setInfo({ ...gifticon, status: '사용함', textStyle: 1 }));
+      }
+      if (updated.status === 'accepted') {
+        dispatch(setInfo({ ...gifticon, status: '수락함', textStyle: 1 }));
+      }
+      if (updated.status === 'checking') {
+        dispatch(setInfo({ ...gifticon, status: '확인중', textStyle: 1 }));
+      }
+      if (updated.status === 'rejected') {
+        dispatch(setInfo({ ...gifticon, status: '거절됨', textStyle: 2 }));
+      }
+      if (updated.status === 'expired') {
+        dispatch(setInfo({ ...gifticon, status: '만료됨', textStyle: 2 }));
       }
     } catch (e) {
       console.log(e);
