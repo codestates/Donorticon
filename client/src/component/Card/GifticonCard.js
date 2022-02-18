@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import { CardBox, CardGallery } from '../../styles/CardStyle';
 import { GifticonButton } from '../../styles/GifticonStyle';
