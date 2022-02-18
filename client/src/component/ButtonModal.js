@@ -67,12 +67,12 @@ const ButtonModal = ({
     if (text[1] === '로그인' && text[0] === 'giver') {
       setIsSignInOpen(false);
       // user.who = 'giver';
-      dispatch(setWho('giver'));
+      dispatch(setWho(1));
       navigate('/signin');
     } else if (text[1] === '로그인' && text[0] === 'helper') {
       setIsSignInOpen(false);
       // user.who = 'helper';
-      dispatch(setWho('helper'));
+      dispatch(setWho(2));
       navigate('/signin');
     }
   };
