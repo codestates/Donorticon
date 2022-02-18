@@ -3,7 +3,8 @@ module.exports = {
   signup_helper: require('./signup_helper'),
   signin_giver: require('./signin_giver'),
   signin_helper: require('./signin_helper'),
-  mypage_giver: require('./mypage_giver'),
+  signin_giver_guest: require('./signin_giver_guest'),
+  signin_helper_guest: require('./signin_helper_guest'),
 
   googleLogin: require('./googleLogin'),
   kakaoLogin: require('./kakaoLogin'),

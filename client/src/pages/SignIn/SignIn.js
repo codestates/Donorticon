@@ -51,16 +51,16 @@ const SignIn = () => {
       try {
         const result = await axios.post(`/signin/${whoIs}`, userInfo);
         const { accessToken } = result.data;
-        // console.log(result);
         dispatch(socialSignIn());
         localStorage.setItem('token', accessToken);
         if (whoIs === 'helper') {
           navigate('/mypage');
         } else {
-          navigate(prev);
+          navigate('/helperlist');
         }
       } catch (e) {
         switch (e.response.status) {
+          case 401: navigate('/verification')
           case 404: {
             setErrorMessage('email 및 비밀번호를 잘못 입력했습니다');
           }

@@ -1,44 +1,94 @@
 import styled from 'styled-components';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
-import {
-  setPage,
-  setLimit,
-  pageSelector
-} from '../../redux/page/pageSlice';
-import GifticonComponent from '../../component/Gifticon';
+import Loader from '../../component/Loader';
+import { CardContainer } from '../../styles/CardStyle';
+import Pagination from '../../component/Pagination/Pagination';
+import GifticonCard from '../../component/Card/GifticonCard';
+import { useSelector } from 'react-redux';
 
+const GifticonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
-const Button = styled.div`
-  width: 10%;
-  border-bottom: 1px solid black;
-  cursor: pointer;
-  font-size: 30px;
-  &:hover {
-    color: black;
-  }
+const Div = styled.div`
+  padding: 20px 0;
 `;
 
 const Gifticon = () => {
-  const dispatch = useDispatch();
-  const state = useSelector(pageSelector);
-  const [gifticon, setGifticon] = useState([]);  
+  const userType = useSelector((state) => state.user.user.who);
+  const [list, setList] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [maxPage, setMaxPage] = useState(1);
+  const [count, setCount] = useState(0);
+
   const [grade, setGrade] = useState('');
 
-  useEffect( async () => {
-    const request = await axios.get(`${process.env.REACT_APP_SERVER}/gifticon?page=${state.page}&limit=${state.limit}`);
-    setGifticon(request.data.gifticonList);
-    setGrade(request.data.userInfo.grade_id);
-  },[])
+  const getList = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const { data } = await axios.get(
+        `/gifticon?page=${currentPage}&limit=9`,
+        { headers: { authorization: token } },
+      );
+      const { list: gifticonList, maxPage, count } = data;
+      setList(gifticonList);
+      setMaxPage(maxPage);
+      setCount(count);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // useEffect(async () => {
+  //   setGifticon(request.data.gifticonList);
+  //   setGrade(request.data.userInfo.grade_id);
+  // }, []);
+
+  useEffect(() => getList(), [currentPage]);
 
   return (
-    <div>
-      <div>Your Grade is.... {grade || 0}!</div>
-      {gifticon.map((item, index) => {
-        return <GifticonComponent key={index} data={item}/>
-      })}
-    </div>
+    <GifticonContainer>
+      <Div>GIFTICON FILTERING 있어야 해</Div>
+      <Div>이미지 여기 있어야 함 그 옆에 어떤레벨인지 문구</Div>
+      <Div>Your Grade is.... {grade || 0}!</Div>
+      <Div style={{ fontSize: '20px' }}>
+        현재까지 {count}회 기부를{' '}
+        {userType === 'helper' ? '받으셨네요!' : '하셨네요!'}
+      </Div>
+      {list === undefined ? (
+        <Loader />
+      ) : (
+        <>
+          <CardContainer>
+            {list.map((gifticon) => {
+              return (
+                <GifticonCard
+                  key={gifticon.id}
+                  id={gifticon.id}
+                  data={gifticon}
+                  name={
+                    userType === 'helper'
+                      ? gifticon.giver.name
+                      : gifticon.helper.name
+                  }
+                />
+              );
+            })}
+          </CardContainer>
+          <Pagination
+            maxPage={maxPage}
+            currentPage={currentPage}
+            count={count}
+            setCurrentPage={setCurrentPage}
+          />
+        </>
+      )}
+    </GifticonContainer>
   );
 };
 
