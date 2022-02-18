@@ -1,14 +1,25 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { giver, helper, gifticon } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
-    //TODO: token이 없는 경우 추가해야함
-    const token = req.headers.authorization;
-    if (token) {
-      // 로그인한 유저 정보 가져오기
-      const user = jwt.verify(token, process.env.ACCESS_SECRET);
+    if (!req.headers.authorization) {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+
+    if (token === 'null') {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+
+    const user = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    if (!user) {
+      return res.status(401).send('invalid token');
+    }
+
+    if (token && user) {
       const { id, user_type, name } = user;
 
       let page = Math.max(parseInt(req.query.page));
@@ -21,7 +32,6 @@ module.exports = {
 
       let gifticonList;
 
-      // 1. 로그인한 유저가 giver 일때
       if (Number(user_type) === 1) {
         try {
           gifticonList = await gifticon.findAll({
@@ -32,7 +42,6 @@ module.exports = {
         }
       }
 
-      // 2. 로그인한 유저가 helper 일때
       if (Number(user_type) === 2) {
         try {
           gifticonList = await gifticon.findAll({
@@ -76,12 +85,18 @@ module.exports = {
                 },
           },
         });
-        // console.log(result.rows[0]);
-        const { count, rows: list } = result;
+
+        const { count, rows: gifticonList } = result;
         const maxPage = Math.ceil(count / limit);
-        res.status(200).send({ list, maxPage, count });
+        res.status(200).send({
+          gifticonList,
+          maxPage,
+          count,
+          message: 'successfully get data',
+        });
       } catch (e) {
         console.log(e);
+        res.status(404).send({ message: 'invalid request' });
       }
     }
   },

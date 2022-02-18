@@ -1,11 +1,12 @@
-import styled from 'styled-components';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Loader from '../../component/Loader';
-import { CardContainer } from '../../styles/CardStyle';
 import Pagination from '../../component/Pagination/Pagination';
 import GifticonCard from '../../component/Card/GifticonCard';
-import { useSelector } from 'react-redux';
+import { CardContainer } from '../../styles/CardStyle';
+
+import styled from 'styled-components';
 
 const GifticonContainer = styled.div`
   display: flex;
@@ -19,7 +20,8 @@ const Div = styled.div`
 `;
 
 const Gifticon = () => {
-  const userType = useSelector((state) => state.user.user.who);
+  const who = useSelector((state) => state.user.user.who);
+
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
@@ -33,9 +35,9 @@ const Gifticon = () => {
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
-        { headers: { authorization: token } },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
-      const { list: gifticonList, maxPage, count } = data;
+      const { gifticonList, maxPage, count } = data;
       setList(gifticonList);
       setMaxPage(maxPage);
       setCount(count);
@@ -57,8 +59,7 @@ const Gifticon = () => {
       <Div>이미지 여기 있어야 함 그 옆에 어떤레벨인지 문구</Div>
       <Div>Your Grade is.... {grade || 0}!</Div>
       <Div style={{ fontSize: '20px' }}>
-        현재까지 {count}회 기부를{' '}
-        {userType === 'helper' ? '받으셨네요!' : '하셨네요!'}
+        현재까지 {count}회 기부를 {who === 2 ? '받으셨네요!' : '하셨네요!'}
       </Div>
       {list === undefined ? (
         <Loader />
@@ -69,13 +70,8 @@ const Gifticon = () => {
               return (
                 <GifticonCard
                   key={gifticon.id}
-                  id={gifticon.id}
                   data={gifticon}
-                  name={
-                    userType === 'helper'
-                      ? gifticon.giver.name
-                      : gifticon.helper.name
-                  }
+                  name={who === 2 ? gifticon.giver.name : gifticon.helper.name}
                 />
               );
             })}
