@@ -6,7 +6,8 @@ const AdressContainer = styled.input`
   margin: 7px auto;
 `;
 
-const Addresser = ({ callback }) => {
+const Addresser = ({ callback, location }) => {
+  const [zipcode, adress, detail] = location.split('+');
   const { daum } = window;
   const findAddr = () => {
     new daum.Postcode({
@@ -22,13 +23,19 @@ const Addresser = ({ callback }) => {
         document.getElementById('member_post').value = data.zonecode;
         if (roadAddr !== '') {
           document.getElementById('member_addr').value = roadAddr;
-          callback(roadAddr);
+          callback(`${data.zonecode}+${roadAddr}`);
         } else if (jibunAddr !== '') {
           document.getElementById('member_addr').value = jibunAddr;
-          callback(jibunAddr);
+          callback(`${data.zonecode}+${jibunAddr}`);
         }
       },
     }).open();
+  };
+
+  const handleDetail = (e) => {
+    if (detail !== e.target.value) {
+      callback(location + `+${e.target.value}`);
+    }
   };
 
   return (
@@ -37,6 +44,7 @@ const Addresser = ({ callback }) => {
         id="member_post"
         type={'text'}
         placeholder="Zip code"
+        defaultValue={zipcode ? zipcode : ''}
         readOnly
         onClick={findAddr}
       />
@@ -44,9 +52,15 @@ const Addresser = ({ callback }) => {
         id="member_addr"
         type={'text'}
         placeholder="Address"
+        defaultValue={adress ? adress : ''}
         readOnly
       />
-      <AdressContainer type={'text'} placeholder="detail adress" />
+      <AdressContainer
+        type={'text'}
+        placeholder="detail adress"
+        defaultValue={detail ? detail : ''}
+        onBlur={handleDetail}
+      />
     </>
   );
 };
