@@ -6,18 +6,10 @@ module.exports = {
     if (!req.headers.authorization) {
       return res.status(401).send({ message: 'invalid token' });
     }
-    // const token = req.headers.authorization.split(' ')[1];
-    const token = req.headers.authorization;
 
-    if (token === 'null') {
-      return res.status(401).send({ message: 'invalid token' });
-    }
+    const token = req.headers.authorization.split(' ')[1];
 
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
-
-    if (!user) {
-      return res.status(401).send('invalid token');
-    }
 
     if (token && user) {
       const { id } = req.params;
@@ -40,11 +32,17 @@ module.exports = {
       }
 
       res.status(200).send({ gifticonInfo });
+    } else {
+      return res.status(404).send({ message: 'invalid request' });
     }
   },
   changeStatus: async (req, res) => {
+    if (!req.headers.authorization) {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
     // status 수정은 helper만 가능
-    const token = req.headers.authorization;
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
     const { user_type } = user;
 
@@ -68,8 +66,14 @@ module.exports = {
 
       try {
         await gifticon.update({ status: statusName }, { where: { id } });
-        const data = await gifticon.findOne({ where: { id } });
-        res.status(200).send(data);
+        const data = await gifticon.findOne({
+          where: { id },
+          attributes: {
+            exclude: ['giver_id', 'helper_id', 'createdAt', 'updatedAt'],
+          },
+        });
+        const updated = data.dataValues;
+        res.status(200).send({ updated, mesasge: 'successfully changed' });
       } catch (e) {
         console.log(e);
       }

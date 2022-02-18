@@ -1,14 +1,16 @@
-require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const { giver, helper, gifticon } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
-    //TODO: token이 없는 경우 추가해야함
-    const token = req.headers.authorization;
-    if (token) {
-      // 로그인한 유저 정보 가져오기
-      const user = jwt.verify(token, process.env.ACCESS_SECRET);
+    if (!req.headers.authorization) {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+
+    const token = req.headers.authorization.split(' ')[1];
+    const user = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    if (token && user) {
       const { id, user_type, name } = user;
 
       let page = Math.max(parseInt(req.query.page));
@@ -50,39 +52,22 @@ module.exports = {
           include: {
             model: Number(user_type) === 1 ? helper : giver,
             required: true,
-            attributes: Number(user_type === 1)
-              ? {
-                  exclude: [
-                    'password',
-                    'slogan',
-                    'description',
-                    'location',
-                    'createdAt',
-                    'updatedAt',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                }
-              : {
-                  exclude: [
-                    'password',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                },
+            attributes: ['name'],
           },
         });
-        // console.log(result.rows[0]);
-        const { count, rows: list } = result;
+        const { count, rows: gifticonList } = result;
         const maxPage = Math.ceil(count / limit);
-        res.status(200).send({ list, maxPage, count });
+        res.status(200).send({
+          gifticonList,
+          maxPage,
+          count,
+          message: 'successfully get data',
+        });
       } catch (e) {
         console.log(e);
       }
+    } else {
+      return res.status(404).send({ message: 'invalid request' });
     }
   },
 };
