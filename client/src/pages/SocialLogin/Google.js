@@ -1,27 +1,30 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
 
 const Google = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [token, setToken] = useState();
 
   const getGoogleCode = () => {
-    const googleCode = new URL(window.location.href).searchParams.get('code');
-    if (googleCode) {
-      getToken(googleCode);
+    const authorizationCode = new URL(window.location.href).searchParams.get(
+      'code',
+    );
+    if (authorizationCode) {
+      getToken(authorizationCode);
     }
   };
 
   const getToken = async (code) => {
     try {
-      const data = await axios.post('/google/signin', {
+      const {
+        data: { token },
+      } = await axios.post('/google/signin', {
         code,
       });
-      setToken(data.data.access_token);
+      getUserInfo(token);
     } catch (e) {
       console.log(e);
     }
@@ -29,12 +32,15 @@ const Google = () => {
 
   const getUserInfo = async (token) => {
     try {
-      const data = await axios.get(`/google/user?accessToken=${token}`);
-      if (data) {
-        const { email, name, user_type: who } = data.data.giverInfo;
+      const {
+        data: { giverInfo, accessToken },
+      } = await axios.get(`/google/user?accessToken=${token}`);
+
+      if (giverInfo) {
+        const { email, name, user_type: who } = giverInfo;
         dispatch(socialSignIn());
         dispatch(setSocialUser({ email, name, who }));
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', accessToken);
         navigate('/');
       }
     } catch (e) {
@@ -44,13 +50,7 @@ const Google = () => {
 
   useEffect(() => getGoogleCode(), []);
 
-  useEffect(() => getUserInfo(token), [token]);
-
-  return (
-    <>
-      <div></div>
-    </>
-  );
+  return <></>;
 };
 
 export default Google;
