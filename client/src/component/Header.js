@@ -120,15 +120,15 @@ const Header = () => {
       ) : null}
       {isSignInOpen ? (
         <ButtonModal
-          giverText={'giver 로그인'}
-          helperText={'helper 로그인'}
+          giverText={'GIVER 로그인'}
+          helperText={'HELPER 로그인'}
           setIsSignInOpen={setIsSignInOpen}
         />
       ) : null}
       {isSignUpOpen ? (
         <ButtonModal
-          giverText={'giver 회원가입'}
-          helperText={'helper 회원가입'}
+          giverText={'GIVER 회원가입'}
+          helperText={'HELPER 회원가입'}
           setIsSignUpOpen={setIsSignUpOpen}
         />
       ) : null}

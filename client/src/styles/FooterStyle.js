@@ -47,7 +47,7 @@ export const MemberName = styled.div`
 
 export const MemberPoition = styled.div`
   padding-bottom: 10px;
-  color: #a2a2a2;
+  color: ${({ theme }) => theme.color.lightGrey};
   font-size: 12px;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 10px;
@@ -55,7 +55,7 @@ export const MemberPoition = styled.div`
 `;
 
 export const MemberGithub = styled.div`
-  color: #858585;
+  color: ${({ theme }) => theme.color.darkGrey};
   font-size: 10px;
   font-weight: 500;
   cursor: pointer;

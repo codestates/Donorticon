@@ -1,25 +1,30 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { sha256 } from 'js-sha256';
+import { setSocialUser } from '../../redux/user/userSlice';
 import ProgressBar from '../../component/ProgressBar';
+import InputSet from '../../component/InputComponent';
+import AddressFinder from '../../component/AddressFinder';
+import {
+  ButtonContainer,
+  CheckBoxContainer,
+  SignUpButton,
+  SignUpContainer,
+  CheckBox,
+  ContentContainer,
+  ContentTitle,
+  Label,
+  Box,
+} from '../../styles/SignUpStyle';
 import {
   Container,
-  Title,
+  SubContainer,
   SubTitle,
-  ContentGuider,
-  ContentBox,
-  ButtonContainer,
-  SignUpButton,
-  Input,
-  Label,
-  CheckList,
-} from '../../styles/SignUpStyle';
-import { ErrorMessage } from '../../component/Input';
-import InputSet from '../../component/Input';
-import sha256 from 'js-sha256';
-import axios from 'axios';
-import Addresser from '../../component/AddressFinder';
-import { useNavigate } from 'react-router-dom';
-import { setSocialUser } from '../../redux/user/userSlice';
-import { useDispatch } from 'react-redux';
+  Title,
+} from '../../styles/utils/Container';
+import { ErrorMessage } from '../../styles/utils/Input';
 
 const SignUpHelper = () => {
   const navigate = useNavigate();
@@ -61,7 +66,7 @@ const SignUpHelper = () => {
         '정신질환자',
         '그 외',
       ],
-      errorMessage: '최소 하나를 선택해 주세요',
+      errorMessage: '1개 이상 선택해주세요',
     },
     {
       contentGuide: '무엇을 지원 받고 싶으신가요?',
@@ -76,7 +81,7 @@ const SignUpHelper = () => {
         '레저/스포츠',
         '상품권/영화/도서',
       ],
-      errorMessage: '최소 하나를 선택해 주세요',
+      errorMessage: '1개 이상 선택해주세요',
     },
     {
       contentGuide: '주요 활동지역을 알려주세요',
@@ -241,45 +246,51 @@ const SignUpHelper = () => {
 
   return (
     <Container>
-      <Title>HELPER</Title>
-      <SubTitle>JOIN</SubTitle>
-      <ContentBox>
-        <ProgressBar percent={percent} />
-        <ContentGuider>{signUpForm[page].contentGuide}</ContentGuider>
-        {page < 2 ? (
-          signUpForm[page].lists.map((list, idx) => (
-            <CheckList key={page * 7 + idx}>
-              <Input
-                id={page * 7 + idx}
-                name={signUpForm[page].name}
-                value={list}
-                type={'checkbox'}
-                onClick={handleCheckBox}
-                defaultChecked={helperInfo[signUpForm[page].name].includes(
-                  list,
-                )}
-              />
-              <Label htmlFor={page * 7 + idx}>{list}</Label>
-            </CheckList>
-          ))
-        ) : page === 2 ? (
-          <Addresser
-            callback={signUpForm[2].callback}
-            location={helperInfo.location}
-          />
-        ) : (
-          signUpForm[page].input.map((card, idx) => (
-            <InputSet
-              key={idx}
-              title={card.title}
-              inputPlaceHolder={card.inputPlaceHolder}
-              callback={card.callback}
-              errorMessage={card.errorMessage}
-              check={isCheckStart}
+      <SignUpContainer>
+        <SubContainer>
+          <Title>HELPER</Title>
+          <SubTitle>회원가입</SubTitle>
+        </SubContainer>
+        <ContentContainer>
+          <ProgressBar percent={percent} />
+          <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
+          {page < 2 ? (
+            signUpForm[page].lists.map((list, idx) => (
+              <CheckBoxContainer key={page * 7 + idx}>
+                <Box>
+                  <CheckBox
+                    key={page * 7 + idx}
+                    id={page * 7 + idx}
+                    name={signUpForm[page].name}
+                    value={list}
+                    onClick={handleCheckBox}
+                    defaultChecked={helperInfo[signUpForm[page].name].includes(
+                      list,
+                    )}
+                  />
+                  <Label htmlFor={page * 7 + idx}>{list}</Label>
+                </Box>
+              </CheckBoxContainer>
+            ))
+          ) : page === 2 ? (
+            <AddressFinder
+              callback={signUpForm[2].callback}
+              location={helperInfo.location}
             />
-          ))
-        )}
-        <ErrorMessage>
+          ) : (
+            signUpForm[page].input.map((card, idx) => (
+              <InputSet
+                key={idx}
+                title={card.title}
+                inputPlaceHolder={card.inputPlaceHolder}
+                callback={card.callback}
+                errorMessage={card.errorMessage}
+                check={isCheckStart}
+              />
+            ))
+          )}
+        </ContentContainer>
+        <ErrorMessage center style={{ paddingTop: '40px' }}>
           {page < 3 && !isValid[page] ? signUpForm[page].errorMessage : ''}
         </ErrorMessage>
         <ButtonContainer>
@@ -290,7 +301,7 @@ const SignUpHelper = () => {
             {page === 3 ? '가입하기' : '다음'}
           </SignUpButton>
         </ButtonContainer>
-      </ContentBox>
+      </SignUpContainer>
     </Container>
   );
 };
