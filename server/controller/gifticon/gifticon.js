@@ -8,7 +8,16 @@ module.exports = {
     }
 
     const token = req.headers.authorization.split(' ')[1];
+
+    if (token === 'null') {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    if (!user) {
+      return res.status(401).send('invalid token');
+    }
 
     if (token && user) {
       const { id, user_type, name } = user;
@@ -23,7 +32,6 @@ module.exports = {
 
       let gifticonList;
 
-      // 1. 로그인한 유저가 giver 일때
       if (Number(user_type) === 1) {
         try {
           gifticonList = await gifticon.findAll({
@@ -34,7 +42,6 @@ module.exports = {
         }
       }
 
-      // 2. 로그인한 유저가 helper 일때
       if (Number(user_type) === 2) {
         try {
           gifticonList = await gifticon.findAll({
@@ -52,9 +59,33 @@ module.exports = {
           include: {
             model: Number(user_type) === 1 ? helper : giver,
             required: true,
-            attributes: ['name'],
+            attributes: Number(user_type === 1)
+              ? {
+                  exclude: [
+                    'password',
+                    'slogan',
+                    'description',
+                    'location',
+                    'createdAt',
+                    'updatedAt',
+                    'mobile',
+                    'user_type',
+                    'verification',
+                    'verify_hash',
+                  ],
+                }
+              : {
+                  exclude: [
+                    'password',
+                    'mobile',
+                    'user_type',
+                    'verification',
+                    'verify_hash',
+                  ],
+                },
           },
         });
+
         const { count, rows: gifticonList } = result;
         const maxPage = Math.ceil(count / limit);
         res.status(200).send({
@@ -65,9 +96,8 @@ module.exports = {
         });
       } catch (e) {
         console.log(e);
+        res.status(404).send({ message: 'invalid request' });
       }
-    } else {
-      return res.status(404).send({ message: 'invalid request' });
     }
   },
 };
