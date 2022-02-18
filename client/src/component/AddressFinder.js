@@ -6,7 +6,7 @@ const AdressContainer = styled.input`
   margin: 7px auto;
 `;
 
-const Addresser = ({ callback, location }) => {
+const AddressFinder = ({ callback, location }) => {
   const [zipcode, adress, detail] = location.split('+');
   const { daum } = window;
   const findAddr = () => {
@@ -65,4 +65,4 @@ const Addresser = ({ callback, location }) => {
   );
 };
 
-export default Addresser;
+export default AddressFinder;

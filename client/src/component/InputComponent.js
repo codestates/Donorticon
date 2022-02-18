@@ -1,16 +1,5 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import { Input } from '../styles/utils/Input';
-
-const ContentTitle = styled.div`
-  margin-top: 5%;
-`;
-
-export const ErrorMessage = styled.div`
-  font-size: 12px;
-  text-align: center;
-  color: red;
-`;
+import { ErrorMessage, Input } from '../styles/utils/Input';
 
 const InputSet = ({
   title,
@@ -18,8 +7,10 @@ const InputSet = ({
   callback,
   errorMessage,
   check,
+  type,
 }) => {
   const [isError, setIsError] = useState(false);
+  const titleCheck = title === '비밀번호' ? 'password' : 'text';
 
   const handleInputContent = (e) => {
     setIsError(callback(e));
@@ -27,9 +18,8 @@ const InputSet = ({
 
   return (
     <>
-      <ContentTitle>{title}</ContentTitle>
       <Input
-        type={title.includes('비밀번호') ? 'password' : 'text'}
+        type={titleCheck}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />

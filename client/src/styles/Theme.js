@@ -3,6 +3,9 @@ const color = {
   main: '#FFCE44',
   mainDark: '#E5B93D',
   error: '#B71C1C',
+  lightGrey: '#a2a2a2',
+  darkGrey: '#858585',
+  progressBar: '#f2f2f2',
 };
 
 // 반응형 대응하기 위한 화면 크기
