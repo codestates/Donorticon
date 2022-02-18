@@ -21,6 +21,7 @@ const InputSet = ({
       <Input
         name={name}
         type={titleCheck}
+        name={name}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
       />
