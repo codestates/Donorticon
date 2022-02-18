@@ -7,6 +7,7 @@ import GifticonCard from '../../component/Card/GifticonCard';
 import { CardContainer } from '../../styles/CardStyle';
 
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const GifticonContainer = styled.div`
   display: flex;
@@ -20,6 +21,7 @@ const Div = styled.div`
 `;
 
 const Gifticon = () => {
+  const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
 
   const [list, setList] = useState([]);
@@ -41,6 +43,7 @@ const Gifticon = () => {
       setList(gifticonList);
       setMaxPage(maxPage);
       setCount(count);
+      navigate(`/gifticon?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
     }

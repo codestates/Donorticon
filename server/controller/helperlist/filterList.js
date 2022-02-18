@@ -6,10 +6,15 @@ module.exports = {
 
     //TODO: req.params 정보가 넘어오지 않았을때 에러 처리
     // if (!req.params) {
-
     // }
 
-    const id = parseInt(req.params.id);
+    let id;
+
+    if (req.params.id) {
+      id = parseInt(req.params.id);
+    } else {
+      id = parseInt(req.params.helperCategoryId);
+    }
 
     let page = Math.max(parseInt(req.query.page));
     let limit = Math.max(parseInt(req.query.limit));
@@ -26,7 +31,7 @@ module.exports = {
     let list;
     let maxPage;
     let count;
-
+    console.log(id, page);
     if (id === 0) {
       try {
         //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
@@ -37,7 +42,6 @@ module.exports = {
           where: {},
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
-
         const { count, rows: list } = filteredList;
         maxPage = Math.ceil(count / limit);
         res.send({ list, maxPage, count });

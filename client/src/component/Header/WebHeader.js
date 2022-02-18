@@ -12,7 +12,7 @@ const WebHeader = ({ handleSignOut, handleSignInModal, handleSignUpModal }) => {
     <NavContainer>
       {isLoggedIn ? (
         <ListContainer>
-          <StyledLink to="/helperlist">
+          <StyledLink to="/helperlist/category/0?page=1&limit=9">
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <StyledLink to="/dm">
@@ -25,7 +25,7 @@ const WebHeader = ({ handleSignOut, handleSignInModal, handleSignUpModal }) => {
         </ListContainer>
       ) : (
         <ListContainer>
-          <StyledLink to="/helperlist">
+          <StyledLink to="/helperlist/category/0?page=1&limit=9">
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <ListItem onClick={handleSignInModal}>로그인</ListItem>
