@@ -22,5 +22,8 @@ router.post('/kakao/signin', user.kakaoLogin.getToken);
 router.get('/kakao/user?', user.kakaoLogin.getUser);
 router.post('/signout', user.signout.signout);
 router.get('/helperlist?', helperlist.helperlist.getList);
+router.get('/helperlist/:id', helperlist.helperlist.getDetail);
+router.post('/helperlist/:id', helperlist.helperlist.donate);
+
 
 module.exports = router;
