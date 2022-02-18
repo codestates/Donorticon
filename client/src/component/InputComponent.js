@@ -8,6 +8,7 @@ const InputSet = ({
   errorMessage,
   check,
   type,
+  name,
 }) => {
   const [isError, setIsError] = useState(false);
   const titleCheck = title === '비밀번호' ? 'password' : 'text';
@@ -19,6 +20,7 @@ const InputSet = ({
   return (
     <>
       <Input
+        name={name}
         type={titleCheck}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
