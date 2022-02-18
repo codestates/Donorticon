@@ -32,7 +32,7 @@ const Router = () => {
         <Route path="/gifticon/detail/:id" element={<GifticonDetail />} />
         <Route path="/google/signin" element={<Google />} />
         <Route path="/kakao/signin" element={<KaKao />} />
-        <Route path="/helperlist" element={<HelperList />} />
+        <Route path="/helperlist/category/:id" element={<HelperList />} />
         <Route path="/helperlist/detail/:id" element={<HelperDetail />} />
       </Routes>
       <Footer />

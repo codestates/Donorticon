@@ -17,8 +17,9 @@ import women from '../img/helperCategory/6_women.png';
 import mental from '../img/helperCategory/7_mental.png';
 import etc from '../img/helperCategory/8_etc.png';
 import CardList from './Card/CardList';
+import { useNavigate } from 'react-router-dom';
 
-const category = [
+const helperCategory = [
   { id: 0, name: '전체보기', src: all },
   { id: 1, name: '아동청소년', src: child },
   { id: 2, name: '어르신', src: old },
@@ -30,57 +31,78 @@ const category = [
 ];
 
 const HelperFilter = () => {
+  const navigate = useNavigate();
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [count, setCount] = useState(0);
+  const [helperCategoryId, SetHelperCategoryId] = useState(0);
 
   const getList = async () => {
+    SetHelperCategoryId(0);
     try {
+      //   console.log('여기여기', helperCategoryId);
       const { data } = await axios.get(
-        `/helperlist?page=${currentPage}&limit=9`,
+        `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
       );
-      const { list: helperlist, maxPage, count } = data;
-      setList(helperlist);
+      const { list: helperList, maxPage, count } = data;
+      setList(helperList);
       setMaxPage(maxPage);
       setCount(count);
+      navigate(
+        `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
+      );
     } catch (e) {
       console.log(e);
     }
   };
 
   const handleNameClick = async (name) => {
-    const filtered = category.filter((x) => x.name === name);
+    const filtered = helperCategory.filter((x) => x.name === name);
     const id = filtered[0].id;
     setCurrentPage(1);
-    getFilteredList(id);
+    SetHelperCategoryId(id);
   };
 
   const getFilteredList = async (id) => {
-    try {
-      if (id === 0) {
-        return getList();
+    if (id === 0) {
+      return getList();
+    } else {
+      //   console.log('카테고리아이디', id);
+      setCurrentPage(1);
+      try {
+        const { data } = await axios.get(
+          `/helperlist/category/${id}?page=${currentPage}&limit=9`,
+        );
+        const { list, maxPage, count } = data;
+        const filteredList = list.map((x) => x.helper);
+        setList(filteredList);
+        setMaxPage(maxPage);
+        setCount(count);
+        navigate(
+          `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
+        );
+      } catch (e) {
+        console.log(e);
       }
-      const { data } = await axios.get(
-        `/helperlist/category/${id}?page=${currentPage}&limit=9`,
-      );
-      const { list, maxPage, count } = data;
-      const filteredList = list.map((x) => x.helper);
-      setList(filteredList);
-      setMaxPage(maxPage);
-      setCount(count);
-    } catch (e) {
-      console.log(e);
     }
   };
 
-  useEffect(() => getList(), []);
+  //   useEffect(() => getList(), []);
+
+  useEffect(() => {
+    if (helperCategoryId === 0) {
+      getList();
+    } else {
+      getFilteredList(helperCategoryId);
+    }
+  }, [currentPage, helperCategoryId]);
 
   return (
     <>
       <CategoryContainer>
         <CategoryBox>
-          {category.map((x, idx) => {
+          {helperCategory.map((x, idx) => {
             const name = x.name;
             return (
               <CategoryContent key={idx}>
