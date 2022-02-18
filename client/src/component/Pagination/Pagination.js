@@ -57,7 +57,9 @@ const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
     currentPage,
     maxPage,
   });
-  const handleClick = (page) => setCurrentPage(page);
+  const handleClick = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Container>
