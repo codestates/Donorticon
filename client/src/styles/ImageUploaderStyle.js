@@ -36,7 +36,11 @@ export const Label = styled.label`
 
 export const Button = styled.div`
   background-color: #fac711;
+  padding: 0.5rem;
+  font-size: 2rem;
   margin: 1rem 2rem;
+  border-radius: 20px;
+  cursor: pointer;
 `;
 
 export const ButtonSection = styled.div`
@@ -57,5 +61,6 @@ export const DragNDropWrapper = styled.div`
   }
 `;
 
-export const DragNDropContainer = styled.div`
+export const DragNDropSpace = styled.div`
+  width: 100%;
 `;

@@ -1,43 +1,49 @@
-import { Container, Input, Wrapper, Button, ButtonSection, Label, Img, DragNDropWrapper, DragNDropContainer } from "../styles/ImageUploaderStyle";
+import { Container, Input, Wrapper, Button, ButtonSection, Label, Img, DragNDropWrapper, DragNDropSpace } from "../styles/ImageUploaderStyle";
 import { useState, useCallback } from 'react';
 import { useDropzone } from "react-dropzone";
 import { FaFileUpload } from 'react-icons/fa';
 
-const ImageUploader = () => {
-  const [uploadedFile, setUploadedFile] = useState('');
+const ImageUploader = (okCallback, cancleCallback, mesage=false) => {
+  const [uploadedImage, setUploadedImage] = useState('');
   const preview = (event) => {
     const file = event.target.files[0];
     const objectUrl = URL.createObjectURL(file)
-    setUploadedFile(objectUrl);
+    setUploadedImage(objectUrl);
   }
 
-  const { getRootProps, getInputProps, isDragActive} = useDropzone();
-  console.log(getInputProps())
+  const onDrop = useCallback((acceptedFiles, rejectFiles) => {
+    console.log("acceptedFiles",URL.createObjectURL(acceptedFiles[0]))
+    console.log("rejectFiles", rejectFiles)
+    setUploadedImage(URL.createObjectURL(acceptedFiles[0]));
+  }, []);
+  const { getRootProps, getInputProps, isDragActive} = useDropzone({
+    onDrop,
+    accept: 'image/png, image/jpg, image/jpeg',
+  });
 
   return (
     <Container>
       <Wrapper>    
-        {uploadedFile ? <Img src={uploadedFile}></Img> : 
+        {uploadedImage ? <Img src={uploadedImage}></Img> : 
         <div>
           <DragNDropWrapper>
+            <div {...getRootProps()}>
+            <input {...getInputProps()} />
+            <DragNDropSpace>
             <FaFileUpload size='5rem'/>
-            <div>Drag & Drop</div>
-            <div>OR</div>
+            {isDragActive ?
+              <div>YESSSS DROP IT!</div>:
+              <div><p>Drag & Drop</p><p>OR</p></div>}
+            </DragNDropSpace>
+            </div>
           </DragNDropWrapper>
-          <Label><Input type="file" accept="image/png, image/jpg" onChange={preview}></Input>Click here</Label>
+          <Label><Input type="file" accept="image/png, image/jpg, image/jpeg" onChange={preview}></Input>Click here</Label>
         </div>}
       </Wrapper>
       <ButtonSection>
-        <Button>Okay</Button>
-        <Button>Cancle</Button>
+        <Button onClick={okCallback}>Okay</Button>
+        <Button onClick={cancleCallback}>Cancle</Button>
       </ButtonSection>
-
-      <DragNDropContainer>
-        dragNdrop
-      <div {...getRootProps()}>
-        <input {...getInputProps()} />
-      </div>
-      </DragNDropContainer>
     </Container>
   )
 }
