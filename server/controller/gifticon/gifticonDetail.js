@@ -3,13 +3,24 @@ const { gifticon, helper } = require('../../models');
 
 module.exports = {
   getDetail: async (req, res) => {
+    if (!req.headers.authorization) {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+    // const token = req.headers.authorization.split(' ')[1];
     const token = req.headers.authorization;
-    const { id } = req.params;
+
+    if (token === 'null') {
+      return res.status(401).send({ message: 'invalid token' });
+    }
 
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
-    //TODO: token이 없는 경우 추가해야함
-    //TODO: 로그인한 유저가 helper인 경우
+
+    if (!user) {
+      return res.status(401).send('invalid token');
+    }
+
     if (token && user) {
+      const { id } = req.params;
       const { user_type } = user;
       let gifticonInfo;
 
@@ -27,6 +38,7 @@ module.exports = {
           console.log(e);
         }
       }
+
       res.status(200).send({ gifticonInfo });
     }
   },
