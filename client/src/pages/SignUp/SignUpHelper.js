@@ -194,6 +194,7 @@ const SignUpHelper = () => {
   };
 
   const handleButton = async (e) => {
+    console.log(helperInfo);
     if (e.target.textContent === '다음') {
       if (page <= 2) {
         setPercent(percent + 25);
@@ -262,7 +263,10 @@ const SignUpHelper = () => {
             </CheckList>
           ))
         ) : page === 2 ? (
-          <Addresser callback={signUpForm[2].callback} />
+          <Addresser
+            callback={signUpForm[2].callback}
+            location={helperInfo.location}
+          />
         ) : (
           signUpForm[page].input.map((card, idx) => (
             <InputSet
