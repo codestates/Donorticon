@@ -120,11 +120,13 @@ const SignIn = () => {
         <InputContainer>
           <InputSet
             title="이메일"
+            name="email"
             inputPlaceHolder="이메일"
             callback={handleInput}
           />
           <InputSet
             title="비밀번호"
+            name="password"
             inputPlaceHolder="비밀번호"
             callback={handleInput}
           />

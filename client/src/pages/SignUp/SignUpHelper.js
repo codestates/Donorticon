@@ -53,6 +53,7 @@ const SignUpHelper = () => {
   const [page, setPage] = useState(0);
   const [buttonAble, setButtonAble] = useState(false);
   const [isCheckStart, setIsCheckStart] = useState(false);
+  const [displayError, setDisplayError] = useState(false);
   const signUpForm = [
     {
       contentGuide: '어떤 분들을 돕고 계신가요?',
@@ -213,7 +214,6 @@ const SignUpHelper = () => {
         setButtonAble(isValid[page - 1]);
       }
     } else {
-      console.log(isValid);
       setIsCheckStart(isValid.includes(false));
       if (!isValid.includes(false)) {
         try {
@@ -291,13 +291,25 @@ const SignUpHelper = () => {
           )}
         </ContentContainer>
         <ErrorMessage center style={{ paddingTop: '40px' }}>
-          {page < 3 && !isValid[page] ? signUpForm[page].errorMessage : ''}
+          {page < 3 && !isValid[page] && displayError
+            ? signUpForm[page].errorMessage
+            : ''}
         </ErrorMessage>
         <ButtonContainer>
           <SignUpButton onClick={handleButton} disabled={page === 0}>
             이전
           </SignUpButton>
-          <SignUpButton onClick={handleButton} disabled={!buttonAble}>
+          <SignUpButton
+            onClick={(e) => {
+              if (buttonAble) {
+                handleButton(e);
+                setDisplayError(false);
+              } else {
+                setDisplayError(true);
+              }
+            }}
+            buttonAble
+          >
             {page === 3 ? '가입하기' : '다음'}
           </SignUpButton>
         </ButtonContainer>
