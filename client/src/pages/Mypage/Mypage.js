@@ -13,33 +13,34 @@ import {
   InputChanger,
   ChangeButton,
   ProfileImg,
-} from '../styles/Mypage';
+} from '../../styles/Mypage';
 import axios from 'axios';
+import { ListContainer } from '../../styles/HeaderStyle';
 
 const Mypage = () => {
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
   // console.log(whoIs);
-  const giverExmaple = {
-    id: 1,
-    email: 'hwlsgur1120@naver.com',
-    name: '허진혁',
-    mobile: '010-0000-0000',
-    img: 'example',
-  };
-  const heleprExample = {
-    id: 1,
-    email: 'kimcoding@codestates.com',
-    name: 'kimcoding',
-    mobile: '010-1234-5678',
-    img: 'https://getprofileimg.com/png',
-    location: '경기도 성남시',
-    vulnerable: ['아동/청소년', '어르신'],
-    gifticonCategory: ['식품', '가전제품'],
-    gallery: ['https://getimg.com/1/png', 'https://getimg.com/2/png'],
-    description: '남녀노소 모두를 봉사합니다',
-    slogan: '기부해주세요',
-  };
+  // const giverExmaple = {
+  //   id: 1,
+  //   email: 'hwlsgur1120@naver.com',
+  //   name: '허진혁',
+  //   mobile: '010-0000-0000',
+  //   img: 'example',
+  // };
+  // const heleprExample = {
+  //   id: 1,
+  //   email: 'kimcoding@codestates.com',
+  //   name: 'kimcoding',
+  //   mobile: '010-1234-5678',
+  //   img: 'https://getprofileimg.com/png',
+  //   location: '경기도 성남시',
+  //   vulnerable: ['아동/청소년', '어르신'],
+  //   gifticonCategory: ['식품', '가전제품'],
+  //   gallery: ['https://getimg.com/1/png', 'https://getimg.com/2/png'],
+  //   description: '남녀노소 모두를 봉사합니다',
+  //   slogan: '기부해주세요',
+  // };
   const [userInfo, setUserInfo] = useState({});
   const [isChanging, setIsChanging] = useState([
     // giver  helper
@@ -158,16 +159,33 @@ const Mypage = () => {
     //   headers: localStorage.getItem('token'),
     // });
     // setUserInfo(data);
+    console.log(whoIs);
     if (whoIs === 'giver') {
-      setUserInfo(giverExmaple);
+      try {
+        const { data } = await axios.get('/mypage/giver', {
+          headers: { token: localStorage.getItem('token') },
+        });
+        setUserInfo(data);
+      } catch (e) {
+        console.log(e);
+      }
     } else if (whoIs === 'helper') {
-      setUserInfo(
-        Object.assign(
-          heleprExample,
-          { vulnerable: '#' + heleprExample.vulnerable.join(' #') },
-          { gifticonCategory: '#' + heleprExample.gifticonCategory.join(' #') },
-        ),
-      );
+      try {
+        const { data } = await axios.get('/mypage/helper', {
+          headers: { token: localStorage.getItem('token') },
+        });
+        setUserInfo(
+          Object.assign(
+            data,
+            { vulnerable: '#' + data.vulnerable.join(' #') },
+            {
+              gifticonCategory: '#' + data.gifticonCategory.join(' #'),
+            },
+          ),
+        );
+      } catch (e) {
+        console.log(e);
+      }
     }
   }, []);
 
