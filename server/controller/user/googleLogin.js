@@ -5,7 +5,6 @@ const { giver } = require('../../models');
 module.exports = {
   getToken: async (req, res) => {
     const code = req.body.code;
-
     const url = `https://oauth2.googleapis.com/token?code=${code}&client_id=${process.env.GOOGLE_CLIENT_ID}&client_secret=${process.env.GOOGLE_CLIENT_SECRET}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&grant_type=${process.env.GOOGLE_GRANT_TYPE}`;
     try {
       const data = await axios.post(url, {
@@ -20,7 +19,6 @@ module.exports = {
   },
   getUser: async (req, res) => {
     const token = req.query.accessToken;
-
     const googleAPI = `https://www.googleapis.com/oauth2/v2/userinfo?access_token=${token}`;
     try {
       const googleUser = await axios.get(googleAPI, {
@@ -43,7 +41,6 @@ module.exports = {
           const giverInfo = giverFound.dataValues;
           delete giverInfo.password;
           const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
-
           res.status(200).send({
             accessToken,
             giverInfo,

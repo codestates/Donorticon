@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
 import { useNavigate } from 'react-router-dom';
+import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
 
 const Google = () => {
   const dispatch = useDispatch();
@@ -35,6 +35,7 @@ const Google = () => {
       const {
         data: { giverInfo, accessToken },
       } = await axios.get(`/google/user?accessToken=${token}`);
+
       if (giverInfo) {
         const { email, name, user_type: who } = giverInfo;
         dispatch(socialSignIn());
