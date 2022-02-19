@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
       // 해당 테이블에 여러 데이터를 순차적으로 insert
 
       if (helperCreated && helperVulnerableUpdated && gifticonCategoryUpdated) {
-        return res.status(201).json({ message: 'successfully signed up' });
+        return res.status(201).json({ message: `welcome! you have sucessfully signed up`, id: helperId});
       } 
     } catch(err) {
       console.log(err)
