@@ -1,4 +1,4 @@
 module.exports = {
-  helperList: require('./helperlist'),
+  list: require('./list'),
   filterList: require('./filterList'),
 };
