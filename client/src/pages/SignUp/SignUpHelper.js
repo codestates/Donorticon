@@ -24,7 +24,12 @@ import {
   SubTitle,
   Title,
 } from '../../styles/utils/Container';
-import { ErrorMessage } from '../../styles/utils/Input';
+import {
+  ErrorMessage,
+  InputBox,
+  InputContainer,
+  InputLabel,
+} from '../../styles/utils/Input';
 
 const SignUpHelper = () => {
   const navigate = useNavigate();
@@ -285,16 +290,23 @@ const SignUpHelper = () => {
               location={helperInfo.location}
             />
           ) : (
-            signUpForm[page].input.map((card, idx) => (
-              <InputSet
-                key={idx}
-                title={card.title}
-                inputPlaceHolder={card.inputPlaceHolder}
-                callback={card.callback}
-                errorMessage={card.errorMessage}
-                check={isCheckStart}
-              />
-            ))
+            <InputContainer>
+              {signUpForm[page].input.map((card, idx) => (
+                <InputBox key={idx}>
+                  <InputLabel>
+                    {card.title === '휴대전화' ? card.title : `${card.title} *`}
+                  </InputLabel>
+                  <InputSet
+                    key={idx}
+                    title={card.title}
+                    inputPlaceHolder={card.inputPlaceHolder}
+                    callback={card.callback}
+                    errorMessage={card.errorMessage}
+                    check={isCheckStart}
+                  />
+                </InputBox>
+              ))}
+            </InputContainer>
           )}
         </ContentContainer>
         <ErrorMessage center style={{ paddingTop: '40px' }}>

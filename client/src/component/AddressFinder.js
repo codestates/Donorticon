@@ -21,9 +21,9 @@ const Input = styled.input`
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.color.progressBar};
   background-color: none;
-  &:focus {
+  /* &:focus {
     outline-color: ${({ theme }) => theme.color.main};
-  }
+  } */
 `;
 
 const AddressFinder = ({ callback, location }) => {
