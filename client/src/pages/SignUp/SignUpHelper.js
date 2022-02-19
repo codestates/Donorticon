@@ -258,7 +258,7 @@ const SignUpHelper = () => {
           <Title>HELPER</Title>
           <SubTitle>회원가입</SubTitle>
         </SubContainer>
-        <ContentContainer>
+        <ContentContainer show={page < 2 ? true : false}>
           <ProgressBar percent={percent} />
           <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
           {page < 2 ? (
