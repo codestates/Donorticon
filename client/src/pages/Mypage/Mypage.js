@@ -79,6 +79,15 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
+        blurCallback: (e, idx, boolean) => {
+          if (e.target.value.length <= 8) {
+            const arr = [...isChanging];
+            arr[idx] = boolean;
+            setIsChanging(arr);
+          } else {
+            console.log('name 8자 넘어');
+          }
+        },
       },
       {
         inputName: 'mobile',
