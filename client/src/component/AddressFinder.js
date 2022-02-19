@@ -5,24 +5,25 @@ import { useState } from 'react';
 const Box = styled.div`
   display: flex;
   direction: row;
+  padding-bottom: 10px;
 `;
-const Guider = styled.div`
-  font-size: 15px;
-`;
+const Guider = styled.div``;
 const EditButton = styled.button`
   margin-left: auto;
   color: ${({ theme }) => theme.color.mainDark};
   cursor: pointer;
 `;
 const Input = styled.input`
+  all: unset;
+  box-sizing: border-box;
   width: 100%;
-  margin: 5px 0;
+  text-align: left;
   padding: 10px;
-  border-color: ${({ theme }) => theme.color.lightGrey};
-  background-color: whitesmoke;
-  &:focus {
+  border: 1px solid ${({ theme }) => theme.color.progressBar};
+  background-color: none;
+  /* &:focus {
     outline-color: ${({ theme }) => theme.color.main};
-  }
+  } */
 `;
 
 const AddressFinder = ({ callback, location }) => {

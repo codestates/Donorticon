@@ -114,6 +114,7 @@ const SignIn = () => {
     const KAKAO_LOGIN_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
     window.location.assign(KAKAO_LOGIN_URL);
   };
+
   return (
     <Container>
       <SignInContainer>
