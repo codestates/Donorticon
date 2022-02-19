@@ -26,7 +26,6 @@ router.post('/signout', user.signout.signout);
 router.get('/helperlist/:id', helperList.list.getDetail);
 router.post('/helperlist/:id', helperList.list.donate);
 
-// router.get('/helperlist/category/:id?', helperList.helperList.getList);
 router.get('/helperlist/category/:id?', helperList.filterList.getFilteredList);
 
 module.exports = router;
