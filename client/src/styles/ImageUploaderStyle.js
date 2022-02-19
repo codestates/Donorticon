@@ -2,16 +2,18 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   width: 50%;
-  height: 30rem;
+  height: auto;
   text-align: center;
   border-radius: 20px;
   box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
+  background-color: white;
+  z-index: 100;
 `;
 
-export const Wrapper = styled.div`
+export const ImgWrapper = styled.div`
   margin: 1rem;
   width: 95%;
-  height: 80%;
+  height: 20rem;
   border-radius: 20px;
   border: dashed grey;
   display: flex;
@@ -20,8 +22,28 @@ export const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-export const Input = styled.input`
+export const TxtWrapper = styled.div`
+  margin: 1rem;
+  width: 95%;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  flex-direction: column;
+  > div {
+    position: relative;
+    
+  }
+`;
+
+export const InputImg = styled.input`
   display: none;
+`;
+
+export const InputText = styled.input`
+  border-radius: 20px;
+  height: 8rem;
+  font-size: 2rem;
 `;
 
 export const Label = styled.label`
