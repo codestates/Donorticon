@@ -3,13 +3,18 @@ import { useState, useCallback } from 'react';
 import { useDropzone } from "react-dropzone";
 import { FaFileUpload } from 'react-icons/fa';
 import { ModalBackground, ModalFrame } from '../styles/utils/Modal';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-const ImageUploader = ( {includeMessage=false, handleModalOpen, api}) => {
+const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, helperId}) => {
   const [uploadedImage, setUploadedImage] = useState('');
+  const [bucketImage, setBucketImage] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
   const preview = (event) => {
-    const file = event.target.files[0];
-    const objectUrl = URL.createObjectURL(file)
+    const rawFile = event.target.files[0];
+    setBucketImage(rawFile);
+    const objectUrl = URL.createObjectURL(rawFile);
     setUploadedImage(objectUrl);
   }
   const handleMessage = (event) => {
@@ -17,6 +22,7 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api}) => {
     setMessage(text);
   }
 
+  //Drag and drop codes
   const onDrop = useCallback((acceptedFiles, rejectFiles) => {
     setUploadedImage(URL.createObjectURL(acceptedFiles[0]));
   }, []);
@@ -24,6 +30,24 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api}) => {
     onDrop,
     accept: 'image/png, image/jpg, image/jpeg',
   });
+
+  //Upload images to S3
+  const handleSubmit = async () => {
+    const url = await (await axios.post(api, {message, giverId, helperId})).data.url;
+    const upload = await axios(url, {
+      method:"PUT",
+      headers: {
+        "Content-Type": "multipart/form-data"
+      },
+      body: bucketImage
+    })
+    if (upload) {
+      handleModalOpen();
+      navigate('/mypage');
+    } else {
+      alert("Failed at sending image")
+    }
+  }
 
   return (
     <ModalBackground>
@@ -52,7 +76,9 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api}) => {
         </TxtWrapper> : null
       }
       <ButtonSection>
-        <Button>Okay</Button>
+        {uploadedImage ?         
+        <Button onClick={handleSubmit}>Okay</Button> :
+        <Button disabled='disabled' className='disabled'>Okay</Button> }
         <Button onClick={handleModalOpen}>Cancle</Button>
       </ButtonSection>
     </Container>
