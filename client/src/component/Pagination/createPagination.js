@@ -7,7 +7,7 @@ const createPagination = (params) => {
   //   maxPage,
   // });
 
-  const { currentPage, numberOfPageNumBtn, maxPage } = params;
+  const { currentPage, numberOfPage, maxPage } = params;
 
   // 현재 있는 페이지 넘버가 총 페이지 갯수보다 커지거나, 페이지 넘버가 1보다 작은 경우
   // pagination 값 초기화
@@ -19,7 +19,7 @@ const createPagination = (params) => {
 
   // maxPage = 3 인경우,
   // buttons = [1, 2, 3]
-  const pageNumBtn = Array(maxPage)
+  const pageNumList = Array(maxPage)
     .fill(1)
     .map((x, idx) => x + idx);
 
@@ -32,9 +32,7 @@ const createPagination = (params) => {
   // 출력할 건지 정하는 것이 sideBtn
 
   const sideBtn =
-    numberOfPageNumBtn % 2 === 0
-      ? numberOfPageNumBtn / 2
-      : (numberOfPageNumBtn - 1) / 2;
+    numberOfPage % 2 === 0 ? numberOfPage / 2 : (numberOfPage - 1) / 2;
 
   const calculLeft = (rest = 0) => {
     return {
@@ -42,7 +40,7 @@ const createPagination = (params) => {
       // page 넘버 보이는게 3 4 5 6 7 이렇게 보이게끔 설정
       // 5를 기준으로 왼쪽 수들인 3과 4를 얻어내는 과정이
       // 아래 array 부분
-      array: pageNumBtn
+      array: pageNumList
         .slice(0, currentPage - 1)
         .reverse()
         .slice(0, sideBtn + rest)
@@ -56,7 +54,7 @@ const createPagination = (params) => {
 
   const calculRight = (rest = 0) => {
     return {
-      array: pageNumBtn.slice(currentPage).slice(0, sideBtn + rest),
+      array: pageNumList.slice(currentPage).slice(0, sideBtn + rest),
       rest: function () {
         return sideBtn - this.array.length;
       },
