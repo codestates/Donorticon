@@ -215,7 +215,7 @@ const Mypage = () => {
           }}
         >
           <구분Button>[내용1 내용2]</구분Button>
-          <Link to='/gifticon'>받은기부내역</Link>
+          <Link to='/gifticon?'>기부내역</Link>
         </Box>
         <Box
           style={{

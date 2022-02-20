@@ -47,7 +47,6 @@ const SignIn = () => {
         const id = result.data.data.id;
         const { accessToken } = result.data;
         dispatch(socialSignIn());
-        dispatch(setSocialUser({id}));
         localStorage.setItem('token', accessToken);
         if (whoIs === 'helper') {
           navigate('/mypage');
