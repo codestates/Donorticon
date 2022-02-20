@@ -8,13 +8,7 @@ module.exports = {
     // if (!req.params) {
     // }
 
-    let id;
-
-    if (req.params.id) {
-      id = parseInt(req.params.id);
-    } else {
-      id = parseInt(req.params.helperCategoryId);
-    }
+    const id = parseInt(req.params.id);
 
     let page = Math.max(parseInt(req.query.page));
     let limit = Math.max(parseInt(req.query.limit));
@@ -28,22 +22,17 @@ module.exports = {
     // if (id < 0 || id > 7) {
     // }
 
-    let list;
-    let maxPage;
-    let count;
-    console.log(id, page);
     if (id === 0) {
       try {
         //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
-
-        const filteredList = await helper.findAndCountAll({
+        const allList = await helper.findAndCountAll({
           limit: 9,
           offset: skip,
           where: {},
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
-        const { count, rows: list } = filteredList;
-        maxPage = Math.ceil(count / limit);
+        const { count, rows: list } = allList;
+        const maxPage = Math.ceil(count / limit);
         res.send({ list, maxPage, count });
       } catch (e) {
         console.log(e);
@@ -61,7 +50,7 @@ module.exports = {
           },
         });
         const { count, rows: list } = filteredList;
-        maxPage = Math.ceil(count / limit);
+        const maxPage = Math.ceil(count / limit);
         res.send({ list, maxPage, count });
       } catch (e) {
         console.log(e);

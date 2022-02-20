@@ -63,6 +63,11 @@ export const Button = styled.div`
   margin: 1rem 2rem;
   border-radius: 20px;
   cursor: pointer;
+
+  &.disabled{
+    opacity: 0.7;
+    cursor: default;
+  };
 `;
 
 export const ButtonSection = styled.div`
