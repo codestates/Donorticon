@@ -23,7 +23,7 @@ export const CardBox = styled.div`
   flex-direction: column;
 `;
 
-export const CardGallery = styled.div`
+export const CardGallery = styled.img`
   justify-content: center;
   align-items: center;
   width: 100%;

@@ -54,6 +54,7 @@ module.exports = {
 
       try {
         const result = await gifticon.findAndCountAll({
+          where: Number(user_type) === 1 ? { giver_id: id } : { helper_id: id },
           limit,
           offset: skip,
           include: {
