@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
-import { setWho, socialSignIn } from '../../redux/user/userSlice';
+import { setWho, socialSignIn, setSocialUser } from '../../redux/user/userSlice';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -44,8 +44,10 @@ const SignIn = () => {
       const whoIs = who === 1 ? 'giver' : 'helper';
       try {
         const result = await axios.post(`/signin/${whoIs}`, userInfo);
+        const id = result.data.data.id;
         const { accessToken } = result.data;
         dispatch(socialSignIn());
+        dispatch(setSocialUser({id}));
         localStorage.setItem('token', accessToken);
         if (whoIs === 'helper') {
           navigate('/mypage');
