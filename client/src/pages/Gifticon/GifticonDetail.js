@@ -13,13 +13,12 @@ const GifticonDetail = () => {
   const handleBtnClick = () => {
     setIsModalOpen(true);
   };
-
   //TODO: status가 사용함일 경우에만, 하단 부분에 인증사진 출력
 
   return (
     <>
       <div>기프티콘 상세정보</div>
-      <CardGallery style={{ width: '200px', height: '300px' }} />
+      <a href={img} target='_blank'><CardGallery style={{ width: '200px', height: '300px' }} src={img}/></a>
       <div>
         {who === 1 ? 'helper' : 'giver'} {name}
       </div>
