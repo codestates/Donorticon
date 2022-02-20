@@ -35,11 +35,10 @@ const Google = () => {
       const {
         data: { giverInfo, accessToken },
       } = await axios.get(`/google/user?accessToken=${token}`);
-
       if (giverInfo) {
-        const { email, name, user_type: who } = giverInfo;
+        const { id, email, name, user_type: who } = giverInfo;
         dispatch(socialSignIn());
-        dispatch(setSocialUser({ email, name, who }));
+        dispatch(setSocialUser({ id, email, name, who }));
         localStorage.setItem('token', accessToken);
         navigate('/');
       }

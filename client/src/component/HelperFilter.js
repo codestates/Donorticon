@@ -38,20 +38,16 @@ const HelperFilter = () => {
   const [count, setCount] = useState(0);
   const [helperCategoryId, SetHelperCategoryId] = useState(0);
 
-  const getList = async () => {
-    SetHelperCategoryId(0);
+  const getList = async (id) => {
     try {
-      //   console.log('여기여기', helperCategoryId);
       const { data } = await axios.get(
-        `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
+        `/helperlist/category/${id}?page=${currentPage}&limit=9`,
       );
       const { list: helperList, maxPage, count } = data;
       setList(helperList);
       setMaxPage(maxPage);
       setCount(count);
-      navigate(
-        `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
-      );
+      navigate(`/helperlist/category/${id}?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
     }
@@ -65,34 +61,25 @@ const HelperFilter = () => {
   };
 
   const getFilteredList = async (id) => {
-    if (id === 0) {
-      return getList();
-    } else {
-      //   console.log('카테고리아이디', id);
-      setCurrentPage(1);
-      try {
-        const { data } = await axios.get(
-          `/helperlist/category/${id}?page=${currentPage}&limit=9`,
-        );
-        const { list, maxPage, count } = data;
-        const filteredList = list.map((x) => x.helper);
-        setList(filteredList);
-        setMaxPage(maxPage);
-        setCount(count);
-        navigate(
-          `/helperlist/category/${helperCategoryId}?page=${currentPage}&limit=9`,
-        );
-      } catch (e) {
-        console.log(e);
-      }
+    setCurrentPage(1);
+    try {
+      const { data } = await axios.get(
+        `/helperlist/category/${id}?page=${currentPage}&limit=9`,
+      );
+      const { list, maxPage, count } = data;
+      const filteredList = list.map((x) => x.helper);
+      setList(filteredList);
+      setMaxPage(maxPage);
+      setCount(count);
+      navigate(`/helperlist/category/${id}?page=${currentPage}&limit=9`);
+    } catch (e) {
+      console.log(e);
     }
   };
 
-  //   useEffect(() => getList(), []);
-
   useEffect(() => {
     if (helperCategoryId === 0) {
-      getList();
+      getList(helperCategoryId);
     } else {
       getFilteredList(helperCategoryId);
     }
