@@ -10,8 +10,8 @@ module.exports = {
 
     const id = parseInt(req.params.id);
 
-    let page = Math.max(parseInt(req.query.page));
-    let limit = Math.max(parseInt(req.query.limit));
+    let page = Math.abs(parseInt(req.query.page));
+    let limit = Math.abs(parseInt(req.query.limit));
 
     page = !isNaN(page) ? page : 1;
     limit = !isNaN(limit) ? limit : 9;
@@ -26,21 +26,21 @@ module.exports = {
       try {
         //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
         const allList = await helper.findAndCountAll({
-          limit: 9,
+          limit,
           offset: skip,
           where: {},
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
         const { count, rows: list } = allList;
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage, count });
+        res.send({ list, maxPage });
       } catch (e) {
         console.log(e);
       }
     } else {
       try {
         const filteredList = await helper_vulnerable.findAndCountAll({
-          limit: 9,
+          limit,
           offset: skip,
           where: { vulnerable_id: id },
           include: {
@@ -51,7 +51,7 @@ module.exports = {
         });
         const { count, rows: list } = filteredList;
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage, count });
+        res.send({ list, maxPage });
       } catch (e) {
         console.log(e);
       }

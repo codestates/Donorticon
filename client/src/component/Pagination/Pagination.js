@@ -1,93 +1,69 @@
-import styled from 'styled-components';
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
-import { useEffect, useState } from 'react';
+import {
+  FaAngleLeft,
+  FaAngleRight,
+  FaAngleDoubleLeft,
+  FaAngleDoubleRight,
+} from 'react-icons/fa';
+import {
+  PaginationContainer,
+  PaginationUl,
+} from '../../styles/PaginationStyle';
 import createPagination from './createPagination';
 
-const Container = styled.div`
-  display: flex;
-
-  padding: 40px 0;
-`;
-
-const Ul = styled.ul`
-  list-style: none;
-  padding: 0px;
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  .disabled {
-    color: #e0e0e0;
-    pointer-events: none;
-  }
-
-  li {
-    padding: 10px 15px;
-    margin-right: 4px;
-    border-radius: 10px;
-    text-align: center;
-    user-select: none;
-
-    &:last-child {
-      margin-right: 0px;
-    }
-
-    &:not(.active):not(.disabled) {
-      cursor: pointer;
-    }
-
-    &:not(.active):not(.disabled):active {
-      border: 1px solid ${({ theme }) => theme.color.main};
-    }
-
-    &.active {
-      background: ${({ theme }) => theme.color.main};
-      border: 1px solid ${({ theme }) => theme.color.main};
-    }
-    &.disabled {
-      color: #e0e0e0;
-      pointer-events: none;
-    }
-  }
-`;
-
-const Pagenation = ({ maxPage, currentPage, setCurrentPage, count }) => {
+const Pagination = ({ maxPage, currentPage, setCurrentPage }) => {
   const { pagination } = createPagination({
-    numberOfPageNumBtn: 5,
+    numberOfPage: 5,
     currentPage,
     maxPage,
   });
+
   const handleClick = (page) => {
     setCurrentPage(page);
   };
 
   return (
-    <Container>
-      <Ul>
+    <PaginationContainer>
+      <PaginationUl>
+        <FaAngleDoubleLeft
+          size="18"
+          className={`${
+            pagination[0] === currentPage ? 'disabled left' : 'left'
+          }`}
+          onClick={() => handleClick(1)}
+        />
         <FaAngleLeft
           size="18"
-          style={{ marginRight: '5px' }}
-          className={`${pagination[0] === currentPage && 'disabled'}`}
-          onClick={handleClick.bind(null, currentPage - 1)}
+          className={`${
+            pagination[0] === currentPage ? 'disabled left' : 'left'
+          }`}
+          onClick={() => handleClick(currentPage - 1)}
         />
         {pagination.map((page, idx) => (
           <li
             key={idx}
             className={`${currentPage === page && 'active'}`}
-            onClick={handleClick.bind(null, page)}
+            onClick={() => handleClick(page)}
           >
             {page}
           </li>
         ))}
         <FaAngleRight
           size="18"
-          style={{ marginLeft: '5px' }}
-          className={`${pagination.reverse()[0] === currentPage && 'disabled'}`}
-          onClick={handleClick.bind(null, currentPage + 1)}
+          className={`${
+            pagination.reverse()[0] === currentPage ? 'disabled right' : 'right'
+          }`}
+          onClick={() => handleClick(currentPage + 1)}
         />
-      </Ul>
-    </Container>
+        <FaAngleDoubleRight
+          size="18"
+          className={`${
+            pagination[0] === currentPage ? 'disabled right' : 'right'
+          }`}
+          onClick={() => handleClick(maxPage)}
+        />
+      </PaginationUl>
+    </PaginationContainer>
   );
 };
 
-export default Pagenation;
+export default Pagination;

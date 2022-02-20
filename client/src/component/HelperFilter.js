@@ -35,7 +35,6 @@ const HelperFilter = () => {
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
-  const [count, setCount] = useState(0);
   const [helperCategoryId, SetHelperCategoryId] = useState(0);
 
   const getList = async (id) => {
@@ -43,10 +42,9 @@ const HelperFilter = () => {
       const { data } = await axios.get(
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
       );
-      const { list: helperList, maxPage, count } = data;
+      const { list: helperList, maxPage } = data;
       setList(helperList);
       setMaxPage(maxPage);
-      setCount(count);
       navigate(`/helperlist/category/${id}?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
@@ -66,11 +64,10 @@ const HelperFilter = () => {
       const { data } = await axios.get(
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
       );
-      const { list, maxPage, count } = data;
+      const { list, maxPage } = data;
       const filteredList = list.map((x) => x.helper);
       setList(filteredList);
       setMaxPage(maxPage);
-      setCount(count);
       navigate(`/helperlist/category/${id}?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
@@ -107,7 +104,6 @@ const HelperFilter = () => {
       <CardList
         list={list}
         maxPage={maxPage}
-        count={count}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
       />
