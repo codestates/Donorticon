@@ -4,6 +4,7 @@ import axios from 'axios';
 const initialState = {
   isLoggedIn: false,
   user: {
+    id: 0,
     email: '',
     name: '',
     who: 0,
