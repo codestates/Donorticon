@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setPrev } from '../redux/page/pageSlice';
@@ -10,7 +11,10 @@ const ButtonModal = ({
   helperText,
   setIsSignInOpen,
   setIsSignUpOpen,
+  isSignInOpen,
+  isSignUpOpen,
 }) => {
+  const outside = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,16 +41,21 @@ const ButtonModal = ({
     }
   };
 
-  const handleModalClose = () => {
-    if (setIsSignInOpen) {
+  const handleModalClose = (e) => {
+    if (isSignInOpen && outside.current === e.target) {
       setIsSignInOpen(false);
-    } else {
+    }
+    if (isSignUpOpen && outside.current === e.target) {
       setIsSignUpOpen(false);
     }
   };
 
   return (
-    <ModalBackground onClick={handleModalClose}>
+    <ModalBackground
+      className="modal_outside"
+      ref={outside}
+      onClick={(e) => handleModalClose(e)}
+    >
       <ModalFrame>
         <ButtonContainer>
           <Btn onClick={handleButton}>{giverText}</Btn>
