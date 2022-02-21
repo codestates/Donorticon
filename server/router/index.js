@@ -3,6 +3,7 @@ const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon, gifticonDetail } = require('../controller/gifticon');
 const { user, helperList } = require('../controller');
+const { dm } = require('../controller/dm')
 
 router.post('/signup/giver', user.signupGiver);
 router.post('/signup/helper', user.signupHelper);
@@ -27,5 +28,7 @@ router.get('/helperlist/:id', helperList.list.getDetail);
 router.post('/helperlist/:id', helperList.list.donate);
 
 router.get('/helperlist/category/:id?', helperList.filterList.getFilteredList);
+
+router.get('/dm', dm.get);
 
 module.exports = router;

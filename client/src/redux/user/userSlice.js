@@ -7,7 +7,6 @@ const initialState = {
     id: 0,
     email: '',
     name: '',
-    id: '',
     who: 0,
   },
 };
