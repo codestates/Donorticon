@@ -4,15 +4,21 @@ const io = require('socket.io')(5000, {
   }
 });
 
+const { room, helper, giver, message } = require('../../models');
+
 io.on('connection', socket => {
-  console.log(socket.id)    
-  socket.on('send-message', (message) => {
-    // socket.to
-    console.log(message);
+  socket.on('send-message', async (text, currentRoom) => {
+    const user = await room.findOne({where: {id: currentRoom}})
+    const saveMessage = await message.create({
+      giver_id: user.dataValues.giver_id,
+      helper_id: user.dataValues.helper_id,
+      room_id: currentRoom,
+      message: text,
+      gifticon_id: 0
+    })
+    socket.broadcast.emit('received-message', currentRoom)
   })
 })
-
-const { room, helper, giver, message } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
@@ -45,7 +51,7 @@ module.exports = {
           ]
         });
         roomList.forEach((item) => {
-          delete item.dataValues.helper.dataValues.password;
+          delete item.dataValues.giver.dataValues.password;
         })
         res.status(200).json({roomList});
       }
