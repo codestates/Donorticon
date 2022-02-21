@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const CategoryContainer = styled.div`
+export const HelperCategoryContainer = styled.div`
   background-color: ${({ theme }) => theme.color.main};
   width: 100%;
   height: 150px;
@@ -8,34 +8,40 @@ export const CategoryContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-export const CategoryBox = styled.div`
+
+export const HelperCategoryBox = styled.div`
+  width: 50%;
   display: flex;
+  justify-content: space-between;
   cursor: pointer;
 `;
-export const CategoryContent = styled.div`
+export const HelperContent = styled.div`
   text-align: center;
-  padding: 0 20px;
 `;
 
-export const CategoryImageBg = styled.div`
+export const ImageBackground = styled.div`
   width: 65px;
   height: 65px;
-  background-color: ${({ theme }) => theme.color.mainDark};
+  background-color: ${(props) => props.theme.color.mainDark};
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  &:hover {
+  &.active {
     background-color: #fff;
   }
 `;
-export const CategoryImage = styled.div`
+
+export const Image = styled.div`
   background-image: url(${(props) => props.src});
   background-size: cover;
   width: 50px;
   height: 50px;
 `;
 
-export const CategoryName = styled.div`
+export const Name = styled.div`
   padding-top: 10px;
+  &.active {
+    font-weight: 700;
+  }
 `;
