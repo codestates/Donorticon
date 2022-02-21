@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('helper_vulnerables', {
+    await queryInterface.createTable('helper_gifticon_categories', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      vulnerable_id: {
+      gifticon_category_id: {
         allowNull: false,
         type: Sequelize.STRING,
       },
@@ -27,6 +27,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('helper_vulnerables');
+    await queryInterface.dropTable('helper_gifticon_categories');
   },
 };

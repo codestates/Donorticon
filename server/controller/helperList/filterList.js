@@ -1,7 +1,7 @@
 const {
   helper,
   helper_vulnerable,
-  gifticon_category,
+  helper_gifticon_category,
 } = require('../../models');
 
 module.exports = {
@@ -14,8 +14,6 @@ module.exports = {
 
     const helperCategoryId = parseInt(req.params.id);
     const gifticonCategoryId = parseInt(req.query.gifticon);
-
-    console.log(helperCategoryId, gifticonCategoryId);
 
     let page = Math.abs(parseInt(req.query.page));
     let limit = Math.abs(parseInt(req.query.limit));
@@ -49,7 +47,7 @@ module.exports = {
       // 기프티콘카데로리는 전체보기가 아닌 경우
       try {
         //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
-        const allList = await helper_vulnerable.findAndCountAll({
+        const allList = await helper_gifticon_category.findAndCountAll({
           limit,
           offset: skip,
           where: { gifticon_category_id: gifticonCategoryId },
@@ -98,6 +96,22 @@ module.exports = {
           offset: skip,
           where: {
             vulnerable_id: helperCategoryId,
+          },
+          include: [
+            {
+              model: helper,
+              required: true,
+              attributes: ['id'],
+            },
+          ],
+        });
+        const { rows } = filteredList;
+        let idList = rows.map((x) => x.dataValues.helper_id);
+        const filteredAgain = await helper_gifticon_category.findAndCountAll({
+          limit,
+          offset: skip,
+          where: {
+            helper_id: idList,
             gifticon_category_id: gifticonCategoryId,
           },
           include: [
@@ -108,8 +122,7 @@ module.exports = {
             },
           ],
         });
-
-        const { count, rows: list } = filteredList;
+        const { count, rows: list } = filteredAgain;
         const maxPage = Math.ceil(count / limit);
         res.send({ list, maxPage });
       } catch (e) {

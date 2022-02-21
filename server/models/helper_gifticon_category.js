@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class helper_vulnerable extends Model {
+  class helper_gifticon_category extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -9,23 +9,24 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      helper_vulnerable.belongsTo(models.helper, {
+      helper_gifticon_category.belongsTo(models.helper, {
         foreignKey: 'helper_id',
       });
-      helper_vulnerable.belongsTo(models.vulnerable, {
-        foreignKey: 'vulnerable_id',
+
+      helper_gifticon_category.belongsTo(models.gifticon_category, {
+        foreignKey: 'gifticon_category_id',
       });
     }
   }
-  helper_vulnerable.init(
+  helper_gifticon_category.init(
     {
       helper_id: DataTypes.INTEGER,
-      vulnerable_id: DataTypes.INTEGER,
+      gifticon_category_id: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: 'helper_vulnerable',
+      modelName: 'helper_gifticon_category',
     },
   );
-  return helper_vulnerable;
+  return helper_gifticon_category;
 };

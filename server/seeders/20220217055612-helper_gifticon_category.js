@@ -11,95 +11,95 @@ const getRandomNumber = (min, max) => {
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.bulkInsert(
-      'helper_vulnerables',
+      'helper_gifticon_categories',
       [
         {
           helper_id: 1,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 2,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 3,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 4,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 5,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 6,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 7,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 8,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 9,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 10,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 11,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 12,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 13,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 14,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           helper_id: 15,
-          vulnerable_id: getRandomNumber(1, 7),
+          gifticon_category_id: getRandomNumber(1, 8),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -109,6 +109,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete('helper_vulnerables', null, {});
+    await queryInterface.bulkDelete('helper_gifticon_categories', null, {});
   },
 };
