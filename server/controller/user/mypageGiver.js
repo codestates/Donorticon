@@ -16,7 +16,7 @@ module.exports ={
 	put: async (req, res) => {
     const token = req.headers.token;
 		const tokenDecoded = jwt_decode(token);
-		const { id, email, name, mobile, imge } = tokenDecoded;
+		const { id } = tokenDecoded;
 		console.log(req.body, "gfgf");
     if (req.body.password || req.body.mobile || req.body.name) {
       try {
