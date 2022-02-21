@@ -14,6 +14,7 @@ import KaKao from './pages/SocialLogin/Kakao';
 import HelperList from './pages/HelperList/HelperList';
 import GifticonDetail from './pages/Gifticon/GifticonDetail';
 import HelperDetail from './pages/HelperList/HelperDetail';
+import DM from './pages/DM/DM';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
@@ -34,6 +35,7 @@ const Router = () => {
         <Route path="/kakao/signin" element={<KaKao />} />
         <Route path="/helperlist/category/:id" element={<HelperList />} />
         <Route path="/helperlist/detail/:id" element={<HelperDetail />} />
+        <Route path="/dm" element={<DM/>}/>
       </Routes>
       <Footer />
     </BrowserRouter>
