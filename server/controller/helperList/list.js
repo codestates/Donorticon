@@ -37,10 +37,9 @@ module.exports = {
           activity: 1
         }
       })
-      
       if (messageFromGiver) {
         await message.create({
-          room_id: createDMRoom.dataValues.id,
+          room_id: createDMRoom[0].dataValues.id,
           giver_id: req.body.giverId,
           helper_id: req.body.helperId,
           gifticon_id: insertGifticon.dataValues.id,
