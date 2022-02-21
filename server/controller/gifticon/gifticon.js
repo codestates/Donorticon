@@ -92,27 +92,11 @@ module.exports = {
           });
         }
 
-        let grade;
         let count;
         let gifticonList;
 
-        if (who === 1) {
-          if (point >= 21) {
-            grade = 4;
-          } else if (point >= 16) {
-            grade = 3;
-          } else if (point >= 11) {
-            grade = 2;
-          } else if (point >= 6) {
-            grade = 1;
-          } else if (point >= 0) {
-            grade = 0;
-          }
-        }
-
         if (who === 2) {
           point = null;
-          grade = null;
         }
 
         if (statusId === 0) {
@@ -129,7 +113,6 @@ module.exports = {
           maxPage,
           count,
           point,
-          grade,
           message: 'successfully get data',
         });
       } catch (e) {

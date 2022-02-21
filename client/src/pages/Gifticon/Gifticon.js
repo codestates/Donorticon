@@ -21,7 +21,6 @@ const Gifticon = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [count, setCount] = useState(0);
   const [point, setPoint] = useState(0);
-  const [grade, setGrade] = useState(0);
   const [statusId, setStatusId] = useState(0);
 
   const handleStatusClick = (name) => {
@@ -37,7 +36,7 @@ const Gifticon = () => {
         `/gifticon?page=${currentPage}&limit=9`,
         { headers: { Authorization: `Bearer ${token}`, Status: statusId } },
       );
-      const { gifticonList, maxPage, count, point, grade } = data;
+      const { gifticonList, maxPage, count, point } = data;
       setList(gifticonList);
       setMaxPage(maxPage);
       if (count !== null) {
@@ -45,9 +44,6 @@ const Gifticon = () => {
       }
       if (point !== null) {
         setPoint(point);
-      }
-      if (grade !== null) {
-        setGrade(grade);
       }
       navigate(`/gifticon?page=${currentPage}&limit=9`);
     } catch (e) {
@@ -61,16 +57,17 @@ const Gifticon = () => {
 
   return (
     <GifticonContainer>
-      {who && who === 1 && <GiverLevel grade={grade} />}
+      {who && who === 1 && <GiverLevel point={point} />}
       <GiticonFilter
         statusId={statusId}
         handleStatusClick={handleStatusClick}
         list={list}
       />
-
-      <Div style={{ fontSize: '20px' }}>
-        현재까지 {count}회 기부를 {who === 2 ? '받으셨네요!' : '하셨네요!'}
-      </Div>
+      {count && count !== 0 ? (
+        <Div style={{ fontSize: '20px' }}>
+          현재까지 {count}회 기부를 {who === 2 ? '받으셨네요!' : '하셨네요!'}
+        </Div>
+      ) : null}
       {list === undefined ? (
         <Loader />
       ) : list.length === 0 ? (
