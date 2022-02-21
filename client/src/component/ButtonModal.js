@@ -18,7 +18,6 @@ const ButtonModal = ({
     dispatch(setPrev(window.location.pathname));
     const text = e.target.innerText.split(' ');
     // 회원가입
-    console.log(text);
     if (text[1] === '회원가입' && text[0] === 'GIVER') {
       setIsSignUpOpen(false);
       navigate('/signup/giver');
@@ -38,7 +37,7 @@ const ButtonModal = ({
     }
   };
 
-  const ModalClose = () => {
+  const handleModalClose = () => {
     if (setIsSignInOpen) {
       setIsSignInOpen(false);
     } else {
@@ -47,7 +46,7 @@ const ButtonModal = ({
   };
 
   return (
-    <ModalBackground onClick={ModalClose}>
+    <ModalBackground onClick={handleModalClose}>
       <ModalFrame>
         <ButtonContainer>
           <Btn onClick={handleButton}>{giverText}</Btn>

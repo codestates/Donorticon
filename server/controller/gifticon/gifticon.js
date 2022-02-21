@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { giver, helper, gifticon } = require('../../models');
+const { giver, helper, gifticon, score, sequelize } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
@@ -8,19 +8,17 @@ module.exports = {
     }
 
     const token = req.headers.authorization.split(' ')[1];
-
     if (token === 'null') {
       return res.status(401).send({ message: 'invalid token' });
     }
 
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
-
     if (!user) {
       return res.status(401).send('invalid token');
     }
 
     if (token && user) {
-      const { id, user_type, name } = user;
+      const { id, user_type: who } = user;
 
       const statusId = parseInt(req.headers.status);
 
@@ -51,9 +49,10 @@ module.exports = {
 
       try {
         let filteredList;
+        let point;
 
         // giver
-        if (parseInt(user_type) === 1) {
+        if (parseInt(who) === 1) {
           filteredList = await gifticon.findAndCountAll({
             limit,
             offset: skip,
@@ -67,10 +66,17 @@ module.exports = {
               attributes: ['id', 'name', 'createdAt'],
             },
           });
+          const totalPoint = await score.findAll({
+            where: { giver_id: id },
+            attributes: [
+              [sequelize.fn('sum', sequelize.col('point')), 'points'],
+            ],
+          });
+          point = parseInt(totalPoint[0].dataValues.points);
         }
 
         // helper
-        if (parseInt(user_type) === 2) {
+        if (parseInt(who) === 2) {
           filteredList = await gifticon.findAndCountAll({
             limit,
             offset: skip,
@@ -85,12 +91,27 @@ module.exports = {
             },
           });
         }
-        const { count, rows: gifticonList } = filteredList;
+
+        let count;
+        let gifticonList;
+
+        if (who === 2) {
+          point = null;
+        }
+
+        if (statusId === 0) {
+          count = filteredList.count;
+          gifticonList = filteredList.rows;
+        } else {
+          gifticonList = filteredList.rows;
+          count = null;
+        }
         const maxPage = Math.ceil(count / limit);
         res.status(200).send({
           gifticonList,
           maxPage,
           count,
+          point,
           message: 'successfully get data',
         });
       } catch (e) {

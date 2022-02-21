@@ -10,6 +10,7 @@ import GiticonFilter, {
 } from '../../component/Filtering/GifticonFilter';
 import { CardContainer } from '../../styles/CardStyle';
 import { Div, GifticonContainer } from '../../styles/Gifticon/GifticonStyle';
+import GiverLevel from '../../component/GiverLevel';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -19,9 +20,7 @@ const Gifticon = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [count, setCount] = useState(0);
-
-  const [grade, setGrade] = useState('');
-
+  const [point, setPoint] = useState(0);
   const [statusId, setStatusId] = useState(0);
 
   const handleStatusClick = (name) => {
@@ -38,20 +37,21 @@ const Gifticon = () => {
 
         { headers: { Authorization: `Bearer ${token}`, Status: statusId } },
       );
-      const { gifticonList, maxPage, count } = data;
+
+      const { gifticonList, maxPage, count, point } = data;
       setList(gifticonList);
       setMaxPage(maxPage);
-      setCount(count);
+      if (count !== null) {
+        setCount(count);
+      }
+      if (point !== null) {
+        setPoint(point);
+      }
       navigate(`/gifticon?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
     }
   };
-
-  // useEffect(async () => {
-  //   setGifticon(request.data.gifticonList);
-  //   setGrade(request.data.userInfo.grade_id);
-  // }, []);
 
   useEffect(() => getGifticonList(), [currentPage, statusId]);
 
@@ -59,17 +59,27 @@ const Gifticon = () => {
 
   return (
     <GifticonContainer>
+      {who && who === 1 && <GiverLevel point={point} />}
       <GiticonFilter
         statusId={statusId}
         handleStatusClick={handleStatusClick}
+        list={list}
       />
-      {who && who === 1 && <Div>레벨 이미지 여기 있어야 함</Div>}
-      {who && who === 1 && <Div>Your Grade is.... ${grade || 0}!</Div>}
+
       <Div style={{ fontSize: '20px' }}>
         현재까지 {count}회 기부를 {who === 2 ? '받으셨네요!' : '하셨네요!'}
       </Div>
       {list === undefined ? (
         <Loader />
+      ) : list.length === 0 ? (
+        <>
+          <Div>
+            아직 {who && who === 1 ? '기부하신' : '기부받은'} 기프티콘이 없네요!
+          </Div>
+          {who && who === 1 && (
+            <Div>Donorticon을 통해 기프티콘을 기부해보세요!</Div>
+          )}
+        </>
       ) : (
         <>
           <CardContainer>
