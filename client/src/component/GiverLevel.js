@@ -32,7 +32,7 @@ const GiverLevel = ({ point }) => {
       setGrade(pointGrade[2]);
     } else if (point > 15 && point <= 20) {
       setGrade(pointGrade[3]);
-    } else {
+    } else if (point > 20) {
       setGrade(pointGrade[4]);
     }
   };
