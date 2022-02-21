@@ -22,8 +22,8 @@ module.exports = {
     if (token && user) {
       const { id, user_type, name } = user;
 
-      let page = Math.max(parseInt(req.query.page));
-      let limit = Math.max(parseInt(req.query.limit));
+      let page = Math.abs(parseInt(req.query.page));
+      let limit = Math.abs(parseInt(req.query.limit));
 
       page = !isNaN(page) ? page : 1;
       limit = !isNaN(limit) ? limit : 9;
@@ -54,7 +54,8 @@ module.exports = {
 
       try {
         const result = await gifticon.findAndCountAll({
-          limit: 9,
+          where: Number(user_type) === 1 ? { giver_id: id } : { helper_id: id },
+          limit,
           offset: skip,
           include: {
             model: Number(user_type) === 1 ? helper : giver,

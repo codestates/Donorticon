@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 const HelperDetail = () => {
   const { id } = useParams();
   const giverId = useSelector((state) => state.user.user.id);
+  console.log(useSelector((state) => state.user));
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleModalOpen = () => {
@@ -18,7 +19,7 @@ const HelperDetail = () => {
   return (
     <div>{id}
       <Button onClick={handleModalOpen}>Send Gifticon</Button>
-      {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} includeMessage='true' api={`/helperlist/${id}`} giverId={giverId} helperId={id} ></ImageUploader> : null}
+      {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} includeMessage='true' api={`/helperlist/${id}`} giverId={giverId} helperId={parseInt(id)} ></ImageUploader> : null}
     </div>
   );
 };

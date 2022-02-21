@@ -16,6 +16,7 @@ import {
 } from '../../styles/Mypage';
 import axios from 'axios';
 import { ListContainer } from '../../styles/HeaderStyle';
+import { Link } from 'react-router-dom';
 
 const Mypage = () => {
   const who = useSelector((state) => state.user.user.who);
@@ -223,6 +224,7 @@ const Mypage = () => {
           }}
         >
           <구분Button>[내용1 내용2]</구분Button>
+          <Link to='/gifticon?'>기부내역</Link>
         </Box>
         <Box
           style={{

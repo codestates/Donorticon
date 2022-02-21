@@ -34,12 +34,13 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, he
   //Upload images to S3
   const handleSubmit = async () => {
     const url = await (await axios.post(api, {message, giverId, helperId})).data.url;
+    console.log(bucketImage)
     const upload = await axios(url, {
       method:"PUT",
       headers: {
         "Content-Type": "multipart/form-data"
       },
-      body: bucketImage
+      data: bucketImage
     })
     if (upload) {
       handleModalOpen();

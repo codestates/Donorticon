@@ -52,7 +52,7 @@ const GifticonCard = ({ data, name }) => {
   //TODO: status 버튼 hover effect 막기 / cursor: none 설정 필요
   return (
     <CardBox onClick={handleClick}>
-      <CardGallery />
+      <CardGallery src={img} />
       <div>
         <div>{name}</div>
         <div>{createdAt.split('T')[0]} 기부</div>
