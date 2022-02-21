@@ -39,7 +39,6 @@ const gifticonList = [
   '상품권/영화/도서',
 ];
 
-
 const Mypage = () => {
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
@@ -275,10 +274,9 @@ const Mypage = () => {
       }
     } else if (whoIs === 'helper') {
       try {
-        // const { data } = await axios.get('/mypage/helper', {
-        //   headers: { token: localStorage.getItem('token') },
-        // });
-        const data = heleprExample;
+        const { data } = await axios.get('/mypage/helper', {
+          headers: { token: localStorage.getItem('token') },
+        });
         setUserInfo(
           Object.assign(
             data,
