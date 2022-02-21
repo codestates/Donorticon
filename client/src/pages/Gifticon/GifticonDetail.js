@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import GifticonStatusModal from '../../component/GifticonStatusModal';
 import { CardGallery } from '../../styles/CardStyle';
-import { GifticonButton } from '../../styles/GifticonStyle';
+import { GifticonButton } from '../../styles/Gifticon/GifticonStyle';
 
 const GifticonDetail = () => {
   const gifticon = useSelector((state) => state.gifticon);
@@ -18,7 +18,9 @@ const GifticonDetail = () => {
   return (
     <>
       <div>기프티콘 상세정보</div>
-      <a href={img} target='_blank'><CardGallery style={{ width: '200px', height: '300px' }} src={img}/></a>
+      <a href={img} target="_blank">
+        <CardGallery style={{ width: '200px', height: '300px' }} src={img} />
+      </a>
       <div>
         {who === 1 ? 'helper' : 'giver'} {name}
       </div>

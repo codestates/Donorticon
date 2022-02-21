@@ -45,3 +45,8 @@ export const Name = styled.div`
     font-weight: 700;
   }
 `;
+
+export const NoMessage = styled.div`
+  padding: 200px 0;
+  font-size: 20px;
+`;

@@ -39,7 +39,6 @@ const gifticonList = [
   '상품권/영화/도서',
 ];
 
-
 const Mypage = () => {
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
