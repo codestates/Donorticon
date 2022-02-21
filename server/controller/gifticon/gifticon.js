@@ -22,6 +22,8 @@ module.exports = {
     if (token && user) {
       const { id, user_type, name } = user;
 
+      const statusId = parseInt(req.headers.status);
+
       let page = Math.abs(parseInt(req.query.page));
       let limit = Math.abs(parseInt(req.query.limit));
 
@@ -30,64 +32,60 @@ module.exports = {
 
       const skip = (page - 1) * limit;
 
-      let gifticonList;
+      let statusName;
 
-      if (Number(user_type) === 1) {
-        try {
-          gifticonList = await gifticon.findAll({
-            where: { giver_id: id },
-          });
-        } catch (e) {
-          console.log(e);
+      const getStatusName = (statusId) => {
+        if (statusId === 1) {
+          statusName = 'used';
+        } else if (statusId === 2) {
+          statusName = 'accepted';
+        } else if (statusId === 3) {
+          statusName = 'checking';
+        } else if (statusId === 4) {
+          statusName = 'rejected';
+        } else if (statusId === 5) {
+          statusName = 'expired';
         }
-      }
-
-      if (Number(user_type) === 2) {
-        try {
-          gifticonList = await gifticon.findAll({
-            where: { helper_id: id },
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
+        return statusName;
+      };
 
       try {
-        const result = await gifticon.findAndCountAll({
-          where: Number(user_type) === 1 ? { giver_id: id } : { helper_id: id },
-          limit,
-          offset: skip,
-          include: {
-            model: Number(user_type) === 1 ? helper : giver,
-            required: true,
-            attributes: Number(user_type === 1)
-              ? {
-                  exclude: [
-                    'password',
-                    'slogan',
-                    'description',
-                    'location',
-                    'createdAt',
-                    'updatedAt',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                }
-              : {
-                  exclude: [
-                    'password',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                },
-          },
-        });
+        let filteredList;
 
-        const { count, rows: gifticonList } = result;
+        // giver
+        if (parseInt(user_type) === 1) {
+          filteredList = await gifticon.findAndCountAll({
+            limit,
+            offset: skip,
+            where:
+              statusId !== 0
+                ? { giver_id: id, status: getStatusName(statusId) }
+                : { giver_id: id },
+            include: {
+              model: giver,
+              required: true,
+              attributes: ['id', 'name', 'createdAt'],
+            },
+          });
+        }
+
+        // helper
+        if (parseInt(user_type) === 2) {
+          filteredList = await gifticon.findAndCountAll({
+            limit,
+            offset: skip,
+            where:
+              statusId !== 0
+                ? { helper_id: id, status: getStatusName(statusId) }
+                : { helper_id: id },
+            include: {
+              model: helper,
+              required: true,
+              attributes: ['id', 'name', 'createdAt'],
+            },
+          });
+        }
+        const { count, rows: gifticonList } = filteredList;
         const maxPage = Math.ceil(count / limit);
         res.status(200).send({
           gifticonList,

@@ -1,28 +1,20 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Loader from '../../component/Loader';
 import Pagination from '../../component/Pagination/Pagination';
 import GifticonCard from '../../component/Card/GifticonCard';
+import GiticonFilter, {
+  gifticonStatus,
+} from '../../component/Filtering/GifticonFilter';
 import { CardContainer } from '../../styles/CardStyle';
-
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
-
-const GifticonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Div = styled.div`
-  padding: 20px 0;
-`;
+import { Div, GifticonContainer } from '../../styles/Gifticon/GifticonStyle';
 
 const Gifticon = () => {
   const navigate = useNavigate();
-  const who = useSelector((state) => state.user.user);
+  const who = useSelector((state) => state.user.user.who);
+
   const [list, setList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
@@ -30,13 +22,21 @@ const Gifticon = () => {
 
   const [grade, setGrade] = useState('');
 
-  const getList = async () => {
-    const token = localStorage.getItem('token');
+  const [statusId, setStatusId] = useState(0);
 
+  const handleStatusClick = (name) => {
+    const filtered = gifticonStatus.filter((x) => x.name === name);
+    const id = filtered[0].id;
+    setStatusId(id);
+  };
+
+  const getGifticonList = async () => {
+    const token = localStorage.getItem('token');
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
-        { headers: { Authorization: `Bearer ${token}` } },
+
+        { headers: { Authorization: `Bearer ${token}`, Status: statusId } },
       );
       const { gifticonList, maxPage, count } = data;
       setList(gifticonList);
@@ -53,15 +53,20 @@ const Gifticon = () => {
   //   setGrade(request.data.userInfo.grade_id);
   // }, []);
 
-  useEffect(() => getList(), [currentPage]);
+  useEffect(() => getGifticonList(), [currentPage, statusId]);
+
+  //TODO: gifticon list.length === 0일때 문구 필요
 
   return (
     <GifticonContainer>
-      <Div>GIFTICON FILTERING 있어야 해</Div>
-      <Div>이미지 여기 있어야 함 그 옆에 어떤레벨인지 문구</Div>
-      <Div>Your Grade is.... {grade || 0}!</Div>
+      <GiticonFilter
+        statusId={statusId}
+        handleStatusClick={handleStatusClick}
+      />
+      {who && who === 1 && <Div>레벨 이미지 여기 있어야 함</Div>}
+      {who && who === 1 && <Div>Your Grade is.... ${grade || 0}!</Div>}
       <Div style={{ fontSize: '20px' }}>
-        현재까지 {count}회 기부를 {who.who === 2 ? '받으셨네요!' : '하셨네요!'}
+        현재까지 {count}회 기부를 {who === 2 ? '받으셨네요!' : '하셨네요!'}
       </Div>
       {list === undefined ? (
         <Loader />
@@ -73,7 +78,7 @@ const Gifticon = () => {
                 <GifticonCard
                   key={gifticon.id}
                   data={gifticon}
-                  name={who.who === 2 ? gifticon.giver.name : gifticon.helper.name}
+                  name={who === 1 ? gifticon.giver.name : gifticon.helper.name}
                 />
               );
             })}
