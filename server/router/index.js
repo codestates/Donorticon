@@ -11,8 +11,10 @@ router.post('/signin/giver', user.signinGiver);
 router.post('/signin/helper', user.signinHelper);
 router.post('/signin/guest/giver', user.signinGuestGiver);
 router.post('/signin/guest/helper', user.signinGuestHelper);
-router.get('/mypage/giver', user.mypageGiver);
-router.get('/mypage/helper', user.mypageHelper);
+router.get('/mypage/giver', user.mypageGiver.get);
+router.get('/mypage/helper', user.mypageHelper.get);
+router.put('/mypage/giver', user.mypageGiver.put);
+// router.get('/mypage/helper', user.mypageHelper.get);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
