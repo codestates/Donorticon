@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export const CardContainer = styled.div`
+  width: 50%;
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 40px;
   grid-template-columns: repeat(3, 1fr);
   @media ${({ theme }) => theme.device.laptop} {
     grid-template-columns: repeat(2, 1fr);
@@ -14,7 +15,7 @@ export const CardContainer = styled.div`
 
 export const CardBox = styled.div`
   padding: 20px;
-  width: 250px;
+  width: 100%;
   height: 350px;
   text-align: center;
   cursor: pointer;
