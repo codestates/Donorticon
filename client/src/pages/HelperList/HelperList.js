@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import HelperFilter from '../../component/HelperFilter';
+import HelperFilter from '../../component/Filtering/HelperFilter';
 import { Title } from '../../styles/utils/Container';
 
 const HelperContainer = styled.div`

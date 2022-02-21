@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import { CardBox, CardGallery } from '../../styles/CardStyle';
-import { GifticonButton } from '../../styles/GifticonStyle';
+import { GifticonButton } from '../../styles/Gifticon/GifticonStyle';
 
 const GifticonCard = ({ data, name }) => {
   const navigate = useNavigate();

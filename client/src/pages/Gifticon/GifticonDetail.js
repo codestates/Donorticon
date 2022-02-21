@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import GifticonStatusModal from '../../component/GifticonStatusModal';
 import { CardGallery } from '../../styles/CardStyle';
-import { GifticonButton } from '../../styles/GifticonStyle';
+import { GifticonButton } from '../../styles/Gifticon/GifticonStyle';
 
 const GifticonDetail = () => {
   const gifticon = useSelector((state) => state.gifticon);
