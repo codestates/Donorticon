@@ -45,6 +45,8 @@ const SignUpHelper = () => {
     gifticonCategoryName: [],
   });
 
+  const [errorMessage, setErrormessage] = useState('');
+
   const [isValid, setIsValid] = useState([
     false, // 도움이필요한 사람
     false, // 기프티콘
@@ -230,7 +232,6 @@ const SignUpHelper = () => {
       if (!isValid.includes(false)) {
         try {
           const result = await axios.post('/signup/helper', helperInfo);
-          console.log(result);
           if (result) {
             const userInfo = {
               email: helperInfo.email,
@@ -245,8 +246,13 @@ const SignUpHelper = () => {
             navigate(`../../verification`);
           }
         } catch (e) {
-          console.log('error');
-          console.log(e);
+          if (e.response.status === 409) {
+            setErrormessage('이미 회원가입 된 이메일입니다');
+          } else if (e.response.status === 500) {
+            setErrormessage('다시 시도해주세요');
+          } else if (e.response.status === 422) {
+            setErrormessage('입력 정보를 확인해 주세요');
+          }
         }
       }
     }
@@ -315,6 +321,7 @@ const SignUpHelper = () => {
             : ''}
         </ErrorMessage>
         <ButtonContainer>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
           <SignUpButton onClick={handleButton}>이전</SignUpButton>
           <SignUpButton
             onClick={(e) => {

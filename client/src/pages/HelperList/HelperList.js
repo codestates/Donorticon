@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import HelperFilter from '../../component/HelperFilter';
+import { Title } from '../../styles/utils/Container';
 
 const HelperContainer = styled.div`
   display: flex;
@@ -11,7 +12,7 @@ const HelperContainer = styled.div`
 const HelperList = () => {
   return (
     <HelperContainer>
-      <div>HELPER</div>
+      <Title style={{ paddingBottom: '40px' }}>HELPER</Title>
       <HelperFilter />
     </HelperContainer>
   );

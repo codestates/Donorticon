@@ -24,16 +24,62 @@ export const Content = styled.div`
 
 export const Box = styled.div``;
 
-export const 구분Button = styled.div``;
+export const PageButton = styled.div`
+  width: 45%;
+  margin: 5%auto;
+  border: 1px solid ${({ theme }) => theme.color.main};
+  background-color: ${({ theme }) => theme.color.main};
+  cursor: pointer;
+  padding: 10px 0;
+  text-align: center;
+  &:hover {
+    background-color: #fff;
+    background-color: ${({ theme }) => theme.color.main};
+    transition: 0.5s;
+  }
+`;
 
-export const InputBox = styled.div``;
+export const InputBox = styled.div`
+  padding: 10px 0;
+`;
 
 export const InputName = styled.div``;
 
-export const InputContent = styled.div``;
+export const InputContent = styled.div`
+  width: 50%;
+  padding: 10px 0;
+  margin: 10px 0;
+  border-bottom: inset;
+  border-bottom: 1p;
+`;
 
-export const InputChanger = styled.input``;
+export const InputChanger = styled.input`
+  width: 50%;
+  padding: 10px 0;
+  margin: 10px 0;
+  border: none;
+  border-bottom: 1px solid #000;
+  ::placeholder {
+    font-size: 12px;
+    color: ${({ theme }) => theme.color.lightGrey};
+  }
+  &:focus {
+    outline: none;
+  }
+`;
 
-export const ChangeButton = styled.button``;
+export const ChangeButton = styled.button`
+  width: 45%;
+  border: 1px solid ${({ theme }) => theme.color.main};
+  background-color: ${({ theme }) => theme.color.main};
+  cursor: pointer;
+  padding: 10px 0;
+  text-align: center;
+  &:hover {
+    background-color: #fff;
+    background-color: ${({ theme }) => theme.color.main};
+    transition: 0.5s;
+  }
+`;
 
 export const ProfileImg = styled.img``;
