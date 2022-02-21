@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { giver, helper, gifticon } = require('../../models');
+const { giver, helper, gifticon, score, sequelize } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
@@ -8,19 +8,19 @@ module.exports = {
     }
 
     const token = req.headers.authorization.split(' ')[1];
-
     if (token === 'null') {
       return res.status(401).send({ message: 'invalid token' });
     }
 
     const user = jwt.verify(token, process.env.ACCESS_SECRET);
-
     if (!user) {
       return res.status(401).send('invalid token');
     }
 
     if (token && user) {
-      const { id, user_type, name } = user;
+      const { id, user_type: who } = user;
+
+      const statusId = parseInt(req.headers.status);
 
       let page = Math.abs(parseInt(req.query.page));
       let limit = Math.abs(parseInt(req.query.limit));
@@ -30,69 +30,89 @@ module.exports = {
 
       const skip = (page - 1) * limit;
 
-      let gifticonList;
+      let statusName;
 
-      if (Number(user_type) === 1) {
-        try {
-          gifticonList = await gifticon.findAll({
-            where: { giver_id: id },
-          });
-        } catch (e) {
-          console.log(e);
+      const getStatusName = (statusId) => {
+        if (statusId === 1) {
+          statusName = 'used';
+        } else if (statusId === 2) {
+          statusName = 'accepted';
+        } else if (statusId === 3) {
+          statusName = 'checking';
+        } else if (statusId === 4) {
+          statusName = 'rejected';
+        } else if (statusId === 5) {
+          statusName = 'expired';
         }
-      }
-
-      if (Number(user_type) === 2) {
-        try {
-          gifticonList = await gifticon.findAll({
-            where: { helper_id: id },
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
+        return statusName;
+      };
 
       try {
-        const result = await gifticon.findAndCountAll({
-          where: Number(user_type) === 1 ? { giver_id: id } : { helper_id: id },
-          limit,
-          offset: skip,
-          include: {
-            model: Number(user_type) === 1 ? helper : giver,
-            required: true,
-            attributes: Number(user_type === 1)
-              ? {
-                  exclude: [
-                    'password',
-                    'slogan',
-                    'description',
-                    'location',
-                    'createdAt',
-                    'updatedAt',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                }
-              : {
-                  exclude: [
-                    'password',
-                    'mobile',
-                    'user_type',
-                    'verification',
-                    'verify_hash',
-                  ],
-                },
-          },
-        });
+        let filteredList;
+        let point;
 
-        const { count, rows: gifticonList } = result;
+        // giver
+        if (parseInt(who) === 1) {
+          filteredList = await gifticon.findAndCountAll({
+            limit,
+            offset: skip,
+            where:
+              statusId !== 0
+                ? { giver_id: id, status: getStatusName(statusId) }
+                : { giver_id: id },
+            include: {
+              model: giver,
+              required: true,
+              attributes: ['id', 'name', 'createdAt'],
+            },
+          });
+          const totalPoint = await score.findAll({
+            where: { giver_id: id },
+            attributes: [
+              [sequelize.fn('sum', sequelize.col('point')), 'points'],
+            ],
+          });
+          point = parseInt(totalPoint[0].dataValues.points);
+        }
+
+        // helper
+        if (parseInt(who) === 2) {
+          filteredList = await gifticon.findAndCountAll({
+            limit,
+            offset: skip,
+            where:
+              statusId !== 0
+                ? { helper_id: id, status: getStatusName(statusId) }
+                : { helper_id: id },
+            include: {
+              model: helper,
+              required: true,
+              attributes: ['id', 'name', 'createdAt'],
+            },
+          });
+        }
+
+        let count;
+        let gifticonList;
+
+        if (who === 2) {
+          point = null;
+        }
+
+        if (statusId === 0) {
+          count = filteredList.count;
+          gifticonList = filteredList.rows;
+        } else {
+          gifticonList = filteredList.rows;
+          count = null;
+        }
+
         const maxPage = Math.ceil(count / limit);
         res.status(200).send({
           gifticonList,
           maxPage,
           count,
+          point,
           message: 'successfully get data',
         });
       } catch (e) {

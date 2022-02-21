@@ -8,21 +8,22 @@ import {
   Image,
   ImageBackground,
   Name,
-} from '../styles/HelperFilter/HelperCategoryStyle';
-import all from '../img/helperCategory/1_all.png';
-import child from '../img/helperCategory/2_child.png';
-import old from '../img/helperCategory/3_old.png';
-import disable from '../img/helperCategory/4_disable.png';
-import global from '../img/helperCategory/5_global.png';
-import women from '../img/helperCategory/6_women.png';
-import mental from '../img/helperCategory/7_mental.png';
-import etc from '../img/helperCategory/8_etc.png';
-import CardList from './Card/CardList';
+  NoMessage,
+} from '../../styles/HelperFilter/HelperCategoryStyle';
 import {
   GifticonCategoryBox,
   GifticonCategoryContainer,
   GifticonContent,
-} from '../styles/HelperFilter/GifticonCategoryStyle';
+} from '../../styles/HelperFilter/GifticonCategoryStyle';
+import all from '../../img/helperCategory/1_all.png';
+import child from '../../img/helperCategory/2_child.png';
+import old from '../../img/helperCategory/3_old.png';
+import disable from '../../img/helperCategory/4_disable.png';
+import global from '../../img/helperCategory/5_global.png';
+import women from '../../img/helperCategory/6_women.png';
+import mental from '../../img/helperCategory/7_mental.png';
+import etc from '../../img/helperCategory/8_etc.png';
+import CardList from '../Card/CardList';
 
 const helperCategory = [
   { id: 0, name: '전체보기', src: all },
@@ -54,8 +55,6 @@ const HelperFilter = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [helperCategoryId, setHelperCategoryId] = useState(0);
   const [gifticonCategoryId, setGifticonCategoryId] = useState(0);
-
-  //TODO: filter된 데이터가 0개 인경우 문구 추가
 
   const getList = async (id) => {
     try {
@@ -159,12 +158,16 @@ const HelperFilter = () => {
           })}
         </GifticonCategoryBox>
       </GifticonCategoryContainer>
-      <CardList
-        list={list}
-        maxPage={maxPage}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
+      {list.length === 0 ? (
+        <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+      ) : (
+        <CardList
+          list={list}
+          maxPage={maxPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      )}
     </>
   );
 };

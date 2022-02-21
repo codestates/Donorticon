@@ -71,6 +71,7 @@ const Header = () => {
           giverText={'GIVER 로그인'}
           helperText={'HELPER 로그인'}
           setIsSignInOpen={setIsSignInOpen}
+          isSignInOpen={isSignInOpen}
         />
       ) : null}
       {isSignUpOpen ? (
@@ -78,6 +79,7 @@ const Header = () => {
           giverText={'GIVER 회원가입'}
           helperText={'HELPER 회원가입'}
           setIsSignUpOpen={setIsSignUpOpen}
+          isSignUpOpen={isSignUpOpen}
         />
       ) : null}
     </HeaderContainer>
