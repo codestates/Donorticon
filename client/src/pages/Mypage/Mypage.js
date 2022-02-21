@@ -274,10 +274,9 @@ const Mypage = () => {
       }
     } else if (whoIs === 'helper') {
       try {
-        // const { data } = await axios.get('/mypage/helper', {
-        //   headers: { token: localStorage.getItem('token') },
-        // });
-        const data = heleprExample;
+        const { data } = await axios.get('/mypage/helper', {
+          headers: { token: localStorage.getItem('token') },
+        });
         setUserInfo(
           Object.assign(
             data,

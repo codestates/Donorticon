@@ -18,9 +18,7 @@ const GifticonDetail = () => {
   return (
     <>
       <div>기프티콘 상세정보</div>
-      <a href={img} target="_blank">
-        <CardGallery style={{ width: '200px', height: '300px' }} src={img} />
-      </a>
+      <a href={img} target='_blank' rel='noreferrer noopener'><CardGallery style={{ width: '200px', height: '300px' }} src={img}/></a>
       <div>
         {who === 1 ? 'helper' : 'giver'} {name}
       </div>

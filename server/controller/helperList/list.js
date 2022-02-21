@@ -1,4 +1,4 @@
-const { helper, gifticon, message } = require('../../models');
+const { helper, gifticon, message, room } = require('../../models');
 const generateUploadURL = require('../s3')
 
 module.exports = {
@@ -27,10 +27,20 @@ module.exports = {
         img: imageUrl,
         status: "checking"
       })
+
+      const createDMRoom = await room.findOrCreate({
+        where: {
+          giver_id: req.body.giverId,
+          helper_id: req.body.helperId
+        },
+        defaults: {
+          activity: 1
+        }
+      })
       
       if (messageFromGiver) {
         await message.create({
-          room_id: '1',
+          room_id: createDMRoom.dataValues.id,
           giver_id: req.body.giverId,
           helper_id: req.body.helperId,
           gifticon_id: insertGifticon.dataValues.id,

@@ -40,9 +40,12 @@ const RemoveButton = styled.button`
 `;
 
 const TagAdder = styled.div`
-  border: solid;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: solid;
+  border-width: 3px;
+  width: 70%;
   z-index: 1px;
 `;
 
@@ -56,29 +59,9 @@ const Tag = ({ tagList = [], targetTagList = [], callback }) => {
         setIsEditMode(true);
       }}
     >
-      <TagContent
-        onDragEnter={() => {
-          setIsEnter(true);
-        }}
-        onDragExit={() => {
-          console.log('false');
-          setIsEnter(false);
-        }}
-      >
+      <TagContent>
         {targetTagList.map((tag, idx) => (
-          <TagStyle key={idx}>
-            {tagList[tag - 1]}
-            {isEditMode ? (
-              <RemoveButton
-                name={tag}
-                onClick={(e) => {
-                  callback.delete(e.target.name);
-                }}
-              >
-                x
-              </RemoveButton>
-            ) : null}
-          </TagStyle>
+          <TagStyle key={idx}>{tagList[tag - 1]}</TagStyle>
         ))}
       </TagContent>
       {isEditMode ? (
@@ -91,22 +74,20 @@ const Tag = ({ tagList = [], targetTagList = [], callback }) => {
           >
             x
           </RemoveButton>
-          {tagList
-            .filter((__, idx) => !targetTagList.includes(idx + 1))
-            .map((tag, idx) => (
-              <TagStyle
-                key={idx}
-                draggable
-                onDragEnd={(e) => {
-                  if (isEnter) {
-                    callback.create(tagList.indexOf(e.target.textContent) + 1);
-                  }
-                  setIsEnter(false);
-                }}
-              >
-                {tag}
-              </TagStyle>
-            ))}
+          {tagList.map((tag, idx) => (
+            <TagStyle
+              key={idx}
+              draggable
+              onDragEnd={(e) => {
+                if (isEnter) {
+                  callback.create(tagList.indexOf(e.target.textContent) + 1);
+                }
+                setIsEnter(false);
+              }}
+            >
+              {tag}
+            </TagStyle>
+          ))}
         </TagAdder>
       ) : (
         <></>
