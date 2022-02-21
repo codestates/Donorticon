@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setSocialUser, socialSignIn } from '../../redux/user/userSlice';
 
 const KaKao = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { prev } = useSelector((state) => state.page);
 
   const getKakaoCode = () => {
     const authorizationCode = new URL(window.location.href).searchParams.get(
@@ -41,7 +42,7 @@ const KaKao = () => {
         dispatch(socialSignIn());
         dispatch(setSocialUser({ id, email, name, who }));
         localStorage.setItem('token', accessToken);
-        navigate('/');
+        navigate(prev);
       }
     } catch (e) {
       console.log(e);
