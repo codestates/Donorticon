@@ -1,9 +1,3 @@
-import { useEffect, useState } from 'react';
-import bronze from '../img/pointGrade/0_bronze.png';
-import silver from '../img/pointGrade/1_silver.png';
-import gold from '../img/pointGrade/2_gold.png';
-import platinum from '../img/pointGrade/3_platinum.png';
-import diamond from '../img/pointGrade/4_diamond.png';
 import {
   LevelContainer,
   LevelContents,
@@ -11,6 +5,12 @@ import {
   LevelName,
 } from '../styles/Gifticon/GifticonStyle';
 import { Title } from '../styles/utils/Container';
+import bronze from '../img/pointGrade/0_bronze.png';
+import silver from '../img/pointGrade/1_silver.png';
+import gold from '../img/pointGrade/2_gold.png';
+import platinum from '../img/pointGrade/3_platinum.png';
+import diamond from '../img/pointGrade/4_diamond.png';
+import { useEffect, useState } from 'react';
 
 const pointGrade = [
   { id: 0, name: '브론즈 연탄', src: bronze },
@@ -20,34 +20,40 @@ const pointGrade = [
   { id: 4, name: '다이아몬드 연탄', src: diamond },
 ];
 
-const GiverLevel = ({ point }) => {
-  const [grade, setGrade] = useState({});
+const GiverLevel = ({ grade }) => {
+  const [level, setLevel] = useState();
+  console.log('grade', grade);
+  console.log('first', level);
 
-  const getGrade = () => {
-    if (point <= 5) {
-      setGrade(pointGrade[0]);
-    } else if (point > 5 && point <= 10) {
-      setGrade(pointGrade[1]);
-    } else if (point > 10 && point <= 15) {
-      setGrade(pointGrade[2]);
-    } else if (point > 15 && point <= 20) {
-      setGrade(pointGrade[3]);
-    } else if (point > 20) {
-      setGrade(pointGrade[4]);
+  const getLevel = (grade) => {
+    if (grade !== 0) {
+      const filtered = pointGrade.filter((x) => x.id === grade);
+      setLevel(filtered[0]);
+      console.log('second', level);
+    } else {
+      setLevel({ id: 0, name: '브론즈 연탄', src: bronze });
     }
   };
 
-  useEffect(() => getGrade(), []);
+  useEffect(() => getLevel(grade), [grade]);
 
   return (
     <>
       <LevelContainer>
         <Title>GIVER</Title>
       </LevelContainer>
-      <LevelContents>
-        <LevelImage src={grade.src} />
-        <LevelName>{grade.name}</LevelName>
-      </LevelContents>
+      {level && (
+        <LevelContents>
+          <LevelImage src={level.src} />
+          <LevelName>{level.name}</LevelName>
+        </LevelContents>
+      )}
+      {grade === undefined && (
+        <LevelContents>
+          <LevelImage src={bronze} />
+          <LevelName>브론즈 연탄</LevelName>
+        </LevelContents>
+      )}
     </>
   );
 };

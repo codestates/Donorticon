@@ -21,6 +21,7 @@ const Gifticon = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [count, setCount] = useState(0);
   const [point, setPoint] = useState(0);
+  const [grade, setGrade] = useState(0);
   const [statusId, setStatusId] = useState(0);
 
   const handleStatusClick = (name) => {
@@ -34,11 +35,9 @@ const Gifticon = () => {
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
-
         { headers: { Authorization: `Bearer ${token}`, Status: statusId } },
       );
-
-      const { gifticonList, maxPage, count, point } = data;
+      const { gifticonList, maxPage, count, point, grade } = data;
       setList(gifticonList);
       setMaxPage(maxPage);
       if (count !== null) {
@@ -46,6 +45,9 @@ const Gifticon = () => {
       }
       if (point !== null) {
         setPoint(point);
+      }
+      if (grade !== null) {
+        setGrade(grade);
       }
       navigate(`/gifticon?page=${currentPage}&limit=9`);
     } catch (e) {
@@ -59,7 +61,7 @@ const Gifticon = () => {
 
   return (
     <GifticonContainer>
-      {who && who === 1 && <GiverLevel point={point} />}
+      {who && who === 1 && <GiverLevel grade={grade} />}
       <GiticonFilter
         statusId={statusId}
         handleStatusClick={handleStatusClick}
