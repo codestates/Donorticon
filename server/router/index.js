@@ -14,7 +14,7 @@ router.post('/signin/guest/helper', user.signinGuestHelper);
 router.get('/mypage/giver', user.mypageGiver.get);
 router.get('/mypage/helper', user.mypageHelper.get);
 router.put('/mypage/giver', user.mypageGiver.put);
-// router.get('/mypage/helper', user.mypageHelper.get);
+router.put('/mypage/helper', user.mypageHelper.put);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);

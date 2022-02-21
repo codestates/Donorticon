@@ -26,6 +26,74 @@ module.exports = {
 		} catch(err) {
 			console.log(err);
 		}
-	}
+	},
+	put: async (req, res) => {
+    const token = req.headers.token;
+		const tokenDecoded = jwt_decode(token);
+		const { id } = tokenDecoded;
+    if (req.body.password || req.body.mobile || req.body.name || req.body.slogan || req.body.description) {
+      try {
+        if (req.body.password) {
+          const { password } = req.body;
+          await helper.update(
+            { password },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.mobile) {
+          const { mobile } = req.body;
+          await helper.update(
+            { mobile },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.name) {
+          const { name } = req.body;
+          await helper.update(
+            { name },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.slogan) {
+          const { slogan } = req.body;
+          await helper.update(
+            { slogan },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.description) {
+          const { description } = req.body;
+          await helper.update(
+            { description },
+            {
+              where: { id },
+            }
+          );
+        }
+        const helperFinder = await helper.findOne({
+          where: { id },
+          attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
+        });
+        const helperInfo = helperFinder.dataValues;
+        res.clearCookie('refreshToken');
+        const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
+          expiresIn: '6h',
+        });
+        res.status(200).json(helperInfo);
+      } catch (e) {
+        res.status(500).json({ message: 'server qerror' });
+      }
+    } else {
+      res.status(422).json({ message: 'insufficient parameters supplied' });
+    }
+  }
 }
 
