@@ -47,7 +47,6 @@ const Mypage = () => {
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
-  // console.log(whoIs);
   // const giverExmaple = {
   //   id: 1,
   //   email: 'hwlsgur1120@naver.com',
@@ -55,10 +54,18 @@ const Mypage = () => {
   //   mobile: '010-0000-0000',
   //   img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
   // };
-  const [profileUrl, setProfileUrl] = useState(
-    'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
-  );
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({
+    id: 0,
+    email: '',
+    name: '',
+    mobile: '',
+    slogan: '',
+    description: '',
+    gifticonCategory: [],
+    vulnerable: [],
+    gallery: [],
+    img: '',
+  });
   const [isChanging, setIsChanging] = useState([
     // giver  helper
     false, // email  email
@@ -69,7 +76,7 @@ const Mypage = () => {
     false, // null   location
     false, // null   gallery
   ]);
-  const [isEditProfile, setIsEditProfile] = useState(false);
+
   const inputList = {
     giver: [
       {
@@ -85,12 +92,15 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/giver',
                 { email: userInfo.email },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
+              const { token } = result.data;
+              console.log(token);
+              localStorage.setItem('token', token);
             } catch (e) {
               console.log(e);
             }
@@ -109,12 +119,14 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/giver',
                 { name: userInfo.name },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
             } catch (e) {}
           } else {
             console.log('name 8자 넘어');
@@ -132,12 +144,14 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/giver',
                 { mobile: userInfo.mobile },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
             } catch (e) {}
           } else {
             console.log('휴대전화 번호');
@@ -187,12 +201,14 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/helper',
                 { name: userInfo.name },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
             } catch (e) {
               console.log(e);
             }
@@ -212,12 +228,14 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/helper',
                 { mobile: userInfo.mobile },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
             } catch (e) {
               console.log(e);
             }
@@ -235,12 +253,14 @@ const Mypage = () => {
           const arr = [...isChanging];
           arr[idx] = boolean;
           try {
-            await axios.put(
+            const result = await axios.put(
               '/mypage/helper',
               { slogan: userInfo.slogan },
               { headers: { token: localStorage.getItem('token') } },
             );
             setIsChanging(arr);
+            const { token } = result.data;
+            localStorage.setItem('token', token);
           } catch (e) {
             console.log(e);
           }
@@ -255,12 +275,14 @@ const Mypage = () => {
           const arr = [...isChanging];
           arr[idx] = boolean;
           try {
-            await axios.put(
+            const result = await axios.put(
               '/mypage/helper',
               { description: userInfo.description },
               { headers: { token: localStorage.getItem('token') } },
             );
             setIsChanging(arr);
+            const { token } = result.data;
+            localStorage.setItem('token', token);
           } catch (e) {
             console.log(e);
           }
@@ -299,6 +321,7 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { token: localStorage.getItem('token') },
         });
+        // setUserInfo(data);
         setUserInfo(
           Object.assign(
             { ...data },
@@ -465,11 +488,10 @@ const Mypage = () => {
                         },
                       ),
                     );
-                    await axios.delete(
-                      '/mypage/vulnerable',
-                      { vulnerable_id: id },
-                      { headers: { token: localStorage.getItem('token') } },
-                    );
+                    await axios.delete('/mypage/vulnerable', {
+                      headers: { token: localStorage.getItem('token') },
+                      params: { vulnerable_id: id },
+                    });
                   },
                 }}
                 // isEditMode={isChanging[7]}
@@ -505,11 +527,10 @@ const Mypage = () => {
                         },
                       ),
                     );
-                    await axios.delete(
-                      '/mypage/gifticon',
-                      { gifticon_id: id },
-                      { headers: { token: localStorage.getItem('token') } },
-                    );
+                    await axios.delete('/mypage/gifticon', {
+                      headers: { token: localStorage.getItem('token') },
+                      params: { gifticon_id: id },
+                    });
                   },
                 }}
               />
