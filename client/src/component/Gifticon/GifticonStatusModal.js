@@ -1,55 +1,12 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
-import { setInfo, setTextStyle } from '../redux/gifticon/gifticonSlice';
-
-const ModalBackground = styled.div`
-  position: fixed;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const ModalFrame = styled.div`
-  text-align: center;
-  align-items: center;
-  width: 30%;
-  height: 50%;
-  padding: 10px;
-  background-color: #fff;
-  @media ${({ theme }) => theme.device.mobile} {
-  }
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 70%;
-  height: 100%;
-  margin: 0 auto;
-  padding: 10px;
-  background-color: #fff;
-  @media ${({ theme }) => theme.device.mobile} {
-  }
-`;
-
-const Button = styled.div`
-  width: 100%;
-  padding: 10px 0;
-  border: 1px solid black;
-  cursor: pointer;
-  &:not(:last-child) {
-    margin-bottom: 10px;
-  }
-`;
+import { setInfo } from '../../redux/gifticon/gifticonSlice';
+import { ModalBackground } from '../../styles/utils/Modal';
+import {
+  ModalButton,
+  ModalButtonContainer,
+  StatusModalFrame,
+} from '../../styles/Gifticon/GifticonDetailStyle';
 
 const btnList = [
   { id: 1, name: '사용함' },
@@ -107,15 +64,15 @@ const GifticonStatusModal = ({ isModalOpen, setIsModalOpen }) => {
 
   return (
     <ModalBackground onClick={handleModal}>
-      <ModalFrame>
-        <ButtonContainer>
+      <StatusModalFrame>
+        <ModalButtonContainer>
           {printList.map((x) => (
-            <Button key={x.id} onClick={handleButton}>
+            <ModalButton key={x.id} onClick={handleButton}>
               {x.name}
-            </Button>
+            </ModalButton>
           ))}
-        </ButtonContainer>
-      </ModalFrame>
+        </ModalButtonContainer>
+      </StatusModalFrame>
     </ModalBackground>
   );
 };

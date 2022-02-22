@@ -1,11 +1,13 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import { CardBox, CardGallery } from '../../styles/CardStyle';
-import { GifticonButton } from '../../styles/Gifticon/GifticonStyle';
+import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 
 const GifticonCard = ({ data, name }) => {
+  const who = useSelector((state) => state.user.user.who);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [text, setText] = useState('');
@@ -14,10 +16,18 @@ const GifticonCard = ({ data, name }) => {
   const { id, img, report, status, createdAt } = data;
 
   const handleClick = async () => {
+    const token = localStorage.getItem('token');
+    const {
+      data: { gifticonInfo },
+    } = await axios.get(`/gifticon/detail/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(gifticonInfo);
     dispatch(
       setInfo({
         id,
-        name,
+        name: who === 1 ? gifticonInfo.helper.name : gifticonInfo.giver.name,
+        userId: who === 1 ? gifticonInfo.helper.id : gifticonInfo.giver.id,
         createdAt: createdAt.split('T')[0],
         status: text,
         img,
@@ -56,9 +66,9 @@ const GifticonCard = ({ data, name }) => {
       <div>
         <div>{name}</div>
         <div>{createdAt.split('T')[0]} 기부</div>
-        <GifticonButton text={text} textStyle={textStyle}>
+        <GifticonStatusButton text={text} textStyle={textStyle}>
           {text}
-        </GifticonButton>
+        </GifticonStatusButton>
       </div>
     </CardBox>
   );
