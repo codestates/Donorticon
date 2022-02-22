@@ -1,16 +1,17 @@
 const jwt_decode = require('jwt-decode');
-const { helper_vulnerable } = require('../../models');
+const { helper_gifticon_category } = require('../../models');
 
 module.exports = {
   post: async (req, res) => {
     try {
-      const vulnerableId = req.body.vulnerable_id;
+      console.log(req.body)
+      const gifticonCategoryId = req.body.gifticon_id;
       const { token } = req.headers;
       const tokenDecoded = jwt_decode(token);
       const helperId = tokenDecoded.id;
-      await helper_vulnerable.create({
+      await helper_gifticon_category.create({
         helper_id: helperId,
-        vulnerable_id: vulnerableId,
+        gifticon_category_id: gifticonCategoryId,
       });
       res.status(201).json({ message: 'data successfully added' });
     } catch (err) {
@@ -21,15 +22,15 @@ module.exports = {
     console.log('삭제 작동중');
     try {
       console.log('파라미터', req.query);
-      const vulnerableId = req.query.vulnerable_id;
+      const gifticonCategoryId = req.query.gifticon_id;
       const { token } = req.headers;
       const tokenDecoded = jwt_decode(token);
       const helperId = tokenDecoded.id;
       console.log(tokenDecoded);
-      await helper_vulnerable.destroy({
+      await helper_gifticon_category.destroy({
         where: {
           helper_id: helperId,
-          vulnerable_id: vulnerableId,
+          gifticon_category_id: gifticonCategoryId,
         },
       });
       res.json({ message: 'data successfully deleted' });
