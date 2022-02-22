@@ -5,7 +5,6 @@ const {
   helper_vulnerable,
   helper_gifticon_category,
 } = require('../../models');
-const jwt = require('jsonwebtoken');
 
 module.exports = {
   get: async (req, res) => {
