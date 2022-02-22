@@ -3,7 +3,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
-import { setWho, socialSignIn, setSocialUser } from '../../redux/user/userSlice';
+import {
+  setWho,
+  socialSignIn,
+  setSocialUser,
+} from '../../redux/user/userSlice';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -37,6 +41,12 @@ const SignIn = () => {
             : e.target.value,
       }),
     );
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSignin();
+    }
   };
 
   const handleSignin = async () => {
@@ -135,6 +145,7 @@ const SignIn = () => {
             name="password"
             inputPlaceHolder="비밀번호"
             callback={handleInput}
+            handleKeyPress={handleKeyPress}
           />
           <ErrorMessage center>{errorMessage}</ErrorMessage>
         </InputContainer>
