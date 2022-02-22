@@ -15,7 +15,7 @@ const GifticonDetail = ({ data }) => {
   const gifticon = useSelector((state) => state.gifticon);
   const who = useSelector((state) => state.user.user.who);
 
-  const { id, name, createdAt, status, img, report, textStyle } = gifticon;
+  const { name, createdAt, status, img, report, textStyle } = gifticon;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleBtnClick = () => {
@@ -51,7 +51,7 @@ const GifticonDetail = ({ data }) => {
           </div>
         </GifticonInputBox>
       </GifticonBox>
-      {status === '사용함' && <GifticonUsed />}
+      {status === '사용함' && who === 2 && <GifticonUsed />}
       {isModalOpen && who === 2 ? (
         <GifticonStatusModal
           isModalOpen={isModalOpen}

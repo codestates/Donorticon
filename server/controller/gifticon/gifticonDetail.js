@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { gifticon, helper, giver, score } = require('../../models');
+const { gifticon, helper, giver } = require('../../models');
 
 module.exports = {
   getDetail: async (req, res) => {
@@ -62,35 +62,16 @@ module.exports = {
 
     const gifticonId = parseInt(req.params.id);
 
-    // helper만 가능
+    // helper만 가능한 기능들
     if (token && who === 2) {
       // 기프티콘 상태 변경
       if (req.body.status) {
         const status = req.body.status;
-        let statusName;
-
-        if (status === '사용함') {
-          statusName = 'used';
-        } else if (status === '수락함') {
-          statusName = 'accepted';
-        } else if (status === '확인중') {
-          statusName = 'checking';
-        } else if (status === '거절됨') {
-          statusName = 'rejected';
-        } else if (status === '만료됨') {
-          statusName = 'expired';
-        }
-
         try {
-          await gifticon.update(
-            { status: statusName },
-            { where: { id: gifticonId } },
-          );
+          await gifticon.update({ status }, { where: { id: gifticonId } });
           const data = await gifticon.findOne({
             where: { id: gifticonId },
-            attributes: {
-              exclude: ['giver_id', 'helper_id', 'createdAt', 'updatedAt'],
-            },
+            attributes: ['status'],
           });
           const updated = data.dataValues;
           res.status(200).send({ updated, mesasge: 'successfully changed' });
@@ -104,24 +85,25 @@ module.exports = {
         const point = parseInt(req.body.point);
         const giverId = parseInt(req.body.giverId);
 
-        console.log('giverId', giverId);
-        console.log('helperId', helperId);
-
         try {
-          const [data, created] = await score.findOrCreate({
-            where: { helper_id: helperId, giver_id: giverId },
-            defaults: { point },
+          await gifticon.update(
+            { point },
+            {
+              where: {
+                id: gifticonId,
+                helper_id: helperId,
+                giver_id: giverId,
+              },
+            },
+          );
+          const gifticonInfo = await gifticon.findOne({
+            where: { id: gifticonId, helper_id: helperId, giver_id: giverId },
+            attributes: ['point'],
           });
-
-          if (created) {
-            return res.status(200).send({ mesasge: 'successfully changed' });
-          } else {
-            await score.update(
-              { point },
-              { where: { helper_id: helperId, giver_id: giverId } },
-            );
-            return res.status(200).send({ mesasge: 'successfully changed' });
-          }
+          const updatedPoint = gifticonInfo.dataValues.point;
+          res
+            .status(200)
+            .send({ updatedPoint, mesasge: 'successfully changed' });
         } catch (e) {
           console.log(e);
         }

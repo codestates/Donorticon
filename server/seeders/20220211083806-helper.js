@@ -11,8 +11,8 @@ module.exports = {
       [
         {
           user_type: 2,
-          name: 'parkhacker',
-          email: 'parkhacker@codestates.com',
+          name: 'helper',
+          email: 'test2@test.com',
           password:
             '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4',
           mobile: '010-4751-2351',
@@ -32,8 +32,8 @@ module.exports = {
         },
         {
           user_type: 2,
-          name: 'leehacker',
-          email: 'leehacker@codestates.com',
+          name: 'helperhelper',
+          email: 'test3@test.com',
           password:
             '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4',
           mobile: '010-7554-2001',
