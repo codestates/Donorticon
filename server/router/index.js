@@ -26,6 +26,8 @@ router.put('/verification', verification.put);
 router.get('/gifticon?', gifticon.get);
 router.get('/gifticon/detail/:id', gifticonDetail.getDetail);
 router.put('/gifticon/detail/:id', gifticonDetail.updateInfo);
+router.put('/report/:id', gifticonDetail.report);
+
 router.post('/google/signin', user.googleLogin.getToken);
 router.get('/google/user?', user.googleLogin.getUser);
 router.post('/kakao/signin', user.kakaoLogin.getToken);
@@ -38,6 +40,5 @@ router.get('/helperlist/category/:id?', helperList.filterList.getFilteredList);
 
 router.get('/dm', dm.get);
 router.post('/dm', dm.post);
-
 
 module.exports = router;
