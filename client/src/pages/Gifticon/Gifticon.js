@@ -34,7 +34,12 @@ const Gifticon = () => {
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
-        { headers: { Authorization: `Bearer ${token}`, Status: statusId } },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Status: statusId,
+          },
+        },
       );
       const { gifticonList, maxPage, count, point } = data;
       setList(gifticonList);
