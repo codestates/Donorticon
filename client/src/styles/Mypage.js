@@ -76,7 +76,6 @@ export const GalleryImg = styled.img``;
 
 export const GalleryImgContainer = styled.div`
   display: flex;
-  flex-direction: row;
   width: 100%;
   height: 10%;
 `;
@@ -99,4 +98,9 @@ export const Label = styled.label`
     background-color: ${({ theme }) => theme.color.main};
     transition: 0.5s;
   }
+`;
+
+export const ActButton = styled.button`
+  color: ${({ theme }) => theme.color.lightGrey};
+  cursor: pointer;
 `;

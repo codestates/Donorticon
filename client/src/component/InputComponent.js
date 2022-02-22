@@ -5,8 +5,8 @@ const InputSet = ({
   title,
   inputPlaceHolder,
   callback,
-  errorMessage,
-  check,
+  errorMessage = '',
+  check = false,
   name,
 }) => {
   const [isError, setIsError] = useState(false);
