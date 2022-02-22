@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const jwt_decode = require('jwt-decode');
 const { helper, helper_vulnerable, helper_gifticon_category } = require('../../models');
 
