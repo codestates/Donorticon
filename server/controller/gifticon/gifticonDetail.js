@@ -133,7 +133,7 @@ module.exports = {
       //TODO: gifticon img => 신고당햇다는 뭐 그런 이미지로 바꾸는거 필요
       //TODO: BLACK POINT -1점은 너무 낮지 않나?
       await gifticon.update(
-        { report: true, point: -1 },
+        { report: true, point: -1, status: 'reported' },
         { where: { id: gifticonId } },
       );
 
