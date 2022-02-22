@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Container,
@@ -13,6 +13,8 @@ import {
   InputChanger,
   ChangeButton,
   ProfileImg,
+  GalleryImgContainer,
+  GalleryImg,
   Label,
 } from '../../styles/Mypage';
 import Tag from '../../component/Tag';
@@ -297,18 +299,49 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { token: localStorage.getItem('token') },
         });
-        setUserInfo(data);
+        setUserInfo(
+          Object.assign(
+            { ...data },
+            {
+              gallery: Array(2).fill(
+                'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
+              ),
+            },
+          ),
+        );
       } catch (e) {
         console.log(e);
       }
     }
   }, []);
 
-  const handleImageUpload = (e) => {
+  const handleImageUpload = async (e, tag) => {
     const file = e.target.files[0];
-    const newUrl = URL.createObjectURL(file);
-    console.log(newUrl);
-    setProfileUrl(newUrl);
+    const tempUrl = URL.createObjectURL(file);
+    if (tag === 'img') {
+      setUserInfo(Object.assign({ ...userInfo }, { [tag]: tempUrl }));
+    } else if (tag === 'gallery') {
+      setUserInfo(
+        Object.assign(
+          { ...userInfo },
+          { [tag]: [...userInfo.gallery, tempUrl] },
+        ),
+      );
+    }
+    try {
+      const s3Url = await axios.put(
+        `/mypage/${whoIs}`,
+        { tag },
+        {
+          headers: { token: localStorage.getItem('token') },
+        },
+      );
+      await axios.put(s3Url, file, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleInput = (e) => {
@@ -386,6 +419,21 @@ const Mypage = () => {
                 }}
                 location={userInfo.location}
               />
+              <InputName>gallery</InputName>
+              <GalleryImgContainer>
+                {userInfo.gallery.map((url, idx) => {
+                  return <GalleryImg key={idx} src={url} />;
+                })}
+              </GalleryImgContainer>
+              <Label htmlFor="imageAdder">
+                <ChangeButton
+                  id="imageAdder"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'gallery')}
+                />
+                이미지 추가
+              </Label>
               <InputName>vulnerable</InputName>
               <Tag
                 tagList={vulnerableList}
@@ -475,13 +523,13 @@ const Mypage = () => {
             width: '15%',
           }}
         >
-          <ProfileImg src={profileUrl} />
+          <ProfileImg src={userInfo.img} />
           <Label htmlFor="imageChanger">
             <ChangeButton
               id="imageChanger"
               type="file"
               accept="image/*"
-              onChange={handleImageUpload}
+              onChange={(e) => handleImageUpload(e, 'img')}
             />
             이미지 변경
           </Label>
