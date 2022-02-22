@@ -55,6 +55,9 @@ const GifticonCard = ({ data, name }) => {
     } else if (status === 'expired') {
       setText('만료됨');
       setTextStyle(2);
+    } else if (status === 'reported') {
+      setText('신고함');
+      setTextStyle(2);
     }
   };
 
