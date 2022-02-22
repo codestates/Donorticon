@@ -5,12 +5,13 @@ import {
 } from '../../styles/Gifticon/GifticonStatusFilter';
 
 export const gifticonStatus = [
-  { id: 0, name: '전체', eng: 'all' },
-  { id: 1, name: '사용함', eng: 'used' },
-  { id: 2, name: '수락함', eng: 'accpeted' },
-  { id: 3, name: '확인중', eng: 'checking' },
-  { id: 4, name: '거절됨', eng: 'rejected' },
-  { id: 5, name: '만료됨', eng: 'expired' },
+  { id: 0, name: '전체' },
+  { id: 1, name: '사용함' },
+  { id: 2, name: '수락함' },
+  { id: 3, name: '확인중' },
+  { id: 4, name: '거절됨' },
+  { id: 5, name: '만료됨' },
+  { id: 6, name: '신고됨' },
 ];
 
 const GiticonFilter = ({ statusId, handleStatusClick }) => {

@@ -44,7 +44,7 @@ const GifticonDetail = ({ data }) => {
           <CardGallery style={{ width: '200px', height: '300px' }} src={img} />
         </a>
         <div>
-          {status !== '사용함' && (
+          {status !== '사용함' && who === 2 && (
             <Button onClick={handleReportButton}>
               {report ? '신고 완료' : '신고하기'}
             </Button>
