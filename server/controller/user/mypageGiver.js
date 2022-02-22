@@ -56,8 +56,8 @@ module.exports ={
         const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
           expiresIn: '6h',
         });
-				console.log(refreshToken);
-        res.status(200).json(giverInfo);
+				// console.log(refreshToken);
+        res.status(200).json({ giverInfo, token: refreshToken });
       } catch (e) {
         res.status(500).json({ message: 'server error' });
       }
