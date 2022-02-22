@@ -32,5 +32,7 @@ router.post('/helperlist/:id', helperList.list.donate);
 router.get('/helperlist/category/:id?', helperList.filterList.getFilteredList);
 
 router.get('/dm', dm.get);
+router.post('/dm', dm.post);
+
 
 module.exports = router;

@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from "axios";
 import { useSelector } from 'react-redux';
+import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
+import { Container, RoomContainer, DialogueContainer, ReceiverImg, ReceiverName, ReceiverWrapper, InputWrapper, Input, ImgButton, SendButton, Message, Image } from "../../styles/DM/DMStyle";
 
 const socket = io('http://localhost:5000');
   socket.on('connect', () => {
@@ -16,6 +18,8 @@ const DM = () => {
   const [dialogues, setDialogues] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentRoom, setCurrentRoom] = useState('');
+  const [giverId, setGiverId] = useState('');
+  const [helperId, setHelperId] = useState('');
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
@@ -26,9 +30,14 @@ const DM = () => {
     setMessage(event.target.value);
   }
 
-  const sendMessage = async () => {
-    setVal('');
-    socket.emit('send-message', message, currentRoom);
+  const sendMessage = async (event) => {
+    if (message.length > 0) {
+      if (event.key === 'Enter' || event.type === 'click') {
+        setVal('');
+        setMessage('');
+        socket.emit('send-message', message, currentRoom);
+      }
+    }
   }
 
   const getRooms = async () => {
@@ -38,6 +47,10 @@ const DM = () => {
 
   const getDialogues = async (data) => {
     const dialogueRequest = await axios.get(`/dm?room=${data.id}`);
+    if(dialogueRequest.data.dialogues[0]) {
+      setGiverId(dialogueRequest.data.dialogues[0].giver_id);
+      setHelperId(dialogueRequest.data.dialogues[0].helper_id);
+    }
     setCurrentRoom(data.id)
     setDialogues(dialogueRequest.data.dialogues);
   }
@@ -50,39 +63,33 @@ const DM = () => {
   })  
 
   return (
-    <div>
-      <div>DM room list</div>  
-      <br />
-      <br />
-      {rooms.map((item, index) => (
-        <div value={item} onClick={() => getDialogues(item)} key={index}>
-          {user.who === 1 ? <div>Profile Image: {item.helper.img}</div> : <div>Profile Image: {item.giver.img}</div>}
-          {user.who === 1 ? <div>Name: {item.helper.name}</div> : <div>Name: {item.giver.name}</div>}
-          <br />
-          <br />
-        </div>
-      ))}
-      <br />
-      <br />
-      <br />
-      <div>Chat room</div>
-      <br />      
-      {dialogues.map((item, index) => (
-        <div key={index}>
-          <span>{item.message}</span>
-          <span>{item.createdAt}</span>
-        </div>
-      ))}
-      <br />     
-      <input type='text' value={val} onChange={handleMessage}></input>
-      <br />      
-      <br />      
-      <button onClick={sendMessage}>Send Text</button>
-      <br />      
-      <br />
-      <button onClick={handleModalOpen}>Send Image</button>
-      {isModalOpen ? <ImageUploader></ImageUploader> : null}
-    </div>
+    <Container>
+      <RoomContainer>
+        {rooms.map((item, index) => (
+          <ReceiverWrapper value={item} onClick={() => getDialogues(item)} key={index} className={item.id === currentRoom ? "current" : null}>
+            <ReceiverImg src={user.who === 1 ? item.helper.img : item.giver.img}/>
+            <ReceiverName>{user.who === 1 ? item.helper.name: item.giver.name} </ReceiverName>
+          </ReceiverWrapper>
+        ))}
+      </RoomContainer>
+      {dialogues.length > 0 ? 
+        <DialogueContainer>
+          {dialogues.map((item, index) => (
+            <div key={index}>
+              {item.img ? <Image src={item.img} /> : null}
+              {user.who === 1? <Message>{item.message}</Message> : <Message>{item.message}</Message>}
+              <span>{item.createdAt}</span>
+            </div>
+          ))}
+          <InputWrapper>
+            <Input type='text' value={val} onChange={handleMessage} onKeyDown={sendMessage}></Input>     
+            <ImgButton><FaImage size="25" onClick={handleModalOpen}></FaImage></ImgButton>
+            <SendButton><FaPaperPlane size="25" onClick={sendMessage}></FaPaperPlane></SendButton>
+          </InputWrapper>
+        </DialogueContainer>
+      :<div><FaRegCommentDots size="30" opacity="0.5" />Select a Room</div>}
+      {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} api='/dm' roomId={currentRoom} giverId={giverId} helperId={helperId}></ImageUploader> : null}
+    </Container>
   );
 }
 

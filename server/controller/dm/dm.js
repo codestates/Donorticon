@@ -5,6 +5,7 @@ const io = require('socket.io')(5000, {
 });
 
 const { room, helper, giver, message } = require('../../models');
+const generateUploadURL = require('../s3')
 
 io.on('connection', socket => {
   socket.on('send-message', async (text, currentRoom) => {
@@ -58,5 +59,20 @@ module.exports = {
     } catch (e) {
       res.status(500).json({message: 'internal server erorr'});
     }
+  },
+  post: async (req, res) => {
+    const url = await generateUploadURL();
+
+    const imageUrl = url.split('?')[0];
+
+    const saveImgMessage = await message.create({
+      room_id: req.body.roomId,
+      giver_id: req.body.giverId,
+      helper_id: req.body.helperId,
+      img: imageUrl,
+      gifticon_id: 0
+    })
+ 
+    res.status(200).json({url: url});
   }
 };
