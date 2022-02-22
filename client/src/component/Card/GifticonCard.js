@@ -18,11 +18,10 @@ const GifticonCard = ({ data, name }) => {
   const handleClick = async () => {
     const token = localStorage.getItem('token');
     const {
-      data: { gifticonInfo },
+      data: { gifticonInfo, thanksImgUrl },
     } = await axios.get(`/gifticon/detail/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     dispatch(
       setInfo({
         id: gifticonInfo.id,
@@ -34,6 +33,7 @@ const GifticonCard = ({ data, name }) => {
         report: gifticonInfo.report,
         textStyle,
         point: gifticonInfo.point,
+        thanksImgUrl: thanksImgUrl === null ? null : thanksImgUrl,
       }),
     );
     navigate(`/gifticon/detail/${id}`);
