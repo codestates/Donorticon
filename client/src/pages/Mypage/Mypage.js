@@ -13,10 +13,12 @@ import {
   InputChanger,
   ChangeButton,
   ProfileImg,
+  Label,
 } from '../../styles/Mypage';
 import Tag from '../../component/Tag';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AddressFinder from '../../component/AddressFinder';
 
 const vulnerableList = [
   '아동/청소년',
@@ -51,19 +53,9 @@ const Mypage = () => {
   //   mobile: '010-0000-0000',
   //   img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
   // };
-  const heleprExample = {
-    id: 1,
-    email: 'kimcoding@codestates.com',
-    name: 'kimcoding',
-    mobile: '010-1234-5678',
-    img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
-    location: '경기도 성남시',
-    vulnerable: [1, 2],
-    gifticonCategory: [1, 4],
-    gallery: ['https://getimg.com/1/png', 'https://getimg.com/2/png'],
-    description: '남녀노소 모두를 봉사합니다',
-    slogan: '기부해주세요',
-  };
+  const [profileUrl, setProfileUrl] = useState(
+    'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
+  );
   const [userInfo, setUserInfo] = useState({});
   const [isChanging, setIsChanging] = useState([
     // giver  helper
@@ -75,6 +67,7 @@ const Mypage = () => {
     false, // null   location
     false, // null   gallery
   ]);
+  const [isEditProfile, setIsEditProfile] = useState(false);
   const inputList = {
     giver: [
       {
@@ -160,14 +153,23 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const form = new RegExp(
             '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
           );
           if (form.test(e.target.value)) {
             const arr = [...isChanging];
             arr[idx] = boolean;
-            setIsChanging(arr);
+            try {
+              await axios.put(
+                '/mypage/helper',
+                { email: userInfo.email },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             console.log('email형식 안맞아');
           }
@@ -178,11 +180,20 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           if (e.target.value.length <= 8) {
             const arr = [...isChanging];
             arr[idx] = boolean;
-            setIsChanging(arr);
+            try {
+              await axios.put(
+                '/mypage/helper',
+                { name: userInfo.name },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             console.log('name 8자 넘어');
           }
@@ -193,12 +204,21 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
           if (form.test(e.target.value)) {
             const arr = [...isChanging];
             arr[idx] = boolean;
-            setIsChanging(arr);
+            try {
+              await axios.put(
+                '/mypage/helper',
+                { mobile: userInfo.mobile },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             console.log('휴대전화 번호');
           }
@@ -209,10 +229,19 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const arr = [...isChanging];
           arr[idx] = boolean;
-          setIsChanging(arr);
+          try {
+            await axios.put(
+              '/mypage/helper',
+              { slogan: userInfo.slogan },
+              { headers: { token: localStorage.getItem('token') } },
+            );
+            setIsChanging(arr);
+          } catch (e) {
+            console.log(e);
+          }
         },
       },
       {
@@ -220,10 +249,19 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const arr = [...isChanging];
           arr[idx] = boolean;
-          setIsChanging(arr);
+          try {
+            await axios.put(
+              '/mypage/helper',
+              { description: userInfo.description },
+              { headers: { token: localStorage.getItem('token') } },
+            );
+            setIsChanging(arr);
+          } catch (e) {
+            console.log(e);
+          }
         },
       },
       // {
@@ -233,25 +271,7 @@ const Mypage = () => {
       //   },
       // },
       // {
-      //   inputName: 'location',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
       //   inputName: 'gallery',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
-      //   inputName: 'vulnerable',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
-      //   inputName: 'gifticonCategory',
       //   inputCallback: (e) => {
       //     console.log(e);
       //   },
@@ -277,20 +297,19 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { token: localStorage.getItem('token') },
         });
-        setUserInfo(
-          Object.assign(
-            data,
-            // { vulnerable: '#' + data.vulnerable.join(' #') },
-            // {
-            //   gifticonCategory: '#' + data.gifticonCategory.join(' #'),
-            // },
-          ),
-        );
+        setUserInfo(data);
       } catch (e) {
         console.log(e);
       }
     }
   }, []);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    const newUrl = URL.createObjectURL(file);
+    console.log(newUrl);
+    setProfileUrl(newUrl);
+  };
 
   const handleInput = (e) => {
     setUserInfo(
@@ -317,7 +336,7 @@ const Mypage = () => {
           }}
         >
           <PageButton onClick={() => navigate('/mypage')}>내 프로필</PageButton>
-          <PageButton onClick={() => navigate('/gifticon')}>
+          <PageButton onClick={() => navigate('/gifticon?page=1&limit=9')}>
             {whoIs === 'giver' ? '기부 내역' : '기부받은 내역'}
           </PageButton>
         </Box>
@@ -349,31 +368,59 @@ const Mypage = () => {
           ))}
           {whoIs === 'helper' ? (
             <>
+              <AddressFinder
+                callback={(address) => {
+                  setUserInfo(
+                    Object.assign(
+                      { ...userInfo },
+                      {
+                        location: address,
+                      },
+                    ),
+                  );
+                  axios.put(
+                    '/mypage/helper',
+                    { address: address },
+                    { headers: { token: localStorage.getItem('token') } },
+                  );
+                }}
+                location={userInfo.location}
+              />
               <InputName>vulnerable</InputName>
               <Tag
                 tagList={vulnerableList}
                 targetTagList={userInfo.vulnerable}
                 callback={{
-                  create: (who) => {
+                  create: async (id) => {
                     setUserInfo(
                       Object.assign(
                         { ...userInfo },
                         {
-                          vulnerable: [...userInfo.vulnerable, who],
+                          vulnerable: [...userInfo.vulnerable, id],
                         },
                       ),
                     );
+                    await axios.post(
+                      '/mypage/vulnerable',
+                      { vulnerable_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
+                    );
                   },
-                  delete: (who) => {
+                  delete: async (id) => {
                     setUserInfo(
                       Object.assign(
                         { ...userInfo },
                         {
                           vulnerable: userInfo.vulnerable.filter(
-                            (el) => el !== who,
+                            (el) => el !== id,
                           ),
                         },
                       ),
+                    );
+                    await axios.delete(
+                      '/mypage/vulnerable',
+                      { vulnerable_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
                     );
                   },
                 }}
@@ -383,7 +430,40 @@ const Mypage = () => {
               <Tag
                 tagList={gifticonList}
                 targetTagList={userInfo.gifticonCategory}
-                callback={() => null}
+                callback={{
+                  create: async (id) => {
+                    setUserInfo(
+                      Object.assign(
+                        { ...userInfo },
+                        {
+                          gifticonCategory: [...userInfo.gifticonCategory, id],
+                        },
+                      ),
+                    );
+                    await axios.post(
+                      '/mypage/gifticon',
+                      { gifticon_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
+                    );
+                  },
+                  delete: async (id) => {
+                    setUserInfo(
+                      Object.assign(
+                        { ...userInfo },
+                        {
+                          gifticonCategory: userInfo.gifticonCategory.filter(
+                            (el) => el !== id,
+                          ),
+                        },
+                      ),
+                    );
+                    await axios.delete(
+                      '/mypage/gifticon',
+                      { gifticon_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
+                    );
+                  },
+                }}
               />
             </>
           ) : null}
@@ -395,8 +475,16 @@ const Mypage = () => {
             width: '15%',
           }}
         >
-          <ProfileImg />
-          <ChangeButton>이미지 변경</ChangeButton>
+          <ProfileImg src={profileUrl} />
+          <Label htmlFor="imageChanger">
+            <ChangeButton
+              id="imageChanger"
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+            />
+            이미지 변경
+          </Label>
         </Box>
       </Content>
     </Container>
