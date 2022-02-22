@@ -51,11 +51,7 @@ const ButtonModal = ({
   };
 
   return (
-    <ModalBackground
-      className="modal_outside"
-      ref={outside}
-      onClick={(e) => handleModalClose(e)}
-    >
+    <ModalBackground ref={outside} onClick={(e) => handleModalClose(e)}>
       <ModalFrame>
         <ButtonContainer>
           <Btn onClick={handleButton}>{giverText}</Btn>

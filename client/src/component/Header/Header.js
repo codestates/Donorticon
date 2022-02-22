@@ -66,22 +66,22 @@ const Header = () => {
         handleSignInModal={handleSignInModal}
         handleSignUpModal={handleSignUpModal}
       />
-      {isSignInOpen ? (
+      {isSignInOpen && (
         <ButtonModal
           giverText={'GIVER 로그인'}
           helperText={'HELPER 로그인'}
           setIsSignInOpen={setIsSignInOpen}
           isSignInOpen={isSignInOpen}
         />
-      ) : null}
-      {isSignUpOpen ? (
+      )}
+      {isSignUpOpen && (
         <ButtonModal
           giverText={'GIVER 회원가입'}
           helperText={'HELPER 회원가입'}
           setIsSignUpOpen={setIsSignUpOpen}
           isSignUpOpen={isSignUpOpen}
         />
-      ) : null}
+      )}
     </HeaderContainer>
   );
 };
