@@ -117,10 +117,9 @@ module.exports = {
         const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
           expiresIn: '6h',
         });
-        res.status(200).json(helperInfo);
+        res.status(200).json({ helperInfo, token: refreshToken });
       } catch (e) {
-        console.log(e);
-        res.status(500).json({ message: 'server qerror' });
+        res.status(500).json({ message: 'server error' });
       }
     } else {
       res.status(422).json({ message: 'insufficient parameters supplied' });
