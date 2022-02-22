@@ -43,6 +43,7 @@ module.exports = {
           giver_id: req.body.giverId,
           helper_id: req.body.helperId,
           gifticon_id: insertGifticon.dataValues.id,
+          type: 1,
           message: messageFromGiver,
           img: imageUrl
         })

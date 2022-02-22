@@ -6,7 +6,7 @@ import { ModalBackground, ModalFrame } from '../styles/utils/Modal';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, helperId}) => {
+const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, helperId, roomId}) => {
   const [uploadedImage, setUploadedImage] = useState('');
   const [bucketImage, setBucketImage] = useState('');
   const [message, setMessage] = useState('');
@@ -33,8 +33,7 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, he
 
   //Upload images to S3
   const handleSubmit = async () => {
-    const url = await (await axios.post(api, {message, giverId, helperId})).data.url;
-    console.log(bucketImage)
+    const url = await (await axios.post(api, {message, giverId, helperId, roomId})).data.url;
     const upload = await axios(url, {
       method:"PUT",
       headers: {
@@ -44,7 +43,6 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, he
     })
     if (upload) {
       handleModalOpen();
-      navigate('/mypage');
     } else {
       alert("Failed at sending image")
     }

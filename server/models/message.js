@@ -31,7 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     helper_id: DataTypes.INTEGER,
     gifticon_id: DataTypes.INTEGER,
     message: DataTypes.STRING,
-    img: DataTypes.STRING
+    img: DataTypes.STRING,
+    type: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'message',
