@@ -1,4 +1,4 @@
-const jwt_decode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 const { helper_gifticon_category } = require('../../models');
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
       console.log(req.body)
       const gifticonCategoryId = req.body.gifticon_id;
       const { token } = req.headers;
-      const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const helperId = tokenDecoded.id;
       await helper_gifticon_category.create({
         helper_id: helperId,
@@ -24,7 +24,7 @@ module.exports = {
       console.log('파라미터', req.query);
       const gifticonCategoryId = req.query.gifticon_id;
       const { token } = req.headers;
-      const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const helperId = tokenDecoded.id;
       console.log(tokenDecoded);
       await helper_gifticon_category.destroy({
