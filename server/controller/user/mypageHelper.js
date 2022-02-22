@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const jwt_decode = require('jwt-decode');
 const {
   helper,
   helper_vulnerable,
@@ -10,7 +9,7 @@ module.exports = {
   get: async (req, res) => {
     try {
       const token = req.headers.token;
-      const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const { id, email, name, mobile, slogan, description, location, img } =
         tokenDecoded;
       const helperRow = await helper.findOne({
@@ -52,7 +51,7 @@ module.exports = {
   },
   put: async (req, res) => {
     const token = req.headers.token;
-    const tokenDecoded = jwt_decode(token);
+		const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
     const { id } = tokenDecoded;
     if (
       req.body.password ||
