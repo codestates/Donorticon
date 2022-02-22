@@ -9,6 +9,7 @@ const initialState = {
   img: '',
   report: '',
   textStyle: '',
+  point: 0,
 };
 
 export const gifticonSlice = createSlice({
@@ -18,9 +19,12 @@ export const gifticonSlice = createSlice({
     setInfo: (_, action) => {
       return action.payload;
     },
+    setPoint: (state, action) => {
+      state.point = action.payload;
+    },
   },
 });
 
-export const { setInfo } = gifticonSlice.actions;
+export const { setInfo, setPoint } = gifticonSlice.actions;
 
 export default gifticonSlice;
