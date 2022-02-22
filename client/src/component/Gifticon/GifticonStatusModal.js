@@ -25,13 +25,28 @@ const GifticonStatusModal = ({ isModalOpen, setIsModalOpen }) => {
 
   const handleButton = async (e) => {
     const btnText = e.target.innerText;
+
+    let statusName;
+
+    if (btnText === '사용함') {
+      statusName = 'used';
+    } else if (btnText === '수락함') {
+      statusName = 'accepted';
+    } else if (btnText === '확인중') {
+      statusName = 'checking';
+    } else if (btnText === '거절됨') {
+      statusName = 'rejected';
+    } else if (btnText === '만료됨') {
+      statusName = 'expired';
+    }
+
     try {
       const {
         data: { updated },
       } = await axios.put(
         `/gifticon/detail/${gifticon.id}`,
         {
-          status: btnText,
+          status: statusName,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

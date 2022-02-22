@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { giver, helper, gifticon, score, sequelize } = require('../../models');
+const { giver, helper, gifticon, sequelize } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
@@ -18,8 +18,8 @@ module.exports = {
     }
 
     if (token && user) {
+      // 로그인한 유저 정보
       const { id, user_type: who } = user;
-
       const statusId = parseInt(req.headers.status);
 
       let page = Math.abs(parseInt(req.query.page));
@@ -66,12 +66,14 @@ module.exports = {
               attributes: ['id', 'name', 'createdAt'],
             },
           });
-          const totalPoint = await score.findAll({
+
+          const totalPoint = await gifticon.findAll({
             where: { giver_id: id },
             attributes: [
               [sequelize.fn('sum', sequelize.col('point')), 'points'],
             ],
           });
+
           point = parseInt(totalPoint[0].dataValues.points);
         }
 
