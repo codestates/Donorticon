@@ -1,12 +1,11 @@
 const jwt = require('jsonwebtoken');
-const jwt_decode = require('jwt-decode');
 const { giver } = require('../../models');
 
 module.exports ={
 	get: async (req, res) => {
 		try {
 			const token = req.headers.token;
-			const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
 			const { id, email, name, mobile, img } = tokenDecoded;
 			res.status(200).json({ email, name, mobile, img })
 		} catch(err) {
@@ -14,11 +13,11 @@ module.exports ={
 		}
 	},
 	put: async (req, res) => {
-		console.log(req.body, "방금 수정");
     if (req.body.password || req.body.mobile || req.body.name) {
       try {
 				const token = req.headers.token;
-				const tokenDecoded = jwt_decode(token);
+				const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+				console.log(tokenDecoded);
 				const { id } = tokenDecoded;
         if (req.body.password) {
           const { password } = req.body;

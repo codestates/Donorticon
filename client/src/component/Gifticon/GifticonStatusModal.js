@@ -81,6 +81,7 @@ const GifticonStatusModal = ({ isModalOpen, setIsModalOpen }) => {
     <ModalBackground onClick={handleModal}>
       <StatusModalFrame>
         <ModalButtonContainer>
+          <span>"사용함" 선택 => 추후 기프티콘 상태 변경 절대 불가</span>
           {printList.map((x) => (
             <ModalButton key={x.id} onClick={handleButton}>
               {x.name}

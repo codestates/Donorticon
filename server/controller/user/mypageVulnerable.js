@@ -1,12 +1,12 @@
-const jwt_decode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 const { helper_vulnerable } = require('../../models');
 
 module.exports = {
   post: async (req, res) => {
     try {
-      const vulnerableId = req.body.vulnerable_id;
       const { token } = req.headers;
-      const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      const vulnerableId = req.body.vulnerable_id;
       const helperId = tokenDecoded.id;
       await helper_vulnerable.create({
         helper_id: helperId,
@@ -23,7 +23,7 @@ module.exports = {
       console.log('파라미터', req.query);
       const vulnerableId = req.query.vulnerable_id;
       const { token } = req.headers;
-      const tokenDecoded = jwt_decode(token);
+			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const helperId = tokenDecoded.id;
       console.log(tokenDecoded);
       await helper_vulnerable.destroy({

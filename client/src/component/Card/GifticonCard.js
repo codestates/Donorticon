@@ -18,11 +18,10 @@ const GifticonCard = ({ data, name }) => {
   const handleClick = async () => {
     const token = localStorage.getItem('token');
     const {
-      data: { gifticonInfo },
+      data: { gifticonInfo, thanksImgUrl },
     } = await axios.get(`/gifticon/detail/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-
     dispatch(
       setInfo({
         id: gifticonInfo.id,
@@ -34,12 +33,14 @@ const GifticonCard = ({ data, name }) => {
         report: gifticonInfo.report,
         textStyle,
         point: gifticonInfo.point,
+        thanksImgUrl: thanksImgUrl === null ? null : thanksImgUrl,
       }),
     );
     navigate(`/gifticon/detail/${id}`);
   };
 
   const getBtnText = () => {
+    console.log(status);
     if (status === 'used') {
       setText('사용함');
       setTextStyle(1);
@@ -54,6 +55,9 @@ const GifticonCard = ({ data, name }) => {
       setTextStyle(2);
     } else if (status === 'expired') {
       setText('만료됨');
+      setTextStyle(2);
+    } else if (status === 'reported') {
+      setText('신고됨');
       setTextStyle(2);
     }
   };

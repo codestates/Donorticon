@@ -10,6 +10,7 @@ const initialState = {
   report: '',
   textStyle: '',
   point: 0,
+  thanksImgUrl: '',
 };
 
 export const gifticonSlice = createSlice({
