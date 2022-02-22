@@ -72,6 +72,15 @@ export const ChangeButton = styled.input`
   display: none;
 `;
 
+export const GalleryImg = styled.img``;
+
+export const GalleryImgContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 10%;
+`;
+
 export const ProfileImg = styled.img`
   width: 70%;
   border-radius: 50%;
