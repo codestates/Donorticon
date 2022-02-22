@@ -12,6 +12,7 @@ const socket = io('http://localhost:5000');
 
 const DM = () => {
   const user = useSelector((state) => state.user.user);
+  const who = user.who;
   const [message, setMessage] = useState('');
   const [rooms, setRooms] = useState([]);
   const [val, setVal] = useState('');
@@ -23,6 +24,7 @@ const DM = () => {
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
+    socket.emit('send-image', currentRoom);
   }
 
   const handleMessage = (event) => {
@@ -35,13 +37,15 @@ const DM = () => {
       if (event.key === 'Enter' || event.type === 'click') {
         setVal('');
         setMessage('');
-        socket.emit('send-message', message, currentRoom);
+        socket.emit('send-message', message, currentRoom, who);
+        let dialogueRequest = await axios.get(`/dm?room=${currentRoom}`);
+        setDialogues(dialogueRequest.data.dialogues);
       }
     }
   }
 
   const getRooms = async () => {
-    const roomRequest = await axios.get('/dm', {headers: user});
+    const roomRequest = await axios.get('/dm', {headers: {token: localStorage.getItem('token'), who: who}});
     setRooms(roomRequest.data.roomList);
   }
 
@@ -58,7 +62,7 @@ const DM = () => {
   useEffect(() => getRooms(), []);
 
   socket.on('received-message', async (currentRoom) => {
-    const dialogueRequest = await axios.get(`/dm?room=${currentRoom}`);
+    let dialogueRequest = await axios.get(`/dm?room=${currentRoom}`);
     setDialogues(dialogueRequest.data.dialogues);
   })  
 
@@ -77,7 +81,9 @@ const DM = () => {
           {dialogues.map((item, index) => (
             <div key={index}>
               {item.img ? <Image src={item.img} /> : null}
-              {user.who === 1? <Message>{item.message}</Message> : <Message>{item.message}</Message>}
+              {item.message ? 
+                <div>{item.type === who ? <Message className='myMessage'>{item.message}</Message>: <Message className='yourMessage'>{item.message}</Message>}</div>
+              : null}
               <span>{item.createdAt}</span>
             </div>
           ))}

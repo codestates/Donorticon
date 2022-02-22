@@ -45,11 +45,16 @@ export const DialogueContainer = styled.div`
 export const ProfileImg = styled.img``;
 
 export const Message = styled.div`
-  background-color: #fac711;
   width: auto;
   border-radius: 30px;
   padding: 1rem;
   margin: 1rem;
+  &.myMessage {
+    background-color: #fac711;
+  }
+  &.yourMessage {
+    background-color: #58D68D;
+  }
 `;
 
 export const Image = styled.img`
