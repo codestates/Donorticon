@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -20,20 +20,22 @@ const TagStyle = styled.div`
   width: 130px;
   height: 30px;
   border-radius: 15px;
-  background-color: ${({ theme }) => theme.color.main};
+  cursor: ${({ cursor }) => cursor};
+  background-color: ${({ theme, boolean }) =>
+    boolean ? theme.color.main : theme.color.lightGrey};
   border: solid;
   border-width: thin;
   align-items: center;
   text-align: center;
 `;
 
-const RemoveButton = styled.button`
-  width: 15px;
+const CompleteButton = styled.button`
+  width: 100px;
   height: 15px;
   padding-top: 1px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.color.main};
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   margin-left: 20px;
   align-items: center;
   text-align: center;
@@ -46,51 +48,59 @@ const TagAdder = styled.div`
   border: solid;
   border-width: 3px;
   width: 70%;
-  z-index: 1px;
 `;
 
 const Tag = ({ tagList = [], targetTagList = [], callback }) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isEnter, setIsEnter] = useState(false);
-  console.log(tagList);
+
+  const handleClickTag = (e, idx) => {
+    if (!targetTagList.includes(idx + 1)) {
+      callback.create(idx + 1);
+    } else {
+      if (targetTagList.length > 1) {
+        callback.delete(idx + 1);
+      } else {
+        console.log('1개 이상은 필수');
+      }
+    }
+  };
+
   return (
-    <Container
-      onClick={() => {
-        setIsEditMode(true);
-      }}
-    >
-      <TagContent>
-        {targetTagList.map((tag, idx) => (
-          <TagStyle key={idx}>{tagList[tag - 1]}</TagStyle>
-        ))}
-      </TagContent>
+    <Container>
       {isEditMode ? (
         <TagAdder>
-          <RemoveButton
-            onClick={() => {
-              console.log('hi');
-              setIsEditMode(false);
-            }}
-          >
-            x
-          </RemoveButton>
           {tagList.map((tag, idx) => (
             <TagStyle
               key={idx}
-              draggable
-              onDragEnd={(e) => {
-                if (isEnter) {
-                  callback.create(tagList.indexOf(e.target.textContent) + 1);
-                }
-                setIsEnter(false);
-              }}
+              boolean={targetTagList.includes(idx + 1)}
+              onClick={(e) => handleClickTag(e, idx)}
+              cursor="pointer"
             >
               {tag}
             </TagStyle>
           ))}
+          <CompleteButton
+            onClick={() => {
+              setIsEditMode(false);
+            }}
+          >
+            완료
+          </CompleteButton>
         </TagAdder>
       ) : (
-        <></>
+        <>
+          <TagContent
+            onClick={() => {
+              setIsEditMode(true);
+            }}
+          >
+            {targetTagList.map((tag, idx) => (
+              <TagStyle key={idx} boolean={true} cursor="grab">
+                {tagList[tag - 1]}
+              </TagStyle>
+            ))}
+          </TagContent>
+        </>
       )}
     </Container>
   );
