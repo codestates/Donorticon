@@ -207,8 +207,14 @@ const SignUpHelper = () => {
     }
   };
 
+  // const handleKeyPress = (e) => {
+  //   if (e.key === 'Enter') {
+  //     handleButton();
+  //   }
+  // };
+
   const handleButton = async (e) => {
-    console.log(helperInfo);
+    // console.log(helperInfo);
     if (e.target.textContent === '다음') {
       if (page <= 2) {
         setPercent(percent + 25);
@@ -309,6 +315,7 @@ const SignUpHelper = () => {
                     callback={card.callback}
                     errorMessage={card.errorMessage}
                     check={isCheckStart}
+                    // handleKeyPress={handleKeyPress}
                   />
                 </InputBox>
               ))}
