@@ -21,7 +21,6 @@ const GifticonDetail = ({ data }) => {
   const handleBtnClick = () => {
     setIsModalOpen(true);
   };
-  //TODO: status가 사용함일 경우에만, 하단 부분에 인증사진 출력
 
   return (
     <GifticonDetailContainer>
@@ -51,7 +50,8 @@ const GifticonDetail = ({ data }) => {
           </div>
         </GifticonInputBox>
       </GifticonBox>
-      {status === '사용함' && who === 2 && <GifticonUsed />}
+      {status === '사용함' && <GifticonUsed />}
+
       {isModalOpen && who === 2 ? (
         <GifticonStatusModal
           isModalOpen={isModalOpen}

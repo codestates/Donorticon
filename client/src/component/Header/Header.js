@@ -38,9 +38,9 @@ const Header = () => {
     try {
       const result = await axios.post(`/signout`);
       if (result.status === 205) {
+        navigate('/');
         localStorage.removeItem('token');
         dispatch(signOut());
-        navigate('/');
       }
     } catch (e) {
       console.log(e);
