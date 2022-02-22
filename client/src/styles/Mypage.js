@@ -68,8 +68,18 @@ export const InputChanger = styled.input`
   }
 `;
 
-export const ChangeButton = styled.button`
+export const ChangeButton = styled.input`
+  display: none;
+`;
+
+export const ProfileImg = styled.img`
+  width: 70%;
+  border-radius: 50%;
+`;
+
+export const Label = styled.label`
   width: 45%;
+  display: inline-block;
   border: 1px solid ${({ theme }) => theme.color.main};
   background-color: ${({ theme }) => theme.color.main};
   cursor: pointer;
@@ -81,5 +91,3 @@ export const ChangeButton = styled.button`
     transition: 0.5s;
   }
 `;
-
-export const ProfileImg = styled.img``;
