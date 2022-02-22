@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { gifticon, helper, giver } = require('../../models');
+const { gifticon, helper, giver, message } = require('../../models');
 
 module.exports = {
   getDetail: async (req, res) => {
@@ -47,7 +47,16 @@ module.exports = {
           console.log(e);
         }
       }
-      res.status(200).send({ gifticonInfo });
+
+      const thanksImg = await message.findOne({
+        where: { gifticon_id: id },
+        attributes: ['img'],
+      });
+      let thanksImgUrl = null;
+      if (thanksImg) {
+        thanksImgUrl = thanksImg.dataValues.img;
+      }
+      res.status(200).send({ gifticonInfo, thanksImgUrl });
     } else {
       return res.status(404).send({ message: 'invalid request' });
     }
