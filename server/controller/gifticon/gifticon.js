@@ -61,7 +61,7 @@ module.exports = {
                 ? { giver_id: id, status: getStatusName(statusId) }
                 : { giver_id: id },
             include: {
-              model: giver,
+              model: helper,
               required: true,
               attributes: ['id', 'name', 'createdAt'],
             },
@@ -85,7 +85,7 @@ module.exports = {
                 ? { helper_id: id, status: getStatusName(statusId) }
                 : { helper_id: id },
             include: {
-              model: helper,
+              model: giver,
               required: true,
               attributes: ['id', 'name', 'createdAt'],
             },

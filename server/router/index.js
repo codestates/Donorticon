@@ -3,7 +3,7 @@ const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon, gifticonDetail } = require('../controller/gifticon');
 const { user, helperList } = require('../controller');
-const { dm } = require('../controller/dm')
+const { dm } = require('../controller/dm');
 
 router.post('/signup/giver', user.signupGiver);
 router.post('/signup/helper', user.signupHelper);
@@ -22,7 +22,7 @@ router.get('/verification', verification.get);
 router.put('/verification', verification.put);
 router.get('/gifticon?', gifticon.get);
 router.get('/gifticon/detail/:id', gifticonDetail.getDetail);
-router.put('/gifticon/detail/:id', gifticonDetail.changeStatus);
+router.put('/gifticon/detail/:id', gifticonDetail.updateInfo);
 router.post('/google/signin', user.googleLogin.getToken);
 router.get('/google/user?', user.googleLogin.getUser);
 router.post('/kakao/signin', user.kakaoLogin.getToken);
