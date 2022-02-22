@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Container,
@@ -13,10 +13,14 @@ import {
   InputChanger,
   ChangeButton,
   ProfileImg,
+  GalleryImgContainer,
+  GalleryImg,
+  Label,
 } from '../../styles/Mypage';
 import Tag from '../../component/Tag';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import AddressFinder from '../../component/AddressFinder';
 
 const vulnerableList = [
   '아동/청소년',
@@ -43,7 +47,6 @@ const Mypage = () => {
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
-  // console.log(whoIs);
   // const giverExmaple = {
   //   id: 1,
   //   email: 'hwlsgur1120@naver.com',
@@ -51,20 +54,18 @@ const Mypage = () => {
   //   mobile: '010-0000-0000',
   //   img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
   // };
-  const heleprExample = {
-    id: 1,
-    email: 'kimcoding@codestates.com',
-    name: 'kimcoding',
-    mobile: '010-1234-5678',
-    img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
-    location: '경기도 성남시',
-    vulnerable: [1, 2],
-    gifticonCategory: [1, 4],
-    gallery: ['https://getimg.com/1/png', 'https://getimg.com/2/png'],
-    description: '남녀노소 모두를 봉사합니다',
-    slogan: '기부해주세요',
-  };
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState({
+    id: 0,
+    email: '',
+    name: '',
+    mobile: '',
+    slogan: '',
+    description: '',
+    gifticonCategory: [],
+    vulnerable: [],
+    gallery: [],
+    img: '',
+  });
   const [isChanging, setIsChanging] = useState([
     // giver  helper
     false, // email  email
@@ -75,6 +76,7 @@ const Mypage = () => {
     false, // null   location
     false, // null   gallery
   ]);
+
   const inputList = {
     giver: [
       {
@@ -90,8 +92,93 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
+              const result = await axios.put(
                 '/mypage/giver',
+                { email: userInfo.email },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+              const { token } = result.data;
+              console.log(token);
+              localStorage.setItem('token', token);
+            } catch (e) {
+              console.log(e);
+            }
+          } else {
+            console.log('email형식 안맞아');
+          }
+        },
+      },
+      {
+        inputName: 'name',
+        inputCallback: (e) => {
+          handleInput(e);
+        },
+        blurCallback: async (e, idx, boolean) => {
+          if (e.target.value.length <= 8) {
+            const arr = [...isChanging];
+            arr[idx] = boolean;
+            try {
+              const result = await axios.put(
+                '/mypage/giver',
+                { name: userInfo.name },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
+            } catch (e) {}
+          } else {
+            console.log('name 8자 넘어');
+          }
+        },
+      },
+      {
+        inputName: 'mobile',
+        inputCallback: (e) => {
+          handleInput(e);
+        },
+        blurCallback: async (e, idx, boolean) => {
+          const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
+          if (form.test(e.target.value)) {
+            const arr = [...isChanging];
+            arr[idx] = boolean;
+            try {
+              const result = await axios.put(
+                '/mypage/giver',
+                { mobile: userInfo.mobile },
+                { headers: { token: localStorage.getItem('token') } },
+              );
+              setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
+            } catch (e) {}
+          } else {
+            console.log('휴대전화 번호');
+          }
+        },
+      },
+      // {
+      //   inputName: 'img',
+      //   inputCallback: (e) => {},
+      // },
+    ],
+    helper: [
+      {
+        inputName: 'email',
+        inputCallback: (e) => {
+          handleInput(e);
+        },
+        blurCallback: async (e, idx, boolean) => {
+          const form = new RegExp(
+            '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
+          );
+          if (form.test(e.target.value)) {
+            const arr = [...isChanging];
+            arr[idx] = boolean;
+            try {
+              await axios.put(
+                '/mypage/helper',
                 { email: userInfo.email },
                 { headers: { token: localStorage.getItem('token') } },
               );
@@ -114,13 +201,17 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
-                '/mypage/giver',
+              const result = await axios.put(
+                '/mypage/helper',
                 { name: userInfo.name },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
-            } catch (e) {}
+              const { token } = result.data;
+              localStorage.setItem('token', token);
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             console.log('name 8자 넘어');
           }
@@ -137,68 +228,17 @@ const Mypage = () => {
             const arr = [...isChanging];
             arr[idx] = boolean;
             try {
-              await axios.put(
-                '/mypage/giver',
+              const result = await axios.put(
+                '/mypage/helper',
                 { mobile: userInfo.mobile },
                 { headers: { token: localStorage.getItem('token') } },
               );
               setIsChanging(arr);
-            } catch (e) {}
-          } else {
-            console.log('휴대전화 번호');
-          }
-        },
-      },
-      // {
-      //   inputName: 'img',
-      //   inputCallback: (e) => {},
-      // },
-    ],
-    helper: [
-      {
-        inputName: 'email',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: (e, idx, boolean) => {
-          const form = new RegExp(
-            '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
-          );
-          if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            setIsChanging(arr);
-          } else {
-            console.log('email형식 안맞아');
-          }
-        },
-      },
-      {
-        inputName: 'name',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: (e, idx, boolean) => {
-          if (e.target.value.length <= 8) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            setIsChanging(arr);
-          } else {
-            console.log('name 8자 넘어');
-          }
-        },
-      },
-      {
-        inputName: 'mobile',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: (e, idx, boolean) => {
-          const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
-          if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            setIsChanging(arr);
+              const { token } = result.data;
+              localStorage.setItem('token', token);
+            } catch (e) {
+              console.log(e);
+            }
           } else {
             console.log('휴대전화 번호');
           }
@@ -209,10 +249,21 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const arr = [...isChanging];
           arr[idx] = boolean;
-          setIsChanging(arr);
+          try {
+            const result = await axios.put(
+              '/mypage/helper',
+              { slogan: userInfo.slogan },
+              { headers: { token: localStorage.getItem('token') } },
+            );
+            setIsChanging(arr);
+            const { token } = result.data;
+            localStorage.setItem('token', token);
+          } catch (e) {
+            console.log(e);
+          }
         },
       },
       {
@@ -220,10 +271,21 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: (e, idx, boolean) => {
+        blurCallback: async (e, idx, boolean) => {
           const arr = [...isChanging];
           arr[idx] = boolean;
-          setIsChanging(arr);
+          try {
+            const result = await axios.put(
+              '/mypage/helper',
+              { description: userInfo.description },
+              { headers: { token: localStorage.getItem('token') } },
+            );
+            setIsChanging(arr);
+            const { token } = result.data;
+            localStorage.setItem('token', token);
+          } catch (e) {
+            console.log(e);
+          }
         },
       },
       // {
@@ -233,25 +295,7 @@ const Mypage = () => {
       //   },
       // },
       // {
-      //   inputName: 'location',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
       //   inputName: 'gallery',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
-      //   inputName: 'vulnerable',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
-      //   inputName: 'gifticonCategory',
       //   inputCallback: (e) => {
       //     console.log(e);
       //   },
@@ -277,13 +321,15 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { token: localStorage.getItem('token') },
         });
+        // setUserInfo(data);
         setUserInfo(
           Object.assign(
-            data,
-            // { vulnerable: '#' + data.vulnerable.join(' #') },
-            // {
-            //   gifticonCategory: '#' + data.gifticonCategory.join(' #'),
-            // },
+            { ...data },
+            {
+              gallery: Array(2).fill(
+                'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
+              ),
+            },
           ),
         );
       } catch (e) {
@@ -291,6 +337,35 @@ const Mypage = () => {
       }
     }
   }, []);
+
+  const handleImageUpload = async (e, tag) => {
+    const file = e.target.files[0];
+    const tempUrl = URL.createObjectURL(file);
+    if (tag === 'img') {
+      setUserInfo(Object.assign({ ...userInfo }, { [tag]: tempUrl }));
+    } else if (tag === 'gallery') {
+      setUserInfo(
+        Object.assign(
+          { ...userInfo },
+          { [tag]: [...userInfo.gallery, tempUrl] },
+        ),
+      );
+    }
+    try {
+      const s3Url = await axios.put(
+        `/mypage/${whoIs}`,
+        { tag },
+        {
+          headers: { token: localStorage.getItem('token') },
+        },
+      );
+      await axios.put(s3Url, file, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleInput = (e) => {
     setUserInfo(
@@ -317,7 +392,7 @@ const Mypage = () => {
           }}
         >
           <PageButton onClick={() => navigate('/mypage')}>내 프로필</PageButton>
-          <PageButton onClick={() => navigate('/gifticon')}>
+          <PageButton onClick={() => navigate('/gifticon?page=1&limit=9')}>
             {whoIs === 'giver' ? '기부 내역' : '기부받은 내역'}
           </PageButton>
         </Box>
@@ -349,32 +424,74 @@ const Mypage = () => {
           ))}
           {whoIs === 'helper' ? (
             <>
+              <AddressFinder
+                callback={(address) => {
+                  setUserInfo(
+                    Object.assign(
+                      { ...userInfo },
+                      {
+                        location: address,
+                      },
+                    ),
+                  );
+                  axios.put(
+                    '/mypage/helper',
+                    { address: address },
+                    { headers: { token: localStorage.getItem('token') } },
+                  );
+                }}
+                location={userInfo.location}
+              />
+              <InputName>gallery</InputName>
+              <GalleryImgContainer>
+                {userInfo.gallery.map((url, idx) => {
+                  return <GalleryImg key={idx} src={url} />;
+                })}
+              </GalleryImgContainer>
+              <Label htmlFor="imageAdder">
+                <ChangeButton
+                  id="imageAdder"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'gallery')}
+                />
+                이미지 추가
+              </Label>
               <InputName>vulnerable</InputName>
               <Tag
                 tagList={vulnerableList}
                 targetTagList={userInfo.vulnerable}
                 callback={{
-                  create: (who) => {
+                  create: async (id) => {
                     setUserInfo(
                       Object.assign(
                         { ...userInfo },
                         {
-                          vulnerable: [...userInfo.vulnerable, who],
+                          vulnerable: [...userInfo.vulnerable, id],
                         },
                       ),
                     );
+                    await axios.post(
+                      '/mypage/vulnerable',
+                      { vulnerable_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
+                    );
                   },
-                  delete: (who) => {
+                  delete: async (id) => {
                     setUserInfo(
                       Object.assign(
                         { ...userInfo },
                         {
                           vulnerable: userInfo.vulnerable.filter(
-                            (el) => el !== who,
+                            (el) => el !== id,
                           ),
                         },
                       ),
                     );
+                    await axios.delete('/mypage/vulnerable', {
+                      headers: { token: localStorage.getItem('token') },
+                      params: { vulnerable_id: id },
+                    });
                   },
                 }}
                 // isEditMode={isChanging[7]}
@@ -383,7 +500,39 @@ const Mypage = () => {
               <Tag
                 tagList={gifticonList}
                 targetTagList={userInfo.gifticonCategory}
-                callback={() => null}
+                callback={{
+                  create: async (id) => {
+                    setUserInfo(
+                      Object.assign(
+                        { ...userInfo },
+                        {
+                          gifticonCategory: [...userInfo.gifticonCategory, id],
+                        },
+                      ),
+                    );
+                    await axios.post(
+                      '/mypage/gifticon',
+                      { gifticon_id: id },
+                      { headers: { token: localStorage.getItem('token') } },
+                    );
+                  },
+                  delete: async (id) => {
+                    setUserInfo(
+                      Object.assign(
+                        { ...userInfo },
+                        {
+                          gifticonCategory: userInfo.gifticonCategory.filter(
+                            (el) => el !== id,
+                          ),
+                        },
+                      ),
+                    );
+                    await axios.delete('/mypage/gifticon', {
+                      headers: { token: localStorage.getItem('token') },
+                      params: { gifticon_id: id },
+                    });
+                  },
+                }}
               />
             </>
           ) : null}
@@ -395,8 +544,16 @@ const Mypage = () => {
             width: '15%',
           }}
         >
-          <ProfileImg />
-          <ChangeButton>이미지 변경</ChangeButton>
+          <ProfileImg src={userInfo.img} />
+          <Label htmlFor="imageChanger">
+            <ChangeButton
+              id="imageChanger"
+              type="file"
+              accept="image/*"
+              onChange={(e) => handleImageUpload(e, 'img')}
+            />
+            이미지 변경
+          </Label>
         </Box>
       </Content>
     </Container>

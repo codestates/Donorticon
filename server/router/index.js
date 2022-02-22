@@ -3,7 +3,7 @@ const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon, gifticonDetail } = require('../controller/gifticon');
 const { user, helperList } = require('../controller');
-const { dm } = require('../controller/dm')
+const { dm } = require('../controller/dm');
 
 router.post('/signup/giver', user.signupGiver);
 router.post('/signup/helper', user.signupHelper);
@@ -15,12 +15,17 @@ router.get('/mypage/giver', user.mypageGiver.get);
 router.get('/mypage/helper', user.mypageHelper.get);
 router.put('/mypage/giver', user.mypageGiver.put);
 router.put('/mypage/helper', user.mypageHelper.put);
+router.post('/mypage/vulnerable', user.mypageVulnerable.post);
+router.delete('/mypage/vulnerable', user.mypageVulnerable.delete);
+
+router.post('/mypage/gifticon', user.mypageGifticon.post);
+router.delete('/mypage/gifticon', user.mypageGifticon.delete);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
 router.get('/gifticon?', gifticon.get);
 router.get('/gifticon/detail/:id', gifticonDetail.getDetail);
-router.put('/gifticon/detail/:id', gifticonDetail.changeStatus);
+router.put('/gifticon/detail/:id', gifticonDetail.updateInfo);
 router.post('/google/signin', user.googleLogin.getToken);
 router.get('/google/user?', user.googleLogin.getUser);
 router.post('/kakao/signin', user.kakaoLogin.getToken);

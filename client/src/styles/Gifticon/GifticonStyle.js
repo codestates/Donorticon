@@ -7,7 +7,7 @@ export const Div = styled.div`
   padding: 20px 0;
 `;
 
-export const GifticonButton = styled.button`
+export const GifticonStatusButton = styled.button`
   width: 100%;
   padding: 10px 0;
   background-color: ${(props) =>

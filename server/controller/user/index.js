@@ -7,6 +7,8 @@ module.exports = {
   signinGuestHelper: require('./signinGuestHelper'),
   mypageGiver: require('./mypageGiver'),
   mypageHelper: require('./mypageHelper'),
+  mypageVulnerable: require('./mypageVulnerable'),
+  mypageGifticon: require('./mypageGifticon'),
   googleLogin: require('./googleLogin'),
   kakaoLogin: require('./kakaoLogin'),
   signout: require('./signout'),

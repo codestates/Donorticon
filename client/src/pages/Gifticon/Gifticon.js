@@ -87,17 +87,19 @@ const Gifticon = () => {
                 <GifticonCard
                   key={gifticon.id}
                   data={gifticon}
-                  name={who === 1 ? gifticon.giver.name : gifticon.helper.name}
+                  name={who === 1 ? gifticon.helper.name : gifticon.giver.name}
                 />
               );
             })}
           </CardContainer>
-          <Pagination
-            maxPage={maxPage}
-            currentPage={currentPage}
-            count={count}
-            setCurrentPage={setCurrentPage}
-          />
+          {maxPage > 0 && (
+            <Pagination
+              maxPage={maxPage}
+              currentPage={currentPage}
+              count={count}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </>
       )}
     </GifticonContainer>
