@@ -11,6 +11,7 @@ import {
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
+import ImageUploader from '../ImageUploader';
 
 // 임시 데이터
 import img from '../../img/helperCategory/1_all.png';
@@ -25,15 +26,23 @@ const GifticonUsed = () => {
   const { id, name, userId, point, thanksImgUrl } = useSelector(
     (state) => state.gifticon,
   );
+  const user = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  }
+
   const handleImgUpload = () => {
-    //TODO: 수영님 요기다 이미지 업로드 관련 코드 설정해주시면 됩니당!
-    console.log('사진 업로드');
+    handleModalOpen();
   };
 
-  const handleMessage = () => {
-    console.log('send msg');
+  const handleMessage = async () => {
+    await axios.post(`/gifticon/detail/${id}`, {message: message, giverId: userId, helperId: user, gifticonId:id});
+    // setVal(''); this code can remove texts on textarea. Disabled on purpose.
+    setMessage('');
+    alert("Done!");
   };
 
   const [clicked, setClicked] = useState([]);
@@ -75,6 +84,14 @@ const GifticonUsed = () => {
     }
   };
 
+  const [val, setVal] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleText = (event) => {
+    setMessage(event.target.value);
+    setVal(event.target.value);
+  }  
+
   useEffect(() => getPoint(), []);
   useEffect(() => sendPoint(), [clicked]);
   return (
@@ -103,7 +120,7 @@ const GifticonUsed = () => {
           </GifticonBox>
           <Title>감사메세지</Title>
           <GifticonBox>
-            <textarea col={50} style={{ marginRight: '20px' }} />
+            <textarea col={50} style={{ marginRight: '20px' }} value={val} onChange={handleText}/>
             <GifticonButton onClick={handleMessage}>
               {name}님에게 메세지 전송
             </GifticonButton>
@@ -119,6 +136,7 @@ const GifticonUsed = () => {
               />
             ))}
           </GifticonBox>
+          {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} api={`/gifticon/detail/${id}`} giverId={userId} helperId={user} gifticonId={id}></ImageUploader> : null}
         </>
       )}
     </>

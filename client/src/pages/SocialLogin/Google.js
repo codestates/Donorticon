@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
+import { signIn, setUser } from '../../redux/user/userSlice';
 
 const Google = () => {
   const dispatch = useDispatch();
@@ -38,8 +38,8 @@ const Google = () => {
       } = await axios.get(`/google/user?accessToken=${token}`);
       if (giverInfo) {
         const { id, email, name, user_type: who } = giverInfo;
-        dispatch(socialSignIn());
-        dispatch(setSocialUser({ id, email, name, who }));
+        dispatch(signIn());
+        dispatch(setUser({ id, email, name, who }));
         localStorage.setItem('token', accessToken);
         navigate(prev);
       }

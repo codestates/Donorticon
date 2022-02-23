@@ -26,6 +26,7 @@ router.put('/verification', verification.put);
 router.get('/gifticon?', gifticon.get);
 router.get('/gifticon/detail/:id', gifticonDetail.getDetail);
 router.put('/gifticon/detail/:id', gifticonDetail.updateInfo);
+router.post('/gifticon/detail/:id', gifticonDetail.uploadImgMessage);
 router.put('/report/:id', gifticonDetail.report);
 
 router.post('/google/signin', user.googleLogin.getToken);

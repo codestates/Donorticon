@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setSocialUser, socialSignIn } from '../../redux/user/userSlice';
+import { setUser, signIn } from '../../redux/user/userSlice';
 
 const KaKao = () => {
   const dispatch = useDispatch();
@@ -39,8 +39,8 @@ const KaKao = () => {
 
       if (giverInfo) {
         const { id, email, name, user_type: who } = giverInfo;
-        dispatch(socialSignIn());
-        dispatch(setSocialUser({ id, email, name, who }));
+        dispatch(signIn());
+        dispatch(setUser({ id, email, name, who }));
         localStorage.setItem('token', accessToken);
         navigate(prev);
       }

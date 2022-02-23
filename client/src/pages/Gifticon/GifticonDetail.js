@@ -23,7 +23,7 @@ const Button = styled.button`
 const GifticonDetail = ({ data }) => {
   const gifticon = useSelector((state) => state.gifticon);
   const who = useSelector((state) => state.user.user.who);
-
+  
   const { name, createdAt, status, img, report, textStyle } = gifticon;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
