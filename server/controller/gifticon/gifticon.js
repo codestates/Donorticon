@@ -21,7 +21,6 @@ module.exports = {
       // 로그인한 유저 정보
       const { id, user_type: who } = user;
       const statusId = parseInt(req.headers.status);
-      console.log('status', statusId);
 
       let page = Math.abs(parseInt(req.query.page));
       let limit = Math.abs(parseInt(req.query.limit));

@@ -22,9 +22,7 @@ import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 import { SubTitle, Title } from '../../styles/utils/Container';
 import GifticonReport from '../../component/Gifticon/GifticonReport';
 
-
-
-const GifticonDetail = ({ data }) => {
+const GifticonDetail = () => {
   const gifticon = useSelector((state) => state.gifticon);
   const who = useSelector((state) => state.user.user.who);
   const username = useSelector((state) => state.user.user.name);
@@ -36,6 +34,8 @@ const GifticonDetail = ({ data }) => {
     setIsModalOpen(true);
   };
 
+  const giver = who === 1 ? 1 : 0;
+
   return (
     <CommonContainer>
       <TopContainer>
@@ -46,7 +46,7 @@ const GifticonDetail = ({ data }) => {
       <BottomContainer>
         <SideBar />
         <ContentContainer>
-          <ContentTitle top>기프티콘 상세정보</ContentTitle>
+          <ContentTitle>기프티콘 상세정보</ContentTitle>
           <ContentBox>
             <ImageBox>
               <a href={img} target="_blank" rel="noreferrer noopener">
@@ -58,7 +58,7 @@ const GifticonDetail = ({ data }) => {
             </ImageBox>
             <InfoBox>
               <GifticonReport />
-              <InputBox>
+              <InputBox giver={giver}>
                 <div>
                   <InputLabel>
                     {who === 1 ? 'helper 이름' : 'giver 이름'}
@@ -69,23 +69,21 @@ const GifticonDetail = ({ data }) => {
                   <InputLabel>기부날짜</InputLabel>
                   <InputContent>{createdAt}</InputContent>
                 </div>
-                {report === false && (
-                  <div>
-                    <InputLabel>진행상태</InputLabel>
-                    <InputContent noLine>
-                      <GifticonStatusButton
-                        style={{
-                          cursor: who === 1 ? 'not-allowed' : 'pointer',
-                        }}
-                        text={status}
-                        textStyle={textStyle}
-                        onClick={handleBtnClick}
-                      >
-                        {status}
-                      </GifticonStatusButton>
-                    </InputContent>
-                  </div>
-                )}
+                <div>
+                  <InputLabel>진행상태</InputLabel>
+                  <InputContent noLine>
+                    <GifticonStatusButton
+                      style={{
+                        cursor: who === 1 ? 'not-allowed' : 'pointer',
+                      }}
+                      text={status}
+                      textStyle={textStyle}
+                      onClick={handleBtnClick}
+                    >
+                      {status}
+                    </GifticonStatusButton>
+                  </InputContent>
+                </div>
               </InputBox>
             </InfoBox>
           </ContentBox>
