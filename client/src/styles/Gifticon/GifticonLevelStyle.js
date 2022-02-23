@@ -10,6 +10,11 @@ export const LevelTitle = styled.div`
   font-size: 20px;
   text-align: left;
   padding-bottom: 20px;
+  .icon {
+    cursor: pointer;
+    &:hover {
+    }
+  }
 `;
 
 export const LevelContent = styled.div`
