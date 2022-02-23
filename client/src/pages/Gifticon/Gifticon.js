@@ -42,6 +42,7 @@ const Gifticon = () => {
         },
       );
       const { gifticonList, maxPage, count, point } = data;
+      console.log(data);
       setList(gifticonList);
       setMaxPage(maxPage);
       if (count !== null) {
@@ -97,7 +98,7 @@ const Gifticon = () => {
               );
             })}
           </CardContainer>
-          {maxPage > 0 && (
+          {maxPage >= 0 && (
             <Pagination
               maxPage={maxPage}
               currentPage={currentPage}

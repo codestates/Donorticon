@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sha256 } from 'js-sha256';
-import { setSocialUser } from '../../redux/user/userSlice';
+import { setUser } from '../../redux/user/userSlice';
 import ProgressBar from '../../component/ProgressBar';
 import InputSet from '../../component/InputComponent';
 import AddressFinder from '../../component/AddressFinder';
@@ -214,7 +214,6 @@ const SignUpHelper = () => {
   // };
 
   const handleButton = async (e) => {
-    // console.log(helperInfo);
     if (e.target.textContent === '다음') {
       if (page <= 2) {
         setPercent(percent + 25);
@@ -245,7 +244,6 @@ const SignUpHelper = () => {
               type: 2,
               id: result.data.id,
             };
-            dispatch(setSocialUser(userInfo));
             await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
               headers: userInfo,
             });

@@ -19,10 +19,11 @@ module.exports = async (req, res) => {
         const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
           expiresIn: '12h',
         });
+        const info = helperInfo;
         res.status(200).json({
+          info,
           accessToken,
           messeage: 'successfully signed in',
-          data: { id: helperInfo.id },
         });
       } else {
         res.status(401).json({ message: 'verify your email' });

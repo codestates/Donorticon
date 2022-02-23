@@ -1,4 +1,4 @@
-const { giver } = require('../../models')
+const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
@@ -19,13 +19,15 @@ module.exports = async (req, res) => {
         const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
           expiresIn: '12h',
         });
-        res.status(200).json({ accessToken, messeage: 'successfully signed in', data: { id: giverInfo.id }});
+        const info = giverInfo;
+        res
+          .status(200)
+          .json({ info, accessToken, messeage: 'successfully signed in' });
       } else {
-        res.status(401).json({message: 'verify your email'})
+        res.status(401).json({ message: 'verify your email' });
       }
     }
   } catch (e) {
     console.log(e);
   }
 };
-
