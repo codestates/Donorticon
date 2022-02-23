@@ -148,31 +148,47 @@ module.exports = {
     }
   },
   uploadImgMessage : async (req, res) => {
-    const url = await generateUploadURL();
-    const messageFromGiver = req.body.message;
-    try {
-      const imageUrl = url.split('?')[0];
+    const messageFromHelper = req.body.message;
+    const roomId = await sequelize.query(`SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`, { type: QueryTypes.SELECT });
+    if (messageFromHelper) {
+      try {
 
-      const saveImage = await gallery.create({
-        helper_id: req.body.helperId,
-        img: imageUrl,
-      });
-
-      const roomId = await sequelize.query(`SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`, { type: QueryTypes.SELECT });
-
-      if (messageFromGiver) {
         await message.create({
-          room_id: roomId.id,
+          room_id: roomId[0].id,
           giver_id: req.body.giverId,
           helper_id: req.body.helperId,
           gifticon_id: req.body.gifticonId,
           type: 2,
-          message: messageFromGiver
+          message: messageFromHelper
         });
+
+        res.status(200).json({ message : 'Ok'});
+      } catch(e) {
+        res.status(500).json({ message: 'intenal server error' });
       }
-      res.status(200).json({ url: url });
-    } catch (e) {
-      res.status(500).json({ message: 'intenal server error' });
+    } else {
+      try {
+        const url = await generateUploadURL();
+        const imageUrl = url.split('?')[0];
+
+        const saveImage = await gallery.create({
+          helper_id: req.body.helperId,
+          img: imageUrl,
+        });
+
+        await message.create({
+          room_id: roomId[0].id,
+          giver_id: req.body.giverId,
+          helper_id: req.body.helperId,
+          gifticon_id: req.body.gifticonId,
+          img: imageUrl,
+          type: 2,
+        });
+
+        res.status(200).json({ url: url });
+      } catch (e) {
+        res.status(500).json({ message: 'intenal server error' });
+      }
     }
   }
 };

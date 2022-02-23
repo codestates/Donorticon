@@ -38,8 +38,11 @@ const GifticonUsed = () => {
     handleModalOpen();
   };
 
-  const handleMessage = () => {
-    console.log('send msg');
+  const handleMessage = async () => {
+    await axios.post(`/gifticon/detail/${id}`, {message: message, giverId: userId, helperId: user, gifticonId:id});
+    // setVal(''); this code can remove texts on textarea. Disabled on purpose.
+    setMessage('');
+    alert("Done!");
   };
 
   const [clicked, setClicked] = useState([]);
@@ -81,6 +84,14 @@ const GifticonUsed = () => {
     }
   };
 
+  const [val, setVal] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleText = (event) => {
+    setMessage(event.target.value);
+    setVal(event.target.value);
+  }  
+
   useEffect(() => getPoint(), []);
   useEffect(() => sendPoint(), [clicked]);
   return (
@@ -109,7 +120,7 @@ const GifticonUsed = () => {
           </GifticonBox>
           <Title>감사메세지</Title>
           <GifticonBox>
-            <textarea col={50} style={{ marginRight: '20px' }} />
+            <textarea col={50} style={{ marginRight: '20px' }} value={val} onChange={handleText}/>
             <GifticonButton onClick={handleMessage}>
               {name}님에게 메세지 전송
             </GifticonButton>
