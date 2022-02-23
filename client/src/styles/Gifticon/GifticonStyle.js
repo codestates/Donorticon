@@ -10,6 +10,7 @@ export const Div = styled.div`
 export const GifticonStatusButton = styled.button`
   width: 100%;
   padding: 10px 0;
+  text-align: center;
   background-color: ${(props) =>
     props.text === '사용함'
       ? props.theme.color.main
