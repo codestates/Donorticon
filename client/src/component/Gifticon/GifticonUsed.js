@@ -11,6 +11,7 @@ import {
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
+import ImageUploader from '../ImageUploader';
 
 // 임시 데이터
 import img from '../../img/helperCategory/1_all.png';
@@ -25,11 +26,16 @@ const GifticonUsed = () => {
   const { id, name, userId, point, thanksImgUrl } = useSelector(
     (state) => state.gifticon,
   );
+  const user = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  }
+
   const handleImgUpload = () => {
-    //TODO: 수영님 요기다 이미지 업로드 관련 코드 설정해주시면 됩니당!
-    console.log('사진 업로드');
+    handleModalOpen();
   };
 
   const handleMessage = () => {
@@ -119,6 +125,7 @@ const GifticonUsed = () => {
               />
             ))}
           </GifticonBox>
+          {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} api={`/gifticon/detail/${id}`} giverId={userId} helperId={user} gifticonId={id}></ImageUploader> : null}
         </>
       )}
     </>
