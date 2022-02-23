@@ -4,10 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPoint } from '../../redux/gifticon/gifticonSlice';
 import { CardGallery } from '../../styles/CardStyle';
 import {
-  GifticonBox,
+  ContentBox,
   GifticonButton,
   PointImage,
-  Title,
+  ContentTitle,
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
@@ -79,18 +79,19 @@ const GifticonUsed = () => {
   useEffect(() => sendPoint(), [clicked]);
   return (
     <>
-      {who && who === 1 && thanksImgUrl !== null ? (
+      {who && who === 1 && thanksImgUrl !== null && (
         <>
-          <Title>{name}님이 보낸 인증사진</Title>
+          <ContentTitle>{name}님이 보낸 인증사진</ContentTitle>
           <CardGallery style={{ width: '100px', height: '100px' }} src={img} />
         </>
-      ) : (
+      )}
+      {who && who === 1 && thanksImgUrl === null && (
         <span>웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요</span>
       )}
       {who && who === 2 && (
         <>
-          <Title>인증사진</Title>
-          <GifticonBox>
+          <ContentTitle>인증사진</ContentTitle>
+          <ContentBox>
             <div style={{ marginRight: '20px' }}>
               <CardGallery
                 style={{ width: '100px', height: '100px' }}
@@ -100,16 +101,18 @@ const GifticonUsed = () => {
             <GifticonButton onClick={handleImgUpload}>
               사진 업로드
             </GifticonButton>
-          </GifticonBox>
-          <Title>감사메세지</Title>
-          <GifticonBox>
+          </ContentBox>
+          <ContentTitle>감사메세지</ContentTitle>
+          <ContentBox>
             <textarea col={50} style={{ marginRight: '20px' }} />
             <GifticonButton onClick={handleMessage}>
               {name}님에게 메세지 전송
             </GifticonButton>
-          </GifticonBox>
-          <Title>감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)</Title>
-          <GifticonBox>
+          </ContentBox>
+          <ContentTitle>
+            감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)
+          </ContentTitle>
+          <ContentBox>
             {ARRAY.map((x) => (
               <PointImage
                 id={x}
@@ -118,7 +121,7 @@ const GifticonUsed = () => {
                 onClick={(e) => handlePoint(e)}
               />
             ))}
-          </GifticonBox>
+          </ContentBox>
         </>
       )}
     </>
