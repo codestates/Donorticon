@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { gifticon, helper, giver } = require('../../models');
+const { gifticon, helper, giver, message } = require('../../models');
 
 module.exports = {
   getDetail: async (req, res) => {
@@ -47,7 +47,16 @@ module.exports = {
           console.log(e);
         }
       }
-      res.status(200).send({ gifticonInfo });
+
+      const thanksImg = await message.findOne({
+        where: { gifticon_id: id },
+        attributes: ['img'],
+      });
+      let thanksImgUrl = null;
+      if (thanksImg) {
+        thanksImgUrl = thanksImg.dataValues.img;
+      }
+      res.status(200).send({ gifticonInfo, thanksImgUrl });
     } else {
       return res.status(404).send({ message: 'invalid request' });
     }
@@ -108,6 +117,32 @@ module.exports = {
           console.log(e);
         }
       }
+    }
+  },
+  report: async (req, res) => {
+    if (!req.headers.authorization) {
+      return res.status(401).send({ message: 'invalid token' });
+    }
+    const token = req.headers.authorization.split(' ')[1];
+    const user = jwt.verify(token, process.env.ACCESS_SECRET);
+
+    if (token && user) {
+      const gifticonId = parseInt(req.params.id);
+      const giverId = parseInt(req.body.giverId);
+
+      //TODO: gifticon img => 신고당햇다는 뭐 그런 이미지로 바꾸는거 필요
+      //TODO: BLACK POINT -1점은 너무 낮지 않나?
+      await gifticon.update(
+        { report: true, point: -1, status: 'reported' },
+        { where: { id: gifticonId } },
+      );
+
+      const data = await gifticon.findOne({
+        where: { id: gifticonId },
+        attributes: ['id', , 'status'],
+      });
+      const { status, report } = data.dataValues;
+      res.status(200).send({ status, report, message: 'successfully updated' });
     }
   },
 };

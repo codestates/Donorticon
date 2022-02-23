@@ -16,11 +16,14 @@ import {
   GalleryImgContainer,
   GalleryImg,
   Label,
+  ActButton,
 } from '../../styles/Mypage';
 import Tag from '../../component/Tag';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import AddressFinder from '../../component/AddressFinder';
+import PassswordModal from '../../component/PasswordModal';
+import ModalV2 from '../../component/ModalV2';
 
 const vulnerableList = [
   '아동/청소년',
@@ -75,6 +78,9 @@ const Mypage = () => {
     false, // null   description
     false, // null   location
     false, // null   gallery
+    false, // null   activity
+    false, // password password
+    false, // 회원 탈퇴
   ]);
 
   const inputList = {
@@ -338,6 +344,12 @@ const Mypage = () => {
     }
   }, []);
 
+  const modalController = (idx, boolean) => {
+    const arr = [...isChanging];
+    arr[idx] = boolean;
+    setIsChanging(arr);
+  };
+
   const handleImageUpload = async (e, tag) => {
     const file = e.target.files[0];
     const tempUrl = URL.createObjectURL(file);
@@ -536,8 +548,43 @@ const Mypage = () => {
               />
             </>
           ) : null}
-          <div>비밀번호 변경</div>
-          <div>회원 탈퇴</div>
+          <ActButton
+            onClick={() => {
+              modalController(7, true);
+            }}
+          >
+            비밀번호 변경
+          </ActButton>
+          {isChanging[7] ? (
+            <PassswordModal
+              modalCloser={() => {
+                modalController(7, false);
+              }}
+            />
+          ) : null}
+          <ActButton
+            onClick={() => {
+              modalController(8, true);
+            }}
+          >
+            회원 탈퇴
+          </ActButton>
+          {isChanging[8] ? (
+            <ModalV2
+              title="정말로 탈퇴하시겠어요?"
+              callback={async (e) => {
+                if (e.target.textContent === '네') {
+                  try {
+                    await axios.delete('mypage/delete', {
+                      headers: { token: localStorage.getItem('token') },
+                    });
+                    localStorage.removeItem('token');
+                  } catch (e) {}
+                }
+                modalController(8, false);
+              }}
+            />
+          ) : null}
         </Box>
         <Box
           style={{

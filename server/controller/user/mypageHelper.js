@@ -10,8 +10,9 @@ module.exports = {
     try {
       const token = req.headers.token;
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-      const { id, email, name, mobile, slogan, description, location, img } =
+      const { id, email, name, mobile, slogan, description, location, img, activity } =
         tokenDecoded;
+			console.log(tokenDecoded);
       const helperRow = await helper.findOne({
         where: { email },
       });
@@ -42,6 +43,7 @@ module.exports = {
         gifticonCategory: gifticonCategoryList,
         gallery: ['사진추가예정'],
         img,
+				activity
       };
 
       res.status(200).json(data);
@@ -58,7 +60,8 @@ module.exports = {
       req.body.mobile ||
       req.body.name ||
       req.body.slogan ||
-      req.body.description
+      req.body.description ||
+			req.body.address 
     ) {
       try {
         if (req.body.password) {
@@ -101,6 +104,15 @@ module.exports = {
           const { description } = req.body;
           await helper.update(
             { description },
+            {
+              where: { id },
+            },
+          );
+        }
+        if (req.body.address) {
+          const { address } = req.body;
+          await helper.update(
+            { location: address },
             {
               where: { id },
             },

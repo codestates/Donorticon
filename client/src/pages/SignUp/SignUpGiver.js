@@ -95,6 +95,12 @@ const SignUpGiver = () => {
     },
   ];
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSingUpButton();
+    }
+  };
+
   const handleSingUpButton = async () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
@@ -144,6 +150,7 @@ const SignUpGiver = () => {
                 callback={card.callback}
                 errorMessage={card.errorMessage}
                 check={isCheckStart}
+                handleKeyPress={handleKeyPress}
               />
             </InputBox>
           ))}

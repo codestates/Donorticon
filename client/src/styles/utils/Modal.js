@@ -20,3 +20,11 @@ export const ModalFrame = styled.div`
     padding: 20px;
   }
 `;
+
+export const Title = styled.div``;
+
+export const SubTitle = styled.div``;
+
+export const MesaageTitle = styled.div``;
+
+export const MessageArea = styled.textarea``;

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { setPoint } from '../../redux/gifticon/gifticonSlice';
 import { CardGallery } from '../../styles/CardStyle';
 import {
   GifticonBox,
@@ -13,7 +14,6 @@ import red from '../../img/point_red.png';
 
 // 임시 데이터
 import img from '../../img/helperCategory/1_all.png';
-import { setPoint } from '../../redux/gifticon/gifticonSlice';
 
 const BLACK = black;
 const RED = red;
@@ -21,7 +21,10 @@ const RED = red;
 const ARRAY = [0, 1, 2, 3, 4];
 
 const GifticonUsed = () => {
-  const { id, name, userId, point } = useSelector((state) => state.gifticon);
+  const who = useSelector((state) => state.user.user.who);
+  const { id, name, userId, point, thanksImgUrl } = useSelector(
+    (state) => state.gifticon,
+  );
   const dispatch = useDispatch();
 
   const handleImgUpload = () => {
@@ -34,7 +37,6 @@ const GifticonUsed = () => {
   };
 
   const [clicked, setClicked] = useState([]);
-
   const handlePoint = (e) => {
     const id = e.target.id;
     let clickStates = [false, false, false, false, false];
@@ -46,7 +48,7 @@ const GifticonUsed = () => {
 
   const getPoint = () => {
     if (point === 0) return;
-    // 만약 포인트가 5점이라면 연탄 5개 모두가 레드색이어야함
+
     if (point !== 0) {
       let clickStates = [false, false, false, false, false];
       for (let i = 0; i < point; i++) {
@@ -54,7 +56,6 @@ const GifticonUsed = () => {
       }
       setClicked(clickStates);
     }
-    console.log(clicked);
   };
 
   const sendPoint = async () => {
@@ -78,31 +79,48 @@ const GifticonUsed = () => {
   useEffect(() => sendPoint(), [clicked]);
   return (
     <>
-      <Title>인증사진</Title>
-      <GifticonBox>
-        <div style={{ marginRight: '20px' }}>
+      {who && who === 1 && thanksImgUrl !== null ? (
+        <>
+          <Title>{name}님이 보낸 인증사진</Title>
           <CardGallery style={{ width: '100px', height: '100px' }} src={img} />
-        </div>
-        <GifticonButton onClick={handleImgUpload}>사진 업로드</GifticonButton>
-      </GifticonBox>
-      <Title>감사메세지</Title>
-      <GifticonBox>
-        <textarea col={50} style={{ marginRight: '20px' }} />
-        <GifticonButton onClick={handleMessage}>
-          {name}님에게 메세지 전송
-        </GifticonButton>
-      </GifticonBox>
-      <Title>감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)</Title>
-      <GifticonBox>
-        {ARRAY.map((x) => (
-          <PointImage
-            id={x}
-            key={x}
-            src={clicked[x] ? RED : BLACK}
-            onClick={(e) => handlePoint(e)}
-          />
-        ))}
-      </GifticonBox>
+        </>
+      ) : (
+        <span>웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요</span>
+      )}
+      {who && who === 2 && (
+        <>
+          <Title>인증사진</Title>
+          <GifticonBox>
+            <div style={{ marginRight: '20px' }}>
+              <CardGallery
+                style={{ width: '100px', height: '100px' }}
+                src={img}
+              />
+            </div>
+            <GifticonButton onClick={handleImgUpload}>
+              사진 업로드
+            </GifticonButton>
+          </GifticonBox>
+          <Title>감사메세지</Title>
+          <GifticonBox>
+            <textarea col={50} style={{ marginRight: '20px' }} />
+            <GifticonButton onClick={handleMessage}>
+              {name}님에게 메세지 전송
+            </GifticonButton>
+          </GifticonBox>
+          <Title>감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)</Title>
+          <GifticonBox>
+            {ARRAY.map((x) => (
+              <PointImage
+                id={x}
+                key={x}
+                src={clicked[x] ? RED : BLACK}
+                onClick={(e) => handlePoint(e)}
+              />
+            ))}
+          </GifticonBox>
+        </>
+      )}
     </>
   );
 };

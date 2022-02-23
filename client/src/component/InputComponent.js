@@ -5,9 +5,10 @@ const InputSet = ({
   title,
   inputPlaceHolder,
   callback,
-  errorMessage,
-  check,
+  errorMessage = '',
+  check = false,
   name,
+  handleKeyPress,
 }) => {
   const [isError, setIsError] = useState(false);
   const titleCheck = title.includes('비밀번호') ? 'password' : 'text';
@@ -23,6 +24,7 @@ const InputSet = ({
         type={titleCheck}
         placeholder={inputPlaceHolder}
         onChange={handleInputContent}
+        onKeyPress={handleKeyPress}
       />
       {check && isError ? <ErrorMessage>{errorMessage}</ErrorMessage> : null}
     </>
