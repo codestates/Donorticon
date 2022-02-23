@@ -18,8 +18,11 @@ import {
   InfoBox,
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
+
 import { SubTitle, Title } from '../../styles/utils/Container';
 import GifticonReport from '../../component/Gifticon/GifticonReport';
+
+
 
 const GifticonDetail = ({ data }) => {
   const gifticon = useSelector((state) => state.gifticon);
