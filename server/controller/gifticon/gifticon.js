@@ -43,8 +43,8 @@ module.exports = {
           statusName = 'rejected';
         } else if (statusId === 5) {
           statusName = 'expired';
-        } else if (stautsId === 6) {
-          statusName === 'reported';
+        } else if (statusId === 6) {
+          statusName = 'reported';
         }
         return statusName;
       };

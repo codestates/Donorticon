@@ -36,6 +36,7 @@ const GifticonReportModal = ({ reportModal, setReportModal }) => {
       },
     );
     dispatch(setInfo({ ...gifticon, report, status }));
+    setReportModal(false);
   };
 
   const handleNo = () => {
