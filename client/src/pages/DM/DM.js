@@ -50,7 +50,7 @@ const DM = () => {
   }
 
   const getDialogues = async (data) => {
-    const dialogueRequest = await axios.get(`/dm?room=${data.id}`);
+    let dialogueRequest = await axios.get(`/dm?room=${data.id}`);
     if(dialogueRequest.data.dialogues[0]) {
       setGiverId(dialogueRequest.data.dialogues[0].giver_id);
       setHelperId(dialogueRequest.data.dialogues[0].helper_id);

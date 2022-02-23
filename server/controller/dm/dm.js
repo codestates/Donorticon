@@ -3,7 +3,7 @@ const io = require('socket.io')(5000, {
     origin: "http://localhost:3000",
   }
 });
-const jwt_decode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 const { room, helper, giver, message } = require('../../models');
 const generateUploadURL = require('../s3')
 
@@ -35,7 +35,7 @@ module.exports = {
     try {
       if (req.headers.who === '1') {
         let token = req.headers.token;
-        let tokenDecoded = jwt_decode(token);
+        let tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
         let { id } = tokenDecoded;
 
         let roomList = await room.findAll({
@@ -52,7 +52,7 @@ module.exports = {
         res.status(200).json({roomList});
       } else if (req.headers.who === '2') {
         let token = req.headers.token;
-        let tokenDecoded = jwt_decode(token);
+        let tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
         let { id } = tokenDecoded;
 
         let roomList = await room.findAll({
