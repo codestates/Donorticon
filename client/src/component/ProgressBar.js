@@ -20,13 +20,15 @@ const Text = styled.div`
   color: ${({ theme }) => theme.color.main};
 `;
 
-const ProgressBar = ({ percent }) => {
+const ProgressBar = ({ percent, point }) => {
+  const text = point ? `${percent}점` : `${percent}%`;
+  const percentage = point ? percent * 4 : percent;
   return (
     <>
       <BarContainer>
-        <Bar width={`${percent}%`} />
+        <Bar width={`${percentage}%`} />
       </BarContainer>
-      <Text>{percent}%</Text>
+      <Text>{text}</Text>
     </>
   );
 };

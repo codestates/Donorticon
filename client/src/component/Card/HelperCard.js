@@ -2,8 +2,8 @@ import {
   CardBox,
   CardContent,
   CardGallery,
-  Img,
-  Name,
+  HelperImage,
+  HelperName,
   Slogan,
 } from '../../styles/CardStyle';
 import { useNavigate } from 'react-router-dom';
@@ -13,11 +13,11 @@ const Card = ({ id, name, img, slogan }) => {
   const navigate = useNavigate();
 
   return (
-    <CardBox onClick={()=> navigate(`/helperlist/detail/${id}`)}>
+    <CardBox onClick={() => navigate(`/helperlist/detail/${id}`)}>
       <CardGallery />
       <CardContent>
-        <Img src={img} />
-        <Name>{name}</Name>
+        <HelperImage src={img} />
+        <HelperName>{name}</HelperName>
       </CardContent>
       <Slogan>{slogan}</Slogan>
     </CardBox>

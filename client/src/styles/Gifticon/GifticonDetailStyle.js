@@ -41,9 +41,10 @@ export const ContentContainer = styled.div`
 `;
 
 export const ContentTitle = styled.div`
-  font-size: ${(props) => (props.top ? '18px' : 'inherit')};
+  font-size: 18px;
   text-align: left;
   padding-bottom: 20px;
+  padding-top: ${(props) => props.top && '20px'};
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 16px;
   }
@@ -51,9 +52,9 @@ export const ContentTitle = styled.div`
 
 export const ContentBox = styled.div`
   display: flex;
-  align-items: end;
+  align-items: ${(props) => (props.center ? 'center' : 'end')};
   @media ${({ theme }) => theme.device.mobile} {
-    flex-direction: column;
+    flex-direction: ${(props) => (props.row ? 'row' : 'column')};
   }
 `;
 
@@ -61,8 +62,7 @@ export const ContentBox = styled.div`
 
 export const ImageBox = styled.div`
   width: 40%;
-  margin-right: 20px;
-  // height는 사진 크기에 따라서 변경할 것
+  //TODO: height는 사진 크기에 따라서 변경할 것
   height: 300px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
@@ -72,16 +72,20 @@ export const ImageBox = styled.div`
 
 export const InfoBox = styled.div`
   width: 60%;
-  // height는 사진 크기에 따라서 변경할 것
+  //TODO: height는 사진 크기에 따라서 변경할 것
   height: 300px;
+  margin-left: 20px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
+    margin-left: 0;
+    height: auto;
   }
 `;
 
 export const InputBox = styled.div`
   text-align: left;
-  padding-top: 100px;
+  //TODO: 이부분 설정!!! 추후 변경 필요
+  padding-top: ${(props) => (props.giver === 1 ? '150px' : '100px')};
   div {
     display: flex;
     margin-top: 10px;
@@ -106,14 +110,6 @@ export const GifticonButton = styled.button`
   cursor: pointer;
   padding: 10px 0;
   background-color: ${({ theme }) => theme.color.main};
-`;
-
-export const PointImage = styled.div`
-  width: 30px;
-  height: 30px;
-  background-image: url(${(props) => props.src});
-  background-size: cover;
-  cursor: pointer;
 `;
 
 // 기프티콘 상태 변경하는 모달창

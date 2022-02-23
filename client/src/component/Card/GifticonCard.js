@@ -3,13 +3,19 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
-import { CardBox, CardGallery } from '../../styles/CardStyle';
+import {
+  CardBox,
+  CardContent,
+  CardGallery,
+  GifticonInfo,
+} from '../../styles/CardStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 
 const GifticonCard = ({ data, name }) => {
   const who = useSelector((state) => state.user.user.who);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { id, status, img, createdAt } = data;
 
   const [text, setText] = useState('');
@@ -63,17 +69,16 @@ const GifticonCard = ({ data, name }) => {
 
   useEffect(() => getBtnText(), [data]);
 
-  //TODO: status 버튼 hover effect 막기 / cursor: none 설정 필요
   return (
     <CardBox onClick={handleClick}>
       <CardGallery src={img} />
-      <div>
-        <div>{name}</div>
-        <div>{createdAt.split('T')[0]} 기부</div>
+      <CardContent gifticon>
+        <GifticonInfo gifticon>{name}</GifticonInfo>
+        <GifticonInfo>{createdAt.split('T')[0]} 기부</GifticonInfo>
         <GifticonStatusButton text={text} textStyle={textStyle}>
           {text}
         </GifticonStatusButton>
-      </div>
+      </CardContent>
     </CardBox>
   );
 };
