@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isLoggedIn: false,
@@ -15,15 +15,15 @@ export const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    socialSignIn: (state, action) => {
+    signIn: (state, _) => {
       state.isLoggedIn = true;
     },
-    setSocialUser: (state, action) => {
-      state.user = action.payload;
-    },
-    signOut: (state, action) => {
+    signOut: (state, _) => {
       state.isLoggedIn = false;
       state.user = initialState.user;
+    },
+    setUser: (state, action) => {
+      state.user = action.payload;
     },
     setWho: (state, action) => {
       state.user.who = action.payload;
@@ -57,7 +57,6 @@ export const signupGiver = createAsyncThunk(
   },
 );
 
-export const { socialSignIn, setSocialUser, signOut, setWho } =
-  userSlice.actions;
+export const { signIn, signOut, setUser, setWho } = userSlice.actions;
 
 export default userSlice;
