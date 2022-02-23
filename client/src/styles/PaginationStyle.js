@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const PaginationContainer = styled.div`
   display: flex;
   padding: 40px 0;
+  justify-content: center;
 `;
 
 export const PaginationUl = styled.ul`
