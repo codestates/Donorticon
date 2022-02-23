@@ -13,7 +13,7 @@ export const GifticonStatusButton = styled.button`
   background-color: ${(props) =>
     props.text === '사용함'
       ? props.theme.color.main
-      : props.text === '신고함'
+      : props.text === '신고됨'
       ? props.theme.color.error
       : null};
   border: 1px solid

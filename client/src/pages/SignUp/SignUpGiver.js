@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sha256 from 'js-sha256';
-import { setSocialUser } from '../../redux/user/userSlice';
+import { setUser } from '../../redux/user/userSlice';
 import InputSet from '../../component/InputComponent';
 import { SignUpContainer } from '../../styles/SignUpStyle';
 import {
@@ -113,7 +113,6 @@ const SignUpGiver = () => {
             type: 1,
             id: result.data.id,
           };
-          dispatch(setSocialUser(userInfo));
           await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
             headers: userInfo,
           });

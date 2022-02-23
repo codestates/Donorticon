@@ -13,6 +13,7 @@ import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 
 import styled from 'styled-components';
 import GifticonReportModal from '../../component/Gifticon/GifticonReportModal';
+import MyPageHeader from '../../component/MyPageHeader';
 const Button = styled.button`
   padding: 10px;
   color: ${({ theme }) => theme.color.error};
@@ -38,6 +39,7 @@ const GifticonDetail = ({ data }) => {
 
   return (
     <GifticonDetailContainer>
+      <MyPageHeader />
       <Title top>기프티콘 상세정보</Title>
       <GifticonBox>
         <a href={img} target="_blank" rel="noreferrer noopener">
