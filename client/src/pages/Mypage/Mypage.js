@@ -50,13 +50,6 @@ const Mypage = () => {
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
-  // const giverExmaple = {
-  //   id: 1,
-  //   email: 'hwlsgur1120@naver.com',
-  //   name: '허진혁',
-  //   mobile: '010-0000-0000',
-  //   img: 'https://jejuhydrofarms.com/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png',
-  // };
   const [userInfo, setUserInfo] = useState({
     id: 0,
     email: '',
@@ -67,6 +60,7 @@ const Mypage = () => {
     gifticonCategory: [],
     vulnerable: [],
     gallery: [],
+    activity: false,
     img: '',
   });
   const [isChanging, setIsChanging] = useState([
@@ -164,10 +158,6 @@ const Mypage = () => {
           }
         },
       },
-      // {
-      //   inputName: 'img',
-      //   inputCallback: (e) => {},
-      // },
     ],
     helper: [
       {
@@ -294,25 +284,9 @@ const Mypage = () => {
           }
         },
       },
-      // {
-      //   inputName: 'img',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
-      // {
-      //   inputName: 'gallery',
-      //   inputCallback: (e) => {
-      //     console.log(e);
-      //   },
-      // },
     ],
   };
   useEffect(async () => {
-    // const { data } = await axios.get('/mypage/user', {
-    //   headers: localStorage.getItem('token'),
-    // });
-    // setUserInfo(data);
     if (whoIs === 'giver') {
       try {
         const { data } = await axios.get('/mypage/giver', {
@@ -328,16 +302,13 @@ const Mypage = () => {
           headers: { token: localStorage.getItem('token') },
         });
         // setUserInfo(data);
-        setUserInfo(
-          Object.assign(
-            { ...data },
-            {
-              gallery: Array(2).fill(
-                'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
-              ),
-            },
+        console.log(data);
+        setUserInfo({
+          ...data,
+          gallery: Array(2).fill(
+            'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
           ),
-        );
+        });
       } catch (e) {
         console.log(e);
       }
@@ -354,14 +325,9 @@ const Mypage = () => {
     const file = e.target.files[0];
     const tempUrl = URL.createObjectURL(file);
     if (tag === 'img') {
-      setUserInfo(Object.assign({ ...userInfo }, { [tag]: tempUrl }));
+      setUserInfo({ ...userInfo, [tag]: tempUrl });
     } else if (tag === 'gallery') {
-      setUserInfo(
-        Object.assign(
-          { ...userInfo },
-          { [tag]: [...userInfo.gallery, tempUrl] },
-        ),
-      );
+      setUserInfo({ ...userInfo, [tag]: [...userInfo.gallery, tempUrl] });
     }
     try {
       const s3Url = await axios.put(
@@ -380,11 +346,7 @@ const Mypage = () => {
   };
 
   const handleInput = (e) => {
-    setUserInfo(
-      Object.assign(userInfo, {
-        [e.target.name]: e.target.value,
-      }),
-    );
+    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
   const handleFocus = (idx, boolean) => {
@@ -438,14 +400,7 @@ const Mypage = () => {
             <>
               <AddressFinder
                 callback={(address) => {
-                  setUserInfo(
-                    Object.assign(
-                      { ...userInfo },
-                      {
-                        location: address,
-                      },
-                    ),
-                  );
+                  setUserInfo({ ...userInfo, location: address });
                   axios.put(
                     '/mypage/helper',
                     { address: address },
@@ -475,14 +430,10 @@ const Mypage = () => {
                 targetTagList={userInfo.vulnerable}
                 callback={{
                   create: async (id) => {
-                    setUserInfo(
-                      Object.assign(
-                        { ...userInfo },
-                        {
-                          vulnerable: [...userInfo.vulnerable, id],
-                        },
-                      ),
-                    );
+                    setUserInfo({
+                      ...userInfo,
+                      vulnerable: [...userInfo.vulnerable, id],
+                    });
                     await axios.post(
                       '/mypage/vulnerable',
                       { vulnerable_id: id },
@@ -490,16 +441,10 @@ const Mypage = () => {
                     );
                   },
                   delete: async (id) => {
-                    setUserInfo(
-                      Object.assign(
-                        { ...userInfo },
-                        {
-                          vulnerable: userInfo.vulnerable.filter(
-                            (el) => el !== id,
-                          ),
-                        },
-                      ),
-                    );
+                    setUserInfo({
+                      ...userInfo,
+                      vulnerable: userInfo.vulnerable.filter((el) => el !== id),
+                    });
                     await axios.delete('/mypage/vulnerable', {
                       headers: { token: localStorage.getItem('token') },
                       params: { vulnerable_id: id },
@@ -514,14 +459,10 @@ const Mypage = () => {
                 targetTagList={userInfo.gifticonCategory}
                 callback={{
                   create: async (id) => {
-                    setUserInfo(
-                      Object.assign(
-                        { ...userInfo },
-                        {
-                          gifticonCategory: [...userInfo.gifticonCategory, id],
-                        },
-                      ),
-                    );
+                    setUserInfo({
+                      ...userInfo,
+                      gifticonCategory: [...userInfo.gifticonCategory, id],
+                    });
                     await axios.post(
                       '/mypage/gifticon',
                       { gifticon_id: id },
@@ -529,16 +470,12 @@ const Mypage = () => {
                     );
                   },
                   delete: async (id) => {
-                    setUserInfo(
-                      Object.assign(
-                        { ...userInfo },
-                        {
-                          gifticonCategory: userInfo.gifticonCategory.filter(
-                            (el) => el !== id,
-                          ),
-                        },
+                    setUserInfo({
+                      ...userInfo,
+                      gifticonCategory: userInfo.gifticonCategory.filter(
+                        (el) => el !== id,
                       ),
-                    );
+                    });
                     await axios.delete('/mypage/gifticon', {
                       headers: { token: localStorage.getItem('token') },
                       params: { gifticon_id: id },
@@ -546,30 +483,63 @@ const Mypage = () => {
                   },
                 }}
               />
+              <ActButton
+                onClick={() => {
+                  modalController(7, true);
+                }}
+              >
+                {userInfo.activity ? `계정 비활성화` : '계정 활성화'}
+              </ActButton>
+              {isChanging[7] ? (
+                <ModalV2
+                  title={
+                    userInfo.activity
+                      ? '계정을 비활성화 하시겠어요?'
+                      : '계정을 활성화 하시겠어요?'
+                  }
+                  subtitle={
+                    userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
+                  }
+                  callback={async (e) => {
+                    if (e.target.textContent === '네') {
+                      try {
+                        setUserInfo({
+                          ...userInfo,
+                          activity: !userInfo.activity,
+                        });
+                        await axios.put('mypage/helper/activity', null, {
+                          headers: { token: localStorage.getItem('token') },
+                        });
+                      } catch (e) {}
+                    }
+                    modalController(7, false);
+                  }}
+                />
+              ) : null}
             </>
-          ) : null}
-          <ActButton
-            onClick={() => {
-              modalController(7, true);
-            }}
-          >
-            비밀번호 변경
-          </ActButton>
-          {isChanging[7] ? (
-            <PassswordModal
-              modalCloser={() => {
-                modalController(7, false);
-              }}
-            />
           ) : null}
           <ActButton
             onClick={() => {
               modalController(8, true);
             }}
           >
-            회원 탈퇴
+            비밀번호 변경
           </ActButton>
           {isChanging[8] ? (
+            <PassswordModal
+              modalCloser={() => {
+                modalController(8, false);
+              }}
+            />
+          ) : null}
+          <ActButton
+            onClick={() => {
+              modalController(9, true);
+            }}
+          >
+            회원 탈퇴
+          </ActButton>
+          {isChanging[9] ? (
             <ModalV2
               title="정말로 탈퇴하시겠어요?"
               callback={async (e) => {
@@ -581,7 +551,7 @@ const Mypage = () => {
                     localStorage.removeItem('token');
                   } catch (e) {}
                 }
-                modalController(8, false);
+                modalController(9, false);
               }}
             />
           ) : null}

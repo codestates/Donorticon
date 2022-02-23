@@ -21,6 +21,7 @@ module.exports = {
       // 로그인한 유저 정보
       const { id, user_type: who } = user;
       const statusId = parseInt(req.headers.status);
+      console.log('status', statusId);
 
       let page = Math.abs(parseInt(req.query.page));
       let limit = Math.abs(parseInt(req.query.limit));
@@ -111,7 +112,9 @@ module.exports = {
           count = null;
         }
 
-        const maxPage = Math.ceil(count / limit);
+        const maxPage =
+          Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit);
+
         res.status(200).send({
           gifticonList,
           maxPage,

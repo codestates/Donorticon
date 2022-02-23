@@ -3,11 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
-import {
-  setWho,
-  socialSignIn,
-  setSocialUser,
-} from '../../redux/user/userSlice';
+import { setUser, setWho, signIn } from '../../redux/user/userSlice';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -52,19 +48,24 @@ const SignIn = () => {
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       const whoIs = who === 1 ? 'giver' : 'helper';
+
       try {
-        const result = await axios.post(`/signin/${whoIs}`, userInfo);
-        const id = result.data.data.id;
-        const { accessToken } = result.data;
-        dispatch(socialSignIn());
-        localStorage.setItem('token', accessToken);
-        if (whoIs === 'helper') {
-          navigate('/mypage');
-        } else {
-          if (prev.includes('verifyRedir')) {
-            navigate('/helperlist');
+        const {
+          data: { info, accessToken },
+        } = await axios.post(`/signin/${whoIs}`, userInfo);
+        if (accessToken && info) {
+          const { id, email, name, user_type: who } = info;
+          dispatch(signIn());
+          dispatch(setUser({ id, email, name, who }));
+          localStorage.setItem('token', accessToken);
+          if (whoIs === 'helper') {
+            navigate('/mypage');
           } else {
-            navigate(prev);
+            if (prev.includes('verifyRedir')) {
+              navigate('/helperlist');
+            } else {
+              navigate(prev);
+            }
           }
         }
       } catch (e) {
@@ -97,7 +98,7 @@ const SignIn = () => {
         const result = await axios.post('/signin/guest/giver');
         const { token } = result.data;
         localStorage.setItem('token', token);
-        dispatch(socialSignIn());
+        dispatch(signIn());
         navigate(prev);
       } catch (e) {
         console.log(e);
@@ -108,7 +109,7 @@ const SignIn = () => {
         const result = await axios.post('/signin/guest/helper');
         const { token } = result.data;
         localStorage.setItem('token', token);
-        dispatch(socialSignIn());
+        dispatch(signIn());
         navigate('/mypage');
       } catch (e) {
         console.log(e);

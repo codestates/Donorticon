@@ -40,7 +40,6 @@ const GifticonCard = ({ data, name }) => {
   };
 
   const getBtnText = () => {
-    console.log(status);
     if (status === 'used') {
       setText('사용함');
       setTextStyle(1);
