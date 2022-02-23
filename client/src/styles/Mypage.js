@@ -22,7 +22,10 @@ export const Content = styled.div`
   text-align: center;
 `;
 
-export const Box = styled.div``;
+export const Box = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 export const PageButton = styled.div`
   width: 45%;
@@ -102,5 +105,6 @@ export const Label = styled.label`
 
 export const ActButton = styled.button`
   color: ${({ theme }) => theme.color.lightGrey};
+  margin: 5px;
   cursor: pointer;
 `;

@@ -12,6 +12,7 @@ import { useState, useRef } from 'react';
 const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
   const [textMessage, setTextMessage] = useState('');
   const close = useRef();
+  const background = useRef();
 
   //!! callback 작성예시
   /* callback = {(e) => {
@@ -32,13 +33,13 @@ const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
   };
 
   const buttonNo = (e) => {
-    if (close.current === e.target) {
+    if (e.target === close.current || e.target === background.current) {
       callback(e);
     }
   };
 
   return (
-    <ModalBackground ref={close} onClick={buttonNo}>
+    <ModalBackground ref={background} onClick={buttonNo}>
       <ModalFrame>
         <Title>{title}</Title>
         <SubTitle>{subtitle ? subtitle : ''}</SubTitle>
