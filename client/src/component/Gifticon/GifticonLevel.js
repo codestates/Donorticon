@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { VscQuestion } from 'react-icons/vsc';
 import {
   LevelBarBox,
   LevelContainer,
@@ -15,6 +15,7 @@ import gold from '../../img/pointGrade/2_gold.png';
 import platinum from '../../img/pointGrade/3_platinum.png';
 import diamond from '../../img/pointGrade/4_diamond.png';
 import ProgressBar from '../ProgressBar';
+import Bubble from '../Bubble';
 
 const GifticonLevel = ({ point }) => {
   const [level, setLevel] = useState('');
@@ -41,7 +42,9 @@ const GifticonLevel = ({ point }) => {
 
   return (
     <LevelContainer>
-      <LevelTitle>연탄 온도</LevelTitle>
+      <LevelTitle>
+        연탄 온도 <Bubble />
+      </LevelTitle>
       <LevelContent>
         <LevelImageBox>
           <LevelName>{level.name}</LevelName>
