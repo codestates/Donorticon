@@ -3,7 +3,9 @@ const {
   helper,
   helper_vulnerable,
   helper_gifticon_category,
+	gallery
 } = require('../../models');
+const generateUploadURL = require('../s3');
 
 module.exports = {
   get: async (req, res) => {
@@ -12,7 +14,7 @@ module.exports = {
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const { id, email, name, mobile, slogan, description, location, img, activity } =
         tokenDecoded;
-			console.log(tokenDecoded);
+			console.log('마이페이지 조회 성공');
       const helperRow = await helper.findOne({
         where: { email },
       });
@@ -52,16 +54,22 @@ module.exports = {
     }
   },
   put: async (req, res) => {
+		console.log(req.body.tag === 'img', '태그')
     const token = req.headers.token;
 		const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
     const { id } = tokenDecoded;
+		const url = await generateUploadURL();
+		const imageUrl = url.split('?')[0];
     if (
       req.body.password ||
       req.body.mobile ||
       req.body.name ||
       req.body.slogan ||
       req.body.description ||
-			req.body.address 
+			req.body.address ||
+			req.body.activity ||
+			req.body.tag === 'img' ||
+			req.body.tag === 'gallery'
     ) {
       try {
         if (req.body.password) {
@@ -101,6 +109,7 @@ module.exports = {
           );
         }
         if (req.body.description) {
+					console.log(req.body)
           const { description } = req.body;
           await helper.update(
             { description },
@@ -118,16 +127,40 @@ module.exports = {
             },
           );
         }
+        if (req.body.activity) {
+          const { activity } = req.body;
+          await helper.update(
+            { activity },
+            {
+              where: { id },
+            },
+          );
+        }        
+				if (req.body.tag === 'img') {
+					console.log('이미지 변경 신청')
+          await helper.update(
+            { img: imageUrl },
+            {
+              where: { id },
+            },
+          );
+        }
+				if (req.body.tag === 'gallery') {
+					await gallery.create({ 
+							helper_id: id,
+							img: imageUrl
+						})
+				}
         const helperFinder = await helper.findOne({
           where: { id },
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
         const helperInfo = helperFinder.dataValues;
         res.clearCookie('refreshToken');
-        const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
+        const refreshToken = jwt.sign(helperInfo, process.env.ACCESS_SECRET, {
           expiresIn: '6h',
         });
-        res.status(200).json({ helperInfo, token: refreshToken });
+        res.status(200).json({ helperInfo, token:refreshToken });
       } catch (e) {
         res.status(500).json({ message: 'server error' });
       }
