@@ -1,5 +1,12 @@
 const jwt = require('jsonwebtoken');
-const { gifticon, helper, giver, message, gallery, sequelize } = require('../../models');
+const {
+  gifticon,
+  helper,
+  giver,
+  message,
+  gallery,
+  sequelize,
+} = require('../../models');
 const generateUploadURL = require('../s3');
 const { QueryTypes } = require('sequelize');
 
@@ -51,13 +58,17 @@ module.exports = {
       }
 
       const thanksImg = await message.findOne({
+        raw: true,
         where: { gifticon_id: id },
         attributes: ['img'],
       });
+
       let thanksImgUrl = null;
+
       if (thanksImg) {
-        thanksImgUrl = thanksImg.dataValues.img;
+        thanksImgUrl = thanksImg.img;
       }
+
       res.status(200).send({ gifticonInfo, thanksImgUrl });
     } else {
       return res.status(404).send({ message: 'invalid request' });
@@ -80,11 +91,11 @@ module.exports = {
         const status = req.body.status;
         try {
           await gifticon.update({ status }, { where: { id: gifticonId } });
-          const data = await gifticon.findOne({
+          const updated = await gifticon.findOne({
+            raw: true,
             where: { id: gifticonId },
             attributes: ['status'],
           });
-          const updated = data.dataValues;
           res.status(200).send({ updated, mesasge: 'successfully changed' });
         } catch (e) {
           console.log(e);
@@ -108,10 +119,11 @@ module.exports = {
             },
           );
           const gifticonInfo = await gifticon.findOne({
+            raw: true,
             where: { id: gifticonId, helper_id: helperId, giver_id: giverId },
             attributes: ['point'],
           });
-          const updatedPoint = gifticonInfo.dataValues.point;
+          const updatedPoint = gifticonInfo.point;
           res
             .status(200)
             .send({ updatedPoint, mesasge: 'successfully changed' });
@@ -147,23 +159,26 @@ module.exports = {
       res.status(200).send({ status, report, message: 'successfully updated' });
     }
   },
-  uploadImgMessage : async (req, res) => {
+  uploadImgMessage: async (req, res) => {
+    console.log(req.body);
     const messageFromHelper = req.body.message;
-    const roomId = await sequelize.query(`SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`, { type: QueryTypes.SELECT });
+    const roomId = await sequelize.query(
+      `SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`,
+      { type: QueryTypes.SELECT },
+    );
     if (messageFromHelper) {
       try {
-
         await message.create({
           room_id: roomId[0].id,
           giver_id: req.body.giverId,
           helper_id: req.body.helperId,
           gifticon_id: req.body.gifticonId,
           type: 2,
-          message: messageFromHelper
+          message: messageFromHelper,
         });
 
-        res.status(200).json({ message : 'Ok'});
-      } catch(e) {
+        res.status(200).json({ message: 'Ok' });
+      } catch (e) {
         res.status(500).json({ message: 'intenal server error' });
       }
     } else {
@@ -190,5 +205,5 @@ module.exports = {
         res.status(500).json({ message: 'intenal server error' });
       }
     }
-  }
+  },
 };
