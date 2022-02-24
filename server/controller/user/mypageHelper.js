@@ -9,7 +9,8 @@ module.exports = {
   get: async (req, res) => {
     try {
       const token = req.headers.token;
-			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      console.log(token);
+      const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const { id, email, name, mobile, slogan, description, location, img } =
         tokenDecoded;
       const helperRow = await helper.findOne({
@@ -51,8 +52,6 @@ module.exports = {
   },
   put: async (req, res) => {
     const token = req.headers.token;
-		const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-    const { id } = tokenDecoded;
     if (
       req.body.password ||
       req.body.mobile ||
@@ -61,6 +60,8 @@ module.exports = {
       req.body.description
     ) {
       try {
+        const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        const { id } = tokenDecoded;
         if (req.body.password) {
           const { password } = req.body;
           await helper.update(
