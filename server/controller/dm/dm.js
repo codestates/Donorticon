@@ -82,6 +82,7 @@ module.exports = {
       room_id: req.body.roomId,
       giver_id: req.body.giverId,
       helper_id: req.body.helperId,
+      type: req.body.type,
       img: imageUrl,
       gifticon_id: 0
     })

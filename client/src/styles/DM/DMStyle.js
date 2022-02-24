@@ -2,17 +2,22 @@ import styled from 'styled-components';
 
 
 export const Container = styled.div`
-  border: solid;
+  position: relative;
+  width: 90%;
+  height: 50rem;
+  left: 50%;
+  transform: translateX(-50%);
+  border: solid 1px;
   border-color: grey;
   display: flex;
   font-size: 1rem;
   font-weight: 300;
-  margin: 3rem;
+  margin: 4rem 0;
 `;
 
 export const RoomContainer = styled.div`
-  border: solid grey;
   width: 30%;
+  border-right: 1px solid grey;
 `;
 
 export const ReceiverWrapper = styled.div`
@@ -38,19 +43,35 @@ export const ReceiverName = styled.div`
 `;
 
 export const DialogueContainer = styled.div`
-  border: solid grey;
-  width: 100%;
+  width:100%;
 `;
 
-export const ProfileImg = styled.img``;
+export const DialogueWrapper = styled.div`
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin: 1rem;
+  display: flex;
+  flex-direction: column;
+  height: 43rem;
+`;
+
+export const ProfileImg = styled.img`
+  border-radius: 70px;
+  width: 40px;
+  height: 40px;
+`;
 
 export const Message = styled.div`
-  width: auto;
+  display: flex;
   border-radius: 30px;
-  padding: 1rem;
-  margin: 1rem;
+  font-size: 1.5rem;
+  font-weight: 200;
+  margin: 1rem 0;
+  padding: 0.5rem 2rem;
+
   &.myMessage {
     background-color: #fac711;
+    justify-content: flex-end;
   }
   &.yourMessage {
     background-color: #58D68D;
@@ -62,13 +83,23 @@ export const Image = styled.img`
   border-radius: 30px;
   padding: 1rem;
   margin: 1rem;
+  &.myMessage {
+    background-color: #fac711;
+    margin-left:auto;
+    display:block;
+  }
+  &.yourMessage {
+    background-color: #58D68D;
+  }
 `;
 
 export const InputWrapper = styled.div`
   position: relative;
+  bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem 0;
 `;
 
 export const Input = styled.input`
@@ -94,7 +125,22 @@ export const SendButton = styled.span`
   }
 `;
 
+export const Time = styled.div`
+  font-size: 0.8rem;
+  color: grey;
+  padding-right: 1rem;
+  padding-bottom: 2rem;
+  &.myMessage {
+    text-align: right;
+  }
+  &.yourMessage {
+  }
+`;
 
-
-
-
+export const NoroomContainer = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
