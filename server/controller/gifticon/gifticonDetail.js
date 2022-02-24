@@ -160,19 +160,20 @@ module.exports = {
     }
   },
   uploadImgMessage: async (req, res) => {
-    console.log(req.body);
-    const messageFromHelper = req.body.message;
+    const gifticonId = parseInt(req.params.id);
+    const { message: messageFromHelper, giverId, helperId } = req.body;
     const roomId = await sequelize.query(
-      `SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`,
+      `SELECT * FROM rooms WHERE giver_id=${giverId} AND helper_id=${helperId}`,
       { type: QueryTypes.SELECT },
     );
+
     if (messageFromHelper) {
       try {
         await message.create({
           room_id: roomId[0].id,
-          giver_id: req.body.giverId,
-          helper_id: req.body.helperId,
-          gifticon_id: req.body.gifticonId,
+          giver_id: giverId,
+          helper_id: helperId,
+          gifticon_id: gifticonId,
           type: 2,
           message: messageFromHelper,
         });
@@ -205,5 +206,21 @@ module.exports = {
         res.status(500).json({ message: 'intenal server error' });
       }
     }
+  },
+  sendRejectMessage: async (req, res) => {
+    try {
+      console.log(req.body);
+      console.log(req.headers);
+    } catch (e) {
+      console.log(e);
+    }
+    // await message.create({
+    //   room_id: roomId[0].id,
+    //   giver_id: req.body.giverId,
+    //   helper_id: req.body.helperId,
+    //   gifticon_id: req.body.gifticonId,
+    //   img: imageUrl,
+    //   type: 2,
+    // });
   },
 };
