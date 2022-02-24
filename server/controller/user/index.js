@@ -9,6 +9,7 @@ module.exports = {
   mypageHelper: require('./mypageHelper'),
   mypageVulnerable: require('./mypageVulnerable'),
   mypageGifticon: require('./mypageGifticon'),
+  mypageHelperActivity: require('./mypageHelperActivity'),
   googleLogin: require('./googleLogin'),
   kakaoLogin: require('./kakaoLogin'),
   signout: require('./signout'),

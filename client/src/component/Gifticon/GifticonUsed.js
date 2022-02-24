@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPoint } from '../../redux/gifticon/gifticonSlice';
 import { CardGallery } from '../../styles/CardStyle';
 import {
-  GifticonBox,
+  ContentBox,
   GifticonButton,
   PointImage,
-  Title,
+  ContentTitle,
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
+import ImageUploader from '../ImageUploader';
 
 // 임시 데이터
 import img from '../../img/helperCategory/1_all.png';
@@ -25,15 +26,23 @@ const GifticonUsed = () => {
   const { id, name, userId, point, thanksImgUrl } = useSelector(
     (state) => state.gifticon,
   );
+  const user = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
+  }
+
   const handleImgUpload = () => {
-    //TODO: 수영님 요기다 이미지 업로드 관련 코드 설정해주시면 됩니당!
-    console.log('사진 업로드');
+    handleModalOpen();
   };
 
-  const handleMessage = () => {
-    console.log('send msg');
+  const handleMessage = async () => {
+    await axios.post(`/gifticon/detail/${id}`, {message: message, giverId: userId, helperId: user, gifticonId:id});
+    // setVal(''); this code can remove texts on textarea. Disabled on purpose.
+    setMessage('');
+    alert("Done!");
   };
 
   const [clicked, setClicked] = useState([]);
@@ -75,22 +84,31 @@ const GifticonUsed = () => {
     }
   };
 
+  const [val, setVal] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleText = (event) => {
+    setMessage(event.target.value);
+    setVal(event.target.value);
+  }  
+
   useEffect(() => getPoint(), []);
   useEffect(() => sendPoint(), [clicked]);
   return (
     <>
-      {who && who === 1 && thanksImgUrl !== null ? (
+      {who && who === 1 && thanksImgUrl !== null && (
         <>
-          <Title>{name}님이 보낸 인증사진</Title>
+          <ContentTitle>{name}님이 보낸 인증사진</ContentTitle>
           <CardGallery style={{ width: '100px', height: '100px' }} src={img} />
         </>
-      ) : (
+      )}
+      {who && who === 1 && thanksImgUrl === null && (
         <span>웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요</span>
       )}
       {who && who === 2 && (
         <>
-          <Title>인증사진</Title>
-          <GifticonBox>
+          <ContentTitle>인증사진</ContentTitle>
+          <ContentBox>
             <div style={{ marginRight: '20px' }}>
               <CardGallery
                 style={{ width: '100px', height: '100px' }}
@@ -100,16 +118,18 @@ const GifticonUsed = () => {
             <GifticonButton onClick={handleImgUpload}>
               사진 업로드
             </GifticonButton>
-          </GifticonBox>
-          <Title>감사메세지</Title>
-          <GifticonBox>
-            <textarea col={50} style={{ marginRight: '20px' }} />
+          </ContentBox>
+          <ContentTitle>감사메세지</ContentTitle>
+          <ContentBox>
+            <textarea col={50} style={{ marginRight: '20px' }} value={val} onChange={handleText}/>
             <GifticonButton onClick={handleMessage}>
               {name}님에게 메세지 전송
             </GifticonButton>
-          </GifticonBox>
-          <Title>감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)</Title>
-          <GifticonBox>
+          </ContentBox>
+          <ContentTitle>
+            감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)
+          </ContentTitle>
+          <ContentBox>
             {ARRAY.map((x) => (
               <PointImage
                 id={x}
@@ -118,7 +138,9 @@ const GifticonUsed = () => {
                 onClick={(e) => handlePoint(e)}
               />
             ))}
-          </GifticonBox>
+
+          </ContentBox>
+          {isModalOpen ? <ImageUploader handleModalOpen={handleModalOpen} api={`/gifticon/detail/${id}`} giverId={userId} helperId={user} gifticonId={id}></ImageUploader> : null}
         </>
       )}
     </>
