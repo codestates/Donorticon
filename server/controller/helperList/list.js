@@ -39,17 +39,16 @@ module.exports = {
           activity: 1,
         },
       });
-      if (messageFromGiver) {
-        await message.create({
-          room_id: createDMRoom[0].dataValues.id,
-          giver_id: req.body.giverId,
-          helper_id: req.body.helperId,
-          gifticon_id: insertGifticon.dataValues.id,
-          type: 1,
-          message: messageFromGiver,
-          img: imageUrl,
-        });
-      }
+
+      await message.create({
+        room_id: createDMRoom[0].dataValues.id,
+        giver_id: req.body.giverId,
+        helper_id: req.body.helperId,
+        gifticon_id: insertGifticon.dataValues.id,
+        type: 1,
+        message: messageFromGiver || "",
+        img: imageUrl,
+      });
 
       res.status(200).json({ url: url });
     } catch (e) {
