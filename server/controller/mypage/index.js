@@ -4,6 +4,6 @@ module.exports = {
 	mypageVulnerable: require('./mypageVulnerable'),
 	mypageGifticon: require('./mypageGifticon'),
 	mypageHelperActivity: require('./mypageHelperActivity'),
-	
-	mypagePassword: require('./mypagePassword')
+	mypagePassword: require('./mypagePassword'),
+	mypageDelete: require('./mypageDelete')
 }
