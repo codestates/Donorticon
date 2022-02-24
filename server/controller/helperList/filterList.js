@@ -33,6 +33,7 @@ module.exports = {
         const allList = await helper.findAndCountAll({
           limit,
           offset: skip,
+          order: [['id', 'DESC']],
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
         const { count, rows: list } = allList;
@@ -50,6 +51,7 @@ module.exports = {
           limit,
           offset: skip,
           where: { gifticon_category_id: gifticonCategoryId },
+          order: [['id', 'DESC']],
           include: {
             model: helper,
             required: true,
@@ -72,6 +74,7 @@ module.exports = {
           where: {
             vulnerable_id: helperCategoryId,
           },
+          order: [['id', 'DESC']],
           include: [
             {
               model: helper,
@@ -91,6 +94,7 @@ module.exports = {
       // 둘다 전체보기가 아닌 경우
       try {
         const filteredList = await helper_vulnerable.findAndCountAll({
+          raw: true,
           limit,
           offset: skip,
           where: {
@@ -105,7 +109,7 @@ module.exports = {
           ],
         });
         const { rows } = filteredList;
-        let idList = rows.map((x) => x.dataValues.helper_id);
+        const idList = rows.map((x) => x.helper_id);
         const filteredAgain = await helper_gifticon_category.findAndCountAll({
           limit,
           offset: skip,
@@ -120,6 +124,7 @@ module.exports = {
               attributes: ['id', 'name', 'slogan', 'img'],
             },
           ],
+          order: [[{ model: helper }, 'id', 'DESC']],
         });
         const { count, rows: list } = filteredAgain;
         const maxPage = Math.ceil(count / limit);
