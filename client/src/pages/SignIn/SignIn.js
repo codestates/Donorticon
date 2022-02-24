@@ -3,7 +3,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
-import { setUser, setWho, signIn } from '../../redux/user/userSlice';
+import { setWho, signIn } from '../../redux/user/userSlice';
+import { signInGiver, signInHelper } from '../../redux/user/userThunk';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -47,26 +48,18 @@ const SignIn = () => {
 
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
-      const whoIs = who === 1 ? 'giver' : 'helper';
-
       try {
-        const {
-          data: { info, accessToken },
-        } = await axios.post(`/signin/${whoIs}`, userInfo);
-        if (accessToken && info) {
-          const { id, email, name, user_type: who } = info;
-          dispatch(signIn());
-          dispatch(setUser({ id, email, name, who }));
-          localStorage.setItem('token', accessToken);
-          if (whoIs === 'helper') {
-            navigate('/mypage');
+        if (who === 1) {
+          dispatch(signInGiver(userInfo));
+          if (prev.includes('verifyRedir')) {
+            navigate('/helperlist');
           } else {
-            if (prev.includes('verifyRedir')) {
-              navigate('/helperlist');
-            } else {
-              navigate(prev);
-            }
+            navigate(prev);
           }
+        }
+        if (who === 2) {
+          await dispatch(signInHelper(userInfo));
+          navigate('/mypage');
         }
       } catch (e) {
         if (e.response.status === 401) {
