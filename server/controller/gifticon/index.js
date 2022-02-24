@@ -1,3 +1,4 @@
 module.exports = {
-  gifticon: require( './gifticon' )
-}
+  gifticon: require('./gifticon'),
+  gifticonDetail: require('./gifticonDetail'),
+};

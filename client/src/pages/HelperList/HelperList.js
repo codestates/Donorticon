@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import CardList from '../../component/CardList';
+import HelperFilter from '../../component/Filtering/HelperFilter';
+import { HelperTitle, Title } from '../../styles/utils/Container';
 
 const HelperContainer = styled.div`
   display: flex;
@@ -11,10 +12,8 @@ const HelperContainer = styled.div`
 const HelperList = () => {
   return (
     <HelperContainer>
-      <div>HELPER</div>
-      <div>first filtering</div>
-      <div>second filtering</div>
-      <CardList />
+      <HelperTitle>HELPER</HelperTitle>
+      <HelperFilter />
     </HelperContainer>
   );
 };

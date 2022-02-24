@@ -11,8 +11,8 @@ module.exports = {
       [
         {
           user_type: 2,
-          name: 'parkhacker',
-          email: 'parkhacker@codestates.com',
+          name: 'helper',
+          email: 'test2@test.com',
           password:
             '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4',
           mobile: '010-4751-2351',
@@ -26,11 +26,14 @@ module.exports = {
           activity: true,
           createdAt: new Date(),
           updatedAt: new Date(),
+          verification: 1,
+          verify_hash:
+            '597bc8bed75f7f835bb20deab9e808e3dd831a05c21401f23ecb72a8bef152445323911386b64ffd57cbfc356c371fb5b34e724d5a5d1f462e36461cb623660c80f26f69d4c51f29bf640e0135159b9ffedf972816e03494eb52ac5fac50df9a49489365e9ea230ce3faf560737b5a145a4a2f027fa0ec65ddb3ecc8290178',
         },
         {
           user_type: 2,
-          name: 'leehacker',
-          email: 'leehacker@codestates.com',
+          name: 'helperhelper',
+          email: 'test3@test.com',
           password:
             '03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4',
           mobile: '010-7554-2001',

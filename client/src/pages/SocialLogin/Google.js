@@ -1,27 +1,31 @@
-import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
-import { socialSignIn, setSocialUser } from '../../redux/user/userSlice';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { signIn, setUser } from '../../redux/user/userSlice';
 
 const Google = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [token, setToken] = useState();
+  const { prev } = useSelector((state) => state.page);
 
   const getGoogleCode = () => {
-    const googleCode = new URL(window.location.href).searchParams.get('code');
-    if (googleCode) {
-      getToken(googleCode);
+    const authorizationCode = new URL(window.location.href).searchParams.get(
+      'code',
+    );
+    if (authorizationCode) {
+      getToken(authorizationCode);
     }
   };
 
   const getToken = async (code) => {
     try {
-      const data = await axios.post('/google/signin', {
+      const {
+        data: { token },
+      } = await axios.post('/google/signin', {
         code,
       });
-      setToken(data.data.access_token);
+      getUserInfo(token);
     } catch (e) {
       console.log(e);
     }
@@ -29,13 +33,15 @@ const Google = () => {
 
   const getUserInfo = async (token) => {
     try {
-      const data = await axios.get(`/google/user?accessToken=${token}`);
-      if (data) {
-        const { email, name, user_type: who } = data.data.userInfo;
-        dispatch(socialSignIn());
-        dispatch(setSocialUser({ email, name, who }));
-        localStorage.setItem('token', token);
-        navigate('/');
+      const {
+        data: { giverInfo, accessToken },
+      } = await axios.get(`/google/user?accessToken=${token}`);
+      if (giverInfo) {
+        const { id, email, name, user_type: who } = giverInfo;
+        dispatch(signIn());
+        dispatch(setUser({ id, email, name, who }));
+        localStorage.setItem('token', accessToken);
+        navigate(prev);
       }
     } catch (e) {
       console.log(e);
@@ -44,13 +50,7 @@ const Google = () => {
 
   useEffect(() => getGoogleCode(), []);
 
-  useEffect(() => getUserInfo(token), [token]);
-
-  return (
-    <>
-      <div></div>
-    </>
-  );
+  return <></>;
 };
 
 export default Google;

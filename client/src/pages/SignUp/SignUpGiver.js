@@ -1,29 +1,19 @@
-import { useState } from 'react';
-import styled from 'styled-components';
-import InputSet from '../../component/Input';
 import axios from 'axios';
-import sha256 from 'js-sha256';
-import { useNavigate } from 'react-router-dom';
-import { setSocialUser } from '../../redux/user/userSlice';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { ErrorMessage } from '../../component/Input';
-
-const Container = styled.div``;
-
-const Title = styled.div``;
-
-const SubTitle = styled.div``;
-
-const ContentBox = styled.div`
-  font-size: 15px;
-`;
-
-const SignUpButton = styled.button`
-  cursor: pointer;
-  &:hover {
-    color: blue;
-  }
-`;
+import { useNavigate } from 'react-router-dom';
+import sha256 from 'js-sha256';
+import { setUser } from '../../redux/user/userSlice';
+import InputSet from '../../component/InputComponent';
+import { SignUpContainer } from '../../styles/SignUpStyle';
+import {
+  Container,
+  SubContainer,
+  SubTitle,
+  Title,
+} from '../../styles/utils/Container';
+import { Button } from '../../styles/utils/Button';
+import { InputBox, InputContainer, InputLabel } from '../../styles/utils/Input';
 
 const SignUpGiver = () => {
   const navigate = useNavigate();
@@ -105,6 +95,12 @@ const SignUpGiver = () => {
     },
   ];
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSingUpButton();
+    }
+  };
+
   const handleSingUpButton = async () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
@@ -117,18 +113,19 @@ const SignUpGiver = () => {
             type: 1,
             id: result.data.id,
           };
-          dispatch(setSocialUser(userInfo));
           await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-            headers: userInfo,
+            headers: { ...userInfo },
           });
+          const { id, email, name, type: who } = userInfo;
+          dispatch(setUser({ id, email, name, who }));
           navigate(`../../verification`);
         }
       } catch (e) {
-        if (e.response.status === '409') {
+        if (e.response.status === 409) {
           setErrorMessage('이미 회원가입 된 이메일입니다');
-        } else if (e.response.status === '500') {
+        } else if (e.response.status === 500) {
           setErrorMessage('다시 시도해주세요');
-        } else if (e.response.status === '422') {
+        } else if (e.response.status === 422) {
           setErrorMessage('입력 정보를 확인해 주세요');
         }
       }
@@ -137,22 +134,32 @@ const SignUpGiver = () => {
 
   return (
     <Container>
-      <Title>G I V E R</Title>
-      <SubTitle>JOIN</SubTitle>
-      <ContentBox>
-        {input.map((card, idx) => (
-          <InputSet
-            key={idx}
-            title={card.title}
-            inputPlaceHolder={card.inputPlaceHolder}
-            callback={card.callback}
-            errorMessage={card.errorMessage}
-            check={isCheckStart}
-          />
-        ))}
-        <ErrorMessage>{errorMessage}</ErrorMessage>
-        <SignUpButton onClick={handleSingUpButton}>회원 가입</SignUpButton>
-      </ContentBox>
+      <SignUpContainer>
+        <SubContainer>
+          <Title>GIVER</Title>
+          <SubTitle>회원가입</SubTitle>
+        </SubContainer>
+        <InputContainer>
+          {input.map((card, idx) => (
+            <InputBox key={idx}>
+              <InputLabel>
+                {card.title === '휴대전화' ? card.title : `${card.title} *`}
+              </InputLabel>
+              <InputSet
+                title={card.title}
+                inputPlaceHolder={card.inputPlaceHolder}
+                callback={card.callback}
+                errorMessage={card.errorMessage}
+                check={isCheckStart}
+                handleKeyPress={handleKeyPress}
+              />
+            </InputBox>
+          ))}
+        </InputContainer>
+        <Button style={{ marginTop: '40px' }} onClick={handleSingUpButton}>
+          회원 가입
+        </Button>
+      </SignUpContainer>
     </Container>
   );
 };

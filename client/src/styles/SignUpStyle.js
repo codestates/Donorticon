@@ -1,58 +1,80 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  text-align: center;
-  width: 100%;
+export const SignUpContainer = styled.div`
+  width: 450px;
+  padding: 100px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 80%;
+    padding: 50px 0;
+  }
 `;
 
-export const Title = styled.div``;
-
-export const SubTitle = styled.div``;
-
-export const ContentGuider = styled.div``;
-
-export const ContentBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  height: 500px;
-  text-align: center;
-  margin: 0 auto;
+export const ContentContainer = styled.div`
+  padding-top: 40px;
+  border-bottom: 1px solid
+    ${(props) => (props.show ? props.theme.color.progressBar : 'none')};
 `;
 
-export const ButtonContainer = styled.div`
-  flex: 1, 0, 0;
-  display: flex;
-  margin: 0 auto;
+export const ContentTitle = styled.div`
+  padding: 40px 0;
+  font-weight: 500;
+  font-size: 20px;
 `;
 
-export const SignUpButton = styled.button`
-  flex: 1, 1, 1;
-  border: 1px solid ${({ theme }) => theme.color.main};
+// checkbox
+export const CheckBoxContainer = styled.div`
+  text-align: left;
+  padding: 10px;
+  border: 1px solid ${({ theme }) => theme.color.progressBar};
+  border-bottom: none;
+`;
+
+export const Box = styled.div`
+  position: relative;
+`;
+
+export const CheckBox = styled.input.attrs({
+  type: 'checkbox',
+})`
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border: 1px solid ${({ theme }) => theme.color.lightGrey};
   cursor: pointer;
-  padding: 10px 0;
-  margin: 10px 10px;
-  text-align: center;
-  &:hover {
-    background: #fff;
+  &:checked {
+    border: none;
     background-color: ${({ theme }) => theme.color.main};
-    transition: 0.7s;
-  }
-  &:disabled {
-    color: red;
   }
 `;
-export const CheckList = styled.div`
-  margin: 5px;
-`;
-
-export const Input = styled.input``;
 
 export const Label = styled.label`
   cursor: pointer;
+  position: absolute;
+  top: 4px;
+  left: 30px;
+  font-size: 14px;
   &:hover {
     color: ${({ theme }) => theme.color.main};
+  }
+`;
+
+// button
+export const ButtonContainer = styled.div`
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const SignUpButton = styled.button`
+  width: 45%;
+  border: 1px solid ${({ theme }) => theme.color.main};
+  background-color: ${({ theme }) => theme.color.main};
+  cursor: pointer;
+  padding: 10px 0;
+  text-align: center;
+  &:hover {
+    background-color: #fff;
+    background-color: ${({ theme }) => theme.color.main};
+    transition: 0.5s;
   }
 `;
