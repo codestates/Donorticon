@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
-const { gifticon, helper, giver, message } = require('../../models');
+const { gifticon, helper, giver, message, gallery, sequelize } = require('../../models');
+const generateUploadURL = require('../s3');
+const { QueryTypes } = require('sequelize');
 
 module.exports = {
   getDetail: async (req, res) => {
@@ -145,4 +147,48 @@ module.exports = {
       res.status(200).send({ status, report, message: 'successfully updated' });
     }
   },
+  uploadImgMessage : async (req, res) => {
+    const messageFromHelper = req.body.message;
+    const roomId = await sequelize.query(`SELECT * FROM rooms WHERE giver_id=${req.body.giverId} AND helper_id=${req.body.helperId}`, { type: QueryTypes.SELECT });
+    if (messageFromHelper) {
+      try {
+
+        await message.create({
+          room_id: roomId[0].id,
+          giver_id: req.body.giverId,
+          helper_id: req.body.helperId,
+          gifticon_id: req.body.gifticonId,
+          type: 2,
+          message: messageFromHelper
+        });
+
+        res.status(200).json({ message : 'Ok'});
+      } catch(e) {
+        res.status(500).json({ message: 'intenal server error' });
+      }
+    } else {
+      try {
+        const url = await generateUploadURL();
+        const imageUrl = url.split('?')[0];
+
+        const saveImage = await gallery.create({
+          helper_id: req.body.helperId,
+          img: imageUrl,
+        });
+
+        await message.create({
+          room_id: roomId[0].id,
+          giver_id: req.body.giverId,
+          helper_id: req.body.helperId,
+          gifticon_id: req.body.gifticonId,
+          img: imageUrl,
+          type: 2,
+        });
+
+        res.status(200).json({ url: url });
+      } catch (e) {
+        res.status(500).json({ message: 'intenal server error' });
+      }
+    }
+  }
 };

@@ -4,16 +4,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setPoint } from '../../redux/gifticon/gifticonSlice';
 import { CardGallery } from '../../styles/CardStyle';
 import {
-  GifticonBox,
-  GifticonButton,
-  PointImage,
-  Title,
+  ContentBox,
+  ContentTitle,
+  ImageBox,
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
+import ImageUploader from '../ImageUploader';
 
 // 임시 데이터
 import img from '../../img/helperCategory/1_all.png';
+import {
+  ButtonBox,
+  GifticonMessage,
+  GifticonUsedButton,
+  JustForStyle,
+  NoImgMessage,
+  PointImage,
+} from '../../styles/Gifticon/GifticonUsedStyle';
 
 const BLACK = black;
 const RED = red;
@@ -25,18 +33,32 @@ const GifticonUsed = () => {
   const { id, name, userId, point, thanksImgUrl } = useSelector(
     (state) => state.gifticon,
   );
+  const user = useSelector((state) => state.user.user.id);
   const dispatch = useDispatch();
 
-  const handleImgUpload = () => {
-    //TODO: 수영님 요기다 이미지 업로드 관련 코드 설정해주시면 됩니당!
-    console.log('사진 업로드');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleModalOpen = () => {
+    setIsModalOpen(!isModalOpen);
   };
 
-  const handleMessage = () => {
-    console.log('send msg');
+  const handleImgUpload = () => {
+    handleModalOpen();
+  };
+
+  const handleMessage = async () => {
+    await axios.post(`/gifticon/detail/${id}`, {
+      message: message,
+      giverId: userId,
+      helperId: user,
+      gifticonId: id,
+    });
+    // setVal(''); this code can remove texts on textarea. Disabled on purpose.
+    setMessage('');
+    alert('Done!');
   };
 
   const [clicked, setClicked] = useState([]);
+
   const handlePoint = (e) => {
     const id = e.target.id;
     let clickStates = [false, false, false, false, false];
@@ -75,41 +97,75 @@ const GifticonUsed = () => {
     }
   };
 
+  const [val, setVal] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleText = (event) => {
+    setMessage(event.target.value);
+    setVal(event.target.value);
+  };
+
   useEffect(() => getPoint(), []);
   useEffect(() => sendPoint(), [clicked]);
+
   return (
     <>
-      {who && who === 1 && thanksImgUrl !== null ? (
+      {who && who === 1 && thanksImgUrl !== null && (
         <>
-          <Title>{name}님이 보낸 인증사진</Title>
-          <CardGallery style={{ width: '100px', height: '100px' }} src={img} />
+          <ContentTitle top>{name}님이 보낸 인증사진</ContentTitle>
+          <ContentBox>
+            <ImageBox>
+              <CardGallery
+                style={{ width: '100%', height: '300px' }}
+                src={img}
+              />
+            </ImageBox>
+          </ContentBox>
         </>
-      ) : (
-        <span>웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요</span>
+      )}
+      {/*TODO: 인증 사진이 없는 경우 메세지 말고 다른 방법있을까? */}
+      {who && who === 1 && thanksImgUrl === null && (
+        <NoImgMessage>
+          웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요
+        </NoImgMessage>
       )}
       {who && who === 2 && (
         <>
-          <Title>인증사진</Title>
-          <GifticonBox>
-            <div style={{ marginRight: '20px' }}>
+          <ContentTitle top>인증사진</ContentTitle>
+          <ContentBox>
+            <ImageBox>
               <CardGallery
-                style={{ width: '100px', height: '100px' }}
+                style={{ width: '100%', height: '300px' }}
                 src={img}
               />
-            </div>
-            <GifticonButton onClick={handleImgUpload}>
-              사진 업로드
-            </GifticonButton>
-          </GifticonBox>
-          <Title>감사메세지</Title>
-          <GifticonBox>
-            <textarea col={50} style={{ marginRight: '20px' }} />
-            <GifticonButton onClick={handleMessage}>
-              {name}님에게 메세지 전송
-            </GifticonButton>
-          </GifticonBox>
-          <Title>감사운 마음을 연탄 포인트로 표현하세요! (최대 5개)</Title>
-          <GifticonBox>
+            </ImageBox>
+            <ButtonBox>
+              <JustForStyle />
+              <GifticonUsedButton onClick={handleImgUpload}>
+                사진 업로드
+              </GifticonUsedButton>
+            </ButtonBox>
+          </ContentBox>
+          <ContentTitle top>감사메세지</ContentTitle>
+          <ContentBox>
+            <GifticonMessage
+              placeholder={'감사메세지를 적어주세요'}
+              value={val}
+              onChange={handleText}
+            />
+            <ButtonBox>
+              <JustForStyle />
+              <GifticonUsedButton onClick={handleMessage}>
+                {name}님에게 메세지 전송
+              </GifticonUsedButton>
+            </ButtonBox>
+          </ContentBox>
+          <ContentTitle top>
+            감사운 마음을 연탄 포인트로 표현하세요!
+            <br />
+            (최대 5개)
+          </ContentTitle>
+          <ContentBox row>
             {ARRAY.map((x) => (
               <PointImage
                 id={x}
@@ -118,7 +174,16 @@ const GifticonUsed = () => {
                 onClick={(e) => handlePoint(e)}
               />
             ))}
-          </GifticonBox>
+          </ContentBox>
+          {isModalOpen && (
+            <ImageUploader
+              handleModalOpen={handleModalOpen}
+              api={`/gifticon/detail/${id}`}
+              giverId={userId}
+              helperId={user}
+              gifticonId={id}
+            ></ImageUploader>
+          )}
         </>
       )}
     </>

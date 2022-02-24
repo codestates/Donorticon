@@ -111,7 +111,9 @@ module.exports = {
           count = null;
         }
 
-        const maxPage = Math.ceil(count / limit);
+        const maxPage =
+          Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit);
+
         res.status(200).send({
           gifticonList,
           maxPage,

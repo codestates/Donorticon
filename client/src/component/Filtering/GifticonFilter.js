@@ -1,7 +1,9 @@
+import { useRef, useState } from 'react';
 import {
-  Status,
-  StatusBox,
-  StatusContainer,
+  FilterBox,
+  FilterContainer,
+  Filtered,
+  Scroll,
 } from '../../styles/Gifticon/GifticonStatusFilter';
 
 export const gifticonStatus = [
@@ -15,24 +17,40 @@ export const gifticonStatus = [
 ];
 
 const GiticonFilter = ({ statusId, handleStatusClick }) => {
+  const scroll = useRef();
+
+  const [isDrag, setIsDrag] = useState(false);
+  const [startX, setStartX] = useState();
+
+  const handleDragStart = (e) => {
+    console.log(e.pageX);
+    console.log(scroll.current.scrollLeft);
+    e.preventDefault();
+    setIsDrag(true);
+    setStartX(e.pageX + scroll.current.scrollLeft);
+  };
   return (
-    <StatusContainer>
-      <StatusBox>
-        {gifticonStatus.map((category, idx) => {
-          const name = category.name;
-          const id = category.id;
-          return (
-            <Status
-              key={idx}
-              className={`${statusId === id && 'active'}`}
-              onClick={() => handleStatusClick(name)}
-            >
-              {category.name}
-            </Status>
-          );
-        })}
-      </StatusBox>
-    </StatusContainer>
+    <FilterContainer>
+      <FilterBox>
+        <Scroll>
+          {gifticonStatus.map((category, idx) => {
+            const name = category.name;
+            const id = category.id;
+            return (
+              <Filtered
+                key={idx}
+                className={`${statusId === id && 'active'}`}
+                onClick={() => handleStatusClick(name)}
+                ref={scroll}
+                onMouseMove={handleDragStart}
+              >
+                {category.name}
+              </Filtered>
+            );
+          })}
+        </Scroll>
+      </FilterBox>
+    </FilterContainer>
   );
 };
 
