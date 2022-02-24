@@ -48,7 +48,8 @@ const gifticonList = [
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const who = useSelector((state) => state.user.user.who);
+  const who = useSelector((state) => state.user);
+  console.log(who)
   const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
     id: 0,

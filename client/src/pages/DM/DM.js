@@ -37,7 +37,7 @@ const DM = () => {
       if (event.key === 'Enter' || event.type === 'click') {
         setVal('');
         setMessage('');
-        socket.emit('send-message', message, currentRoom, who);
+        await socket.emit('send-message', message, currentRoom, who);
         let dialogueRequest = await axios.get(`/dm?room=${currentRoom}`);
         setDialogues(dialogueRequest.data.dialogues);
       }
