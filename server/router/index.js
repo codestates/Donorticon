@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon, gifticonDetail } = require('../controller/gifticon');
-const { user, helperList } = require('../controller');
+const { user, helperList, mypage } = require('../controller');
 const { dm } = require('../controller/dm');
 
 router.post('/signup/giver', user.signupGiver);
@@ -11,15 +11,16 @@ router.post('/signin/giver', user.signinGiver);
 router.post('/signin/helper', user.signinHelper);
 router.post('/signin/guest/giver', user.signinGuestGiver);
 router.post('/signin/guest/helper', user.signinGuestHelper);
-router.get('/mypage/giver', user.mypageGiver.get);
-router.get('/mypage/helper', user.mypageHelper.get);
-router.put('/mypage/giver', user.mypageGiver.put);
-router.put('/mypage/helper', user.mypageHelper.put);
-router.post('/mypage/vulnerable', user.mypageVulnerable.post);
-router.delete('/mypage/vulnerable', user.mypageVulnerable.delete);
-router.post('/mypage/gifticon', user.mypageGifticon.post);
-router.delete('/mypage/gifticon', user.mypageGifticon.delete);
-router.put('/mypage/helper/activity', user.mypageHelperActivity.put);
+
+router.get('/mypage/giver', mypage.mypageGiver.get);
+router.get('/mypage/helper', mypage.mypageHelper.get);
+router.put('/mypage/giver', mypage.mypageGiver.put);
+router.put('/mypage/helper', mypage.mypageHelper.put);
+router.post('/mypage/vulnerable', mypage.mypageVulnerable.post);
+router.delete('/mypage/vulnerable', mypage.mypageVulnerable.delete);
+router.post('/mypage/gifticon', mypage.mypageGifticon.post);
+router.delete('/mypage/gifticon', mypage.mypageGifticon.delete);
+router.put('/mypage/helper/activity', mypage.mypageHelperActivity.put);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
