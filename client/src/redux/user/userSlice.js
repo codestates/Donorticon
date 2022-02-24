@@ -1,7 +1,9 @@
 import axios from 'axios';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { signInGiver, signInHelper } from './userThunk';
 
 const initialState = {
+  isLoading: false,
   isLoggedIn: false,
   user: {
     id: '',
@@ -29,33 +31,40 @@ export const userSlice = createSlice({
       state.user.who = action.payload;
     },
   },
-  extraReducers: (builder) =>
-    builder
-      .addCase(signupGiver.fulfilled, (state, action) => {
-        state.isLoggedIn = false;
-      })
-      .addCase(signupGiver.rejected, (state, action) => {
-        state.isLoggedIn = false;
-      }),
+  extraReducers: {
+    [signInGiver.pending]: (state, _) => {
+      state.isLoading = true;
+    },
+    [signInGiver.fulfilled]: (state, { payload }) => {
+      state.user.id = payload.id;
+      state.user.email = payload.email;
+      state.user.name = payload.name;
+      state.isLoading = false;
+      state.isLoggedIn = true;
+    },
+    [signInGiver.rejected]: (state, _) => {
+      state.isLoading = true;
+    },
+    [signInHelper.pending]: (state, _) => {
+      state.isLoading = true;
+    },
+    [signInHelper.fulfilled]: (state, { payload }) => {
+      state.user.id = payload.id;
+      state.user.email = payload.email;
+      state.user.name = payload.name;
+      state.isLoggedIn = true;
+      state.isLoading = false;
+    },
+    [signInHelper.rejected]: (state, _) => {
+      state.isLoading = true;
+    },
+  },
 });
 
 axios.defaults.baseURL = 'http://localhost:4000';
 // axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 // 회원가입
-export const signupGiver = createAsyncThunk(
-  '/signup/giver',
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await axios.post('/signup/giver', data);
-      console.log(response);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.response.data);
-    }
-  },
-);
 
 export const { signIn, signOut, setUser, setWho } = userSlice.actions;
 
