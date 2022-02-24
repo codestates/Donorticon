@@ -8,6 +8,7 @@ export const signInGiver = createAsyncThunk(
     try {
       const response = await axios.post('/signin/giver', payload);
       const data = response.data;
+      console.log(response);
       if (response.status === 200) {
         setToken(data.accessToken);
         return data.info;
@@ -39,12 +40,15 @@ export const signInHelper = createAsyncThunk(
 );
 
 export const signUpGiver = createAsyncThunk(
-  'signup/giver',
+  '/signup/giver',
   async (payload, { rejectWithValue }) => {
     try {
       const response = await axios.post('/signup/giver', payload);
+      if (response.status === 201) {
+        return response.data.id;
+      }
     } catch (e) {
-      console.log(e.respone.status);
+      return rejectWithValue(e.response);
     }
   },
 );
