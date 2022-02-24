@@ -248,7 +248,7 @@ const SignUpHelper = () => {
               headers: { ...userInfo },
             });
             const { id, email, name, type: who } = userInfo;
-            dispatch(setUser({ id, email, name, type: who }));
+            dispatch(setUser({ id, email, name, who }));
             navigate(`../../verification`);
           }
         } catch (e) {
