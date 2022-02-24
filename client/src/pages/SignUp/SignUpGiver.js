@@ -114,8 +114,10 @@ const SignUpGiver = () => {
             id: result.data.id,
           };
           await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-            headers: userInfo,
+            headers: { ...userInfo },
           });
+          const { id, email, name, type: who } = userInfo;
+          dispatch(setUser({ id, email, name, who }));
           navigate(`../../verification`);
         }
       } catch (e) {
