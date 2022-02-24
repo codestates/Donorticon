@@ -11,8 +11,14 @@ module.exports = {
   get: async (req, res) => {
     try {
       const token = req.headers.token;
+<<<<<<< HEAD
+      console.log(token);
+      const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      const { id, email, name, mobile, slogan, description, location, img } =
+=======
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const { id, email, name, mobile, slogan, description, location, img, activity } =
+>>>>>>> dev
         tokenDecoded;
 			console.log('마이페이지 조회 성공');
       const helperRow = await helper.findOne({
@@ -72,6 +78,8 @@ module.exports = {
 			req.body.tag === 'gallery'
     ) {
       try {
+        const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        const { id } = tokenDecoded;
         if (req.body.password) {
           const { password } = req.body;
           await helper.update(
