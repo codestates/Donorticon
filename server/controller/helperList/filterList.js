@@ -33,7 +33,6 @@ module.exports = {
         const allList = await helper.findAndCountAll({
           limit,
           offset: skip,
-          where: {},
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
         const { count, rows: list } = allList;
