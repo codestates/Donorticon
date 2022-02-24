@@ -48,8 +48,8 @@ const gifticonList = [
 
 const Mypage = () => {
   const navigate = useNavigate();
-  const who = useSelector((state) => state.user);
-  console.log(who)
+  const who = useSelector((state) => state.user.user.who);
+  console.log(who);
   const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
     id: 0,
@@ -506,6 +506,7 @@ const Mypage = () => {
                     userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
                   }
                   callback={async (e) => {
+                    modalController(7, false);
                     if (e.target.textContent === '네') {
                       try {
                         setUserInfo({
@@ -521,7 +522,6 @@ const Mypage = () => {
                         );
                       } catch (e) {}
                     }
-                    modalController(7, false);
                   }}
                 />
               ) : null}

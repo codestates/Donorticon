@@ -37,3 +37,14 @@ export const signInHelper = createAsyncThunk(
     }
   },
 );
+
+export const signUpGiver = createAsyncThunk(
+  'signup/giver',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signup/giver', payload);
+    } catch (e) {
+      console.log(e.respone.status);
+    }
+  },
+);
