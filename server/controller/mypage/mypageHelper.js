@@ -61,6 +61,10 @@ module.exports = {
 				const token = req.headers.token;
 				// console.log({ endPoint: '/mypage/helper', method: 'put', token })
 				const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        if (!tokenDecoded) {
+          console.log('invalid token');
+          return res.status(401).json({ message: 'invalid token' });
+        }
 				const { id } = tokenDecoded;
 				const url = await generateUploadURL();
         if (req.body.mobile) {
