@@ -32,12 +32,15 @@ const StatusDropDown = () => {
 
   const [isActive, setIsActive] = useState(false);
   const [isRejected, setIsRejected] = useState(false);
+  const [isUsed, setIsUsed] = useState(false);
 
   const filtered = gifticonStatus.filter((x) => x.name !== status);
   const token = getToken();
 
   const handleActive = () => {
-    setIsActive((prev) => !prev);
+    if (!isUsed) {
+      setIsActive((prev) => !prev);
+    }
   };
 
   const handleStatus = async (e) => {
@@ -69,8 +72,10 @@ const StatusDropDown = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
+
       if (updated.status === 'used') {
-        dispatch(setInfo({ ...gifticon, status: '사용함', textStyle: 1 }));
+        setIsUsed(true);
+        return;
       }
       if (updated.status === 'accepted') {
         dispatch(setInfo({ ...gifticon, status: '수락함', textStyle: 1 }));
@@ -79,14 +84,12 @@ const StatusDropDown = () => {
         dispatch(setInfo({ ...gifticon, status: '확인중', textStyle: 1 }));
       }
       if (updated.status === 'rejected') {
-        dispatch(setInfo({ ...gifticon, status: '거절됨', textStyle: 2 }));
         setIsRejected(true);
         return;
       }
       if (updated.status === 'expired') {
         dispatch(setInfo({ ...gifticon, status: '만료됨', textStyle: 2 }));
       }
-
       setIsActive((prev) => !prev);
     } catch (e) {
       console.log(e);
@@ -95,6 +98,7 @@ const StatusDropDown = () => {
 
   const handleRejected = async (e, textMessage) => {
     if (e.target.textContent === '네') {
+      dispatch(setInfo({ ...gifticon, status: '거절됨', textStyle: 2 }));
       const message = textMessage ? textMessage : '';
       try {
         const response = await axios.post(
@@ -110,12 +114,23 @@ const StatusDropDown = () => {
         );
         if (response.status === 200) {
           setIsRejected(false);
+          setIsActive(false);
         }
       } catch (e) {
         console.log(e);
       }
     } else {
       setIsRejected(false);
+    }
+  };
+
+  const handleUsed = async (e) => {
+    if (e.target.textContent === '네') {
+      dispatch(setInfo({ ...gifticon, status: '사용함', textStyle: 1 }));
+      setIsUsed(false);
+      setIsActive(false);
+    } else {
+      setIsUsed(false);
     }
   };
 
@@ -138,6 +153,7 @@ const StatusDropDown = () => {
             text={status}
             textStyle={textStyle}
             onClick={handleActive}
+            status={status}
           >
             {status}
             <AiOutlineDownSquare size="20" className="icon" />
@@ -156,6 +172,15 @@ const StatusDropDown = () => {
           title={'정말로 거부하시겠어요?'}
           isMessage={true}
           callback={handleRejected}
+        />
+      )}
+      {isUsed && (
+        <ModalV2
+          title={
+            '"사용함" 상태로 변경하시면, 추후 상태 변경은 절대 불가합니다.'
+          }
+          subtitle={'신중하게 선택해 주세요.'}
+          callback={handleUsed}
         />
       )}
     </>
