@@ -23,6 +23,11 @@ export const Title = styled.div`
   }
 `;
 
+export const HelperTitle = styled(Title)`
+  text-align: center;
+  padding: 40px 0;
+`;
+
 export const SubTitle = styled.div`
   padding-top: 40px;
   padding-bottom: 20px;
@@ -30,6 +35,6 @@ export const SubTitle = styled.div`
   font-size: 28px;
   font-weight: 500;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;

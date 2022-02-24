@@ -29,7 +29,10 @@ const MobileHeader = ({
       </MobileNavContainer>
       {isToggled && isLoggedIn ? (
         <ListContainer isToggled={isToggled}>
-          <StyledLink to="/helperlist" onClick={handleToggle}>
+          <StyledLink
+            to="/helperlist/category/0?page=1&limit=9"
+            onClick={handleToggle}
+          >
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <StyledLink to="/dm" onClick={handleToggle}>
@@ -45,7 +48,10 @@ const MobileHeader = ({
       ) : null}
       {isToggled && !isLoggedIn ? (
         <ListContainer isToggled={isToggled}>
-          <StyledLink to="/helperlist" onClick={handleToggle}>
+          <StyledLink
+            to="/helperlist/category/0?page=1&limit=9"
+            onClick={handleToggle}
+          >
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <ListItem onClick={handleSignInModal}>로그인</ListItem>

@@ -2,28 +2,31 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import GifticonStatusModal from '../../component/Gifticon/GifticonStatusModal';
 import GifticonUsed from '../../component/Gifticon/GifticonUsed';
+import SideBar from '../../component/SideBar';
 import { CardGallery } from '../../styles/CardStyle';
 import {
-  GifticonBox,
-  GifticonDetailContainer,
-  GifticonInputBox,
-  Title,
+  BottomContainer,
+  CommonContainer,
+  InputBox,
+  InputContent,
+  InputLabel,
+  TopContainer,
+  ContentContainer,
+  ContentTitle,
+  ContentBox,
+  ImageBox,
+  InfoBox,
 } from '../../styles/Gifticon/GifticonDetailStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 
-import styled from 'styled-components';
-import GifticonReportModal from '../../component/Gifticon/GifticonReportModal';
-const Button = styled.button`
-  padding: 10px;
-  color: ${({ theme }) => theme.color.error};
-  border: 1px solid ${({ theme }) => theme.color.error};
-  cursor: pointer;
-`;
+import { SubTitle, Title } from '../../styles/utils/Container';
+import GifticonReport from '../../component/Gifticon/GifticonReport';
 
-const GifticonDetail = ({ data }) => {
+const GifticonDetail = () => {
   const gifticon = useSelector((state) => state.gifticon);
   const who = useSelector((state) => state.user.user.who);
-  
+  const username = useSelector((state) => state.user.user.name);
+
   const { name, createdAt, status, img, report, textStyle } = gifticon;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,65 +34,69 @@ const GifticonDetail = ({ data }) => {
     setIsModalOpen(true);
   };
 
-  const [reportModal, setReportModal] = useState(false);
-  const handleReportButton = () => {
-    setReportModal(true);
-  };
+  const giver = who === 1 ? 1 : 0;
 
   return (
-    <GifticonDetailContainer>
-      <Title top>기프티콘 상세정보</Title>
-      <GifticonBox>
-        <a href={img} target="_blank" rel="noreferrer noopener">
-          <CardGallery style={{ width: '200px', height: '300px' }} src={img} />
-        </a>
-        <div>
-          {status !== '사용함' && who === 2 && (
-            <Button onClick={handleReportButton}>
-              {report ? '신고 완료' : '신고하기'}
-            </Button>
+    <CommonContainer>
+      <TopContainer>
+        <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
+        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
+        <SubTitle>{username}님 반가워요!</SubTitle>
+      </TopContainer>
+      <BottomContainer>
+        <SideBar />
+        <ContentContainer>
+          <ContentTitle>기프티콘 상세정보</ContentTitle>
+          <ContentBox>
+            <ImageBox>
+              <a href={img} target="_blank" rel="noreferrer noopener">
+                <CardGallery
+                  style={{ width: '100%', height: '300px' }}
+                  src={img}
+                />
+              </a>
+            </ImageBox>
+            <InfoBox>
+              <GifticonReport />
+              <InputBox giver={giver}>
+                <div>
+                  <InputLabel>
+                    {who === 1 ? 'helper 이름' : 'giver 이름'}
+                  </InputLabel>
+                  <InputContent>{name}</InputContent>
+                </div>
+                <div>
+                  <InputLabel>기부날짜</InputLabel>
+                  <InputContent>{createdAt}</InputContent>
+                </div>
+                <div>
+                  <InputLabel>진행상태</InputLabel>
+                  <InputContent noLine>
+                    <GifticonStatusButton
+                      style={{
+                        cursor: who === 1 ? 'not-allowed' : 'pointer',
+                      }}
+                      text={status}
+                      textStyle={textStyle}
+                      onClick={handleBtnClick}
+                    >
+                      {status}
+                    </GifticonStatusButton>
+                  </InputContent>
+                </div>
+              </InputBox>
+            </InfoBox>
+          </ContentBox>
+          {status === '사용함' && <GifticonUsed />}
+          {isModalOpen && who === 2 && status !== '사용함' && (
+            <GifticonStatusModal
+              isModalOpen={isModalOpen}
+              setIsModalOpen={setIsModalOpen}
+            />
           )}
-          {reportModal &&
-            who === 2 &&
-            status !== '사용함' &&
-            report === false && (
-              <GifticonReportModal
-                reportModal={reportModal}
-                setReportModal={setReportModal}
-              />
-            )}
-          <GifticonInputBox>
-            <div>
-              {who === 1 ? 'helper' : 'giver'} {name}
-            </div>
-            <div>기부날짜 {createdAt}</div>
-            {report === false && (
-              <div>
-                진행상태
-                <GifticonStatusButton
-                  style={{
-                    cursor: who === 1 ? 'not-allowed' : 'pointer',
-                    width: '100px',
-                  }}
-                  text={status}
-                  textStyle={textStyle}
-                  onClick={handleBtnClick}
-                >
-                  {status}
-                </GifticonStatusButton>
-              </div>
-            )}
-          </GifticonInputBox>
-        </div>
-      </GifticonBox>
-      {status === '사용함' && <GifticonUsed />}
-      {isModalOpen && who === 2 && status !== '사용함' && (
-        <GifticonStatusModal
-          isModalOpen={isModalOpen}
-          setIsModalOpen={setIsModalOpen}
-        />
-      )}
-    </GifticonDetailContainer>
+        </ContentContainer>
+      </BottomContainer>
+    </CommonContainer>
   );
 };
 
