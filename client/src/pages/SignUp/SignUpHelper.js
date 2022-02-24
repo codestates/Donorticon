@@ -30,6 +30,8 @@ import {
   InputContainer,
   InputLabel,
 } from '../../styles/utils/Input';
+import { signUpHelper } from '../../redux/user/userThunk';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignUpHelper = () => {
   const navigate = useNavigate();
@@ -236,21 +238,20 @@ const SignUpHelper = () => {
       setIsCheckStart(isValid.includes(false));
       if (!isValid.includes(false)) {
         try {
-          const result = await axios.post('/signup/helper', helperInfo);
-          if (result) {
-            const userInfo = {
-              email: helperInfo.email,
-              name: helperInfo.name,
-              type: 2,
-              id: result.data.id,
-            };
-            await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-              headers: { ...userInfo },
-            });
-            const { id, email, name, type: who } = userInfo;
-            dispatch(setUser({ id, email, name, who }));
-            navigate(`../../verification`);
-          }
+          const result = signUpHelper(helperInfo);
+          const userId = unwrapResult(result);
+          const userInfo = {
+            email: helperInfo.email,
+            name: helperInfo.name,
+            type: 2,
+            id: userId,
+          };
+          await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
+            headers: { ...userInfo },
+          });
+          const { id, email, name, type: who } = userInfo;
+          dispatch(setUser({ id, email, name, who }));
+          navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {
             setErrormessage('이미 회원가입 된 이메일입니다');
