@@ -7,6 +7,10 @@ module.exports ={
 		try {
 			const token = req.headers.token;
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      if (!tokenDecoded) {
+        console.log('invalid token');
+        return res.status(401).json({ message: 'invalid token' });
+      }
 			const { id } = tokenDecoded;
 			const giverInfo = await giver.findOne({
 				where: { id },
