@@ -28,6 +28,7 @@ const GifticonCard = ({ data, name }) => {
     } = await axios.get(`/gifticon/detail/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
+
     dispatch(
       setInfo({
         id: gifticonInfo.id,

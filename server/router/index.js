@@ -21,6 +21,8 @@ router.delete('/mypage/vulnerable', mypage.mypageVulnerable.delete);
 router.post('/mypage/gifticon', mypage.mypageGifticon.post);
 router.delete('/mypage/gifticon', mypage.mypageGifticon.delete);
 router.put('/mypage/helper/activity', mypage.mypageHelperActivity.put);
+router.put('/mypage/password', mypage.mypagePassword);
+router.delete('/mypage/delete', mypage.mypageDelete);
 
 router.get('/verification', verification.get);
 router.put('/verification', verification.put);
