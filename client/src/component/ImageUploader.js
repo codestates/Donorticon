@@ -25,6 +25,7 @@ const ImageUploader = ( {includeMessage=false, handleModalOpen, api, giverId, he
   //Drag and drop codes
   const onDrop = useCallback((acceptedFiles, rejectFiles) => {
     setUploadedImage(URL.createObjectURL(acceptedFiles[0]));
+    setBucketImage(acceptedFiles[0]);
   }, []);
   const { getRootProps, getInputProps, isDragActive} = useDropzone({
     onDrop,
