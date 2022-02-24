@@ -8,7 +8,6 @@ export const signInGiver = createAsyncThunk(
     try {
       const response = await axios.post('/signin/giver', payload);
       const data = response.data;
-      console.log(response);
       if (response.status === 200) {
         setToken(data.accessToken);
         return data.info;
@@ -34,7 +33,7 @@ export const signInHelper = createAsyncThunk(
         return rejectWithValue(data);
       }
     } catch (e) {
-      console.log(e.response.data);
+      console.log(e.response);
     }
   },
 );
@@ -49,6 +48,52 @@ export const signUpGiver = createAsyncThunk(
       }
     } catch (e) {
       return rejectWithValue(e.response);
+    }
+  },
+);
+
+export const signUpHelper = createAsyncThunk(
+  '/signup/helper',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signup/helper', payload);
+      if (response.status === 201) {
+        return response.data.id;
+      }
+    } catch (e) {
+      return rejectWithValue(e.response);
+    }
+  },
+);
+
+export const verifyUser = createAsyncThunk(
+  '/verification',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.get('/verification', {
+        headers: { ...payload },
+      });
+      if (response.status === 200) {
+        return payload;
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+);
+
+export const updateVerification = createAsyncThunk(
+  '/verification',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.put('/verification', {
+        headers: { ...payload },
+      });
+      if (response.status === 200) {
+        return response.data.verification;
+      }
+    } catch (e) {
+      console.log(e.response);
     }
   },
 );

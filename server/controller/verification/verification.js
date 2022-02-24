@@ -66,6 +66,7 @@ module.exports = {
         }
       });
     }
+    console.log('working');
   },
 
   put: async (req, res) => {

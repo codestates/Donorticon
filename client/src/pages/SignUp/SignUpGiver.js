@@ -14,7 +14,7 @@ import {
 } from '../../styles/utils/Container';
 import { Button } from '../../styles/utils/Button';
 import { InputBox, InputContainer, InputLabel } from '../../styles/utils/Input';
-import { signUpGiver } from '../../redux/user/userThunk';
+import { signUpGiver, verifyUser } from '../../redux/user/userThunk';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignUpGiver = () => {
@@ -103,34 +103,20 @@ const SignUpGiver = () => {
     }
   };
 
-  const handleVarification = async (userId) => {
-    try {
-      const userInfo = {
-        email: giverInfo.email,
-        name: giverInfo.name,
-        type: 1,
-        id: userId,
-      };
-      await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-        headers: { ...userInfo },
-      });
-      const { id, email, name, type: who } = userInfo;
-      dispatch(setUser({ id, email, name, who }));
-      navigate('../../verification');
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
   const handleSingUpButton = async () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
       try {
         const resultAction = await dispatch(signUpGiver(giverInfo));
-        const data = unwrapResult(resultAction);
-        if (data) {
-          handleVarification(data);
-        }
+        const id = unwrapResult(resultAction);
+        const userInfo = {
+          email: giverInfo.email,
+          name: giverInfo.name,
+          type: 1,
+          id,
+        };
+        dispatch(verifyUser(userInfo));
+        navigate('../../verification');
       } catch (e) {
         const status = e.status;
         if (status === 409) {
