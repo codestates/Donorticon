@@ -330,13 +330,17 @@ const Mypage = () => {
       setUserInfo({ ...userInfo, [tag]: [...userInfo.gallery, tempUrl] });
     }
     try {
-      const s3Url = await axios.put(
+      const {
+        data: { s3Url },
+        data: { token },
+      } = await axios.put(
         `/mypage/${whoIs}`,
         { tag },
         {
           headers: { token: localStorage.getItem('token') },
         },
       );
+      localStorage.setItem('token', token);
       await axios.put(s3Url, file, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -507,9 +511,13 @@ const Mypage = () => {
                           ...userInfo,
                           activity: !userInfo.activity,
                         });
-                        await axios.put('mypage/helper/activity', null, {
-                          headers: { token: localStorage.getItem('token') },
-                        });
+                        await axios.put(
+                          'mypage/helper/activity',
+                          { activity: !userInfo.activity },
+                          {
+                            headers: { token: localStorage.getItem('token') },
+                          },
+                        );
                       } catch (e) {}
                     }
                     modalController(7, false);
