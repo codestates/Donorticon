@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { signInGiver, signInHelper } from './userThunk';
+import { signInGiver, signInHelper, signUpGiver } from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -57,6 +57,10 @@ export const userSlice = createSlice({
     },
     [signInHelper.rejected]: (state, _) => {
       state.isLoading = true;
+    },
+    [signUpGiver.fulfilled]: (state, { payload }) => {
+      console.log(payload);
+      state.user.id = payload;
     },
   },
 });

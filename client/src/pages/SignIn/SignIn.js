@@ -52,7 +52,7 @@ const SignIn = () => {
         if (who === 1) {
           dispatch(signInGiver(userInfo));
           if (prev.includes('verifyRedir')) {
-            navigate('/helperlist');
+            navigate('/helperlist/category/0?page=1&limit=9');
           } else {
             navigate(prev);
           }
