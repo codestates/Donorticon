@@ -94,9 +94,10 @@ const SignIn = () => {
   const handleGuest = async () => {
     if (who === 1) {
       try {
-        dispatch(setWho('giver_guest'));
-        const result = await axios.post('/signin/guest/giver');
-        const { token } = result.data;
+        dispatch(setWho(1));
+        const {
+          data: { accessToken: token },
+        } = await axios.post('/signin/guest/giver');
         localStorage.setItem('token', token);
         dispatch(signIn());
         navigate(prev);
@@ -105,9 +106,10 @@ const SignIn = () => {
       }
     } else if (who === 2) {
       try {
-        dispatch(setWho('helper_guest'));
-        const result = await axios.post('/signin/guest/helper');
-        const { token } = result.data;
+        dispatch(setWho(2));
+        const {
+          data: { accessToken: token },
+        } = await axios.post('/signin/guest/helper');
         localStorage.setItem('token', token);
         dispatch(signIn());
         navigate('/mypage');
