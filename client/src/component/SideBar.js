@@ -9,7 +9,7 @@ const MyPageSideBar = () => {
         <Item first>내프로필</Item>
       </StyledLink>
       <StyledLink to="/gifticon?page=1&limit=9">
-        <Item>{who === 1 ? '기부받은내역' : '기부내역'}</Item>
+        <Item>{who === 1 ? '기부내역' : '기부받은내역'}</Item>
       </StyledLink>
     </SideBarContainer>
   );
