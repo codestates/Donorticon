@@ -42,13 +42,13 @@ const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
     <ModalBackground ref={background} onClick={buttonNo}>
       <ModalFrame>
         <Title>{title}</Title>
-        <SubTitle>{subtitle ? subtitle : ''}</SubTitle>
-        {isMessage ? (
+        <SubTitle>{subtitle && subtitle}</SubTitle>
+        {isMessage && (
           <>
-            <MesaageTitle></MesaageTitle>
+            <MesaageTitle />
             <MessageArea onChange={(e) => setTextMessage(e.target.value)} />
           </>
-        ) : null}
+        )}
         <ButtonContainer>
           <Btn onClick={buttonYes}>네</Btn>
           <Btn ref={close} onClick={buttonNo}>
