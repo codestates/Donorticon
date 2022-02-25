@@ -51,7 +51,7 @@ export const DialogueWrapper = styled.div`
   overflow-x: hidden;
   margin: 1rem;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   height: 43rem;
 `;
 

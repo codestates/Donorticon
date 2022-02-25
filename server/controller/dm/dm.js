@@ -43,7 +43,6 @@ module.exports = {
         roomList.forEach((item) => {
           delete item.dataValues.giver.dataValues.password;
         })
-        console.log(req.headers)
         res.status(200).json({roomList});
       }
     } catch (e) {
