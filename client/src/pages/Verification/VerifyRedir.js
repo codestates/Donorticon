@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { updateVerification } from '../../redux/user/userThunk';
 import { useDispatch } from 'react-redux';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const Button = styled.div`
   width: 100%;
@@ -28,9 +29,10 @@ const VerifyRedir = () => {
     code: code,
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     // const request = await axios.put(`/verification`, { headers: headers });
-    const verified = dispatch(updateVerification(info)).unwrap();
+    const response = await dispatch(updateVerification(info));
+    const verified = unwrapResult(response);
     if (verified) {
       setVerification(true);
     }

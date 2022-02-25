@@ -20,7 +20,7 @@ module.exports = {
     const messageFromGiver = req.body.message;
     try {
       const imageUrl = url.split('?')[0];
-
+      console.log(req.body.giverId, req.body.helperId);
       const insertGifticon = await gifticon.create({
         giver_id: req.body.giverId,
         helper_id: req.body.helperId,
@@ -46,7 +46,7 @@ module.exports = {
         helper_id: req.body.helperId,
         gifticon_id: insertGifticon.dataValues.id,
         type: 1,
-        message: messageFromGiver || "",
+        message: messageFromGiver || '',
         img: imageUrl,
       });
 

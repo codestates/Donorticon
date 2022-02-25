@@ -2,7 +2,9 @@ import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
 import {
   signInGiver,
+  signInGiverGuest,
   signInHelper,
+  signInHelperGuest,
   signUpGiver,
   verifyUser,
 } from './userThunk';
@@ -62,6 +64,21 @@ export const userSlice = createSlice({
     },
     [signInHelper.rejected]: (state, _) => {
       state.isLoading = true;
+    },
+    [signInGiverGuest.fulfilled]: (state, { payload }) => {
+      state.isLoggedIn = true;
+      state.user.who = 1;
+      state.user.id = payload.data.id;
+      state.user.email = payload.data.email;
+      state.user.name = payload.data.name;
+    },
+
+    [signInHelperGuest.fulfilled]: (state, { payload }) => {
+      state.isLoggedIn = true;
+      state.user.who = 2;
+      state.user.id = payload.data.id;
+      state.user.email = payload.data.email;
+      state.user.name = payload.data.name;
     },
     [signUpGiver.fulfilled]: (state, { payload }) => {
       state.user.id = payload;

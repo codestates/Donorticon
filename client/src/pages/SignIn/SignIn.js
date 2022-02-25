@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
 import { setWho, signIn } from '../../redux/user/userSlice';
-import { signInGiver, signInHelper } from '../../redux/user/userThunk';
+import {
+  signInGiver,
+  signInGiverGuest,
+  signInHelper,
+  signInHelperGuest,
+} from '../../redux/user/userThunk';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -87,24 +92,14 @@ const SignIn = () => {
   const handleGuest = async () => {
     if (who === 1) {
       try {
-        dispatch(setWho(1));
-        const {
-          data: { accessToken: token },
-        } = await axios.post('/signin/guest/giver');
-        localStorage.setItem('token', token);
-        dispatch(signIn());
+        dispatch(signInGiverGuest());
         navigate(prev);
       } catch (e) {
         console.log(e);
       }
     } else if (who === 2) {
       try {
-        dispatch(setWho(2));
-        const {
-          data: { accessToken: token },
-        } = await axios.post('/signin/guest/helper');
-        localStorage.setItem('token', token);
-        dispatch(signIn());
+        dispatch(signInHelperGuest());
         navigate('/mypage');
       } catch (e) {
         console.log(e);

@@ -38,6 +38,38 @@ export const signInHelper = createAsyncThunk(
   },
 );
 
+export const signInGiverGuest = createAsyncThunk(
+  'signin/guest/giver',
+  async () => {
+    try {
+      const response = await axios.post('/signin/guest/giver');
+      const data = response.data;
+      if (response.status === 200) {
+        setToken(data.accessToken);
+        return data;
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+);
+
+export const signInHelperGuest = createAsyncThunk(
+  'signin/guest/helper',
+  async () => {
+    try {
+      const response = await axios.post('/signin/guest/helper');
+      const data = response.data;
+      if (response.status === 200) {
+        setToken(data.accessToken);
+        return data;
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+);
+
 export const signUpGiver = createAsyncThunk(
   '/signup/giver',
   async (payload, { rejectWithValue }) => {
