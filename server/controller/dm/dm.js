@@ -1,29 +1,6 @@
-const io = require('socket.io')(5000, {
-  cors: {
-    origin: process.env.CLIENT_URL,
-  }
-});
 const jwt = require('jsonwebtoken');
 const { room, helper, giver, message } = require('../../models');
 const generateUploadURL = require('../s3')
-
-io.on('connection', socket => {
-  socket.on('send-message', async (text, currentRoom, who) => {
-    const user = await room.findOne({where: {id: currentRoom}})
-    const saveMessage = await message.create({
-      giver_id: user.dataValues.giver_id,
-      helper_id: user.dataValues.helper_id,
-      room_id: currentRoom,
-      message: text,
-      type: who,
-      gifticon_id: 0
-    })
-    socket.broadcast.emit('received-message', currentRoom)
-  })
-  socket.on('send-image', async (currentRoom) => {
-    socket.broadcast.emit('received-message', currentRoom)
-  })
-})
 
 module.exports = {
   get: async (req, res) => {

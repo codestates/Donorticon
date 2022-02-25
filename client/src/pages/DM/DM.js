@@ -6,8 +6,9 @@ import { useSelector } from 'react-redux';
 import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
 import { Container, RoomContainer, DialogueContainer, ReceiverImg, ReceiverName, ProfileImg, Time,ReceiverWrapper, NoroomContainer, DialogueWrapper, InputWrapper, Input, ImgButton, SendButton, Message, Image } from "../../styles/DM/DMStyle";
 
-const socket = io('http://localhost:5000');
+const socket = io(process.env.REACT_APP_SERVER);
   socket.on('connect', () => {
+    console.log('connected')
 })
 
 const DM = () => {
