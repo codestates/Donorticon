@@ -142,20 +142,19 @@ module.exports = {
 
     if (token && user) {
       const gifticonId = parseInt(req.params.id);
-      const giverId = parseInt(req.body.giverId);
 
-      //TODO: gifticon img => 신고당햇다는 뭐 그런 이미지로 바꾸는거 필요
-      //TODO: BLACK POINT -1점은 너무 낮지 않나?
       await gifticon.update(
         { report: true, point: -1, status: 'reported' },
         { where: { id: gifticonId } },
       );
 
       const data = await gifticon.findOne({
+        raw: true,
         where: { id: gifticonId },
-        attributes: ['id', , 'status'],
+        attributes: ['id', 'status', 'report'],
       });
-      const { status, report } = data.dataValues;
+
+      const { status, report } = data;
       res.status(200).send({ status, report, message: 'successfully updated' });
     }
   },

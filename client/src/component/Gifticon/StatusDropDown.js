@@ -1,12 +1,10 @@
-import { useEffect, useImperativeHandle, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
 import { AiOutlineDownSquare } from 'react-icons/ai';
 import {
   DropdownItemContainer,
   DropDownItems,
   DropDownStatusButton,
-  StatusBox,
   StatusContainer,
 } from '../../styles/StatusDropDownStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
@@ -38,7 +36,7 @@ const StatusDropDown = () => {
   const token = getToken();
 
   const handleActive = () => {
-    if (!isUsed) {
+    if (status !== '신고됨' || !isUsed) {
       setIsActive((prev) => !prev);
     }
   };
@@ -90,6 +88,7 @@ const StatusDropDown = () => {
       if (updated.status === 'expired') {
         dispatch(setInfo({ ...gifticon, status: '만료됨', textStyle: 2 }));
       }
+
       setIsActive((prev) => !prev);
     } catch (e) {
       console.log(e);
