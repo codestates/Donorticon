@@ -246,7 +246,7 @@ const SignUpHelper = () => {
             type: 2,
             id,
           };
-          dispatch(verifyUser(userInfo));
+          await dispatch(verifyUser(userInfo));
           navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {

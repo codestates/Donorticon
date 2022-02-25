@@ -26,7 +26,8 @@ module.exports = async (req, res) => {
           messeage: 'successfully signed in',
         });
       } else {
-        res.status(401).json({ message: 'verify your email' });
+        const { id, email, user_type: type } = helperInfo;
+        res.status(401).json({ message: 'verify your email', id, email, type });
       }
     }
   } catch (e) {
