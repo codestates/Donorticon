@@ -31,7 +31,6 @@ const VerifyRedir = () => {
   useEffect(() => {
     // const request = await axios.put(`/verification`, { headers: headers });
     const verified = dispatch(updateVerification(info)).unwrap();
-    console.log(verified);
     if (verified) {
       setVerification(true);
     }

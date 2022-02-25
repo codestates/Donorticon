@@ -57,6 +57,7 @@ export const signUpHelper = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await axios.post('/signup/helper', payload);
+      console.log(response.data.id);
       if (response.status === 201) {
         return response.data.id;
       }
@@ -69,6 +70,7 @@ export const signUpHelper = createAsyncThunk(
 export const verifyUser = createAsyncThunk(
   '/verification',
   async (payload, { rejectWithValue }) => {
+    console.log(payload);
     try {
       const response = await axios.get('/verification', {
         headers: { ...payload },
