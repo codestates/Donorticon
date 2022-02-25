@@ -14,7 +14,6 @@ const Button = styled.div`
 
 const GifticonReportModal = ({ reportModal, setReportModal }) => {
   const gifticon = useSelector((state) => state.gifticon);
-  const { id, userId } = useSelector((state) => state.gifticon);
   const outside = useRef();
   const dispatch = useDispatch();
 
@@ -26,16 +25,21 @@ const GifticonReportModal = ({ reportModal, setReportModal }) => {
 
   const handleYes = async () => {
     const token = localStorage.getItem('token');
+
     const {
       data: { report, status },
     } = await axios.put(
-      `/report/${id}`,
-      { giverId: userId },
+      `/report/${gifticon.id}`,
+      {},
       {
         headers: { Authorization: `Bearer ${token}` },
       },
     );
-    dispatch(setInfo({ ...gifticon, report, status }));
+    if (status === 'reported') {
+      dispatch(
+        setInfo({ ...gifticon, report, status: '신고됨', textStyle: 2 }),
+      );
+    }
     setReportModal(false);
   };
 

@@ -9,11 +9,11 @@ module.exports = async (req, res) => {
     } else {
       mobile = null;
     }
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
     try {
       const [ userInfo, created ] = await giver.findOrCreate({
         where: { email },
-        defaults: { password, mobile, user_type: 1 }
+        defaults: { name, password, mobile, user_type: 1 }
       }); 
       if ( created ) {
         res.status(201).json({ message: `welcome ${req.body.name}! you have sucessfully signed up`, id: userInfo.dataValues.id});

@@ -10,12 +10,27 @@ export const StatusBox = styled.div``;
 
 export const DropDownStatusButton = styled(GifticonStatusButton)`
   position: relative;
-  cursor: ${(props) => (props.status === '사용함' ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
+  pointer-events: ${(props) =>
+    props.status === '사용함'
+      ? 'none'
+      : props.status === '신고됨'
+      ? 'none'
+      : props.status === '거절됨'
+      ? 'none'
+      : 'inherit'};
   .icon {
     position: absolute;
     bottom: 5px;
     right: 5px;
-    display: ${(props) => props.status === '사용함' && 'none'};
+    display: ${(props) =>
+      props.status === '사용함'
+        ? 'none'
+        : props.status === '신고됨'
+        ? 'none'
+        : props.status === '거절됨'
+        ? 'none'
+        : 'inherit'};
   }
 `;
 

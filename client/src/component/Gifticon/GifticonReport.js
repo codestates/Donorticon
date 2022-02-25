@@ -17,15 +17,15 @@ const GifticonReport = () => {
   };
   return (
     <ReportButtonBox>
-      {status !== '사용함' && who === 2 && (
+      {status !== '사용함' && !report && who === 2 && (
         <ReportButton
           className={`${report === true && 'active'}`}
           onClick={handleReportButton}
         >
-          {report ? '신고 완료' : '신고 하기'}
+          신고 하기
         </ReportButton>
       )}
-      {reportModal && who === 2 && status !== '사용함' && report === false && (
+      {reportModal && who === 2 && !report && status !== '사용함' && (
         <GifticonReportModal
           reportModal={reportModal}
           setReportModal={setReportModal}

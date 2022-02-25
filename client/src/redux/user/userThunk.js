@@ -11,11 +11,10 @@ export const signInGiver = createAsyncThunk(
       if (response.status === 200) {
         setToken(data.accessToken);
         return data.info;
-      } else {
-        return rejectWithValue(data);
       }
     } catch (e) {
-      console.log(e.response.data);
+      // console.log('thunck file', e.response.data);
+      return rejectWithValue(e);
     }
   },
 );
@@ -29,11 +28,42 @@ export const signInHelper = createAsyncThunk(
       if (response.status === 200) {
         setToken(data.accessToken);
         return data.info;
-      } else {
-        return rejectWithValue(data);
       }
     } catch (e) {
-      console.log(e.response);
+      // console.log(e.response);
+      return rejectWithValue(e);
+    }
+  },
+);
+
+export const signInGiverGuest = createAsyncThunk(
+  'signin/guest/giver',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signin/guest/giver');
+      const data = response.data;
+      if (response.status === 200) {
+        setToken(data.accessToken);
+        return data;
+      }
+    } catch (e) {
+      return rejectWithValue(e);
+    }
+  },
+);
+
+export const signInHelperGuest = createAsyncThunk(
+  'signin/guest/helper',
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signin/guest/helper');
+      const data = response.data;
+      if (response.status === 200) {
+        setToken(data.accessToken);
+        return data;
+      }
+    } catch (e) {
+      return rejectWithValue(e);
     }
   },
 );
@@ -47,7 +77,7 @@ export const signUpGiver = createAsyncThunk(
         return response.data.id;
       }
     } catch (e) {
-      return rejectWithValue(e.response);
+      return rejectWithValue(e);
     }
   },
 );
@@ -79,7 +109,7 @@ export const verifyUser = createAsyncThunk(
         return payload;
       }
     } catch (e) {
-      console.log(e.response);
+      return rejectWithValue(e);
     }
   },
 );
@@ -95,7 +125,7 @@ export const updateVerification = createAsyncThunk(
         return response.data.verification;
       }
     } catch (e) {
-      console.log(e.response);
+      return rejectWithValue(e);
     }
   },
 );

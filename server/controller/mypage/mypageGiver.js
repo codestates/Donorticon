@@ -8,7 +8,6 @@ module.exports ={
 			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       if (!tokenDecoded) {
-        console.log('invalid token');
         return res.status(401).json({ message: 'invalid token' });
       }
 			const { id } = tokenDecoded;
@@ -28,7 +27,6 @@ module.exports ={
 	put: async (req, res) => {
     if (req.body.mobile || req.body.name || req.body.tag === 'img') {
       try {
-        console.log(req.body)
         const token = req.headers.authorization.split(' ')[1];
         const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
           const { id } = tokenDecoded;
@@ -52,13 +50,13 @@ module.exports ={
             );
           }
           if (req.body.tag === 'img') {
-            console.log('이미지 변경 신청')
             await giver.update(
               { img: url.split('?')[0] },
               {
                 where: { id },
               },
             );
+            return res.status(200).json({ url });
           }
           res.status(200).json({ message: "user information successfully changed" });
       } catch (e) {

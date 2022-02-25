@@ -4,7 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
 import { setWho, signIn } from '../../redux/user/userSlice';
-import { signInGiver, signInHelper } from '../../redux/user/userThunk';
+import {
+  signInGiver,
+  signInGiverGuest,
+  signInHelper,
+  signInHelperGuest,
+} from '../../redux/user/userThunk';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
 import {
@@ -15,6 +20,7 @@ import {
 } from '../../styles/utils/Container';
 import { Button } from '../../styles/utils/Button';
 import { InputContainer, ErrorMessage } from '../../styles/utils/Input';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -50,7 +56,7 @@ const SignIn = () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       try {
         if (who === 1) {
-          dispatch(signInGiver(userInfo));
+          await dispatch(signInGiver(userInfo)).unwrap();
           if (prev.includes('verifyRedir')) {
             navigate('/helperlist/category/0?page=1&limit=9');
           } else {
@@ -58,7 +64,7 @@ const SignIn = () => {
           }
         }
         if (who === 2) {
-          await dispatch(signInHelper(userInfo));
+          await dispatch(signInHelper(userInfo)).unwrap();
           navigate('/mypage');
         }
       } catch (e) {
@@ -87,24 +93,14 @@ const SignIn = () => {
   const handleGuest = async () => {
     if (who === 1) {
       try {
-        dispatch(setWho(1));
-        const {
-          data: { accessToken: token },
-        } = await axios.post('/signin/guest/giver');
-        localStorage.setItem('token', token);
-        dispatch(signIn());
+        await dispatch(signInGiverGuest()).unwrap();
         navigate(prev);
       } catch (e) {
         console.log(e);
       }
     } else if (who === 2) {
       try {
-        dispatch(setWho(2));
-        const {
-          data: { accessToken: token },
-        } = await axios.post('/signin/guest/helper');
-        localStorage.setItem('token', token);
-        dispatch(signIn());
+        await dispatch(signInHelperGuest()).unwrap();
         navigate('/mypage');
       } catch (e) {
         console.log(e);

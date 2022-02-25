@@ -9,7 +9,7 @@ import {
 import { Btn, ButtonContainer } from '../styles/ButtonModalStyle';
 import { useState, useRef } from 'react';
 
-const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
+const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
   const [textMessage, setTextMessage] = useState('');
   const close = useRef();
   const background = useRef();
@@ -39,7 +39,7 @@ const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
   };
 
   return (
-    <ModalBackground ref={background} onClick={buttonNo}>
+    <ModalBackground id={id} ref={background} onClick={buttonNo}>
       <ModalFrame>
         <Title>{title}</Title>
         <SubTitle>{subtitle && subtitle}</SubTitle>
@@ -50,8 +50,10 @@ const ModalV2 = ({ title, subtitle, isMessage, callback }) => {
           </>
         )}
         <ButtonContainer>
-          <Btn onClick={buttonYes}>네</Btn>
-          <Btn ref={close} onClick={buttonNo}>
+          <Btn id={id} onClick={buttonYes}>
+            네
+          </Btn>
+          <Btn id={id} ref={close} onClick={buttonNo}>
             아니오
           </Btn>
         </ButtonContainer>

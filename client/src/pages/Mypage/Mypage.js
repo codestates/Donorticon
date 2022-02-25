@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   Title,
@@ -24,6 +24,8 @@ import { useNavigate } from 'react-router-dom';
 import AddressFinder from '../../component/AddressFinder';
 import PassswordModal from '../../component/PasswordModal';
 import ModalV2 from '../../component/ModalV2';
+import { removeToken } from '../../redux/utils/auth';
+import { signOut } from '../../redux/user/userSlice';
 
 const vulnerableList = [
   '아동/청소년',
@@ -49,6 +51,7 @@ const gifticonList = [
 const Mypage = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
@@ -241,12 +244,7 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUserInfo({
-          ...data,
-          gallery: Array(2).fill(
-            'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
-          ),
-        });
+        setUserInfo(data);
       } catch (e) {
         console.log(e);
       }
@@ -263,7 +261,7 @@ const Mypage = () => {
     }
     try {
       const {
-        data: { s3Url },
+        data: { url },
       } = await axios.put(
         `/mypage/${whoIs}`,
         { tag },
@@ -271,7 +269,8 @@ const Mypage = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      await axios.put(s3Url, file, {
+      console.log(url);
+      await axios.put(url, file, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     } catch (e) {
@@ -454,43 +453,34 @@ const Mypage = () => {
               ) : null}
             </>
           )}
-          <ActButton
-            onClick={() => {
-              handleFocus(8, true);
-            }}
-          >
+          <ActButton id="8" onClick={handleFocus}>
             비밀번호 변경
           </ActButton>
-          {isChanging[8] ? (
-            <PassswordModal
-              modalCloser={() => {
-                handleFocus(8, false);
-              }}
-            />
-          ) : null}
-          <ActButton
-            onClick={() => {
-              handleFocus(9, true);
-            }}
-          >
+          {isChanging[8] && <PassswordModal id="8" modalCloser={handleFocus} />}
+          <ActButton id="9" onClick={handleFocus}>
             회원 탈퇴
           </ActButton>
-          {isChanging[9] ? (
+          {isChanging[9] && (
             <ModalV2
+              id="9"
               title="정말로 탈퇴하시겠어요?"
               callback={async (e) => {
+                handleFocus(e);
                 if (e.target.textContent === '네') {
                   try {
                     await axios.delete('mypage/delete', {
                       headers: { Authorization: `Bearer ${token}` },
                     });
-                    localStorage.removeItem('token');
-                  } catch (e) {}
+                    navigate('/');
+                    dispatch(signOut());
+                    removeToken();
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }
-                handleFocus(9, false);
               }}
             />
-          ) : null}
+          )}
         </Box>
         <Box
           style={{

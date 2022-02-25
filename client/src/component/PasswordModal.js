@@ -5,6 +5,7 @@ import InputSet from './InputComponent';
 import { ErrorMessage } from '../styles/utils/Input';
 import axios from 'axios';
 import { InputLabel, InputBox } from '../styles/utils/Input';
+import { sha256 } from 'js-sha256';
 
 const PasswordModal = ({ modalCloser }) => {
   const [passwordChanger, setPasswordChanger] = useState({
@@ -20,12 +21,10 @@ const PasswordModal = ({ modalCloser }) => {
       inputPlaceHolder: '현재 비밀번호를 입력하세요',
       name: 'password',
       callback: (e) => {
-        setPasswordChanger(
-          Object.assign(
-            { ...passwordChanger },
-            { [e.target.name]: e.target.value },
-          ),
-        );
+        setPasswordChanger({
+          ...passwordChanger,
+          [e.target.name]: sha256(e.target.value),
+        });
       },
     },
     {
@@ -33,12 +32,10 @@ const PasswordModal = ({ modalCloser }) => {
       inputPlaceHolder: '새로운 비밀번호를 입력하세요',
       name: 'newPassword',
       callback: (e) => {
-        setPasswordChanger(
-          Object.assign(
-            { ...passwordChanger },
-            { [e.target.name]: e.target.value },
-          ),
-        );
+        setPasswordChanger({
+          ...passwordChanger,
+          [e.target.name]: sha256(e.target.value),
+        });
       },
     },
     {
@@ -46,18 +43,17 @@ const PasswordModal = ({ modalCloser }) => {
       inputPlaceHolder: '다시 한 번 새로운 비밀번호를 입력하세요',
       name: 'newPasswordCheck',
       callback: (e) => {
-        setPasswordChanger(
-          Object.assign(
-            { ...passwordChanger },
-            { [e.target.name]: e.target.value },
-          ),
-        );
+        setPasswordChanger({
+          ...passwordChanger,
+          [e.target.name]: sha256(e.target.value),
+        });
       },
     },
   ];
 
   return (
     <ModalBackground
+      id="8"
       ref={close}
       onClick={(e) => {
         if (close.current === e.target) {
@@ -80,7 +76,8 @@ const PasswordModal = ({ modalCloser }) => {
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <ButtonContainer>
           <Btn
-            onClick={async () => {
+            id="8"
+            onClick={async (e) => {
               if (passwordChanger.password === passwordChanger.newPassword) {
                 setErrorMessage('현재 비밀번호와 새로운 비밀번호가 같습니다');
                 return;
@@ -97,15 +94,19 @@ const PasswordModal = ({ modalCloser }) => {
                       newPassword: passwordChanger.newPassword,
                     },
                     {
-                      headers: { token: localStorage.getItem('token') },
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                          'token',
+                        )}`,
+                      },
                     },
                   );
-                  modalCloser();
+                  modalCloser(e);
                 } catch (e) {
                   if (e.response.status === 422) {
-                    setErrorMessage('현재 비밀번호가를 확인해 주세요');
+                    setErrorMessage('모두 입력해주세요');
                   } else if (e.response.status === 401) {
-                    setErrorMessage('세션이 만료되었습니다. 다시 시도해주세요');
+                    setErrorMessage('현재 비밀번호가 일치하지 않습니다');
                   }
                 }
               } else {
@@ -115,11 +116,7 @@ const PasswordModal = ({ modalCloser }) => {
           >
             확인
           </Btn>
-          <Btn
-            onClick={() => {
-              modalCloser();
-            }}
-          >
+          <Btn id="8" onClick={modalCloser}>
             취소
           </Btn>
         </ButtonContainer>

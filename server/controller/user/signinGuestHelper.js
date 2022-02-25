@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',
-        data: { id: helperGuestInfo.id },
+        data: { id: helperGuestInfo.id, email: helperGuestInfo.email, name: helperGuestInfo.name },
       });
     } else {
       res.status(500).json({ message: 'internal server error' });
