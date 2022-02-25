@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GifticonStatusButton } from './Gifticon/GifticonStyle';
+import { GifticonStatusButton } from './GifticonStyle';
 
 export const StatusContainer = styled.div`
   width: 100%;

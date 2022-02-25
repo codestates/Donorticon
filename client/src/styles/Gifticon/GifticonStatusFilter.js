@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import {
   GifticonCategoryContainer,
   GifticonContent,
-} from '../HelperFilter/GifticonCategoryStyle';
+} from '../HelperList/GifticonCategoryStyle';
 
 export const FilterContainer = styled(GifticonCategoryContainer)``;
 

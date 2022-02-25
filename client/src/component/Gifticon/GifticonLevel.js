@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import ProgressBar from '../SignUp/ProgressBar';
+import Bubble from './Bubble';
 import {
   LevelBarBox,
   LevelContainer,
@@ -8,13 +10,12 @@ import {
   LevelName,
   LevelTitle,
 } from '../../styles/Gifticon/GifticonLevelStyle';
+
 import bronze from '../../img/pointGrade/0_bronze.png';
 import silver from '../../img/pointGrade/1_silver.png';
 import gold from '../../img/pointGrade/2_gold.png';
 import platinum from '../../img/pointGrade/3_platinum.png';
 import diamond from '../../img/pointGrade/4_diamond.png';
-import ProgressBar from '../ProgressBar';
-import Bubble from '../Bubble';
 
 const GifticonLevel = ({ point }) => {
   const [level, setLevel] = useState('');

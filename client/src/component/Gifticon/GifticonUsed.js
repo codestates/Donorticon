@@ -20,7 +20,7 @@ import {
 } from '../../styles/Gifticon/GifticonUsedStyle';
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
-import ModalV2 from '../ModalV2';
+import ModalV2 from '../Modal/ModalV2';
 
 const BLACK = black;
 const RED = red;
