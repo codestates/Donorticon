@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
     try {
       const [helperFound, helperCreated] = await helper.findOrCreate({
         where: { email },
-        defaults: { password, img, user_type: 2, slogan, description, location, activity: true }
+        defaults: { name, password, img, user_type: 2, slogan, description, location, activity: true }
       }); 
       if (!helperCreated) {
         return res.status(409).json({ message: "email already exists" })

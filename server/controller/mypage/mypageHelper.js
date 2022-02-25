@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const { convertToObject } = require('typescript');
 const {
   helper,
   helper_vulnerable,
@@ -12,10 +11,8 @@ module.exports = {
   get: async (req, res) => {
     try {
 			const token = req.headers.authorization.split(' ')[1];
-			console.log({ endPoint: '/mypage/helper', method: 'get', token })
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       if (!tokenDecoded) {
-        console.log('invalid token');
         return res.status(401).json({ message: 'invalid token' });
       }
       const { id } = tokenDecoded;
@@ -62,11 +59,9 @@ module.exports = {
 			req.body.tag === 'gallery'
     ) {
       try {
-        console.log(req.body)
         const token = req.headers.authorization.split(' ')[1];
 				const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
         if (!tokenDecoded) {
-          console.log('invalid token');
           return res.status(401).json({ message: 'invalid token' });
         }
 				const { id } = tokenDecoded;
@@ -123,7 +118,6 @@ module.exports = {
               where: { id },
             },
           );
-					console.log({ tag: "img", url })
 					return res.status(201).json({ url });
         }
 				if (req.body.tag === 'gallery') {
@@ -131,7 +125,6 @@ module.exports = {
 							helper_id: id,
 							img: url.split('?')[0]
 						})
-					console.log({ tag: "gallery", url });
 					return res.status(201).json({ url });
 				}
         res.status(201).json({ message: "user information successfully changed" });
