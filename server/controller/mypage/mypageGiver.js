@@ -16,6 +16,9 @@ module.exports ={
 				where: { id },
 				attributes: { exclude: ['verification', 'verify_hash', 'password', 'createdAt', 'updatedAt'] },
 			});
+      if (!giverInfo) {
+        return res.status(404).json({ message: 'user not found' });
+      }
 			const data = giverInfo.dataValues;
 			res.status(200).json(data)
 		} catch(err) {
