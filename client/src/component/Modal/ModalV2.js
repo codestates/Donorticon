@@ -5,8 +5,8 @@ import {
   SubTitle,
   MesaageTitle,
   MessageArea,
-} from '../styles/utils/Modal';
-import { Btn, ButtonContainer } from '../styles/ButtonModalStyle';
+} from '../../styles/utils/Modal';
+import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
 import { useState, useRef } from 'react';
 
 const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {

@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../component/Pagination/Pagination';
-import GifticonCard from '../../component/Card/GifticonCard';
+import GifticonCard from '../../component/Gifticon/GifticonCard';
 import GiticonFilter, {
   gifticonStatus,
-} from '../../component/Filtering/GifticonFilter';
+} from '../../component/HelperList/GifticonFilter';
 import SideBar from '../../component/SideBar';
 import { CardContainer } from '../../styles/CardStyle';
 import GifticonLevel from '../../component/Gifticon/GifticonLevel';

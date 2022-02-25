@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import HelperFilter from '../../component/Filtering/HelperFilter';
-import { HelperTitle, Title } from '../../styles/utils/Container';
+import HelperFilter from '../../component/HelperList/HelperFilter';
+import { HelperTitle } from '../../styles/utils/Container';
 
 const HelperContainer = styled.div`
   display: flex;

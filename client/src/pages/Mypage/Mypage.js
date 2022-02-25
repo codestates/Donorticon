@@ -1,5 +1,13 @@
-import { Suspense, useEffect, useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { removeToken } from '../../redux/utils/auth';
+import { signOut } from '../../redux/user/userSlice';
+import AddressFinder from '../../component/SignUp/AddressFinder';
+import Tag from '../../component/Mypage/Tag';
+import PassswordModal from '../../component/Modal/PasswordModal';
+import ModalV2 from '../../component/Modal/ModalV2';
 import {
   Container,
   Title,
@@ -17,15 +25,7 @@ import {
   GalleryImg,
   Label,
   ActButton,
-} from '../../styles/Mypage';
-import Tag from '../../component/Tag';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import AddressFinder from '../../component/AddressFinder';
-import PassswordModal from '../../component/PasswordModal';
-import ModalV2 from '../../component/ModalV2';
-import { removeToken } from '../../redux/utils/auth';
-import { signOut } from '../../redux/user/userSlice';
+} from '../../styles/Mypage/Mypage';
 
 const vulnerableList = [
   '아동/청소년',

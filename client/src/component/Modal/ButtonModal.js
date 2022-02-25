@@ -1,10 +1,10 @@
 import { useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setPrev } from '../redux/page/pageSlice';
-import { setWho } from '../redux/user/userSlice';
-import { Btn, ButtonContainer } from '../styles/ButtonModalStyle';
-import { ModalBackground, ModalFrame } from '../styles/utils/Modal';
+import { setPrev } from '../../redux/page/pageSlice';
+import { setWho } from '../../redux/user/userSlice';
+import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
+import { ModalBackground, ModalFrame } from '../../styles/utils/Modal';
 
 const ButtonModal = ({
   giverText,
