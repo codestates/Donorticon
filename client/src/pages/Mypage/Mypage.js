@@ -6,26 +6,31 @@ import { removeToken } from '../../redux/utils/auth';
 import { signOut } from '../../redux/user/userSlice';
 import AddressFinder from '../../component/SignUp/AddressFinder';
 import Tag from '../../component/Mypage/Tag';
+import SideBar from '../../component/SideBar';
 import PassswordModal from '../../component/Modal/PasswordModal';
 import ModalV2 from '../../component/Modal/ModalV2';
 import {
-  Container,
-  Title,
-  SubTitle,
-  Content,
-  Box,
-  PageButton,
   InputBox,
   InputName,
   InputContent,
   InputChanger,
-  ChangeButton,
   ProfileImg,
-  GalleryImgContainer,
   GalleryImg,
-  Label,
   ActButton,
-} from '../../styles/Mypage/Mypage';
+  ContentLeft,
+  ContentRight,
+  GalleryBox,
+  NotShow,
+  GalleryAddLabel,
+  MultiContainer,
+} from '../../styles/Mypage/MypageStyle';
+import {
+  BottomContainer,
+  CommonContainer,
+  ContentContainer,
+  TopContainer,
+} from '../../styles/CommonStyle';
+import { SubTitle, Title } from '../../styles/utils/Container';
 
 const vulnerableList = [
   '아동/청소년',
@@ -229,6 +234,7 @@ const Mypage = () => {
       },
     ],
   };
+
   useEffect(async () => {
     if (who === 1) {
       try {
@@ -290,216 +296,212 @@ const Mypage = () => {
       setIsChanging(arr);
     }
   };
-
   return (
-    <Container>
-      <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-      <SubTitle>{userInfo.name}님 반가워요!</SubTitle>
-      <Content>
-        <Box
-          style={{
-            width: '15%',
-          }}
-        >
-          <PageButton onClick={() => navigate('/mypage')}>내 프로필</PageButton>
-          <PageButton onClick={() => navigate('/gifticon?page=1&limit=9')}>
-            {who === 1 ? '기부 내역' : '기부받은 내역'}
-          </PageButton>
-        </Box>
-        <Box
-          style={{
-            padding: '0 20px',
-            width: '60%',
-          }}
-        >
-          {inputList[who].map((list, idx) => (
-            <InputBox key={idx}>
-              <InputName>{list.inputName}</InputName>
-              {isChanging[idx] ? (
-                <InputChanger
-                  id={idx}
-                  name={list.inputName}
-                  defaultValue={userInfo[list.inputName]}
-                  onChange={list.inputCallback}
-                  onBlur={(e) => list.blurCallback(e)}
-                />
-              ) : (
-                <InputContent id={idx} onClick={handleFocus}>
-                  {userInfo[list.inputName]}
-                </InputContent>
-              )}
-            </InputBox>
-          ))}
-          {who === 2 && (
-            <>
-              <AddressFinder
-                callback={(address) => {
-                  setUserInfo({ ...userInfo, location: address });
-                  axios.put(
-                    '/mypage/helper',
-                    { address: address },
-                    { headers: { Authorization: `Bearer ${token}` } },
-                  );
-                }}
-                location={userInfo.location}
-              />
-              <InputName>gallery</InputName>
-              <GalleryImgContainer>
-                {userInfo.gallery.map((url, idx) => {
-                  return <GalleryImg key={idx} src={url} />;
-                })}
-              </GalleryImgContainer>
-              <Label htmlFor="imageAdder">
-                <ChangeButton
-                  id="imageAdder"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleImageUpload(e, 'gallery')}
-                />
-                이미지 추가
-              </Label>
-              <InputName>vulnerable</InputName>
-              <Tag
-                tagList={vulnerableList}
-                targetTagList={userInfo.vulnerable}
-                callback={{
-                  create: async (id) => {
-                    setUserInfo({
-                      ...userInfo,
-                      vulnerable: [...userInfo.vulnerable, id],
-                    });
-                    await axios.post(
-                      '/mypage/vulnerable',
-                      { vulnerable_id: id },
+    <CommonContainer>
+      <TopContainer>
+        <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
+        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
+        <SubTitle>{userInfo.name}님 반가워요!</SubTitle>
+      </TopContainer>
+      <BottomContainer>
+        <SideBar />
+        <ContentContainer mypage>
+          <ContentLeft>
+            {inputList[who].map((list, idx) => (
+              <InputBox key={idx}>
+                <InputName>{list.inputName}</InputName>
+                {isChanging[idx] ? (
+                  <InputChanger
+                    id={idx}
+                    name={list.inputName}
+                    defaultValue={userInfo[list.inputName]}
+                    onChange={list.inputCallback}
+                    onBlur={(e) => list.blurCallback(e)}
+                  />
+                ) : (
+                  <InputContent id={idx} onClick={handleFocus}>
+                    {userInfo[list.inputName]}
+                  </InputContent>
+                )}
+              </InputBox>
+            ))}
+            {who === 2 && (
+              <>
+                <AddressFinder
+                  callback={(address) => {
+                    setUserInfo({ ...userInfo, location: address });
+                    axios.put(
+                      '/mypage/helper',
+                      { address: address },
                       { headers: { Authorization: `Bearer ${token}` } },
                     );
-                  },
-                  delete: async (id) => {
-                    setUserInfo({
-                      ...userInfo,
-                      vulnerable: userInfo.vulnerable.filter((el) => el !== id),
-                    });
-                    await axios.delete('/mypage/vulnerable', {
-                      headers: { Authorization: `Bearer ${token}` },
-                      params: { vulnerable_id: id },
-                    });
-                  },
-                }}
-                // isEditMode={isChanging[7]}
-              />
-              <InputName>gifticon</InputName>
-              <Tag
-                tagList={gifticonList}
-                targetTagList={userInfo.gifticonCategory}
-                callback={{
-                  create: async (id) => {
-                    setUserInfo({
-                      ...userInfo,
-                      gifticonCategory: [...userInfo.gifticonCategory, id],
-                    });
-                    await axios.post(
-                      '/mypage/gifticon',
-                      { gifticon_id: id },
-                      { headers: { Authorization: `Bearer ${token}` } },
-                    );
-                  },
-                  delete: async (id) => {
-                    setUserInfo({
-                      ...userInfo,
-                      gifticonCategory: userInfo.gifticonCategory.filter(
-                        (el) => el !== id,
-                      ),
-                    });
-                    await axios.delete('/mypage/gifticon', {
-                      headers: { Authorization: `Bearer ${token}` },
-                      params: { gifticon_id: id },
-                    });
-                  },
-                }}
-              />
-              <ActButton id="7" onClick={handleFocus}>
-                {userInfo.activity ? `계정 비활성화` : '계정 활성화'}
-              </ActButton>
-              {isChanging[7] ? (
-                <ModalV2
-                  id="7"
-                  title={
-                    userInfo.activity
-                      ? '계정을 비활성화 하시겠어요?'
-                      : '계정을 활성화 하시겠어요?'
-                  }
-                  subtitle={
-                    userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
-                  }
-                  callback={async (e) => {
-                    handleFocus(e);
-                    if (e.target.textContent === '네') {
-                      try {
+                  }}
+                  location={userInfo.location}
+                  mypage
+                />
+                <MultiContainer>
+                  <InputName>갤러리</InputName>
+                  <GalleryBox>
+                    {userInfo.gallery.map((url, idx) => {
+                      return <GalleryImg key={idx} src={url} />;
+                    })}
+                  </GalleryBox>
+                  <GalleryAddLabel htmlFor="imageAdder">
+                    <NotShow
+                      id="imageAdder"
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleImageUpload(e, 'gallery')}
+                    />
+                    이미지 추가
+                  </GalleryAddLabel>
+                </MultiContainer>
+                <MultiContainer>
+                  <InputName>vulnerable</InputName>
+                  <Tag
+                    tagList={vulnerableList}
+                    targetTagList={userInfo.vulnerable}
+                    callback={{
+                      create: async (id) => {
                         setUserInfo({
                           ...userInfo,
-                          activity: !userInfo.activity,
+                          vulnerable: [...userInfo.vulnerable, id],
                         });
-                        await axios.put(
-                          'mypage/helper/activity',
-                          { activity: !userInfo.activity },
-                          {
-                            headers: { Authorization: `Bearer ${token}` },
-                          },
+                        await axios.post(
+                          '/mypage/vulnerable',
+                          { vulnerable_id: id },
+                          { headers: { Authorization: `Bearer ${token}` } },
                         );
-                      } catch (e) {}
+                      },
+                      delete: async (id) => {
+                        setUserInfo({
+                          ...userInfo,
+                          vulnerable: userInfo.vulnerable.filter(
+                            (el) => el !== id,
+                          ),
+                        });
+                        await axios.delete('/mypage/vulnerable', {
+                          headers: { Authorization: `Bearer ${token}` },
+                          params: { vulnerable_id: id },
+                        });
+                      },
+                    }}
+                  />
+                </MultiContainer>
+                <MultiContainer>
+                  <InputName>gifticon</InputName>
+                  <Tag
+                    tagList={gifticonList}
+                    targetTagList={userInfo.gifticonCategory}
+                    callback={{
+                      create: async (id) => {
+                        setUserInfo({
+                          ...userInfo,
+                          gifticonCategory: [...userInfo.gifticonCategory, id],
+                        });
+                        await axios.post(
+                          '/mypage/gifticon',
+                          { gifticon_id: id },
+                          { headers: { Authorization: `Bearer ${token}` } },
+                        );
+                      },
+                      delete: async (id) => {
+                        setUserInfo({
+                          ...userInfo,
+                          gifticonCategory: userInfo.gifticonCategory.filter(
+                            (el) => el !== id,
+                          ),
+                        });
+                        await axios.delete('/mypage/gifticon', {
+                          headers: { Authorization: `Bearer ${token}` },
+                          params: { gifticon_id: id },
+                        });
+                      },
+                    }}
+                  />
+                </MultiContainer>
+                <ActButton id="7" onClick={handleFocus}>
+                  {userInfo.activity ? `계정 비활성화` : '계정 활성화'}
+                </ActButton>
+                {isChanging[7] ? (
+                  <ModalV2
+                    id="7"
+                    title={
+                      userInfo.activity
+                        ? '계정을 비활성화 하시겠어요?'
+                        : '계정을 활성화 하시겠어요?'
                     }
-                  }}
-                />
-              ) : null}
-            </>
-          )}
-          <ActButton id="8" onClick={handleFocus}>
-            비밀번호 변경
-          </ActButton>
-          {isChanging[8] && <PassswordModal id="8" modalCloser={handleFocus} />}
-          <ActButton id="9" onClick={handleFocus}>
-            회원 탈퇴
-          </ActButton>
-          {isChanging[9] && (
-            <ModalV2
-              id="9"
-              title="정말로 탈퇴하시겠어요?"
-              callback={async (e) => {
-                handleFocus(e);
-                if (e.target.textContent === '네') {
-                  try {
-                    await axios.delete('mypage/delete', {
-                      headers: { Authorization: `Bearer ${token}` },
-                    });
-                    navigate('/');
-                    dispatch(signOut());
-                    removeToken();
-                  } catch (e) {
-                    console.log(e);
+                    subtitle={
+                      userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
+                    }
+                    callback={async (e) => {
+                      handleFocus(e);
+                      if (e.target.textContent === '네') {
+                        try {
+                          setUserInfo({
+                            ...userInfo,
+                            activity: !userInfo.activity,
+                          });
+                          await axios.put(
+                            'mypage/helper/activity',
+                            { activity: !userInfo.activity },
+                            {
+                              headers: { Authorization: `Bearer ${token}` },
+                            },
+                          );
+                        } catch (e) {}
+                      }
+                    }}
+                  />
+                ) : null}
+              </>
+            )}
+            <ActButton id="8" onClick={handleFocus}>
+              비밀번호 변경
+            </ActButton>
+            {isChanging[8] && (
+              <PassswordModal id="8" modalCloser={handleFocus} />
+            )}
+            <ActButton id="9" onClick={handleFocus}>
+              회원 탈퇴
+            </ActButton>
+            {isChanging[9] && (
+              <ModalV2
+                id="9"
+                title="정말로 탈퇴하시겠어요?"
+                callback={async (e) => {
+                  handleFocus(e);
+                  if (e.target.textContent === '네') {
+                    try {
+                      await axios.delete('mypage/delete', {
+                        headers: { Authorization: `Bearer ${token}` },
+                      });
+                      navigate('/');
+                      dispatch(signOut());
+                      removeToken();
+                    } catch (e) {
+                      console.log(e);
+                    }
                   }
-                }
-              }}
-            />
-          )}
-        </Box>
-        <Box
-          style={{
-            width: '15%',
-          }}
-        >
-          <ProfileImg src={userInfo.img} />
-          <Label htmlFor="imageChanger">
-            <ChangeButton
-              id="imageChanger"
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, 'img')}
-            />
-            이미지 변경
-          </Label>
-        </Box>
-      </Content>
-    </Container>
+                }}
+              />
+            )}
+          </ContentLeft>
+          <ContentRight>
+            <ProfileImg src={userInfo.img} />
+            <GalleryAddLabel htmlFor="imageChanger">
+              <NotShow
+                id="imageChanger"
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, 'img')}
+              />
+              이미지 변경
+            </GalleryAddLabel>
+          </ContentRight>
+        </ContentContainer>
+      </BottomContainer>
+    </CommonContainer>
   );
 };
 
