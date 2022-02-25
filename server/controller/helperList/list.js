@@ -1,4 +1,4 @@
-const { helper, gifticon, message, room } = require('../../models');
+const { helper, gifticon, message, room, gallery, helper_vulnerable, helper_gifticon_category } = require('../../models');
 const generateUploadURL = require('../s3');
 
 module.exports = {
@@ -9,7 +9,31 @@ module.exports = {
       delete data.password;
       delete data.verification;
       delete data.verify_hash;
-      res.status(200).json(data);
+      const helper_vulnerableRow = await helper_vulnerable.findAll({
+        where: { helper_id: helperId },
+      });
+      const helper_gifticon_categoryRow =
+        await helper_gifticon_category.findAll({
+          where: { helper_id: helperId },
+      });
+			const galleryRow = await gallery.findAll({
+				where: { helper_id: helperId }
+			});
+      const vulnerableList = helper_vulnerableRow.map((el) =>
+        el.dataValues.vulnerable_id,
+      );
+      const gifticonCategoryList = helper_gifticon_categoryRow.map((el) =>
+        el.dataValues.gifticon_category_id,
+      );
+      const galleryList = galleryRow.map((el) =>
+        el.dataValues.img,
+      );   
+      res.status(200).json(Object.assign(
+        data.dataValues, { 
+        gallery: galleryList, 
+        vulnerable: vulnerableList, 
+        gifticon: gifticonCategoryList 
+      }));
     } catch (e) {
       console.log(e);
       res.status(500).json({ message: 'intenal server error' });
