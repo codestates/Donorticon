@@ -56,7 +56,8 @@ module.exports ={
                 where: { id },
               },
             );
-            return res.ststus(200).json({ url });
+            console.log(url);
+            return res.status(200).json({ url });
           }
           res.status(200).json({ message: "user information successfully changed" });
       } catch (e) {
