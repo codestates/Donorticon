@@ -1,19 +1,15 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { setPoint } from '../../redux/gifticon/gifticonSlice';
+import ImageUploader from '../ImageUploader';
 import { CardGallery } from '../../styles/CardStyle';
 import {
   ContentBox,
   ContentTitle,
   ImageBox,
 } from '../../styles/Gifticon/GifticonDetailStyle';
-import black from '../../img/point_black.png';
-import red from '../../img/point_red.png';
-import ImageUploader from '../ImageUploader';
-
-// 임시 데이터
-import img from '../../img/helperCategory/1_all.png';
 import {
   ButtonBox,
   GifticonMessage,
@@ -22,6 +18,9 @@ import {
   NoImgMessage,
   PointImage,
 } from '../../styles/Gifticon/GifticonUsedStyle';
+import black from '../../img/point_black.png';
+import red from '../../img/point_red.png';
+import ModalV2 from '../ModalV2';
 
 const BLACK = black;
 const RED = red;
@@ -29,16 +28,22 @@ const RED = red;
 const ARRAY = [0, 1, 2, 3, 4];
 
 const GifticonUsed = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user.id);
   const who = useSelector((state) => state.user.user.who);
   const { id, name, userId, point, thanksImgUrl } = useSelector(
     (state) => state.gifticon,
   );
-  const user = useSelector((state) => state.user.user.id);
-  const dispatch = useDispatch();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [clicked, setClicked] = useState([]);
+  const [isImgModalOpen, setIsImgModalOpen] = useState(false);
+  const [val, setVal] = useState('');
+  const [message, setMessage] = useState('');
+  const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+
   const handleModalOpen = () => {
-    setIsModalOpen(!isModalOpen);
+    setIsImgModalOpen(!isImgModalOpen);
   };
 
   const handleImgUpload = () => {
@@ -46,18 +51,17 @@ const GifticonUsed = () => {
   };
 
   const handleMessage = async () => {
-    await axios.post(`/gifticon/detail/${id}`, {
+    const data = await axios.post(`/gifticon/detail/${id}`, {
       message: message,
       giverId: userId,
       helperId: user,
       gifticonId: id,
     });
-    // setVal(''); this code can remove texts on textarea. Disabled on purpose.
-    setMessage('');
-    alert('Done!');
+    if (data.status === 200) {
+      setMessage('');
+      setIsCheckModalOpen(true);
+    }
   };
-
-  const [clicked, setClicked] = useState([]);
 
   const handlePoint = (e) => {
     const id = e.target.id;
@@ -97,12 +101,17 @@ const GifticonUsed = () => {
     }
   };
 
-  const [val, setVal] = useState('');
-  const [message, setMessage] = useState('');
-
   const handleText = (event) => {
     setMessage(event.target.value);
     setVal(event.target.value);
+  };
+
+  const handleCheckModal = (e) => {
+    if (e.target.textContent === '네') {
+      navigate('/dm');
+    } else {
+      setIsCheckModalOpen(false);
+    }
   };
 
   useEffect(() => getPoint(), []);
@@ -117,7 +126,7 @@ const GifticonUsed = () => {
             <ImageBox>
               <CardGallery
                 style={{ width: '100%', height: '300px' }}
-                src={img}
+                src={thanksImgUrl}
               />
             </ImageBox>
           </ContentBox>
@@ -136,7 +145,7 @@ const GifticonUsed = () => {
             <ImageBox>
               <CardGallery
                 style={{ width: '100%', height: '300px' }}
-                src={img}
+                src={thanksImgUrl}
               />
             </ImageBox>
             <ButtonBox>
@@ -175,14 +184,21 @@ const GifticonUsed = () => {
               />
             ))}
           </ContentBox>
-          {isModalOpen && (
+          {isImgModalOpen && (
             <ImageUploader
               handleModalOpen={handleModalOpen}
               api={`/gifticon/detail/${id}`}
               giverId={userId}
               helperId={user}
               gifticonId={id}
-            ></ImageUploader>
+            />
+          )}
+          {isCheckModalOpen && (
+            <ModalV2
+              title={'메세지가 성공적으로 전달되었습니다.'}
+              subtitle={'메세지 페이지로 이동하시겠어요?'}
+              callback={handleCheckModal}
+            />
           )}
         </>
       )}
