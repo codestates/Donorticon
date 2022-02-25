@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { convertToObject } = require('typescript');
 const {
   helper,
   helper_vulnerable,
@@ -13,6 +14,10 @@ module.exports = {
       const token = req.headers.token;
 			console.log({ endPoint: '/mypage/helper', method: 'get', token })
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      if (!tokenDecoded) {
+        console.log('invalid token');
+        return res.status(401).json({ message: 'invalid token' });
+      }
       const { id } = tokenDecoded;
       const helper_vulnerableRow = await helper_vulnerable.findAll({
         where: { helper_id: id },
@@ -24,7 +29,6 @@ module.exports = {
 			const galleryRow = await gallery.findAll({
 				where: { helper_id: id }
 			});
-			// console.log({gallery: galleryRow.dataValues})
       const vulnerableList = helper_vulnerableRow.map((el) =>
         el.dataValues.vulnerable_id,
       );
@@ -38,9 +42,10 @@ module.exports = {
 				where: { id },
 				attributes: { exclude: ['verification', 'verify_hash', 'password', 'createdAt', 'updatedAt'] },
 			});
-
+      if (!helperInfo) {
+        return res.status(404).json({ message: 'user not found' });
+      }
       const data = Object.assign(helperInfo.dataValues, { vulnerable: vulnerableList, gifticonCategory: gifticonCategoryList, gallery: galleryList } )
-      // console.log(data)
 			res.status(200).json(data);
     } catch (err) {
       console.log(err);
@@ -59,7 +64,6 @@ module.exports = {
       try {
         console.log(req.body)
 				const token = req.headers.token;
-				// console.log({ endPoint: '/mypage/helper', method: 'put', token })
 				const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
         if (!tokenDecoded) {
           console.log('invalid token');
@@ -95,7 +99,6 @@ module.exports = {
           );
         }
         if (req.body.description) {
-					// console.log(req.body)
           const { description } = req.body;
           await helper.update(
             { description },
@@ -114,7 +117,6 @@ module.exports = {
           );
         }     
 				if (req.body.tag === 'img') {
-					console.log('이미지 변경 신청')
           await helper.update(
             { img: url.split('?')[0] },
             {
