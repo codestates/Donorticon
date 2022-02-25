@@ -11,8 +11,7 @@ export const SignUpContainer = styled.div`
 
 export const ContentContainer = styled.div`
   padding-top: 40px;
-  border-bottom: 1px solid
-    ${(props) => (props.show ? props.theme.color.progressBar : 'none')};
+  border-bottom: 1px solid;
 `;
 
 export const ContentTitle = styled.div`

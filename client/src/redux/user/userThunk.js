@@ -33,7 +33,69 @@ export const signInHelper = createAsyncThunk(
         return rejectWithValue(data);
       }
     } catch (e) {
-      console.log(e.response.data);
+      console.log(e.response);
+    }
+  },
+);
+
+export const signUpGiver = createAsyncThunk(
+  '/signup/giver',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signup/giver', payload);
+      if (response.status === 201) {
+        return response.data.id;
+      }
+    } catch (e) {
+      return rejectWithValue(e.response);
+    }
+  },
+);
+
+export const signUpHelper = createAsyncThunk(
+  '/signup/helper',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.post('/signup/helper', payload);
+      console.log(response.data.id);
+      if (response.status === 201) {
+        return response.data.id;
+      }
+    } catch (e) {
+      return rejectWithValue(e.response);
+    }
+  },
+);
+
+export const verifyUser = createAsyncThunk(
+  '/verification',
+  async (payload, { rejectWithValue }) => {
+    console.log(payload);
+    try {
+      const response = await axios.get('/verification', {
+        headers: { ...payload },
+      });
+      if (response.status === 200) {
+        return payload;
+      }
+    } catch (e) {
+      console.log(e.response);
+    }
+  },
+);
+
+export const updateVerification = createAsyncThunk(
+  '/verification',
+  async (payload, { rejectWithValue }) => {
+    try {
+      const response = await axios.put('/verification', {
+        headers: { ...payload },
+      });
+      if (response.status === 200) {
+        return response.data.verification;
+      }
+    } catch (e) {
+      console.log(e.response);
     }
   },
 );

@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { convertToObject } = require('typescript');
 const {
   helper,
   helper_vulnerable,
@@ -11,77 +12,65 @@ module.exports = {
   get: async (req, res) => {
     try {
       const token = req.headers.token;
+			console.log({ endPoint: '/mypage/helper', method: 'get', token })
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-      const { id, email, name, mobile, slogan, description, location, img, activity } =
-        tokenDecoded;
-			console.log('마이페이지 조회 성공');
-      const helperRow = await helper.findOne({
-        where: { email },
-      });
-      const helperId = helperRow.id;
+      if (!tokenDecoded) {
+        console.log('invalid token');
+        return res.status(401).json({ message: 'invalid token' });
+      }
+      const { id } = tokenDecoded;
       const helper_vulnerableRow = await helper_vulnerable.findAll({
-        where: { helper_id: helperId },
+        where: { helper_id: id },
       });
       const helper_gifticon_categoryRow =
         await helper_gifticon_category.findAll({
-          where: { helper_id: helperId },
+          where: { helper_id: id },
         });
+			const galleryRow = await gallery.findAll({
+				where: { helper_id: id }
+			});
       const vulnerableList = helper_vulnerableRow.map((el) =>
-        Number(el.dataValues.vulnerable_id),
+        el.dataValues.vulnerable_id,
       );
       const gifticonCategoryList = helper_gifticon_categoryRow.map((el) =>
-        Number(el.dataValues.gifticon_category_id),
+        el.dataValues.gifticon_category_id,
       );
-
-      const data = {
-        id,
-        email,
-        name,
-        mobile,
-        slogan,
-        description,
-        location,
-        vulnerable: vulnerableList,
-        gifticonCategory: gifticonCategoryList,
-        gallery: ['사진추가예정'],
-        img,
-				activity
-      };
-
-      res.status(200).json(data);
+      const galleryList = galleryRow.map((el) =>
+        el.dataValues.img,
+      );
+			const helperInfo = await helper.findOne({
+				where: { id },
+				attributes: { exclude: ['verification', 'verify_hash', 'password', 'createdAt', 'updatedAt'] },
+			});
+      if (!helperInfo) {
+        return res.status(404).json({ message: 'user not found' });
+      }
+      const data = Object.assign(helperInfo.dataValues, { vulnerable: vulnerableList, gifticonCategory: gifticonCategoryList, gallery: galleryList } )
+			res.status(200).json(data);
     } catch (err) {
       console.log(err);
     }
   },
   put: async (req, res) => {
-		console.log(req.body.tag === 'img', '태그')
-    const token = req.headers.token;
-		const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-    const { id } = tokenDecoded;
-		const url = await generateUploadURL();
     if (
-      req.body.password ||
       req.body.mobile ||
       req.body.name ||
       req.body.slogan ||
       req.body.description ||
 			req.body.address ||
-			req.body.activity ||
 			req.body.tag === 'img' ||
 			req.body.tag === 'gallery'
     ) {
       try {
-        const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-        const { id } = tokenDecoded;
-        if (req.body.password) {
-          const { password } = req.body;
-          await helper.update(
-            { password },
-            {
-              where: { id },
-            },
-          );
+        console.log(req.body)
+				const token = req.headers.token;
+				const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        if (!tokenDecoded) {
+          console.log('invalid token');
+          return res.status(401).json({ message: 'invalid token' });
         }
+				const { id } = tokenDecoded;
+				const url = await generateUploadURL();
         if (req.body.mobile) {
           const { mobile } = req.body;
           await helper.update(
@@ -110,7 +99,6 @@ module.exports = {
           );
         }
         if (req.body.description) {
-					console.log(req.body)
           const { description } = req.body;
           await helper.update(
             { description },
@@ -127,48 +115,31 @@ module.exports = {
               where: { id },
             },
           );
-        }
-        if (req.body.activity) {
-          const { activity } = req.body;
-          await helper.update(
-            { activity },
-            {
-              where: { id },
-            },
-          );
-        }        
+        }     
 				if (req.body.tag === 'img') {
-					console.log('이미지 변경 신청')
           await helper.update(
-            { img: url },
+            { img: url.split('?')[0] },
             {
               where: { id },
             },
           );
+					console.log({ tag: "img", url })
+					return res.status(201).json({ url });
         }
 				if (req.body.tag === 'gallery') {
-					console.log({ url })
 					await gallery.create({ 
 							helper_id: id,
-							img: url
+							img: url.split('?')[0]
 						})
+					console.log({ tag: "gallery", url });
 					return res.status(201).json({ url });
 				}
-        const helperFinder = await helper.findOne({
-          where: { id },
-          attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
-        });
-        const helperInfo = helperFinder.dataValues;
-        res.clearCookie('refreshToken');
-        const refreshToken = jwt.sign(helperInfo, process.env.ACCESS_SECRET, {
-          expiresIn: '6h',
-        });
-        res.status(201).json({ helperInfo, token:refreshToken });
+        res.status(201).json({ message: "user information successfully changed" });
       } catch (e) {
         res.status(500).json({ message: 'server error' });
-      }
+      } 
     } else {
       res.status(422).json({ message: 'insufficient parameters supplied' });
-    }
+    } 
   },
 };

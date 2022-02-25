@@ -47,9 +47,9 @@ const gifticonList = [
 ];
 
 const Mypage = () => {
+  const token = localStorage.getItem('token');
   const navigate = useNavigate();
-  const who = useSelector((state) => state.user);
-  console.log(who)
+  const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
     id: 0,
@@ -79,35 +79,14 @@ const Mypage = () => {
   ]);
 
   const inputList = {
-    giver: [
+    1: [
       {
         inputName: 'email',
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: async (e, idx, boolean) => {
-          const form = new RegExp(
-            '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
-          );
-          if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            try {
-              const result = await axios.put(
-                '/mypage/giver',
-                { email: userInfo.email },
-                { headers: { token: localStorage.getItem('token') } },
-              );
-              setIsChanging(arr);
-              const { token } = result.data;
-              console.log(token);
-              localStorage.setItem('token', token);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            console.log('email형식 안맞아');
-          }
+        blurCallback: () => {
+          //nothing to change
         },
       },
       {
@@ -117,17 +96,13 @@ const Mypage = () => {
         },
         blurCallback: async (e, idx, boolean) => {
           if (e.target.value.length <= 8) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
+            handleFocus(e);
             try {
               const result = await axios.put(
                 '/mypage/giver',
                 { name: userInfo.name },
-                { headers: { token: localStorage.getItem('token') } },
+                { headers: { Authorization: `Bearer ${token}` } },
               );
-              setIsChanging(arr);
-              const { token } = result.data;
-              localStorage.setItem('token', token);
             } catch (e) {}
           } else {
             console.log('name 8자 넘어');
@@ -148,11 +123,9 @@ const Mypage = () => {
               const result = await axios.put(
                 '/mypage/giver',
                 { mobile: userInfo.mobile },
-                { headers: { token: localStorage.getItem('token') } },
+                { headers: { Authorization: `Bearer ${token}` } },
               );
               setIsChanging(arr);
-              const { token } = result.data;
-              localStorage.setItem('token', token);
             } catch (e) {}
           } else {
             console.log('휴대전화 번호');
@@ -160,32 +133,14 @@ const Mypage = () => {
         },
       },
     ],
-    helper: [
+    2: [
       {
         inputName: 'email',
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: async (e, idx, boolean) => {
-          const form = new RegExp(
-            '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
-          );
-          if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            try {
-              await axios.put(
-                '/mypage/helper',
-                { email: userInfo.email },
-                { headers: { token: localStorage.getItem('token') } },
-              );
-              setIsChanging(arr);
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            console.log('email형식 안맞아');
-          }
+        blurCallback: () => {
+          //nothing to change
         },
       },
       {
@@ -195,17 +150,13 @@ const Mypage = () => {
         },
         blurCallback: async (e, idx, boolean) => {
           if (e.target.value.length <= 8) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
+            handleFocus(e);
             try {
               const result = await axios.put(
                 '/mypage/helper',
                 { name: userInfo.name },
-                { headers: { token: localStorage.getItem('token') } },
+                { headers: { Authorization: `Bearer ${token}` } },
               );
-              setIsChanging(arr);
-              const { token } = result.data;
-              localStorage.setItem('token', token);
             } catch (e) {
               console.log(e);
             }
@@ -219,20 +170,16 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: async (e, idx, boolean) => {
+        blurCallback: async (e) => {
           const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
           if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
+            handleFocus(e);
             try {
               const result = await axios.put(
                 '/mypage/helper',
                 { mobile: userInfo.mobile },
-                { headers: { token: localStorage.getItem('token') } },
+                { headers: { Authorization: `Bearer ${token}` } },
               );
-              setIsChanging(arr);
-              const { token } = result.data;
-              localStorage.setItem('token', token);
             } catch (e) {
               console.log(e);
             }
@@ -246,18 +193,14 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: async (e, idx, boolean) => {
-          const arr = [...isChanging];
-          arr[idx] = boolean;
+        blurCallback: async (e) => {
+          handleFocus(e);
           try {
             const result = await axios.put(
               '/mypage/helper',
               { slogan: userInfo.slogan },
-              { headers: { token: localStorage.getItem('token') } },
+              { headers: { Authorization: `Bearer ${token}` } },
             );
-            setIsChanging(arr);
-            const { token } = result.data;
-            localStorage.setItem('token', token);
           } catch (e) {
             console.log(e);
           }
@@ -268,18 +211,14 @@ const Mypage = () => {
         inputCallback: (e) => {
           handleInput(e);
         },
-        blurCallback: async (e, idx, boolean) => {
-          const arr = [...isChanging];
-          arr[idx] = boolean;
+        blurCallback: async (e) => {
+          handleFocus(e);
           try {
             const result = await axios.put(
               '/mypage/helper',
               { description: userInfo.description },
-              { headers: { token: localStorage.getItem('token') } },
+              { headers: { Authorization: `Bearer ${token}` } },
             );
-            setIsChanging(arr);
-            const { token } = result.data;
-            localStorage.setItem('token', token);
           } catch (e) {
             console.log(e);
           }
@@ -288,22 +227,20 @@ const Mypage = () => {
     ],
   };
   useEffect(async () => {
-    if (whoIs === 'giver') {
+    if (who === 1) {
       try {
         const { data } = await axios.get('/mypage/giver', {
-          headers: { token: localStorage.getItem('token') },
+          headers: { Authorization: `Bearer ${token}` },
         });
         setUserInfo(data);
       } catch (e) {
         console.log(e);
       }
-    } else if (whoIs === 'helper') {
+    } else if (who === 2) {
       try {
         const { data } = await axios.get('/mypage/helper', {
-          headers: { token: localStorage.getItem('token') },
+          headers: { Authorization: `Bearer ${token}` },
         });
-        // setUserInfo(data);
-        console.log(data);
         setUserInfo({
           ...data,
           gallery: Array(2).fill(
@@ -316,12 +253,6 @@ const Mypage = () => {
     }
   }, []);
 
-  const modalController = (idx, boolean) => {
-    const arr = [...isChanging];
-    arr[idx] = boolean;
-    setIsChanging(arr);
-  };
-
   const handleImageUpload = async (e, tag) => {
     const file = e.target.files[0];
     const tempUrl = URL.createObjectURL(file);
@@ -333,15 +264,13 @@ const Mypage = () => {
     try {
       const {
         data: { s3Url },
-        data: { token },
       } = await axios.put(
         `/mypage/${whoIs}`,
         { tag },
         {
-          headers: { token: localStorage.getItem('token') },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
-      localStorage.setItem('token', token);
       await axios.put(s3Url, file, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -354,15 +283,18 @@ const Mypage = () => {
     setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
   };
 
-  const handleFocus = (idx, boolean) => {
-    const arr = [...isChanging];
-    arr[idx] = boolean;
-    setIsChanging(arr);
+  const handleFocus = (e) => {
+    const index = parseInt(e.target.id);
+    if (index !== 0) {
+      const arr = [...isChanging];
+      arr[index] = !isChanging[index];
+      setIsChanging(arr);
+    }
   };
 
   return (
     <Container>
-      <Title>{whoIs === 'giver' ? 'GIVER' : 'HELPER'}</Title>
+      <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
       <SubTitle>{userInfo.name}님 반가워요!</SubTitle>
       <Content>
         <Box
@@ -372,7 +304,7 @@ const Mypage = () => {
         >
           <PageButton onClick={() => navigate('/mypage')}>내 프로필</PageButton>
           <PageButton onClick={() => navigate('/gifticon?page=1&limit=9')}>
-            {whoIs === 'giver' ? '기부 내역' : '기부받은 내역'}
+            {who === 1 ? '기부 내역' : '기부받은 내역'}
           </PageButton>
         </Box>
         <Box
@@ -381,27 +313,25 @@ const Mypage = () => {
             width: '60%',
           }}
         >
-          {inputList[whoIs].map((list, idx) => (
+          {inputList[who].map((list, idx) => (
             <InputBox key={idx}>
               <InputName>{list.inputName}</InputName>
               {isChanging[idx] ? (
                 <InputChanger
+                  id={idx}
                   name={list.inputName}
                   defaultValue={userInfo[list.inputName]}
                   onChange={list.inputCallback}
-                  onBlur={(e) => list.blurCallback(e, idx, false)}
+                  onBlur={(e) => list.blurCallback(e)}
                 />
               ) : (
-                <InputContent
-                  name={list.inputName}
-                  onClick={() => handleFocus(idx, true)}
-                >
+                <InputContent id={idx} onClick={handleFocus}>
                   {userInfo[list.inputName]}
                 </InputContent>
               )}
             </InputBox>
           ))}
-          {whoIs === 'helper' ? (
+          {who === 2 && (
             <>
               <AddressFinder
                 callback={(address) => {
@@ -409,7 +339,7 @@ const Mypage = () => {
                   axios.put(
                     '/mypage/helper',
                     { address: address },
-                    { headers: { token: localStorage.getItem('token') } },
+                    { headers: { Authorization: `Bearer ${token}` } },
                   );
                 }}
                 location={userInfo.location}
@@ -442,7 +372,7 @@ const Mypage = () => {
                     await axios.post(
                       '/mypage/vulnerable',
                       { vulnerable_id: id },
-                      { headers: { token: localStorage.getItem('token') } },
+                      { headers: { Authorization: `Bearer ${token}` } },
                     );
                   },
                   delete: async (id) => {
@@ -451,7 +381,7 @@ const Mypage = () => {
                       vulnerable: userInfo.vulnerable.filter((el) => el !== id),
                     });
                     await axios.delete('/mypage/vulnerable', {
-                      headers: { token: localStorage.getItem('token') },
+                      headers: { Authorization: `Bearer ${token}` },
                       params: { vulnerable_id: id },
                     });
                   },
@@ -471,7 +401,7 @@ const Mypage = () => {
                     await axios.post(
                       '/mypage/gifticon',
                       { gifticon_id: id },
-                      { headers: { token: localStorage.getItem('token') } },
+                      { headers: { Authorization: `Bearer ${token}` } },
                     );
                   },
                   delete: async (id) => {
@@ -482,21 +412,18 @@ const Mypage = () => {
                       ),
                     });
                     await axios.delete('/mypage/gifticon', {
-                      headers: { token: localStorage.getItem('token') },
+                      headers: { Authorization: `Bearer ${token}` },
                       params: { gifticon_id: id },
                     });
                   },
                 }}
               />
-              <ActButton
-                onClick={() => {
-                  modalController(7, true);
-                }}
-              >
+              <ActButton id="7" onClick={handleFocus}>
                 {userInfo.activity ? `계정 비활성화` : '계정 활성화'}
               </ActButton>
               {isChanging[7] ? (
                 <ModalV2
+                  id="7"
                   title={
                     userInfo.activity
                       ? '계정을 비활성화 하시겠어요?'
@@ -506,6 +433,7 @@ const Mypage = () => {
                     userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
                   }
                   callback={async (e) => {
+                    handleFocus(e);
                     if (e.target.textContent === '네') {
                       try {
                         setUserInfo({
@@ -516,20 +444,19 @@ const Mypage = () => {
                           'mypage/helper/activity',
                           { activity: !userInfo.activity },
                           {
-                            headers: { token: localStorage.getItem('token') },
+                            headers: { Authorization: `Bearer ${token}` },
                           },
                         );
                       } catch (e) {}
                     }
-                    modalController(7, false);
                   }}
                 />
               ) : null}
             </>
-          ) : null}
+          )}
           <ActButton
             onClick={() => {
-              modalController(8, true);
+              handleFocus(8, true);
             }}
           >
             비밀번호 변경
@@ -537,13 +464,13 @@ const Mypage = () => {
           {isChanging[8] ? (
             <PassswordModal
               modalCloser={() => {
-                modalController(8, false);
+                handleFocus(8, false);
               }}
             />
           ) : null}
           <ActButton
             onClick={() => {
-              modalController(9, true);
+              handleFocus(9, true);
             }}
           >
             회원 탈퇴
@@ -555,12 +482,12 @@ const Mypage = () => {
                 if (e.target.textContent === '네') {
                   try {
                     await axios.delete('mypage/delete', {
-                      headers: { token: localStorage.getItem('token') },
+                      headers: { Authorization: `Bearer ${token}` },
                     });
                     localStorage.removeItem('token');
                   } catch (e) {}
                 }
-                modalController(9, false);
+                handleFocus(9, false);
               }}
             />
           ) : null}

@@ -1,8 +1,8 @@
-import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import GifticonStatusModal from '../../component/Gifticon/GifticonStatusModal';
 import GifticonUsed from '../../component/Gifticon/GifticonUsed';
+import GifticonReport from '../../component/Gifticon/GifticonReport';
 import SideBar from '../../component/SideBar';
+import StatusDropDown from '../../component/Gifticon/StatusDropDown';
 import { CardGallery } from '../../styles/CardStyle';
 import {
   BottomContainer,
@@ -17,24 +17,21 @@ import {
   ImageBox,
   InfoBox,
 } from '../../styles/Gifticon/GifticonDetailStyle';
-import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 
 import { SubTitle, Title } from '../../styles/utils/Container';
-import GifticonReport from '../../component/Gifticon/GifticonReport';
 
 const GifticonDetail = () => {
   const gifticon = useSelector((state) => state.gifticon);
   const who = useSelector((state) => state.user.user.who);
   const username = useSelector((state) => state.user.user.name);
+  const giver = who === 1 ? 1 : 0;
 
   const { name, createdAt, status, img, report, textStyle } = gifticon;
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleBtnClick = () => {
-    setIsModalOpen(true);
-  };
-
-  const giver = who === 1 ? 1 : 0;
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+  // const handleBtnClick = () => {
+  //   setIsModalOpen(true);
+  // };
 
   return (
     <CommonContainer>
@@ -71,29 +68,14 @@ const GifticonDetail = () => {
                 </div>
                 <div>
                   <InputLabel>진행상태</InputLabel>
-                  <InputContent noLine>
-                    <GifticonStatusButton
-                      style={{
-                        cursor: who === 1 ? 'not-allowed' : 'pointer',
-                      }}
-                      text={status}
-                      textStyle={textStyle}
-                      onClick={handleBtnClick}
-                    >
-                      {status}
-                    </GifticonStatusButton>
-                  </InputContent>
+                  <div style={{ width: '70%' }}>
+                    <StatusDropDown />
+                  </div>
                 </div>
               </InputBox>
             </InfoBox>
           </ContentBox>
           {status === '사용함' && <GifticonUsed />}
-          {isModalOpen && who === 2 && status !== '사용함' && (
-            <GifticonStatusModal
-              isModalOpen={isModalOpen}
-              setIsModalOpen={setIsModalOpen}
-            />
-          )}
         </ContentContainer>
       </BottomContainer>
     </CommonContainer>

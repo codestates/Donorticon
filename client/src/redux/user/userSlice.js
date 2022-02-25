@@ -1,6 +1,11 @@
 import axios from 'axios';
 import { createSlice } from '@reduxjs/toolkit';
-import { signInGiver, signInHelper } from './userThunk';
+import {
+  signInGiver,
+  signInHelper,
+  signUpGiver,
+  verifyUser,
+} from './userThunk';
 
 const initialState = {
   isLoading: false,
@@ -58,10 +63,17 @@ export const userSlice = createSlice({
     [signInHelper.rejected]: (state, _) => {
       state.isLoading = true;
     },
+    [signUpGiver.fulfilled]: (state, { payload }) => {
+      state.user.id = payload;
+    },
+    [verifyUser.fulfilled]: (state, { payload }) => {
+      state.user.email = payload.email;
+      state.user.name = payload.name;
+    },
   },
 });
 
-axios.defaults.baseURL = 'http://localhost:4000';
+axios.defaults.baseURL = `${process.env.REACT_APP_SERVER}`;
 // axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 // 회원가입

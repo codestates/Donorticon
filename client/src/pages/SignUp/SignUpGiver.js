@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sha256 from 'js-sha256';
 import { setUser } from '../../redux/user/userSlice';
@@ -14,6 +14,8 @@ import {
 } from '../../styles/utils/Container';
 import { Button } from '../../styles/utils/Button';
 import { InputBox, InputContainer, InputLabel } from '../../styles/utils/Input';
+import { signUpGiver, verifyUser } from '../../redux/user/userThunk';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignUpGiver = () => {
   const navigate = useNavigate();
@@ -105,28 +107,24 @@ const SignUpGiver = () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
       try {
-        const result = await axios.post('/signup/giver', giverInfo);
-        if (result) {
-          const userInfo = {
-            email: giverInfo.email,
-            name: giverInfo.name,
-            type: 1,
-            id: result.data.id,
-          };
-          await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-            headers: { ...userInfo },
-          });
-          const { id, email, name, type: who } = userInfo;
-          dispatch(setUser({ id, email, name, who }));
-          navigate(`../../verification`);
-        }
+        const resultAction = await dispatch(signUpGiver(giverInfo));
+        const id = unwrapResult(resultAction);
+        const userInfo = {
+          email: giverInfo.email,
+          name: giverInfo.name,
+          type: 1,
+          id,
+        };
+        dispatch(verifyUser(userInfo));
+        navigate('../../verification');
       } catch (e) {
-        if (e.response.status === 409) {
+        const status = e.status;
+        if (status === 409) {
           setErrorMessage('이미 회원가입 된 이메일입니다');
-        } else if (e.response.status === 500) {
+        } else if (status === 500) {
           setErrorMessage('다시 시도해주세요');
-        } else if (e.response.status === 422) {
-          setErrorMessage('입력 정보를 확인해 주세요');
+        } else if (status === 422) {
+          setErrorMessage('필수 정보(*)를 모두 입력해 주세요');
         }
       }
     }
@@ -156,6 +154,7 @@ const SignUpGiver = () => {
             </InputBox>
           ))}
         </InputContainer>
+        {errorMessage && <div>{errorMessage}</div>}
         <Button style={{ marginTop: '40px' }} onClick={handleSingUpButton}>
           회원 가입
         </Button>

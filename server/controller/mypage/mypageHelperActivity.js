@@ -14,6 +14,7 @@ module.exports = {
 						where: { id }
 					}
 				)
+				res.status(200).json({ message: 'data successfully changed' })
 			}
 			console.log(tokenDecoded);
 		} catch(err) {
