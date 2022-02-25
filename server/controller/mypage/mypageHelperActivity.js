@@ -16,7 +16,6 @@ module.exports = {
 				)
 				res.status(200).json({ message: 'data successfully changed' })
 			}
-			console.log(tokenDecoded);
 		} catch(err) {
 			console.log(err);
 		}
