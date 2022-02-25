@@ -22,7 +22,7 @@ module.exports = {
       const helper_gifticon_categoryRow =
         await helper_gifticon_category.findAll({
           where: { helper_id: id },
-        });
+      });
 			const galleryRow = await gallery.findAll({
 				where: { helper_id: id }
 			});
