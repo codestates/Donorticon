@@ -47,14 +47,22 @@ const Footer = () => {
         <Content>
           <MemberName>황 지 수</MemberName>
           <MemberPoition>Full-Stack</MemberPoition>
-          <a href="https://github.com/tiatiahwang">
+          <a
+            href="https://github.com/tiatiahwang"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <MemberGithub>GitHub</MemberGithub>
           </a>
         </Content>
         <Content>
           <MemberName>허 진 혁</MemberName>
           <MemberPoition>Front-End</MemberPoition>
-          <a href="https://github.com/Jin-hyeok2">
+          <a
+            href="https://github.com/Jin-hyeok2"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <MemberGithub>GitHub</MemberGithub>
           </a>
         </Content>
