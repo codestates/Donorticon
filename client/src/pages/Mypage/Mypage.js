@@ -263,7 +263,7 @@ const Mypage = () => {
     }
     try {
       const {
-        data: { s3Url },
+        data: { url },
       } = await axios.put(
         `/mypage/${whoIs}`,
         { tag },
@@ -271,7 +271,8 @@ const Mypage = () => {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
-      await axios.put(s3Url, file, {
+      console.log(url);
+      await axios.put(url, file, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
     } catch (e) {
@@ -287,7 +288,9 @@ const Mypage = () => {
     const index = parseInt(e.target.id);
     if (index !== 0) {
       const arr = [...isChanging];
+      console.log('1', arr);
       arr[index] = !isChanging[index];
+      console.log('2', arr);
       setIsChanging(arr);
     }
   };
@@ -423,7 +426,6 @@ const Mypage = () => {
               </ActButton>
               {isChanging[7] ? (
                 <ModalV2
-                  id="7"
                   title={
                     userInfo.activity
                       ? '계정을 비활성화 하시겠어요?'
@@ -454,29 +456,16 @@ const Mypage = () => {
               ) : null}
             </>
           )}
-          <ActButton
-            onClick={() => {
-              handleFocus(8, true);
-            }}
-          >
+          <ActButton id="8" onClick={handleFocus}>
             비밀번호 변경
           </ActButton>
-          {isChanging[8] ? (
-            <PassswordModal
-              modalCloser={() => {
-                handleFocus(8, false);
-              }}
-            />
-          ) : null}
-          <ActButton
-            onClick={() => {
-              handleFocus(9, true);
-            }}
-          >
+          {isChanging[8] && <PassswordModal id="8" modalCloser={handleFocus} />}
+          <ActButton id="9" onClick={handleFocus}>
             회원 탈퇴
           </ActButton>
-          {isChanging[9] ? (
+          {isChanging[9] && (
             <ModalV2
+              id="9"
               title="정말로 탈퇴하시겠어요?"
               callback={async (e) => {
                 if (e.target.textContent === '네') {
@@ -487,10 +476,9 @@ const Mypage = () => {
                     localStorage.removeItem('token');
                   } catch (e) {}
                 }
-                handleFocus(9, false);
               }}
             />
-          ) : null}
+          )}
         </Box>
         <Box
           style={{
