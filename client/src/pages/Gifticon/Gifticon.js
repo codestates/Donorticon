@@ -7,15 +7,15 @@ import GifticonCard from '../../component/Gifticon/GifticonCard';
 import GiticonFilter, {
   gifticonStatus,
 } from '../../component/HelperList/GifticonFilter';
+import GifticonLevel from '../../component/Gifticon/GifticonLevel';
 import SideBar from '../../component/SideBar';
 import { CardContainer } from '../../styles/CardStyle';
-import GifticonLevel from '../../component/Gifticon/GifticonLevel';
 import {
   BottomContainer,
   CommonContainer,
   ContentContainer,
   TopContainer,
-} from '../../styles/Gifticon/GifticonDetailStyle';
+} from '../../styles/CommonStyle';
 import { SubTitle, Title } from '../../styles/utils/Container';
 
 const Gifticon = () => {

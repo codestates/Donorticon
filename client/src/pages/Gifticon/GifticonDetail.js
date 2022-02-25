@@ -4,20 +4,21 @@ import GifticonReport from '../../component/Gifticon/GifticonReport';
 import SideBar from '../../component/SideBar';
 import StatusDropDown from '../../component/Gifticon/StatusDropDown';
 import { CardGallery } from '../../styles/CardStyle';
+import { SubTitle, Title } from '../../styles/utils/Container';
 import {
   BottomContainer,
   CommonContainer,
-  InputBox,
-  InputContent,
-  InputLabel,
-  TopContainer,
+  ContentBox,
   ContentContainer,
   ContentTitle,
-  ContentBox,
   ImageBox,
+  TopContainer,
+} from '../../styles/CommonStyle';
+import {
   InfoBox,
+  InputContent,
 } from '../../styles/Gifticon/GifticonDetailStyle';
-import { SubTitle, Title } from '../../styles/utils/Container';
+import { InputBox, InputLabel } from '../../styles/utils/Input';
 
 const GifticonDetail = () => {
   const username = useSelector((state) => state.user.user.name);
