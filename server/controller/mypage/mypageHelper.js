@@ -135,4 +135,16 @@ module.exports = {
       res.status(422).json({ message: 'insufficient parameters supplied' });
     } 
   },
+  delete: async (req, res) => {
+    try {
+      const token = req.headers.authorization.split(' ')[1];
+      const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+      if (!tokenDecoded) {
+        return res.status(401).json({ message: 'invalid token' });
+      }
+      console.log('갤러리 삭제를 요청하셨군요! 서비스 제작중입니다!')
+    } catch(err) {
+      console.log(err)
+    }
+  }
 };

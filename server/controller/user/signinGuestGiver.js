@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',
-        data: { id: giverGuestInfo.id },
+        data: { id: giverGuestInfo.id, email: giverGuestInfo.email, name: giverGuestInfo.name },
       });
     } else {
       res.status(500).json({ message: 'internal server error' });
