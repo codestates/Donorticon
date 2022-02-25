@@ -30,7 +30,7 @@ import {
   InputContainer,
   InputLabel,
 } from '../../styles/utils/Input';
-import { signUpHelper } from '../../redux/user/userThunk';
+import { signUpHelper, verifyUser } from '../../redux/user/userThunk';
 import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignUpHelper = () => {
@@ -238,19 +238,15 @@ const SignUpHelper = () => {
       setIsCheckStart(isValid.includes(false));
       if (!isValid.includes(false)) {
         try {
-          const result = signUpHelper(helperInfo);
-          const userId = unwrapResult(result);
+          const result = await dispatch(signUpHelper(helperInfo));
+          const id = unwrapResult(result);
           const userInfo = {
             email: helperInfo.email,
             name: helperInfo.name,
             type: 2,
-            id: userId,
+            id,
           };
-          await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-            headers: { ...userInfo },
-          });
-          const { id, email, name, type: who } = userInfo;
-          dispatch(setUser({ id, email, name, who }));
+          dispatch(verifyUser(userInfo));
           navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {
@@ -276,7 +272,7 @@ const SignUpHelper = () => {
           <Title>HELPER</Title>
           <SubTitle>회원가입</SubTitle>
         </SubContainer>
-        <ContentContainer show={page < 2 ? true : false}>
+        <ContentContainer>
           <ProgressBar percent={percent} />
           <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
           {page < 2 ? (
