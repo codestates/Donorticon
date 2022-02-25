@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { VscQuestion } from 'react-icons/vsc';
 import {
   LevelBarBox,
   LevelContainer,
