@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
   if (name && email && password && location && vulnerableName && gifticonCategoryName) { 
     try {
       const [helperFound, helperCreated] = await helper.findOrCreate({
-        where: { name, email },
+        where: { email },
         defaults: { password, img, user_type: 2, slogan, description, location, activity: true }
       }); 
       if (!helperCreated) {

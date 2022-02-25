@@ -4,7 +4,7 @@ const { helper } = require('../../models');
 module.exports = {
 	put: async (req, res) => {
 		try {
-			const token = req.headers.token;
+			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
 			const { id } = tokenDecoded;
 			if (typeof req.body.activity === 'boolean') {

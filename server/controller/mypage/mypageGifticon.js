@@ -6,7 +6,7 @@ module.exports = {
     try {
       console.log(req.body)
       const gifticonCategoryId = req.body.gifticon_id;
-      const { token } = req.headers;
+			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const helperId = tokenDecoded.id;
       await helper_gifticon_category.create({
@@ -23,7 +23,7 @@ module.exports = {
     try {
       console.log('파라미터', req.query);
       const gifticonCategoryId = req.query.gifticon_id;
-      const { token } = req.headers;
+			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const helperId = tokenDecoded.id;
       console.log(tokenDecoded);

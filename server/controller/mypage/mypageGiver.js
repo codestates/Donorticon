@@ -5,7 +5,7 @@ const generateUploadURL = require('../s3');
 module.exports ={
 	get: async (req, res) => {
 		try {
-			const token = req.headers.token;
+			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       if (!tokenDecoded) {
         console.log('invalid token');
@@ -29,8 +29,8 @@ module.exports ={
     if (req.body.mobile || req.body.name || req.body.tag === 'img') {
       try {
         console.log(req.body)
-          const token = req.headers.token;
-          const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
+        const token = req.headers.authorization.split(' ')[1];
+        const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
           const { id } = tokenDecoded;
           const url = await generateUploadURL();
           if (req.body.mobile) {
