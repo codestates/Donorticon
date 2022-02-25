@@ -288,9 +288,7 @@ const Mypage = () => {
     const index = parseInt(e.target.id);
     if (index !== 0) {
       const arr = [...isChanging];
-      console.log('1', arr);
       arr[index] = !isChanging[index];
-      console.log('2', arr);
       setIsChanging(arr);
     }
   };
@@ -426,6 +424,7 @@ const Mypage = () => {
               </ActButton>
               {isChanging[7] ? (
                 <ModalV2
+                  id="7"
                   title={
                     userInfo.activity
                       ? '계정을 비활성화 하시겠어요?'
@@ -468,6 +467,7 @@ const Mypage = () => {
               id="9"
               title="정말로 탈퇴하시겠어요?"
               callback={async (e) => {
+                handleFocus(e);
                 if (e.target.textContent === '네') {
                   try {
                     await axios.delete('mypage/delete', {

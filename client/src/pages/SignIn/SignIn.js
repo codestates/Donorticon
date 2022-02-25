@@ -20,6 +20,7 @@ import {
 } from '../../styles/utils/Container';
 import { Button } from '../../styles/utils/Button';
 import { InputContainer, ErrorMessage } from '../../styles/utils/Input';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -55,7 +56,7 @@ const SignIn = () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       try {
         if (who === 1) {
-          dispatch(signInGiver(userInfo));
+          await dispatch(signInGiver(userInfo)).unwrap();
           if (prev.includes('verifyRedir')) {
             navigate('/helperlist/category/0?page=1&limit=9');
           } else {
@@ -63,7 +64,7 @@ const SignIn = () => {
           }
         }
         if (who === 2) {
-          await dispatch(signInHelper(userInfo));
+          await dispatch(signInHelper(userInfo)).unwrap();
           navigate('/mypage');
         }
       } catch (e) {
@@ -92,14 +93,14 @@ const SignIn = () => {
   const handleGuest = async () => {
     if (who === 1) {
       try {
-        dispatch(signInGiverGuest());
+        await dispatch(signInGiverGuest()).unwrap();
         navigate(prev);
       } catch (e) {
         console.log(e);
       }
     } else if (who === 2) {
       try {
-        dispatch(signInHelperGuest());
+        await dispatch(signInHelperGuest()).unwrap();
         navigate('/mypage');
       } catch (e) {
         console.log(e);
