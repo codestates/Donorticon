@@ -5,11 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { setPoint } from '../../redux/gifticon/gifticonSlice';
 import ImageUploader from '../ImageUploader';
 import { CardGallery } from '../../styles/CardStyle';
-import {
-  ContentBox,
-  ContentTitle,
-  ImageBox,
-} from '../../styles/Gifticon/GifticonDetailStyle';
+import { ContentBox, ContentTitle, ImageBox } from '../../styles/CommonStyle';
 import {
   ButtonBox,
   GifticonMessage,
