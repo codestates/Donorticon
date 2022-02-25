@@ -9,10 +9,10 @@ module.exports = async (req, res) => {
     } else {
       mobile = null;
     }
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
     try {
       const [ userInfo, created ] = await giver.findOrCreate({
-        where: { name, email },
+        where: { email },
         defaults: { password, mobile, user_type: 1 }
       }); 
       if ( created ) {
