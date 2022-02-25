@@ -7,34 +7,37 @@ module.exports = async (req, res) => {
       const token = req.headers.authorization.split(' ')[1];
       const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       if (!tokenDecoded) {
-        return res.status(401).json({ message: 'invalid token' });
+        return res.status(401).json({ message: 'invalid token' })
       }
       const { id, user_type } = tokenDecoded;
+      const giverFinder = await giver.findOne({
+        where: { id },
+        attributes: { exclude: ['createdAt', 'updatedAt'] },
+      });
+      const giverInfo = giverFinder.dataValues;
+      if (req.body.currentPassword !== giverInfo.password) {
+        return res.status(401).json({ message: 'unauthorized user' })
+      } 
       if (user_type === 1) {
         await giver.update(
-          { password: req.body.newPassword },
+          { password: req.body.newPassword }, 
           {
-            where: { id },
-          },
+            where: { id }
+          }
         );
-        res
-          .status(200)
-          .json({ message: 'giver password changed successfully' });
+        res.status(200).json({ message: 'giver password changed successfully' })
       } else if (user_type === 2) {
         await helper.update(
-          { password: req.body.newPassword },
+          { password: req.body.newPassword }, 
           {
-            where: { id },
-          },
+            where: { id }
+          }
         );
-        res
-          .status(200)
-          .json({ message: 'helper password changed successfully' });
-      }
+        res.status(200).json({ message: 'helper password changed successfully' })     }
     } else {
-      res.status(422).json({ message: 'insufficient parameters supplied' });
+      res.status(422).json({ message: 'insufficient parameters supplied' })
     }
-  } catch (err) {
+  } catch(err) {
     console.log(err);
   }
-};
+}
