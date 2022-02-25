@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res) => {
 	try {
 		if (req.body.newPassword) {
-			const { token } = req.headers;
+			const token = req.headers.authorization.split(' ')[1];
 			const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
 			if (!tokenDecoded) {
 				return res.status(401).json({ message: 'invalid token' })
