@@ -104,9 +104,9 @@ const PasswordModal = ({ modalCloser }) => {
                   modalCloser(e);
                 } catch (e) {
                   if (e.response.status === 422) {
-                    setErrorMessage('현재 비밀번호가를 확인해 주세요');
+                    setErrorMessage('모두 입력해주세요');
                   } else if (e.response.status === 401) {
-                    setErrorMessage('세션이 만료되었습니다. 다시 시도해주세요');
+                    setErrorMessage('현재 비밀번호가 일치하지 않습니다');
                   }
                 }
               } else {

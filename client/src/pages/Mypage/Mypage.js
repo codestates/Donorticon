@@ -1,5 +1,5 @@
 import { Suspense, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   Title,
@@ -24,6 +24,8 @@ import { useNavigate } from 'react-router-dom';
 import AddressFinder from '../../component/AddressFinder';
 import PassswordModal from '../../component/PasswordModal';
 import ModalV2 from '../../component/ModalV2';
+import { removeToken } from '../../redux/utils/auth';
+import { signOut } from '../../redux/user/userSlice';
 
 const vulnerableList = [
   '아동/청소년',
@@ -49,6 +51,7 @@ const gifticonList = [
 const Mypage = () => {
   const token = localStorage.getItem('token');
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const who = useSelector((state) => state.user.user.who);
   const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
@@ -241,12 +244,7 @@ const Mypage = () => {
         const { data } = await axios.get('/mypage/helper', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUserInfo({
-          ...data,
-          gallery: Array(2).fill(
-            'http://img.segye.com/content/image/2021/04/11/20210411509865.jpg',
-          ),
-        });
+        setUserInfo(data);
       } catch (e) {
         console.log(e);
       }
@@ -473,8 +471,12 @@ const Mypage = () => {
                     await axios.delete('mypage/delete', {
                       headers: { Authorization: `Bearer ${token}` },
                     });
-                    localStorage.removeItem('token');
-                  } catch (e) {}
+                    navigate('/');
+                    dispatch(signOut());
+                    removeToken();
+                  } catch (e) {
+                    console.log(e);
+                  }
                 }
               }}
             />
