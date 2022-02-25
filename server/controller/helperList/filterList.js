@@ -27,11 +27,10 @@ module.exports = {
         const allList = await helper.findAndCountAll({
           limit,
           offset: skip,
-          where: { activity: true },
+          where: { activity: true, verification: 1 },
           order: [['id', 'DESC']],
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
-        console.log(allList);
         const { count, rows: list } = allList;
         const maxPage = Math.ceil(count / limit);
         res.send({ list, maxPage });
@@ -51,7 +50,7 @@ module.exports = {
           include: {
             model: helper,
             required: true,
-            where: { activity: true },
+            where: { activity: true, verification: 1 },
             attributes: ['id', 'name', 'slogan', 'img'],
           },
         });
@@ -76,7 +75,7 @@ module.exports = {
             {
               model: helper,
               required: true,
-              where: { activity: true },
+              where: { activity: true, verification: 1 },
               attributes: ['id', 'name', 'slogan', 'img'],
             },
           ],
@@ -102,7 +101,7 @@ module.exports = {
             {
               model: helper,
               required: true,
-              where: { activity: true },
+              where: { activity: true, verification: 1 },
               attributes: ['id'],
             },
           ],
