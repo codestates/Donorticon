@@ -56,7 +56,6 @@ module.exports ={
                 where: { id },
               },
             );
-            console.log(url);
             return res.status(200).json({ url });
           }
           res.status(200).json({ message: "user information successfully changed" });
