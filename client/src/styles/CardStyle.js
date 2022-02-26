@@ -5,11 +5,8 @@ export const CardContainer = styled.div`
   width: ${(props) => (props.gifticon ? '100%' : '50%')};
   padding: 20px 0;
   display: grid;
-  grid-gap: 40px;
+  grid-gap: 20px;
   grid-template-columns: repeat(3, 1fr);
-  @media ${({ theme }) => theme.device.laptop} {
-    grid-template-columns: repeat(2, 1fr);
-  }
   @media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: repeat(1, 1fr);
   }
@@ -30,7 +27,6 @@ export const CardGallery = styled.img`
   align-items: center;
   width: 100%;
   height: 200px;
-  border: 1px solid #000;
 `;
 
 export const CardContent = styled.div`
@@ -59,6 +55,13 @@ export const Slogan = styled.div`
   text-align: left;
   font-size: 18px;
   padding-top: 10px;
+`;
+
+export const HelperBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 // ============================================

@@ -4,7 +4,9 @@ import {
   GifticonContent,
 } from '../HelperList/GifticonCategoryStyle';
 
-export const FilterContainer = styled(GifticonCategoryContainer)``;
+export const FilterContainer = styled(GifticonCategoryContainer)`
+  padding-top: 0;
+`;
 
 export const FilterBox = styled.div`
   width: 100%;

@@ -16,7 +16,11 @@ import {
   ContentContainer,
   TopContainer,
 } from '../../styles/CommonStyle';
-import { SubTitle, Title } from '../../styles/utils/Container';
+import {
+  GifticonHeightContainer,
+  SubTitle,
+  Title,
+} from '../../styles/utils/Container';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -65,15 +69,10 @@ const Gifticon = () => {
 
   useEffect(() => getGifticonList(), [currentPage, statusId]);
 
-  //  {
-  //    who && who === 1 && <Div>Donorticon을 통해 기프티콘을 기부해보세요!</Div>;
-  //  }
-
   return (
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{username}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
@@ -93,24 +92,25 @@ const Gifticon = () => {
             </>
           ) : (
             <>
-              <CardContainer gifticon>
-                {list.map((gifticon) => {
-                  return (
-                    <GifticonCard
-                      key={gifticon.id}
-                      data={gifticon}
-                      name={
-                        who === 1 ? gifticon.helper.name : gifticon.giver.name
-                      }
-                    />
-                  );
-                })}
-              </CardContainer>
+              <GifticonHeightContainer>
+                <CardContainer gifticon>
+                  {list.map((gifticon) => {
+                    return (
+                      <GifticonCard
+                        key={gifticon.id}
+                        data={gifticon}
+                        name={
+                          who === 1 ? gifticon.helper.name : gifticon.giver.name
+                        }
+                      />
+                    );
+                  })}
+                </CardContainer>
+              </GifticonHeightContainer>
               {maxPage > 0 && (
                 <Pagination
                   maxPage={maxPage}
                   currentPage={currentPage}
-                  count={count}
                   setCurrentPage={setCurrentPage}
                 />
               )}

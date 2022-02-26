@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 export const AddressContainer = styled.div`
   margin: 10px 0;
+  width: ${(props) => props.mypage && '80%'};
+  @media ${({ theme }) => theme.device.mobile} {
+    width: ${(props) => props.mypage && '100%'};
+  }
 `;
 
 export const AddressBox = styled.div`
@@ -27,6 +31,9 @@ export const AddressInput = styled.input`
   width: 100%;
   text-align: left;
   padding: 10px;
-  border: 1px solid ${({ theme }) => theme.color.progressBar};
-  background-color: none;
+  border: 1px solid
+    ${(props) =>
+      props.mypage
+        ? props.theme.color.lightGrey
+        : props.theme.color.progressBar};
 `;

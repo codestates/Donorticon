@@ -38,6 +38,7 @@ export const ContentContainer = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     padding-top: 40px;
+    flex-direction: ${(props) => props.mypage && 'column-reverse'};
   }
 `;
 

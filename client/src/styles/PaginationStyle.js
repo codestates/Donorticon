@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const PaginationContainer = styled.div`
   display: flex;
-  padding: 40px 0;
+  padding-bottom: 20px;
   justify-content: center;
 `;
 
