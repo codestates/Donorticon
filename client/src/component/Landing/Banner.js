@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ilu2 from '../../img/ilu2.jpg';
 import {
   BannerContainer,
@@ -6,6 +7,10 @@ import {
   Title,
   Text,
 } from '../../styles/Landing/BannerStyle';
+=======
+import ilu2 from '../../img/ilu2.jpg'
+import { BannerContainer, Img, TextContainer, Title, Text } from '../../styles/landing/BannerStyle';
+>>>>>>> feature/errorfix-5
 
 const Banner = () => {
   return (
