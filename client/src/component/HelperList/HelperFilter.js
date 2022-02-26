@@ -9,12 +9,12 @@ import {
   ImageBackground,
   Name,
   NoMessage,
-} from '../../styles/HelperFilter/HelperCategoryStyle';
+} from '../../styles/HelperList/HelperCategoryStyle';
 import {
   GifticonCategoryBox,
   GifticonCategoryContainer,
   GifticonContent,
-} from '../../styles/HelperFilter/GifticonCategoryStyle';
+} from '../../styles/HelperList/GifticonCategoryStyle';
 import all from '../../img/helperCategory/1_all.png';
 import child from '../../img/helperCategory/2_child.png';
 import old from '../../img/helperCategory/3_old.png';
@@ -23,7 +23,7 @@ import global from '../../img/helperCategory/5_global.png';
 import women from '../../img/helperCategory/6_women.png';
 import mental from '../../img/helperCategory/7_mental.png';
 import etc from '../../img/helperCategory/8_etc.png';
-import CardList from '../Card/CardList';
+import CardList from './CardList';
 
 const helperCategory = [
   { id: 0, name: '전체보기', src: all },

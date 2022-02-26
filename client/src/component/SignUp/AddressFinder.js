@@ -1,32 +1,14 @@
-import styled from 'styled-components';
-import DaumPostCode from 'react-daum-postcode';
 import { useState } from 'react';
+import DaumPostCode from 'react-daum-postcode';
+import {
+  AddressBox,
+  AddressContainer,
+  AddressEdit,
+  AddressInput,
+  AddressTitle,
+} from '../../styles/AddressFinderStyle';
 
-const Box = styled.div`
-  display: flex;
-  direction: row;
-  padding-bottom: 10px;
-`;
-const Guider = styled.div``;
-const EditButton = styled.button`
-  margin-left: auto;
-  color: ${({ theme }) => theme.color.mainDark};
-  cursor: pointer;
-`;
-const Input = styled.input`
-  all: unset;
-  box-sizing: border-box;
-  width: 100%;
-  text-align: left;
-  padding: 10px;
-  border: 1px solid ${({ theme }) => theme.color.progressBar};
-  background-color: none;
-  /* &:focus {
-    outline-color: ${({ theme }) => theme.color.main};
-  } */
-`;
-
-const AddressFinder = ({ callback, location }) => {
+const AddressFinder = ({ callback, location, mypage }) => {
   const [complete, setComplete] = useState(location === '' ? false : true);
   const handleComplete = (data) => {
     let fullAddress = data.address;
@@ -46,13 +28,15 @@ const AddressFinder = ({ callback, location }) => {
   };
 
   return complete ? (
-    <>
-      <Box>
-        <Guider>활동 지역</Guider>
-        <EditButton onClick={() => setComplete(false)}>수정</EditButton>
-      </Box>
-      <Input readOnly defaultValue={location} />
-    </>
+    <AddressContainer>
+      <AddressBox>
+        <AddressTitle mypage={mypage}>활동 지역</AddressTitle>
+        <AddressEdit mypage={mypage} onClick={() => setComplete(false)}>
+          수정
+        </AddressEdit>
+      </AddressBox>
+      <AddressInput readOnly defaultValue={location} />
+    </AddressContainer>
   ) : (
     <DaumPostCode onComplete={handleComplete} className="post-code" />
   );

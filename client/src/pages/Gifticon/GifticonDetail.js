@@ -4,34 +4,29 @@ import GifticonReport from '../../component/Gifticon/GifticonReport';
 import SideBar from '../../component/SideBar';
 import StatusDropDown from '../../component/Gifticon/StatusDropDown';
 import { CardGallery } from '../../styles/CardStyle';
+import { SubTitle, Title } from '../../styles/utils/Container';
 import {
   BottomContainer,
   CommonContainer,
-  InputBox,
-  InputContent,
-  InputLabel,
-  TopContainer,
+  ContentBox,
   ContentContainer,
   ContentTitle,
-  ContentBox,
   ImageBox,
+  TopContainer,
+} from '../../styles/CommonStyle';
+import {
   InfoBox,
+  InputContent,
 } from '../../styles/Gifticon/GifticonDetailStyle';
-
-import { SubTitle, Title } from '../../styles/utils/Container';
+import { InputBox, InputLabel } from '../../styles/utils/Input';
 
 const GifticonDetail = () => {
-  const gifticon = useSelector((state) => state.gifticon);
-  const who = useSelector((state) => state.user.user.who);
   const username = useSelector((state) => state.user.user.name);
+  const who = useSelector((state) => state.user.user.who);
+  const gifticon = useSelector((state) => state.gifticon);
   const giver = who === 1 ? 1 : 0;
 
-  const { name, createdAt, status, img, report, textStyle } = gifticon;
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-  // const handleBtnClick = () => {
-  //   setIsModalOpen(true);
-  // };
+  const { name, createdAt, status, img } = gifticon;
 
   return (
     <CommonContainer>
@@ -46,12 +41,11 @@ const GifticonDetail = () => {
           <ContentTitle>기프티콘 상세정보</ContentTitle>
           <ContentBox>
             <ImageBox>
-              <a href={img} target="_blank" rel="noreferrer noopener">
-                <CardGallery
-                  style={{ width: '100%', height: '300px' }}
-                  src={img}
-                />
-              </a>
+              {/* TODO: 이미지 클릭시 이미지 확대 */}
+              <CardGallery
+                style={{ width: '100%', height: '300px' }}
+                src={img}
+              />
             </ImageBox>
             <InfoBox>
               <GifticonReport />

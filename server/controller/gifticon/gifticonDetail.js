@@ -1,12 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {
-  gifticon,
-  helper,
-  giver,
-  message,
-  gallery,
-  sequelize,
-} = require('../../models');
+const { gifticon, helper, giver, message, sequelize } = require('../../models');
 const generateUploadURL = require('../s3');
 const { QueryTypes } = require('sequelize');
 
@@ -57,16 +50,19 @@ module.exports = {
         }
       }
 
-      const thanksImg = await message.findOne({
+      const thanksImg = await message.findAll({
         raw: true,
-        where: { gifticon_id: id },
+        where: { gifticon_id: id, thanksImg: true },
         attributes: ['img'],
+        order: [['id', 'DESC']],
       });
 
-      let thanksImgUrl = null;
+      let thanksImgUrl;
 
-      if (thanksImg) {
-        thanksImgUrl = thanksImg.img;
+      if (thanksImg.length !== 0) {
+        thanksImgUrl = thanksImg[0].img;
+      } else {
+        thanksImgUrl = null;
       }
 
       res.status(200).send({ gifticonInfo, thanksImgUrl });
@@ -84,9 +80,7 @@ module.exports = {
 
     const gifticonId = parseInt(req.params.id);
 
-    // helper만 가능한 기능들
     if (token && who === 2) {
-      // 기프티콘 상태 변경
       if (req.body.status) {
         const status = req.body.status;
         try {
@@ -186,11 +180,6 @@ module.exports = {
         const url = await generateUploadURL();
         const imageUrl = url.split('?')[0];
 
-        const saveImage = await gallery.create({
-          helper_id: req.body.helperId,
-          img: imageUrl,
-        });
-
         await message.create({
           room_id: roomId[0].id,
           giver_id: req.body.giverId,
@@ -198,28 +187,13 @@ module.exports = {
           gifticon_id: req.body.gifticonId,
           img: imageUrl,
           type: 2,
+          thanksImg: true,
         });
 
-        res.status(200).json({ url: url });
+        res.status(200).json({ url, imageUrl });
       } catch (e) {
         res.status(500).json({ message: 'intenal server error' });
       }
     }
-  },
-  sendRejectMessage: async (req, res) => {
-    try {
-      console.log(req.body);
-      console.log(req.headers);
-    } catch (e) {
-      console.log(e);
-    }
-    // await message.create({
-    //   room_id: roomId[0].id,
-    //   giver_id: req.body.giverId,
-    //   helper_id: req.body.helperId,
-    //   gifticon_id: req.body.gifticonId,
-    //   img: imageUrl,
-    //   type: 2,
-    // });
   },
 };

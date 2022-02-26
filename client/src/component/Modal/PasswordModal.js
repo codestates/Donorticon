@@ -1,10 +1,10 @@
 import { useState, useRef } from 'react';
-import { ModalBackground, ModalFrame } from '../styles/utils/Modal';
-import { Btn, ButtonContainer } from '../styles/ButtonModalStyle';
-import InputSet from './InputComponent';
-import { ErrorMessage } from '../styles/utils/Input';
+import { ModalBackground, ModalFrame } from '../../styles/utils/Modal';
+import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
+import InputSet from '../InputComponent';
+import { ErrorMessage } from '../../styles/utils/Input';
 import axios from 'axios';
-import { InputLabel, InputBox } from '../styles/utils/Input';
+import { InputLabel, InputBox } from '../../styles/utils/Input';
 import { sha256 } from 'js-sha256';
 
 const PasswordModal = ({ modalCloser }) => {

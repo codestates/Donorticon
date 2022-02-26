@@ -85,7 +85,8 @@ export const userSlice = createSlice({
     },
     [verifyUser.fulfilled]: (state, { payload }) => {
       state.user.email = payload.email;
-      state.user.name = payload.name;
+      state.user.who = payload.type;
+      state.user.id = payload.id;
     },
   },
 });

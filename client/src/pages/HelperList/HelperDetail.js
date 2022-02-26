@@ -1,7 +1,15 @@
+import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import ImageUploader from '../../component/ImageUploader';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
+import {
+  FaAngleLeft,
+  FaAngleRight,
+  FaCircle,
+  FaRegCircle,
+} from 'react-icons/fa';
+import ImageUploader from '../../component/ImageUploader';
+import Map from '../../component/SignUp/Map';
 import {
   Container,
   UpBox,
@@ -14,15 +22,7 @@ import {
   UpBoxContentTitle,
   Img,
   UpBoxContentWho,
-} from '../../styles/helperDetail/helperDetailStyle';
-import Map from '../../component/Map';
-import axios from 'axios';
-import {
-  FaAngleLeft,
-  FaAngleRight,
-  FaCircle,
-  FaRegCircle,
-} from 'react-icons/fa';
+} from '../../styles/HelperList/HelperDetailStyle';
 
 const HelperDetail = () => {
   const { id } = useParams();

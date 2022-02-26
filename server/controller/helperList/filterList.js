@@ -6,8 +6,6 @@ const {
 
 module.exports = {
   getFilteredList: async (req, res) => {
-    // req.params로 넘어오는 id가 0에서 7 사이어야함
-
     //TODO: req.params 정보가 넘어오지 않았을때 에러 처리
     // if (!req.params) {
     // }
@@ -23,16 +21,13 @@ module.exports = {
 
     const skip = (page - 1) * limit;
 
-    //TODO: 에러 처리(id값은 0부터 7까지만 가능)
-    // if (id < 0 || id > 7) {
-    // }
-
     if (helperCategoryId === 0 && gifticonCategoryId === 0) {
       try {
         //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
         const allList = await helper.findAndCountAll({
           limit,
           offset: skip,
+          where: { activity: true, verification: 1 },
           order: [['id', 'DESC']],
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
@@ -55,6 +50,7 @@ module.exports = {
           include: {
             model: helper,
             required: true,
+            where: { activity: true, verification: 1 },
             attributes: ['id', 'name', 'slogan', 'img'],
           },
         });
@@ -79,6 +75,7 @@ module.exports = {
             {
               model: helper,
               required: true,
+              where: { activity: true, verification: 1 },
               attributes: ['id', 'name', 'slogan', 'img'],
             },
           ],
@@ -104,6 +101,7 @@ module.exports = {
             {
               model: helper,
               required: true,
+              where: { activity: true, verification: 1 },
               attributes: ['id'],
             },
           ],

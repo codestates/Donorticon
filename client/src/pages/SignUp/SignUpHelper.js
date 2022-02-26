@@ -1,12 +1,10 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sha256 } from 'js-sha256';
-import { setUser } from '../../redux/user/userSlice';
-import ProgressBar from '../../component/ProgressBar';
+import AddressFinder from '../../component/SignUp/AddressFinder';
+import ProgressBar from '../../component/SignUp/ProgressBar';
 import InputSet from '../../component/InputComponent';
-import AddressFinder from '../../component/AddressFinder';
 import {
   ButtonContainer,
   CheckBoxContainer,
@@ -246,7 +244,7 @@ const SignUpHelper = () => {
             type: 2,
             id,
           };
-          dispatch(verifyUser(userInfo));
+          await dispatch(verifyUser(userInfo));
           navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {

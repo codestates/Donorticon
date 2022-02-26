@@ -16,11 +16,11 @@ const Button = styled.div`
 
 const Verification = () => {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state.user);
+  const state = useSelector((state) => state.user.user);
   const userInfo = {
-    email: `${state.user.email}`,
-    type: `${state.user.type}`,
-    id: `${state.user.id}`,
+    email: state.email,
+    type: state.who,
+    id: state.id,
   };
   const handleVerification = () => {
     // const request = await axios.get(
