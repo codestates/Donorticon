@@ -23,6 +23,7 @@ import {
   NotShow,
   GalleryAddLabel,
   MultiContainer,
+  ActBox,
 } from '../../styles/Mypage/MypageStyle';
 import {
   BottomContainer,
@@ -300,7 +301,6 @@ const Mypage = () => {
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{userInfo.name}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
@@ -339,7 +339,7 @@ const Mypage = () => {
                   location={userInfo.location}
                   mypage
                 />
-                <MultiContainer>
+                <MultiContainer gallery>
                   <InputName>갤러리</InputName>
                   <GalleryBox>
                     {userInfo.gallery.map((url, idx) => {
@@ -420,51 +420,55 @@ const Mypage = () => {
                     }}
                   />
                 </MultiContainer>
-                <ActButton id="7" onClick={handleFocus}>
-                  {userInfo.activity ? `계정 비활성화` : '계정 활성화'}
-                </ActButton>
-                {isChanging[7] ? (
-                  <ModalV2
-                    id="7"
-                    title={
-                      userInfo.activity
-                        ? '계정을 비활성화 하시겠어요?'
-                        : '계정을 활성화 하시겠어요?'
-                    }
-                    subtitle={
-                      userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
-                    }
-                    callback={async (e) => {
-                      handleFocus(e);
-                      if (e.target.textContent === '네') {
-                        try {
-                          setUserInfo({
-                            ...userInfo,
-                            activity: !userInfo.activity,
-                          });
-                          await axios.put(
-                            'mypage/helper/activity',
-                            { activity: !userInfo.activity },
-                            {
-                              headers: { Authorization: `Bearer ${token}` },
-                            },
-                          );
-                        } catch (e) {}
-                      }
-                    }}
-                  />
-                ) : null}
               </>
             )}
-            <ActButton id="8" onClick={handleFocus}>
-              비밀번호 변경
-            </ActButton>
+            <ActBox>
+              {who === 2 && (
+                <ActButton id="7" onClick={handleFocus}>
+                  {userInfo.activity ? '계정 비활성화' : '계정 활성화'}
+                </ActButton>
+              )}
+              <ActButton id="8" onClick={handleFocus}>
+                비밀번호 변경
+              </ActButton>
+              <ActButton id="9" onClick={handleFocus}>
+                회원 탈퇴
+              </ActButton>
+            </ActBox>
+            {isChanging[7] ? (
+              <ModalV2
+                id="7"
+                title={
+                  userInfo.activity
+                    ? '계정을 비활성화 하시겠어요?'
+                    : '계정을 활성화 하시겠어요?'
+                }
+                subtitle={
+                  userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
+                }
+                callback={async (e) => {
+                  handleFocus(e);
+                  if (e.target.textContent === '네') {
+                    try {
+                      setUserInfo({
+                        ...userInfo,
+                        activity: !userInfo.activity,
+                      });
+                      await axios.put(
+                        'mypage/helper/activity',
+                        { activity: !userInfo.activity },
+                        {
+                          headers: { Authorization: `Bearer ${token}` },
+                        },
+                      );
+                    } catch (e) {}
+                  }
+                }}
+              />
+            ) : null}
             {isChanging[8] && (
               <PassswordModal id="8" modalCloser={handleFocus} />
             )}
-            <ActButton id="9" onClick={handleFocus}>
-              회원 탈퇴
-            </ActButton>
             {isChanging[9] && (
               <ModalV2
                 id="9"
@@ -488,16 +492,20 @@ const Mypage = () => {
             )}
           </ContentLeft>
           <ContentRight>
-            <ProfileImg src={userInfo.img} />
-            <GalleryAddLabel htmlFor="imageChanger">
-              <NotShow
-                id="imageChanger"
-                type="file"
-                accept="image/*"
-                onChange={(e) => handleImageUpload(e, 'img')}
-              />
-              이미지 변경
-            </GalleryAddLabel>
+            <MultiContainer center>
+              <ProfileImg src={userInfo.img} />
+            </MultiContainer>
+            <MultiContainer center>
+              <GalleryAddLabel center htmlFor="imageChanger">
+                <NotShow
+                  id="imageChanger"
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleImageUpload(e, 'img')}
+                />
+                이미지 변경
+              </GalleryAddLabel>
+            </MultiContainer>
           </ContentRight>
         </ContentContainer>
       </BottomContainer>

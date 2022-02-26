@@ -32,7 +32,6 @@ const GifticonDetail = () => {
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{username}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
