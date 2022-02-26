@@ -6,7 +6,10 @@ module.exports = {
   get: async (req, res) => {
     if (Object.keys(req.query).length !== 0) {
       const room = req.query.room;
-      let dialogues = await message.findAll({where:{room_id:room}});
+      let dialogues = await message.findAll({
+        order: [['id', 'DESC']],
+        where:{room_id:room}
+      });
       res.status(200).json({dialogues});
     }
     try {
