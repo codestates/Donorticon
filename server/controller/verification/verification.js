@@ -11,8 +11,8 @@ module.exports = {
     const email = req.headers.email;
     const type = parseInt(req.headers.type);
     const transporter = nodemailer.createTransport({
-      service: 'Naver',
-      host: 'smtp.naver.com',
+      service: 'gmail',
+      host: 'smtp.gmail.com',
       port: 587,
       auth: {
         user: `${process.env.MAIL_ID}`,
@@ -32,8 +32,8 @@ module.exports = {
 
     const code = crypto.randomBytes(127).toString('hex');
     const message = {
-      from: 'swim1720@naver.com',
-      to: email,
+      from: 'donorticon@gmail.com',
+      to: `${req.headers.email}`,
       subject: 'Donorticon: Please verify your email',
       template: 'email',
       context: {
