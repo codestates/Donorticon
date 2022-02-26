@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDownSquare } from 'react-icons/ai';
+import { getToken } from '../../redux/utils/auth';
+import { setInfo } from '../../redux/gifticon/gifticonSlice';
+import ModalV2 from '../Modal/ModalV2';
 import {
   DropdownItemContainer,
   DropDownItems,
   DropDownStatusButton,
   StatusContainer,
-} from '../../styles/StatusDropDownStyle';
+} from '../../styles/Gifticon/StatusDropDownStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
-import { setInfo } from '../../redux/gifticon/gifticonSlice';
-import axios from 'axios';
-import { getToken } from '../../redux/utils/auth';
-import ModalV2 from '../ModalV2';
 
 const gifticonStatus = [
   { id: 1, name: '사용함' },
