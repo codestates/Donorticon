@@ -1,6 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Loader from '../component/Loader';
 import Banner from '../component/Landing/Banner';
 import HowToUse from '../component/Landing/HowToUse';
 import Helpers from '../component/Landing/Helpers';
@@ -19,34 +18,28 @@ const Div = styled.div`
 `;
 
 const Home = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Container>
-          <Wrapper>
-            <Div>
-              <Banner />
-            </Div>
-            <Div>
-              <HowToUse />
-            </Div>
-            <Div>
-              <Helpers />
-            </Div>
-            <Div>
-              <Reviews />
-            </Div>
-            <Div>
-              <Cases />
-            </Div>
-          </Wrapper>
-          <FloatingButton />
-        </Container>
-      )}
+      <Container>
+        <Wrapper>
+          <Div>
+            <Banner />
+          </Div>
+          <Div>
+            <HowToUse />
+          </Div>
+          <Div>
+            <Helpers />
+          </Div>
+          <Div>
+            <Reviews />
+          </Div>
+          <Div>
+            <Cases />
+          </Div>
+        </Wrapper>
+        <FloatingButton />
+      </Container>
     </>
   );
 };

@@ -9,8 +9,9 @@ export const AddressContainer = styled.div`
 `;
 
 export const AddressBox = styled.div`
+  width: 100%;
   display: flex;
-  direction: row;
+  justify-content: space-between;
   padding-bottom: 10px;
 `;
 
@@ -19,7 +20,7 @@ export const AddressTitle = styled.div`
 `;
 
 export const AddressEdit = styled.button`
-  margin-left: auto;
+  text-align: right;
   cursor: pointer;
   font-size: 13px;
   width: 90px;

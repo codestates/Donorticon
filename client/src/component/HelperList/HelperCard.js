@@ -11,7 +11,8 @@ import { useNavigate } from 'react-router-dom';
 const Card = ({ id, name, img, slogan }) => {
   const navigate = useNavigate();
 
-  const sliced = slogan.length > 24 ? `${slogan.slice(0, 24)}...` : `${slogan}`;
+  const sliced =
+    slogan && slogan.length > 24 ? `${slogan.slice(0, 24)}...` : `${slogan}`;
 
   return (
     <CardBox onClick={() => navigate(`/helperlist/detail/${id}`)}>
@@ -20,7 +21,7 @@ const Card = ({ id, name, img, slogan }) => {
         <HelperImage src={img} />
         <HelperName>{name}</HelperName>
       </CardContent>
-      <Slogan>{sliced}</Slogan>
+      <Slogan>{slogan === null ? '아직 정보가 없어요!' : `${sliced}`}</Slogan>
     </CardBox>
   );
 };

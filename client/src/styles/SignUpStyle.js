@@ -11,7 +11,6 @@ export const SignUpContainer = styled.div`
 
 export const ContentContainer = styled.div`
   padding-top: 40px;
-  border-bottom: 1px solid;
 `;
 
 export const ContentTitle = styled.div`
@@ -20,12 +19,18 @@ export const ContentTitle = styled.div`
   font-size: 20px;
 `;
 
+export const ContentBox = styled.div`
+  min-height: 400px;
+  border-top: ${(props) =>
+    props.line && `1px solid ${props.theme.color.progressBar}`};
+`;
+
 // checkbox
 export const CheckBoxContainer = styled.div`
   text-align: left;
   padding: 10px;
   border: 1px solid ${({ theme }) => theme.color.progressBar};
-  border-bottom: none;
+  border-top: none;
 `;
 
 export const Box = styled.div`
