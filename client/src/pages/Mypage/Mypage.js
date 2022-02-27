@@ -25,6 +25,7 @@ import {
   MultiContainer,
   ActBox,
   TextareaChanger,
+  LoaderBox,
 } from '../../styles/Mypage/MypageStyle';
 import {
   BottomContainer,
@@ -34,6 +35,7 @@ import {
 } from '../../styles/CommonStyle';
 import { SubTitle, Title } from '../../styles/utils/Container';
 import { ErrorMessage } from '../../styles/utils/Input';
+import Loader from '../../component/Loader';
 
 const vulnerableList = [
   '아동/청소년',
@@ -183,22 +185,6 @@ const Mypage = () => {
     }
   };
 
-  const handleWho = async () => {
-    try {
-      const { data } = await axios.get(
-        `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      setUserInfo(data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => handleWho(), []);
-
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     const tempUrl = URL.createObjectURL(file);
@@ -317,6 +303,31 @@ const Mypage = () => {
     }
   };
 
+  const handleWho = async () => {
+    try {
+      const { data } = await axios.get(
+        `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+      setUserInfo(data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      handleWho();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
+
   return (
     <CommonContainer>
       <TopContainer>
@@ -325,149 +336,155 @@ const Mypage = () => {
       </TopContainer>
       <BottomContainer>
         <SideBar />
-        <ContentContainer mypage>
-          <ContentLeft>
-            {inputList[who].map((list, idx) => (
-              <InputBox key={idx}>
-                <InputName>{list.title}</InputName>
-                {isChanging[idx] ? (
-                  idx === 4 ? (
-                    <>
-                      <TextareaChanger
-                        id={idx}
-                        name={list.name}
-                        defaultValue={userInfo[list.name]}
-                        onBlur={handleBlur}
-                      />
-                      {isError[idx] && (
-                        <ErrorMessage>{list.errorMessage}</ErrorMessage>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      <InputChanger
-                        id={idx}
-                        name={list.name}
-                        defaultValue={userInfo[list.name]}
-                        onBlur={handleBlur}
-                      />
-                      {isError[idx] && (
-                        <ErrorMessage>{list.errorMessage}</ErrorMessage>
-                      )}
-                    </>
-                  )
-                ) : (
-                  <InputContent id={idx} onClick={handleFocus}>
-                    {userInfo[list.name].length > 50
-                      ? `${userInfo[list.name].slice(0, 50)}...`
-                      : userInfo[list.name]}
-                  </InputContent>
-                )}
-              </InputBox>
-            ))}
-            {who === 2 && (
-              <>
-                <AddressFinder
-                  callback={handleAddress}
-                  location={userInfo.location}
-                  mypage
-                />
-                <MultiContainer gallery>
-                  <InputName>갤러리</InputName>
-                  <GalleryBox>
-                    {userInfo.gallery.map((url, idx) => {
-                      return (
-                        <GalleryImg
-                          key={idx}
-                          src={url}
-                          onClick={removeGallery}
+        {isLoading ? (
+          <LoaderBox>
+            <Loader />
+          </LoaderBox>
+        ) : (
+          <ContentContainer mypage>
+            <ContentLeft>
+              {inputList[who].map((list, idx) => (
+                <InputBox key={idx}>
+                  <InputName>{list.title}</InputName>
+                  {isChanging[idx] ? (
+                    idx === 4 ? (
+                      <>
+                        <TextareaChanger
+                          id={idx}
+                          name={list.name}
+                          defaultValue={userInfo[list.name]}
+                          onBlur={handleBlur}
                         />
-                      );
-                    })}
-                  </GalleryBox>
-                  <GalleryAddLabel htmlFor="gallery">
-                    <NotShow
-                      id="gallery"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageUpload}
-                    />
-                    이미지 추가
-                  </GalleryAddLabel>
-                </MultiContainer>
-                <MultiContainer>
-                  <InputName>vulnerable</InputName>
-                  <Tag
-                    tagList={vulnerableList}
-                    targetTagList={userInfo.vulnerable}
-                    callback={vulnerableHandler}
-                  />
-                </MultiContainer>
-                <MultiContainer>
-                  <InputName>gifticon</InputName>
-                  <Tag
-                    tagList={gifticonList}
-                    targetTagList={userInfo.gifticonCategory}
-                    callback={gifticonHandler}
-                  />
-                </MultiContainer>
-              </>
-            )}
-            <ActBox>
+                        {isError[idx] && (
+                          <ErrorMessage>{list.errorMessage}</ErrorMessage>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <InputChanger
+                          id={idx}
+                          name={list.name}
+                          defaultValue={userInfo[list.name]}
+                          onBlur={handleBlur}
+                        />
+                        {isError[idx] && (
+                          <ErrorMessage>{list.errorMessage}</ErrorMessage>
+                        )}
+                      </>
+                    )
+                  ) : (
+                    <InputContent id={idx} onClick={handleFocus}>
+                      {userInfo[list.name] && userInfo[list.name].length > 50
+                        ? `${userInfo[list.name].slice(0, 50)}...`
+                        : userInfo[list.name]}
+                    </InputContent>
+                  )}
+                </InputBox>
+              ))}
               {who === 2 && (
-                <ActButton id="7" onClick={handleFocus}>
-                  {userInfo.activity ? '계정 비활성화' : '계정 활성화'}
-                </ActButton>
+                <>
+                  <AddressFinder
+                    callback={handleAddress}
+                    location={userInfo.location}
+                    mypage
+                  />
+                  <MultiContainer gallery>
+                    <InputName>갤러리</InputName>
+                    <GalleryBox>
+                      {userInfo.gallery.map((url, idx) => {
+                        return (
+                          <GalleryImg
+                            key={idx}
+                            src={url}
+                            onClick={removeGallery}
+                          />
+                        );
+                      })}
+                    </GalleryBox>
+                    <GalleryAddLabel htmlFor="gallery">
+                      <NotShow
+                        id="gallery"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                      />
+                      이미지 추가
+                    </GalleryAddLabel>
+                  </MultiContainer>
+                  <MultiContainer>
+                    <InputName>vulnerable</InputName>
+                    <Tag
+                      tagList={vulnerableList}
+                      targetTagList={userInfo.vulnerable}
+                      callback={vulnerableHandler}
+                    />
+                  </MultiContainer>
+                  <MultiContainer>
+                    <InputName>gifticon</InputName>
+                    <Tag
+                      tagList={gifticonList}
+                      targetTagList={userInfo.gifticonCategory}
+                      callback={gifticonHandler}
+                    />
+                  </MultiContainer>
+                </>
               )}
-              <ActButton id="8" onClick={handleFocus}>
-                비밀번호 변경
-              </ActButton>
-              <ActButton id="9" onClick={handleFocus}>
-                회원 탈퇴
-              </ActButton>
-            </ActBox>
-            {isChanging[7] && (
-              <ModalV2
-                id="7"
-                title={
-                  userInfo.activity
-                    ? '계정을 비활성화 하시겠어요?'
-                    : '계정을 활성화 하시겠어요?'
-                }
-                subtitle={
-                  userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
-                }
-                callback={handleActivity}
-              />
-            )}
-            {isChanging[8] && (
-              <PassswordModal id="8" modalCloser={handleFocus} />
-            )}
-            {isChanging[9] && (
-              <ModalV2
-                id="9"
-                title="정말로 탈퇴하시겠어요?"
-                callback={handleDeleteUser}
-              />
-            )}
-          </ContentLeft>
-          <ContentRight>
-            <MultiContainer center>
-              <ProfileImg src={userInfo.img} />
-            </MultiContainer>
-            <MultiContainer center>
-              <GalleryAddLabel center htmlFor="img">
-                <NotShow
-                  id="img"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
+              <ActBox>
+                {who === 2 && (
+                  <ActButton id="7" onClick={handleFocus}>
+                    {userInfo.activity ? '계정 비활성화' : '계정 활성화'}
+                  </ActButton>
+                )}
+                <ActButton id="8" onClick={handleFocus}>
+                  비밀번호 변경
+                </ActButton>
+                <ActButton id="9" onClick={handleFocus}>
+                  회원 탈퇴
+                </ActButton>
+              </ActBox>
+              {isChanging[7] && (
+                <ModalV2
+                  id="7"
+                  title={
+                    userInfo.activity
+                      ? '계정을 비활성화 하시겠어요?'
+                      : '계정을 활성화 하시겠어요?'
+                  }
+                  subtitle={
+                    userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
+                  }
+                  callback={handleActivity}
                 />
-                이미지 변경
-              </GalleryAddLabel>
-            </MultiContainer>
-          </ContentRight>
-        </ContentContainer>
+              )}
+              {isChanging[8] && (
+                <PassswordModal id="8" modalCloser={handleFocus} />
+              )}
+              {isChanging[9] && (
+                <ModalV2
+                  id="9"
+                  title="정말로 탈퇴하시겠어요?"
+                  callback={handleDeleteUser}
+                />
+              )}
+            </ContentLeft>
+            <ContentRight>
+              <MultiContainer center>
+                <ProfileImg src={userInfo.img} />
+              </MultiContainer>
+              <MultiContainer center>
+                <GalleryAddLabel center htmlFor="img">
+                  <NotShow
+                    id="img"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                  />
+                  이미지 변경
+                </GalleryAddLabel>
+              </MultiContainer>
+            </ContentRight>
+          </ContentContainer>
+        )}
       </BottomContainer>
     </CommonContainer>
   );

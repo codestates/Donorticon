@@ -27,6 +27,7 @@ import global from '../../img/helperCategory/5_global.png';
 import women from '../../img/helperCategory/6_women.png';
 import mental from '../../img/helperCategory/7_mental.png';
 import etc from '../../img/helperCategory/8_etc.png';
+import Loader from '../Loader';
 
 const helperCategory = [
   { id: 0, name: '전체보기', src: all },
@@ -110,12 +111,22 @@ const HelperFilter = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (helperCategoryId === 0) {
-      getList(helperCategoryId);
-    } else {
-      getFilteredList(helperCategoryId);
-    }
+    const getData = () => {
+      if (helperCategoryId === 0) {
+        getList(helperCategoryId);
+      } else {
+        getFilteredList(helperCategoryId);
+      }
+    };
+    setTimeout(() => {
+      getData();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
   }, [currentPage, helperCategoryId, gifticonCategoryId]);
 
   return (
@@ -161,33 +172,39 @@ const HelperFilter = () => {
           })}
         </GifticonCategoryBox>
       </GifticonCategoryContainer>
-      {list.length === 0 ? (
-        <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+      {isLoading ? (
+        <Loader />
       ) : (
         <>
-          <HelperHeightContainer>
-            <HelperBox>
-              <CardContainer>
-                {list.map((helper) => {
-                  return (
-                    <HelperCard
-                      id={helper.id}
-                      name={helper.name}
-                      img={helper.img}
-                      slogan={helper.slogan}
-                      key={helper.id}
-                    />
-                  );
-                })}
-              </CardContainer>
-            </HelperBox>
-          </HelperHeightContainer>
-          {maxPage > 0 && (
-            <Pagination
-              maxPage={maxPage}
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-            />
+          {list.length === 0 ? (
+            <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+          ) : (
+            <>
+              <HelperHeightContainer>
+                <HelperBox>
+                  <CardContainer>
+                    {list.map((helper) => {
+                      return (
+                        <HelperCard
+                          id={helper.id}
+                          name={helper.name}
+                          img={helper.img}
+                          slogan={helper.slogan}
+                          key={helper.id}
+                        />
+                      );
+                    })}
+                  </CardContainer>
+                </HelperBox>
+              </HelperHeightContainer>
+              {maxPage > 0 && (
+                <Pagination
+                  maxPage={maxPage}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              )}
+            </>
           )}
         </>
       )}

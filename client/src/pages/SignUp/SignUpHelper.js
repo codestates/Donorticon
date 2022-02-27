@@ -15,6 +15,7 @@ import {
   ContentTitle,
   Label,
   Box,
+  ContentBox,
 } from '../../styles/SignUpStyle';
 import {
   Container,
@@ -284,47 +285,55 @@ const SignUpHelper = () => {
           <ProgressBar percent={percent} />
           <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
           {page < 2 ? (
-            signUpForm[page].lists.map((list, idx) => (
-              <CheckBoxContainer key={page * 7 + idx}>
-                <Box>
-                  <CheckBox
-                    key={page * 7 + idx}
-                    id={page * 7 + idx}
-                    name={signUpForm[page].name}
-                    value={list}
-                    onClick={handleCheckBox}
-                    defaultChecked={helperInfo[signUpForm[page].name].includes(
-                      list,
-                    )}
-                  />
-                  <Label htmlFor={page * 7 + idx}>{list}</Label>
-                </Box>
-              </CheckBoxContainer>
-            ))
-          ) : page === 2 ? (
-            <AddressFinder
-              callback={signUpForm[2].callback}
-              location={helperInfo.location}
-            />
-          ) : (
-            <InputContainer>
-              {signUpForm[page].input.map((card, idx) => (
-                <InputBox key={idx}>
-                  <InputLabel>
-                    {card.title === '휴대전화' ? card.title : `${card.title} *`}
-                  </InputLabel>
-                  <InputSet
-                    key={idx}
-                    title={card.title}
-                    inputPlaceHolder={card.inputPlaceHolder}
-                    callback={card.callback}
-                    errorMessage={card.errorMessage}
-                    check={isCheckStart}
-                    // handleKeyPress={handleKeyPress}
-                  />
-                </InputBox>
+            <ContentBox line>
+              {signUpForm[page].lists.map((list, idx) => (
+                <CheckBoxContainer key={page * 7 + idx}>
+                  <Box>
+                    <CheckBox
+                      key={page * 7 + idx}
+                      id={page * 7 + idx}
+                      name={signUpForm[page].name}
+                      value={list}
+                      onClick={handleCheckBox}
+                      defaultChecked={helperInfo[
+                        signUpForm[page].name
+                      ].includes(list)}
+                    />
+                    <Label htmlFor={page * 7 + idx}>{list}</Label>
+                  </Box>
+                </CheckBoxContainer>
               ))}
-            </InputContainer>
+            </ContentBox>
+          ) : page === 2 ? (
+            <ContentBox>
+              <AddressFinder
+                callback={signUpForm[2].callback}
+                location={helperInfo.location}
+              />
+            </ContentBox>
+          ) : (
+            <ContentBox>
+              <InputContainer>
+                {signUpForm[page].input.map((card, idx) => (
+                  <InputBox key={idx}>
+                    <InputLabel>
+                      {card.title === '휴대전화'
+                        ? card.title
+                        : `${card.title} *`}
+                    </InputLabel>
+                    <InputSet
+                      key={idx}
+                      title={card.title}
+                      inputPlaceHolder={card.inputPlaceHolder}
+                      callback={card.callback}
+                      errorMessage={card.errorMessage}
+                      check={isCheckStart}
+                      // handleKeyPress={handleKeyPress}
+                    />
+                  </InputBox>
+                ))}
+              </InputContainer>
+            </ContentBox>
           )}
         </ContentContainer>
         <ErrorMessage center style={{ paddingTop: '40px' }}>

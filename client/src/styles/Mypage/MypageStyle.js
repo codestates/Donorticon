@@ -150,3 +150,7 @@ export const ErrorReminder = styled.div`
   right: 0;
   color: ${({ theme }) => theme.color.error};
 `;
+
+export const LoaderBox = styled.div`
+  width: 100%;
+`;
