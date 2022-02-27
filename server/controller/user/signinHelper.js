@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     });
     if (!helperFinder) {
-      res.status(404).json({ message: 'Invalid user' });
+      res.status(404).json({ message: 'invalid user' });
     } else {
       const helperInfo = helperFinder.dataValues;
       if (helperInfo.verification) {

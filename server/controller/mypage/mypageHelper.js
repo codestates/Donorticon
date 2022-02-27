@@ -125,11 +125,11 @@ module.exports = {
 							helper_id: id,
 							img: url.split('?')[0]
 						})
-					return res.status(201).json({ url });
+					return res.status(200).json({ url });
 				}
-        res.status(201).json({ message: "user information successfully changed" });
+        res.status(200).json({ message: "user information successfully changed" });
       } catch (e) {
-        res.status(500).json({ message: 'server error' });
+        res.status(500).json({ message: 'internal server error' });
       } 
     } else {
       res.status(422).json({ message: 'insufficient parameters supplied' });
@@ -142,9 +142,9 @@ module.exports = {
       if (!tokenDecoded) {
         return res.status(401).json({ message: 'invalid token' });
       }
-      console.log('갤러리 삭제를 요청하셨군요! 서비스 제작중입니다!')
+      res.status(200).json({ message: '갤러리 삭제를 요청하셨군요! 서비스 제작중입니다!' })
     } catch(err) {
-      console.log(err)
+      res.status(500).json({ message: 'internal server error' })
     }
   }
 };

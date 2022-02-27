@@ -25,6 +25,6 @@ module.exports = async (req, res) => {
 				res.status(200).json({ message: 'helper account successfully deleted' })			
 			}
 	} catch(err) {
-		console.log(err);
+		res.status(500).json({ message: 'internal server error' })
 	}
 }

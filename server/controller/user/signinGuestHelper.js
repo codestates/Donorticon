@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 module.exports = async (req, res) => {
   try {
     const helperEmailNumber = await helper.count();
-    const helperEmail = `guest${helperEmailNumber + 1}@donorticon.com`;
+    const helperEmail = `guestHelper${helperEmailNumber + 1}@donorticon.com`;
     const helperGuestCreated = await helper.create({
       email: helperEmail,
-      name: `helper${helperEmailNumber + 1}`,
+      name: `guestHelper${helperEmailNumber + 1}`,
       user_type: 2,
     });
     const helperGuestFinder = await helper.findOne({
