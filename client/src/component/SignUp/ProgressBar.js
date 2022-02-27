@@ -26,7 +26,7 @@ const ProgressBar = ({ percent, point }) => {
   return (
     <>
       <BarContainer>
-        <Bar width={`${percentage}%`} />
+        <Bar width={percentage >= 0 ? `${percentage}%` : '0%'} />
       </BarContainer>
       <Text>{text}</Text>
     </>

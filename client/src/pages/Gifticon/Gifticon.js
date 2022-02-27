@@ -3,20 +3,25 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../component/Pagination/Pagination';
-import GifticonCard from '../../component/Card/GifticonCard';
+import GifticonCard from '../../component/Gifticon/GifticonCard';
 import GiticonFilter, {
   gifticonStatus,
-} from '../../component/Filtering/GifticonFilter';
+} from '../../component/HelperList/GifticonFilter';
+import GifticonLevel from '../../component/Gifticon/GifticonLevel';
 import SideBar from '../../component/SideBar';
 import { CardContainer } from '../../styles/CardStyle';
-import GifticonLevel from '../../component/Gifticon/GifticonLevel';
 import {
   BottomContainer,
   CommonContainer,
   ContentContainer,
   TopContainer,
-} from '../../styles/Gifticon/GifticonDetailStyle';
-import { SubTitle, Title } from '../../styles/utils/Container';
+} from '../../styles/CommonStyle';
+import {
+  GifticonHeightContainer,
+  SubTitle,
+  Title,
+} from '../../styles/utils/Container';
+import { BoldText, CountMessage } from '../../styles/Gifticon/GifticonStyle';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -65,15 +70,10 @@ const Gifticon = () => {
 
   useEffect(() => getGifticonList(), [currentPage, statusId]);
 
-  //  {
-  //    who && who === 1 && <Div>Donorticon을 통해 기프티콘을 기부해보세요!</Div>;
-  //  }
-
   return (
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{username}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
@@ -85,7 +85,9 @@ const Gifticon = () => {
           />
           {who === 1 && <GifticonLevel point={point} count={count} />}
           {who === 2 && count !== 0 && (
-            <div>현재까지 {count}회 기부를 받으셨네요!</div>
+            <CountMessage>
+              <BoldText>{count}회 기부</BoldText>를 받으셨어요!
+            </CountMessage>
           )}
           {list.length === 0 ? (
             <>
@@ -93,24 +95,25 @@ const Gifticon = () => {
             </>
           ) : (
             <>
-              <CardContainer gifticon>
-                {list.map((gifticon) => {
-                  return (
-                    <GifticonCard
-                      key={gifticon.id}
-                      data={gifticon}
-                      name={
-                        who === 1 ? gifticon.helper.name : gifticon.giver.name
-                      }
-                    />
-                  );
-                })}
-              </CardContainer>
+              <GifticonHeightContainer>
+                <CardContainer gifticon>
+                  {list.map((gifticon) => {
+                    return (
+                      <GifticonCard
+                        key={gifticon.id}
+                        data={gifticon}
+                        name={
+                          who === 1 ? gifticon.helper.name : gifticon.giver.name
+                        }
+                      />
+                    );
+                  })}
+                </CardContainer>
+              </GifticonHeightContainer>
               {maxPage > 0 && (
                 <Pagination
                   maxPage={maxPage}
                   currentPage={currentPage}
-                  count={count}
                   setCurrentPage={setCurrentPage}
                 />
               )}

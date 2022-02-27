@@ -40,7 +40,7 @@ const GifticonCard = ({ data, name }) => {
         report: gifticonInfo.report,
         textStyle,
         point: gifticonInfo.point,
-        thanksImgUrl: thanksImgUrl === null ? null : thanksImgUrl,
+        thanksImgUrl,
       }),
     );
     navigate(`/gifticon/detail/${id}`);

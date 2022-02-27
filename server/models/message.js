@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class message extends Model {
     /**
@@ -12,30 +10,34 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       message.belongsTo(models.room, {
-        foreignKey: 'room_id'
+        foreignKey: 'room_id',
       });
       message.belongsTo(models.giver, {
-        foreignKey: 'giver_id'
+        foreignKey: 'giver_id',
       });
       message.belongsTo(models.helper, {
-        foreignKey: 'helper_id'
+        foreignKey: 'helper_id',
       });
       message.belongsTo(models.gifticon, {
-        foreignKey: 'gifticon_id'
+        foreignKey: 'gifticon_id',
       });
     }
   }
-  message.init({
-    room_id: DataTypes.INTEGER,
-    giver_id: DataTypes.INTEGER,
-    helper_id: DataTypes.INTEGER,
-    gifticon_id: DataTypes.INTEGER,
-    message: DataTypes.STRING,
-    img: DataTypes.STRING,
-    type: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'message',
-  });
+  message.init(
+    {
+      room_id: DataTypes.INTEGER,
+      giver_id: DataTypes.INTEGER,
+      helper_id: DataTypes.INTEGER,
+      gifticon_id: DataTypes.INTEGER,
+      message: DataTypes.STRING,
+      img: DataTypes.STRING,
+      type: DataTypes.INTEGER,
+      thanksImg: DataTypes.BOOLEAN,
+    },
+    {
+      sequelize,
+      modelName: 'message',
+    },
+  );
   return message;
 };

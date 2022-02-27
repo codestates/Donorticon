@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { MapContainer } from '../styles/utils/Map';
+import { MapContainer } from '../../styles/utils/Map';
 import { useState } from 'react';
 
 const Mapping = ({ address }) => {

@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
       });
       const giverInfo = giverFinder.dataValues;
       if (req.body.currentPassword !== giverInfo.password) {
-        return res.status(401).json({ message: 'unauthorized user' })
+        return res.status(404).json({ message: 'wrong password' })
       } 
       if (user_type === 1) {
         await giver.update(
@@ -33,11 +33,12 @@ module.exports = async (req, res) => {
             where: { id }
           }
         );
-        res.status(200).json({ message: 'helper password changed successfully' })     }
+        res.status(200).json({ message: 'helper password changed successfully' })    
+      }
     } else {
-      res.status(422).json({ message: 'insufficient parameters supplied' })
+      res.status(422).json({ message: 'insufficient parameters supplied' });
     }
   } catch(err) {
-    console.log(err);
+    res.status(500).json({ message: 'internal server error' });
   }
 }

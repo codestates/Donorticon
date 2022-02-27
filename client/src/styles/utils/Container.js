@@ -13,6 +13,15 @@ export const SubContainer = styled.div`
   padding-bottom: 20px;
 `;
 
+export const HelperHeightContainer = styled.div`
+  min-height: 1100px;
+  width: 100%;
+`;
+
+export const GifticonHeightContainer = styled.div`
+  min-height: 1200px;
+`;
+
 export const Title = styled.div`
   color: ${({ theme }) => theme.color.main};
   font-size: 38px;
@@ -34,7 +43,9 @@ export const SubTitle = styled.div`
   letter-spacing: 10px;
   font-size: 28px;
   font-weight: 500;
+  line-height: initial;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 18px;
+    letter-spacing: 5px;
   }
 `;

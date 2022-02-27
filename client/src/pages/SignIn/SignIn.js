@@ -9,6 +9,7 @@ import {
   signInGiverGuest,
   signInHelper,
   signInHelperGuest,
+  verifyUser,
 } from '../../redux/user/userThunk';
 import InputSet from '../../component/InputComponent';
 import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
@@ -64,11 +65,14 @@ const SignIn = () => {
           }
         }
         if (who === 2) {
-          await dispatch(signInHelper(userInfo)).unwrap();
+          const res = await dispatch(signInHelper(userInfo)).unwrap();
           navigate('/mypage');
         }
       } catch (e) {
         if (e.response.status === 401) {
+          const { id, email, type } = e.response.data;
+          const veriInfo = { id, email, type };
+          await dispatch(verifyUser(veriInfo));
           navigate('/verification');
         }
         if (e.response.status === 404) {

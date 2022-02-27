@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GifticonStatusButton } from './Gifticon/GifticonStyle';
+import { GifticonStatusButton } from './GifticonStyle';
 
 export const StatusContainer = styled.div`
   width: 100%;
@@ -10,18 +10,33 @@ export const StatusBox = styled.div``;
 
 export const DropDownStatusButton = styled(GifticonStatusButton)`
   position: relative;
-  cursor: ${(props) => (props.status === '사용함' ? 'not-allowed' : 'pointer')};
+  cursor: pointer;
+  pointer-events: ${(props) =>
+    props.status === '사용함'
+      ? 'none'
+      : props.status === '신고됨'
+      ? 'none'
+      : props.status === '거절됨'
+      ? 'none'
+      : 'inherit'};
   .icon {
     position: absolute;
-    bottom: 5px;
+    bottom: 7px;
     right: 5px;
-    display: ${(props) => props.status === '사용함' && 'none'};
+    display: ${(props) =>
+      props.status === '사용함'
+        ? 'none'
+        : props.status === '신고됨'
+        ? 'none'
+        : props.status === '거절됨'
+        ? 'none'
+        : 'inherit'};
   }
 `;
 
 export const DropDownItems = styled.ul`
   display: ${(props) => (props.isActive ? `block` : `none`)};
-  border: 1px solid #000;
+  border: 1px solid ${({ theme }) => theme.color.lightGrey};
   background-color: white;
   position: absolute;
   left: 0;
@@ -35,7 +50,7 @@ export const DropdownItemContainer = styled.li`
   justify-content: space-between;
   align-items: center;
   padding: 9px 14px;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid ${({ theme }) => theme.color.lightGrey};
   border-top: none;
   &:hover {
     background-color: ${({ theme }) => theme.color.main};

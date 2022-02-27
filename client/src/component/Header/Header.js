@@ -9,7 +9,7 @@ import {
   StyledLink,
 } from '../../styles/HeaderStyle';
 import logo from '../../img/logo.png';
-import ButtonModal from '../ButtonModal';
+import ButtonModal from '../Modal/ButtonModal';
 import MobileHeader from './MobileHeader';
 import WebHeader from './WebHeader';
 

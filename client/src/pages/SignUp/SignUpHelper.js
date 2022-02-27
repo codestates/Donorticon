@@ -1,12 +1,10 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { sha256 } from 'js-sha256';
-import { setUser } from '../../redux/user/userSlice';
-import ProgressBar from '../../component/ProgressBar';
+import AddressFinder from '../../component/SignUp/AddressFinder';
+import ProgressBar from '../../component/SignUp/ProgressBar';
 import InputSet from '../../component/InputComponent';
-import AddressFinder from '../../component/AddressFinder';
 import {
   ButtonContainer,
   CheckBoxContainer,
@@ -40,6 +38,7 @@ const SignUpHelper = () => {
   const [helperInfo, setHelperInfo] = useState({
     email: '',
     password: '',
+    passwordCheck: '',
     name: '',
     mobile: '',
     location: '',
@@ -97,7 +96,7 @@ const SignUpHelper = () => {
     {
       contentGuide: '주요 활동지역을 알려주세요',
       callback: (adress) => {
-        setHelperInfo(Object.assign(helperInfo, { location: adress }));
+        setHelperInfo({ ...helperInfo, location: adress });
         const validList = [...isValid];
         validList[2] = true;
         setIsValid(validList);
@@ -112,14 +111,15 @@ const SignUpHelper = () => {
           title: '이메일',
           inputPlaceHolder: '이메일을 입력해주세요',
           callback: (e) => {
-            setHelperInfo(Object.assign(helperInfo, { email: e.target.value }));
+            setHelperInfo({ ...helperInfo, email: e.target.value });
             const form = new RegExp(
               '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
             );
             const validList = [...isValid];
-            validList[3] = form.test(e.target.value);
+            validList[3] =
+              form.test(e.target.value) && e.target.value.length <= 50;
             setIsValid(validList);
-            return !form.test(e.target.value);
+            return !(form.test(e.target.value) && e.target.value.length <= 50);
           },
           errorMessage: '이메일 형식이 맞지 않습니다',
         },
@@ -127,7 +127,7 @@ const SignUpHelper = () => {
           title: '이름',
           inputPlaceHolder: '8자 이내로 입력해주세요',
           callback: (e) => {
-            setHelperInfo(Object.assign(helperInfo, { name: e.target.value }));
+            setHelperInfo({ ...helperInfo, name: e.target.value });
             const validList = [...isValid];
             validList[4] = e.target.value.length <= 8;
             setIsValid(validList);
@@ -139,22 +139,30 @@ const SignUpHelper = () => {
           title: '비밀번호',
           inputPlaceHolder: '비밀번호를 입력해주세요',
           callback: (e) => {
-            setHelperInfo(
-              Object.assign(helperInfo, { password: sha256(e.target.value) }),
-            );
+            setHelperInfo({ ...helperInfo, password: sha256(e.target.value) });
             const validList = [...isValid];
-            validList[5] = e.target.value.length >= 1;
+            validList[5] =
+              e.target.value.length >= 1 &&
+              sha256(e.target.value) === helperInfo.passwordCheck;
             setIsValid(validList);
-            return !(e.target.value.length >= 1);
+            return !(
+              e.target.value.length >= 1 &&
+              sha256(e.target.value) === helperInfo.passwordCheck
+            );
           },
-          errorMessage: '비밀번호를 입력해주세요',
+          errorMessage: '비밀번호를 확인해주세요',
         },
         {
           title: '비밀번호 확인',
           inputPlaceHolder: '비밀번호를 확인해주세요',
           callback: (e) => {
+            setHelperInfo({
+              ...helperInfo,
+              passwordCheck: sha256(e.target.value),
+            });
             const validList = [...isValid];
             validList[6] = sha256(e.target.value) === helperInfo.password;
+            if (validList[6] && !validList[5]) validList[5] = true;
             setIsValid(validList);
             return sha256(e.target.value) !== helperInfo.password;
           },
@@ -164,9 +172,7 @@ const SignUpHelper = () => {
           title: '휴대전화',
           inputPlaceHolder: '010-0000-0000 형식으로 입력해주세요',
           callback: (e) => {
-            setHelperInfo(
-              Object.assign(helperInfo, { mobile: e.target.value }),
-            );
+            setHelperInfo({ ...helperInfo, mobile: e.target.value });
             const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
             const validList = [...isValid];
             validList[7] = e.target.value ? form.test(e.target.value) : true;
@@ -246,7 +252,7 @@ const SignUpHelper = () => {
             type: 2,
             id,
           };
-          dispatch(verifyUser(userInfo));
+          await dispatch(verifyUser(userInfo));
           navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {
@@ -262,7 +268,9 @@ const SignUpHelper = () => {
   };
 
   useEffect(() => {
-    setPercent(percent + 25);
+    if (percent === 0) {
+      setPercent(percent + 25);
+    }
   }, []);
 
   return (

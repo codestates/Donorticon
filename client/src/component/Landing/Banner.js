@@ -1,5 +1,11 @@
-import ilu2 from '../../img/ilu2.jpg'
-import { BannerContainer, Img, TextContainer, Title, Text } from '../../styles/landing/BannerStyle';
+import ilu2 from '../../img/ilu2.jpg';
+import {
+  BannerContainer,
+  Img,
+  TextContainer,
+  Title,
+  Text,
+} from '../../styles/Landing/BannerStyle';
 
 const Banner = () => {
   return (

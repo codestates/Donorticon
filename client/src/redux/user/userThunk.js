@@ -25,9 +25,11 @@ export const signInHelper = createAsyncThunk(
     try {
       const response = await axios.post('/signin/helper', payload);
       const data = response.data;
+      console.log(data);
       if (response.status === 200) {
         setToken(data.accessToken);
         return data.info;
+      } else {
       }
     } catch (e) {
       // console.log(e.response);
@@ -100,13 +102,12 @@ export const signUpHelper = createAsyncThunk(
 export const verifyUser = createAsyncThunk(
   '/verification',
   async (payload, { rejectWithValue }) => {
-    console.log(payload);
     try {
       const response = await axios.get('/verification', {
         headers: { ...payload },
       });
       if (response.status === 200) {
-        return payload;
+        return response.data;
       }
     } catch (e) {
       return rejectWithValue(e);

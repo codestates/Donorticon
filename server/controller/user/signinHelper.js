@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     });
     if (!helperFinder) {
-      res.status(404).json({ message: 'Invalid user' });
+      res.status(404).json({ message: 'invalid user' });
     } else {
       const helperInfo = helperFinder.dataValues;
       if (helperInfo.verification) {
@@ -26,7 +26,8 @@ module.exports = async (req, res) => {
           messeage: 'successfully signed in',
         });
       } else {
-        res.status(401).json({ message: 'verify your email' });
+        const { id, email, user_type: type } = helperInfo;
+        res.status(401).json({ message: 'verify your email', id, email, type });
       }
     }
   } catch (e) {

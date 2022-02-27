@@ -17,12 +17,12 @@ const getForeignKeyIdList = async (listToConvert, modelName) => {
 // [1, 2]와 같은 값을 줌(gifticon_category 테이블에도 동일한 방식이 적용되게 함) 
 
 module.exports = async (req, res) => {
-  const { name, email, password, img, location, slogan, description, vulnerableName, gifticonCategoryName } = req.body;
+  const { name, email, password, location, vulnerableName, gifticonCategoryName } = req.body;
   if (name && email && password && location && vulnerableName && gifticonCategoryName) { 
     try {
       const [helperFound, helperCreated] = await helper.findOrCreate({
         where: { email },
-        defaults: { name, password, img, user_type: 2, slogan, description, location, activity: true }
+        defaults: { name, password, user_type: 2, location, activity: true }
       }); 
       if (!helperCreated) {
         return res.status(409).json({ message: "email already exists" })
@@ -33,7 +33,6 @@ module.exports = async (req, res) => {
       const helperId = helperRow.id;
 
       let vulnerableList = await getForeignKeyIdList(vulnerableName, vulnerable);
-      console.log(vulnerableList);
 
       vulnerableList = vulnerableList.map(el => { 
         return {
@@ -57,12 +56,12 @@ module.exports = async (req, res) => {
       // 해당 테이블에 여러 데이터를 순차적으로 insert
 
       if (helperCreated && helperVulnerableUpdated && gifticonCategoryUpdated) {
-        return res.status(201).json({ message: `welcome! you have sucessfully signed up`, id: helperId});
+        res.status(201).json({ message: 'sucessfully signed up', id: helperId});
       } 
     } catch(err) {
-      console.log(err)
+      res.status(500).json({ message: 'internal server error' });
     }
   } else {
-    return res.status(422).json('insufficient parameter supplied') 
+    res.status(422).json('insufficient parameter supplied') 
   }  
 }

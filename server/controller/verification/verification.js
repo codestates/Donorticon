@@ -7,9 +7,12 @@ const { giver, helper } = require('../../models');
 
 module.exports = {
   get: async (req, res) => {
+    const id = parseInt(req.headers.id);
+    const email = req.headers.email;
+    const type = parseInt(req.headers.type);
     const transporter = nodemailer.createTransport({
-      service: 'Naver',
-      host: 'smtp.naver.com',
+      service: 'gmail',
+      host: 'smtp.gmail.com',
       port: 587,
       auth: {
         user: `${process.env.MAIL_ID}`,
@@ -29,40 +32,34 @@ module.exports = {
 
     const code = crypto.randomBytes(127).toString('hex');
     const message = {
-      from: 'swim1720@naver.com',
+      from: 'donorticon@gmail.com',
       to: `${req.headers.email}`,
       subject: 'Donorticon: Please verify your email',
       template: 'email',
       context: {
         src: `${process.env.BUCKET}/aintgottime.jpg`,
-        redirection: `${process.env.CLIENT_URL}/verifyRedir/type=${req.headers.type}/id=${req.headers.id}/code=${code}`,
+        redirection: `${process.env.CLIENT_URL}/verifyRedir/type=${type}/id=${id}/code=${code}`,
       },
     };
 
     if (req.headers.type === '1') {
-      await giver.update(
-        { verify_hash: code },
-        { where: { id: req.headers.id } },
-      );
+      await giver.update({ verify_hash: code }, { where: { id } });
       await transporter.sendMail(message, (err, info) => {
         if (err) {
           console.log(err);
         } else {
           console.log(info);
-          res.status(200).json({ Message: 'Success' });
+          res.status(200).json({ Message: 'Success', id, email, type });
         }
       });
     } else if (req.headers.type === '2') {
-      await helper.update(
-        { verify_hash: code },
-        { where: { id: req.headers.id } },
-      );
+      await helper.update({ verify_hash: code }, { where: { id } });
       await transporter.sendMail(message, (err, info) => {
         if (err) {
           console.log(err);
         } else {
           console.log(info);
-          res.status(200).json({ Message: 'Success' });
+          res.status(200).json({ Message: 'Success', id, email, type });
         }
       });
     }
