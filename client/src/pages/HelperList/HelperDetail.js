@@ -23,6 +23,7 @@ import {
   Img,
   UpBoxContentWho,
 } from '../../styles/HelperList/HelperDetailStyle';
+import Loader from '../../component/Loader';
 
 const HelperDetail = () => {
   const { id } = useParams();
@@ -42,11 +43,12 @@ const HelperDetail = () => {
     location: '부산 부산진구 경마장로 1 (범전동)', //정보있지만 수정 필요
   });
   const [galleryPage, setGalleryPage] = useState(0);
+  const [galleryLocation, setGalleryLocation] = useState([]);
+
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  const [galleryLocation, setGalleryLocation] = useState([]);
   const getDetail = async () => {
     try {
       const { data } = await axios.get(`/helperlist/${id}`);
@@ -60,13 +62,6 @@ const HelperDetail = () => {
     return result;
   };
 
-  useEffect(() => {
-    getDetail();
-    const arr = Array(helperInfo.gallery.length).fill(false);
-    arr[0] = true;
-    setGalleryLocation(makeLocationArr(0));
-  }, []);
-
   const handlePage = (move) => {
     if (
       galleryPage + move >= 0 &&
@@ -77,52 +72,75 @@ const HelperDetail = () => {
     }
   };
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const getData = () => {
+      getDetail();
+      const arr = Array(helperInfo.gallery.length).fill(false);
+      arr[0] = true;
+      setGalleryLocation(makeLocationArr(0));
+    };
+    setTimeout(() => {
+      getData();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, []);
+
   console.log(helperInfo);
 
   return (
     <Container>
-      <UpBox>
-        <UpBoxProfile src={helperInfo.img} />
-        <UpBoxContent>
-          {helperInfo.vulnerable.map((list, idx) => (
-            <ContentTag key={idx}>{`#${list}`}</ContentTag>
-          ))}
-          <UpBoxContentTitle>{helperInfo.slogan}</UpBoxContentTitle>
-          <UpBoxContentWho>{helperInfo.name}</UpBoxContentWho>
-          <Button style={{ margin: 'auto' }} onClick={handleModalOpen}>
-            기부하기
-          </Button>
-        </UpBoxContent>
-      </UpBox>
-      <DownBox>
-        <DownBoxTitle>소개글</DownBoxTitle>
-        <DownBoxTitle>필요한 기프티콘</DownBoxTitle>
-        {helperInfo.gifticonCatergory.map((tag, idx) => (
-          <ContentTag key={idx}>{`#${tag}`}</ContentTag>
-        ))}
-        <DownBoxTitle>활동 갤러리</DownBoxTitle>
-        <Img src={helperInfo.gallery[galleryPage]} />
-        <FaAngleLeft onClick={() => handlePage(-1)} />
-        {galleryLocation.map((location, idx) =>
-          location ? <FaCircle key={idx} /> : <FaRegCircle key={idx} />,
-        )}
-        <FaAngleRight onClick={() => handlePage(1)} />
-        <DownBoxTitle>활동 지역</DownBoxTitle>
-        {/* 현재 서버에서 location 설정 제대로 해야함 */}
-        {/* <Map address={helperInfo.location}} />  */}
-        <Map address={'부산 부산진구 경마장로 1 (범전동)'} />
-      </DownBox>
-      {id}
-      <Button onClick={handleModalOpen}>기부하기</Button>
-      {isModalOpen ? (
-        <ImageUploader
-          handleModalOpen={handleModalOpen}
-          includeMessage="true"
-          api={`/helperlist/${id}`}
-          giverId={giverId}
-          helperId={parseInt(id)}
-        ></ImageUploader>
-      ) : null}
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <UpBox>
+            <UpBoxProfile src={helperInfo.img} />
+            <UpBoxContent>
+              {helperInfo.vulnerable.map((list, idx) => (
+                <ContentTag key={idx}>{`#${list}`}</ContentTag>
+              ))}
+              <UpBoxContentTitle>{helperInfo.slogan}</UpBoxContentTitle>
+              <UpBoxContentWho>{helperInfo.name}</UpBoxContentWho>
+              <Button style={{ margin: 'auto' }} onClick={handleModalOpen}>
+                기부하기
+              </Button>
+            </UpBoxContent>
+          </UpBox>
+          <DownBox>
+            <DownBoxTitle>소개글</DownBoxTitle>
+            <DownBoxTitle>필요한 기프티콘</DownBoxTitle>
+            {helperInfo.gifticonCatergory.map((tag, idx) => (
+              <ContentTag key={idx}>{`#${tag}`}</ContentTag>
+            ))}
+            <DownBoxTitle>활동 갤러리</DownBoxTitle>
+            <Img src={helperInfo.gallery[galleryPage]} />
+            <FaAngleLeft onClick={() => handlePage(-1)} />
+            {galleryLocation.map((location, idx) =>
+              location ? <FaCircle key={idx} /> : <FaRegCircle key={idx} />,
+            )}
+            <FaAngleRight onClick={() => handlePage(1)} />
+            <DownBoxTitle>활동 지역</DownBoxTitle>
+            {/* 현재 서버에서 location 설정 제대로 해야함 */}
+            {/* <Map address={helperInfo.location}} />  */}
+            <Map address={'부산 부산진구 경마장로 1 (범전동)'} />
+          </DownBox>
+          {id}
+          <Button onClick={handleModalOpen}>기부하기</Button>
+          {isModalOpen ? (
+            <ImageUploader
+              handleModalOpen={handleModalOpen}
+              includeMessage="true"
+              api={`/helperlist/${id}`}
+              giverId={giverId}
+              helperId={parseInt(id)}
+            ></ImageUploader>
+          ) : null}
+        </>
+      )}
     </Container>
   );
 };

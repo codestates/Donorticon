@@ -30,6 +30,27 @@ export const CountMessage = styled.div`
   }
 `;
 
+export const NoGifticonMessage = styled.div`
+  font-size: 18px;
+  text-align: ${(props) => (props.center ? 'center' : 'left')};
+  height: calc(100vh - 200px);
+  line-height: 45px;
+  padding-top: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 15px;
+    text-align: center;
+  }
+`;
+
+export const DonateButton = styled.button`
+  border: 1px solid ${({ theme }) => theme.color.main};
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100px;
+  &:hover {
+    background-color: ${({ theme }) => theme.color.main};
+  }
+`;
 export const BoldText = styled.span`
   font-weight: 700;
 `;
