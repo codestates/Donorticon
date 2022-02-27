@@ -12,8 +12,6 @@ export const LevelTitle = styled.div`
   padding-bottom: 20px;
   .icon {
     cursor: pointer;
-    &:hover {
-    }
   }
 `;
 

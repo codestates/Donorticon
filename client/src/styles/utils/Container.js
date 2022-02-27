@@ -43,6 +43,7 @@ export const SubTitle = styled.div`
   letter-spacing: 10px;
   font-size: 28px;
   font-weight: 500;
+  line-height: initial;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 18px;
     letter-spacing: 5px;

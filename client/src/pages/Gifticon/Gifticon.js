@@ -21,6 +21,7 @@ import {
   SubTitle,
   Title,
 } from '../../styles/utils/Container';
+import { BoldText, CountMessage } from '../../styles/Gifticon/GifticonStyle';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -84,7 +85,9 @@ const Gifticon = () => {
           />
           {who === 1 && <GifticonLevel point={point} count={count} />}
           {who === 2 && count !== 0 && (
-            <div>현재까지 {count}회 기부를 받으셨네요!</div>
+            <CountMessage>
+              <BoldText>{count}회 기부</BoldText>를 받으셨어요!
+            </CountMessage>
           )}
           {list.length === 0 ? (
             <>
