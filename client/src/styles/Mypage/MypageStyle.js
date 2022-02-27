@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const ContentLeft = styled.div`
   width: 70%;
+
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
@@ -94,6 +95,10 @@ export const ProfileImg = styled.div`
   background-size: cover;
   width: 150px;
   height: 150px;
+  @media ${({ theme }) => theme.device.tablet} {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 export const GalleryAddLabel = styled.label`

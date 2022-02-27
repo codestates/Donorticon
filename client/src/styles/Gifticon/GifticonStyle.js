@@ -18,3 +18,18 @@ export const GifticonStatusButton = styled.button`
     ${(props) =>
       props.textStyle === 1 ? props.theme.color.main : props.theme.color.error};
 `;
+
+export const CountMessage = styled.div`
+  font-size: 20px;
+  text-align: left;
+  padding-top: 40px;
+  padding-bottom: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    text-align: center;
+    font-size: 18px;
+  }
+`;
+
+export const BoldText = styled.span`
+  font-weight: 700;
+`;
