@@ -38,11 +38,10 @@ module.exports = {
         Object.assign(data.dataValues, {
           gallery: galleryList,
           vulnerable: vulnerableList,
-          gifticon: gifticonCategoryList,
+          gifticonCategory: gifticonCategoryList,
         }),
       );
     } catch (e) {
-      console.log(e);
       res.status(500).json({ message: 'intenal server error' });
     }
   },
