@@ -183,7 +183,7 @@ const Mypage = () => {
     }
   };
 
-  useEffect(async () => {
+  const handleWho = async () => {
     try {
       const { data } = await axios.get(
         `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
@@ -195,7 +195,9 @@ const Mypage = () => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  };
+
+  useEffect(() => handleWho(), []);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
