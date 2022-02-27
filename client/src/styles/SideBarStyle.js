@@ -22,6 +22,9 @@ export const Item = styled.button`
   width: 100px;
   text-align: center;
   margin-bottom: 20px;
+  &.active {
+    background-color: ${({ theme }) => theme.color.main};
+  }
   &:hover {
     background-color: ${({ theme }) => theme.color.main};
   }
