@@ -21,8 +21,11 @@ export const AddressTitle = styled.div`
 export const AddressEdit = styled.button`
   margin-left: auto;
   cursor: pointer;
-  color: ${({ theme }) => theme.color.mainDark};
-  font-size: ${(props) => props.mypage && '13px'};
+  font-size: 13px;
+  width: 90px;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
 `;
 
 export const AddressInput = styled.input`

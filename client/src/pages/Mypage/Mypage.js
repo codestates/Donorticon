@@ -24,6 +24,7 @@ import {
   GalleryAddLabel,
   MultiContainer,
   ActBox,
+  TextareaChanger,
 } from '../../styles/Mypage/MypageStyle';
 import {
   BottomContainer,
@@ -32,6 +33,7 @@ import {
   TopContainer,
 } from '../../styles/CommonStyle';
 import { SubTitle, Title } from '../../styles/utils/Container';
+import { ErrorMessage } from '../../styles/utils/Input';
 
 const vulnerableList = [
   '아동/청소년',
@@ -59,7 +61,6 @@ const Mypage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const who = useSelector((state) => state.user.user.who);
-  const whoIs = who === 1 ? 'giver' : 'helper';
   const [userInfo, setUserInfo] = useState({
     id: 0,
     email: '',
@@ -70,11 +71,12 @@ const Mypage = () => {
     gifticonCategory: [],
     vulnerable: [],
     gallery: [],
-    activity: false,
+    activity: true,
     img: '',
   });
+
   const [isChanging, setIsChanging] = useState([
-    // giver  helper
+    //        giver  helper
     false, // email  email
     false, // name   name
     false, // mobile mobile
@@ -86,192 +88,132 @@ const Mypage = () => {
     false, // password password
     false, // 회원 탈퇴
   ]);
+  //                                     email, name, mobile, slogan, description
+  const [isError, setIsError] = useState([false, false, false, false, false]);
 
   const inputList = {
     1: [
+      { title: '이메일', name: 'email', errorMessage: '' },
+      { title: '이름', name: 'name', errorMessage: '8자 이상의 이름입니다' },
       {
-        inputName: 'email',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: () => {
-          //nothing to change
-        },
-      },
-      {
-        inputName: 'name',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e, idx, boolean) => {
-          if (e.target.value.length <= 8) {
-            handleFocus(e);
-            try {
-              const result = await axios.put(
-                '/mypage/giver',
-                { name: userInfo.name },
-                { headers: { Authorization: `Bearer ${token}` } },
-              );
-            } catch (e) {}
-          } else {
-            console.log('name 8자 넘어');
-          }
-        },
-      },
-      {
-        inputName: 'mobile',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e, idx, boolean) => {
-          const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
-          if (form.test(e.target.value)) {
-            const arr = [...isChanging];
-            arr[idx] = boolean;
-            try {
-              const result = await axios.put(
-                '/mypage/giver',
-                { mobile: userInfo.mobile },
-                { headers: { Authorization: `Bearer ${token}` } },
-              );
-              setIsChanging(arr);
-            } catch (e) {}
-          } else {
-            console.log('휴대전화 번호');
-          }
-        },
+        title: '휴대전화',
+        name: 'mobile',
+        errorMessage: '010-0000-0000 형식으로 입력해주세요',
       },
     ],
     2: [
+      { title: '이메일', name: 'email', errorMessage: '' },
       {
-        inputName: 'email',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: () => {
-          //nothing to change
-        },
+        title: '이름/단체명',
+        name: 'name',
+        errorMessage: '8자 이상의 이름입니다',
       },
       {
-        inputName: 'name',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e, idx, boolean) => {
-          if (e.target.value.length <= 8) {
-            handleFocus(e);
-            try {
-              const result = await axios.put(
-                '/mypage/helper',
-                { name: userInfo.name },
-                { headers: { Authorization: `Bearer ${token}` } },
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            console.log('name 8자 넘어');
-          }
-        },
+        title: '휴대전화',
+        name: 'mobile',
+        errorMessage: '010-0000-0000 형식으로 입력해주세요',
       },
+      { title: '슬로건', name: 'slogan', errorMessage: '' },
       {
-        inputName: 'mobile',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e) => {
-          const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
-          if (form.test(e.target.value)) {
-            handleFocus(e);
-            try {
-              const result = await axios.put(
-                '/mypage/helper',
-                { mobile: userInfo.mobile },
-                { headers: { Authorization: `Bearer ${token}` } },
-              );
-            } catch (e) {
-              console.log(e);
-            }
-          } else {
-            console.log('휴대전화 번호');
-          }
-        },
-      },
-      {
-        inputName: 'slogan',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e) => {
-          handleFocus(e);
-          try {
-            const result = await axios.put(
-              '/mypage/helper',
-              { slogan: userInfo.slogan },
-              { headers: { Authorization: `Bearer ${token}` } },
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        },
-      },
-      {
-        inputName: 'description',
-        inputCallback: (e) => {
-          handleInput(e);
-        },
-        blurCallback: async (e) => {
-          handleFocus(e);
-          try {
-            const result = await axios.put(
-              '/mypage/helper',
-              { description: userInfo.description },
-              { headers: { Authorization: `Bearer ${token}` } },
-            );
-          } catch (e) {
-            console.log(e);
-          }
-        },
+        title: '설명',
+        name: 'description',
+        errorMessage: '300자 이상의 내용입니다',
       },
     ],
   };
 
+  const vulnerableHandler = {
+    create: async (id) => {
+      setUserInfo({
+        ...userInfo,
+        vulnerable: [...userInfo.vulnerable, id],
+      });
+      await axios.post(
+        '/mypage/vulnerable',
+        { vulnerable_id: id },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+    },
+    delete: async (id) => {
+      setUserInfo({
+        ...userInfo,
+        vulnerable: userInfo.vulnerable.filter((el) => el !== id),
+      });
+      await axios.delete('/mypage/vulnerable', {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { vulnerable_id: id },
+      });
+    },
+  };
+
+  const gifticonHandler = {
+    create: async (id) => {
+      setUserInfo({
+        ...userInfo,
+        gifticonCategory: [...userInfo.gifticonCategory, id],
+      });
+      await axios.post(
+        '/mypage/gifticon',
+        { gifticon_id: id },
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+    },
+    delete: async (id) => {
+      setUserInfo({
+        ...userInfo,
+        gifticonCategory: userInfo.gifticonCategory.filter((el) => el !== id),
+      });
+      await axios.delete('/mypage/gifticon', {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { gifticon_id: id },
+      });
+    },
+  };
+
+  const checkForm = (e) => {
+    if (e.target.name === 'name') {
+      return e.target.value.length <= 8 && e.target.value.length >= 1;
+    } else if (e.target.name === 'mobile') {
+      const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
+      return form.test(e.target.value);
+    } else if (e.target.name === 'description') {
+      return e.target.value.length >= 1 && e.target.value.length <= 300;
+    } else {
+      return e.target.value.length >= 1;
+    }
+  };
+
   useEffect(async () => {
-    if (who === 1) {
-      try {
-        const { data } = await axios.get('/mypage/giver', {
+    try {
+      const { data } = await axios.get(
+        `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
+        {
           headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserInfo(data);
-      } catch (e) {
-        console.log(e);
-      }
-    } else if (who === 2) {
-      try {
-        const { data } = await axios.get('/mypage/helper', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserInfo(data);
-      } catch (e) {
-        console.log(e);
-      }
+        },
+      );
+      setUserInfo(data);
+    } catch (e) {
+      console.log(e);
     }
   }, []);
 
-  const handleImageUpload = async (e, tag) => {
+  const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     const tempUrl = URL.createObjectURL(file);
-    if (tag === 'img') {
-      setUserInfo({ ...userInfo, [tag]: tempUrl });
-    } else if (tag === 'gallery') {
-      setUserInfo({ ...userInfo, [tag]: [...userInfo.gallery, tempUrl] });
+    if (e.target.id === 'img') {
+      setUserInfo({ ...userInfo, img: tempUrl });
+    } else if (e.target.id === 'gallery') {
+      if (userInfo.gallery.length === 5) {
+        return;
+      }
+      setUserInfo({ ...userInfo, gallery: [...userInfo.gallery, tempUrl] });
     }
     try {
       const {
         data: { url },
       } = await axios.put(
-        `/mypage/${whoIs}`,
-        { tag },
+        `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
+        { tag: e.target.id },
         {
           headers: { Authorization: `Bearer ${token}` },
         },
@@ -285,18 +227,94 @@ const Mypage = () => {
     }
   };
 
-  const handleInput = (e) => {
-    setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+  const handleBlur = async (e) => {
+    if (checkForm(e)) {
+      setUserInfo({ ...userInfo, [e.target.name]: e.target.value });
+      handleFocus(e);
+      handleError(e, false);
+      try {
+        await axios.put(
+          `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
+          { [e.target.name]: e.target.value },
+          { headers: { Authorization: `Bearer ${token}` } },
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      handleError(e, true);
+    }
+  };
+
+  const handleError = (e, boolean) => {
+    const arr = [...isError];
+    arr[e.target.id] = boolean;
+    setIsError(arr);
   };
 
   const handleFocus = (e) => {
-    const index = parseInt(e.target.id);
-    if (index !== 0) {
+    if (e.target.id !== '0') {
       const arr = [...isChanging];
-      arr[index] = !isChanging[index];
+      arr[e.target.id] = !isChanging[e.target.id];
       setIsChanging(arr);
     }
   };
+
+  const handleAddress = (address) => {
+    setUserInfo({ ...userInfo, location: address });
+    axios.put(
+      '/mypage/helper',
+      { address: address },
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+  };
+
+  const removeGallery = (e) => {
+    if (userInfo.gallery.length >= 2) {
+      setUserInfo({
+        ...userInfo,
+        gallery: userInfo.gallery.filter((el) => el !== e.target.src),
+      });
+    } else {
+      console.log('1개 이상 갤러리 이미지를 사용해주세요');
+    }
+  };
+
+  const handleDeleteUser = async (e) => {
+    handleFocus(e);
+    if (e.target.textContent === '네') {
+      try {
+        await axios.delete('mypage/delete', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        navigate('/');
+        dispatch(signOut());
+        removeToken();
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
+  const handleActivity = async (e) => {
+    handleFocus(e);
+    if (e.target.textContent === '네') {
+      try {
+        setUserInfo({
+          ...userInfo,
+          activity: !userInfo.activity,
+        });
+        await axios.put(
+          'mypage/helper/activity',
+          { activity: !userInfo.activity },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+      } catch (e) {}
+    }
+  };
+
   return (
     <CommonContainer>
       <TopContainer>
@@ -309,18 +327,38 @@ const Mypage = () => {
           <ContentLeft>
             {inputList[who].map((list, idx) => (
               <InputBox key={idx}>
-                <InputName>{list.inputName}</InputName>
+                <InputName>{list.title}</InputName>
                 {isChanging[idx] ? (
-                  <InputChanger
-                    id={idx}
-                    name={list.inputName}
-                    defaultValue={userInfo[list.inputName]}
-                    onChange={list.inputCallback}
-                    onBlur={(e) => list.blurCallback(e)}
-                  />
+                  idx === 4 ? (
+                    <>
+                      <TextareaChanger
+                        id={idx}
+                        name={list.name}
+                        defaultValue={userInfo[list.name]}
+                        onBlur={handleBlur}
+                      />
+                      {isError[idx] && (
+                        <ErrorMessage>{list.errorMessage}</ErrorMessage>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <InputChanger
+                        id={idx}
+                        name={list.name}
+                        defaultValue={userInfo[list.name]}
+                        onBlur={handleBlur}
+                      />
+                      {isError[idx] && (
+                        <ErrorMessage>{list.errorMessage}</ErrorMessage>
+                      )}
+                    </>
+                  )
                 ) : (
                   <InputContent id={idx} onClick={handleFocus}>
-                    {userInfo[list.inputName]}
+                    {userInfo[list.name].length > 50
+                      ? `${userInfo[list.name].slice(0, 50)}...`
+                      : userInfo[list.name]}
                   </InputContent>
                 )}
               </InputBox>
@@ -328,14 +366,7 @@ const Mypage = () => {
             {who === 2 && (
               <>
                 <AddressFinder
-                  callback={(address) => {
-                    setUserInfo({ ...userInfo, location: address });
-                    axios.put(
-                      '/mypage/helper',
-                      { address: address },
-                      { headers: { Authorization: `Bearer ${token}` } },
-                    );
-                  }}
+                  callback={handleAddress}
                   location={userInfo.location}
                   mypage
                 />
@@ -343,15 +374,21 @@ const Mypage = () => {
                   <InputName>갤러리</InputName>
                   <GalleryBox>
                     {userInfo.gallery.map((url, idx) => {
-                      return <GalleryImg key={idx} src={url} />;
+                      return (
+                        <GalleryImg
+                          key={idx}
+                          src={url}
+                          onClick={removeGallery}
+                        />
+                      );
                     })}
                   </GalleryBox>
-                  <GalleryAddLabel htmlFor="imageAdder">
+                  <GalleryAddLabel htmlFor="gallery">
                     <NotShow
-                      id="imageAdder"
+                      id="gallery"
                       type="file"
                       accept="image/*"
-                      onChange={(e) => handleImageUpload(e, 'gallery')}
+                      onChange={handleImageUpload}
                     />
                     이미지 추가
                   </GalleryAddLabel>
@@ -361,31 +398,7 @@ const Mypage = () => {
                   <Tag
                     tagList={vulnerableList}
                     targetTagList={userInfo.vulnerable}
-                    callback={{
-                      create: async (id) => {
-                        setUserInfo({
-                          ...userInfo,
-                          vulnerable: [...userInfo.vulnerable, id],
-                        });
-                        await axios.post(
-                          '/mypage/vulnerable',
-                          { vulnerable_id: id },
-                          { headers: { Authorization: `Bearer ${token}` } },
-                        );
-                      },
-                      delete: async (id) => {
-                        setUserInfo({
-                          ...userInfo,
-                          vulnerable: userInfo.vulnerable.filter(
-                            (el) => el !== id,
-                          ),
-                        });
-                        await axios.delete('/mypage/vulnerable', {
-                          headers: { Authorization: `Bearer ${token}` },
-                          params: { vulnerable_id: id },
-                        });
-                      },
-                    }}
+                    callback={vulnerableHandler}
                   />
                 </MultiContainer>
                 <MultiContainer>
@@ -393,31 +406,7 @@ const Mypage = () => {
                   <Tag
                     tagList={gifticonList}
                     targetTagList={userInfo.gifticonCategory}
-                    callback={{
-                      create: async (id) => {
-                        setUserInfo({
-                          ...userInfo,
-                          gifticonCategory: [...userInfo.gifticonCategory, id],
-                        });
-                        await axios.post(
-                          '/mypage/gifticon',
-                          { gifticon_id: id },
-                          { headers: { Authorization: `Bearer ${token}` } },
-                        );
-                      },
-                      delete: async (id) => {
-                        setUserInfo({
-                          ...userInfo,
-                          gifticonCategory: userInfo.gifticonCategory.filter(
-                            (el) => el !== id,
-                          ),
-                        });
-                        await axios.delete('/mypage/gifticon', {
-                          headers: { Authorization: `Bearer ${token}` },
-                          params: { gifticon_id: id },
-                        });
-                      },
-                    }}
+                    callback={gifticonHandler}
                   />
                 </MultiContainer>
               </>
@@ -435,7 +424,7 @@ const Mypage = () => {
                 회원 탈퇴
               </ActButton>
             </ActBox>
-            {isChanging[7] ? (
+            {isChanging[7] && (
               <ModalV2
                 id="7"
                 title={
@@ -446,26 +435,9 @@ const Mypage = () => {
                 subtitle={
                   userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
                 }
-                callback={async (e) => {
-                  handleFocus(e);
-                  if (e.target.textContent === '네') {
-                    try {
-                      setUserInfo({
-                        ...userInfo,
-                        activity: !userInfo.activity,
-                      });
-                      await axios.put(
-                        'mypage/helper/activity',
-                        { activity: !userInfo.activity },
-                        {
-                          headers: { Authorization: `Bearer ${token}` },
-                        },
-                      );
-                    } catch (e) {}
-                  }
-                }}
+                callback={handleActivity}
               />
-            ) : null}
+            )}
             {isChanging[8] && (
               <PassswordModal id="8" modalCloser={handleFocus} />
             )}
@@ -473,21 +445,7 @@ const Mypage = () => {
               <ModalV2
                 id="9"
                 title="정말로 탈퇴하시겠어요?"
-                callback={async (e) => {
-                  handleFocus(e);
-                  if (e.target.textContent === '네') {
-                    try {
-                      await axios.delete('mypage/delete', {
-                        headers: { Authorization: `Bearer ${token}` },
-                      });
-                      navigate('/');
-                      dispatch(signOut());
-                      removeToken();
-                    } catch (e) {
-                      console.log(e);
-                    }
-                  }
-                }}
+                callback={handleDeleteUser}
               />
             )}
           </ContentLeft>
@@ -496,12 +454,12 @@ const Mypage = () => {
               <ProfileImg src={userInfo.img} />
             </MultiContainer>
             <MultiContainer center>
-              <GalleryAddLabel center htmlFor="imageChanger">
+              <GalleryAddLabel center htmlFor="img">
                 <NotShow
-                  id="imageChanger"
+                  id="img"
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handleImageUpload(e, 'img')}
+                  onChange={handleImageUpload}
                 />
                 이미지 변경
               </GalleryAddLabel>

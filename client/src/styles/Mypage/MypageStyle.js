@@ -40,6 +40,18 @@ export const InputChanger = styled.input`
   }
 `;
 
+export const TextareaChanger = styled.textarea`
+  all: unset;
+  width: 80%;
+  padding: 10px 0;
+  margin: 10px 0;
+  border-bottom: 1px solid ${({ theme }) => theme.color.main};
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
+  height: max-content;
+`;
+
 export const InputContent = styled.div`
   width: 80%;
   padding: 10px 0;
@@ -72,6 +84,20 @@ export const GalleryImg = styled.img`
   width: 20%;
   height: 100%;
   border: 1px solid ${({ theme }) => theme.color.lightGrey};
+  &:hover {
+    cursor: pointer;
+    position: relative;
+    animation: ddd.1s infinite;
+    animation-direction: alternate;
+  }
+  @keyframes ddd {
+    from {
+      transform: rotate(2deg);
+    }
+    to {
+      transform: rotate(-2deg);
+    }
+  }
 `;
 
 export const ActBox = styled.div`
@@ -114,4 +140,13 @@ export const GalleryAddLabel = styled.label`
 
 export const NotShow = styled.input`
   display: none;
+`;
+
+export const ErrorReminder = styled.div`
+  display: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  color: ${({ theme }) => theme.color.error};
 `;
