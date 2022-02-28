@@ -24,7 +24,6 @@ module.exports = {
 
     if (helperCategoryId === 0 && gifticonCategoryId === 0) {
       try {
-        //TODO: gallery 모델과 helper 모델 id로 연결해서 이미지 한개 끌어와야함
         const allList = await helper.findAndCountAll({
           limit,
           offset: skip,

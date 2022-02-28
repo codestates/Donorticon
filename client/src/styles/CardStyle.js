@@ -22,7 +22,14 @@ export const CardBox = styled.div`
   flex-direction: column;
 `;
 
-export const CardGallery = styled.img`
+export const EmptyBox = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
+
+export const CardGallery = styled.div`
+  background-image: url(${(props) => props.src});
+  background-size: cover;
   justify-content: center;
   align-items: center;
   width: 100%;

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
   FaAngleLeft,
   FaAngleRight,
@@ -20,6 +21,8 @@ const Pagination = ({ maxPage, currentPage, setCurrentPage }) => {
   const handleClick = (page) => {
     setCurrentPage(page);
   };
+
+  useEffect(() => window.scrollTo(0, 0), [currentPage]);
 
   return (
     <PaginationContainer>
