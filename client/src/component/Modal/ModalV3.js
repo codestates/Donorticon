@@ -1,11 +1,11 @@
+import { useRef } from 'react';
 import {
   ModalBackground,
   ModalFrame,
   Title,
   SubTitle,
-} from '../../styles/utils/Modal';
-import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
-import { useRef } from 'react';
+} from '../../styles/Modal/ModalStyle';
+import { Btn, ButtonContainer } from '../../styles/Modal/ButtonModalStyle';
 
 const ModalV3 = ({ title, subtitle, closer }) => {
   const check = useRef();
