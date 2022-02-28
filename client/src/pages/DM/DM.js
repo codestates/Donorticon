@@ -1,5 +1,5 @@
 import ImageUploader from '../../component/ImageUploader';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
@@ -26,7 +26,9 @@ import {
   ButtonBox,
   BottomWrapper,
   BottomBox,
-  RoomOwnerName,
+  RoomTop,
+  RoomBottom,
+  MobileChatContainer,
 } from '../../styles/DM/DMStyle';
 
 const socket = io(process.env.REACT_APP_SERVER);
@@ -46,6 +48,7 @@ const DM = () => {
   const [giverId, setGiverId] = useState('');
   const [helperId, setHelperId] = useState('');
   const [profileImg, setProfileImg] = useState('');
+  const [mobileDialogue, setMobileDialoge] = useState(false);
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
@@ -91,6 +94,7 @@ const DM = () => {
     }
     console.log(profileImg)
     setDialogues(dialogueRequest.data.dialogues);
+    setMobileDialoge(true);
   };
 
   useEffect(() => getRooms(), []);
@@ -104,25 +108,27 @@ const DM = () => {
     <DMContainer>
       <SubContainer>
         <RoomContainer>
-          <RoomOwnerName>{user.name}</RoomOwnerName>
-          {rooms.map((item, index) => (
-            <ReceiverWrapper
-              value={item}
-              onClick={() => getDialogues(item)}
-              key={index}
-              className={item.id === currentRoom && 'current'}
-            >
-              <ReceiverImg
-                src={user.who === 1 ? item.helper.img : item.giver.img}
-              />
-              <ReceiverName>
-                {user.who === 1 ? item.helper.name : item.giver.name}
-              </ReceiverName>
-            </ReceiverWrapper>
-          ))}
+          <RoomTop>{user.name}</RoomTop>
+          <RoomBottom>
+            {rooms.map((item, index) => (
+              <ReceiverWrapper
+                value={item}
+                onClick={() => getDialogues(item)}
+                key={index}
+                className={item.id === currentRoom && 'current'}
+              >
+                <ReceiverImg
+                  src={user.who === 1 ? item.helper.img : item.giver.img}
+                />
+                <ReceiverName>
+                  {user.who === 1 ? item.helper.name : item.giver.name}
+                </ReceiverName>
+              </ReceiverWrapper>
+            ))}
+          </RoomBottom>
         </RoomContainer>
         {dialogues.length > 0 ? (
-          <ChatContainer>
+          <ChatContainer mobileDialogue={mobileDialogue}>
             <DialogueWrapper>
               {dialogues.map((item, index) => (
                 <div key={index}>
@@ -215,7 +221,10 @@ const DM = () => {
           </NoroomContainer>
         )}
       </SubContainer>
-      {isModalOpen ? (
+      {dialogues.length > 0 && (
+        <MobileChatContainer>MOBILE</MobileChatContainer>
+      )}
+      {isModalOpen && (
         <ImageUploader
           handleModalOpen={handleModalOpen}
           api="/dm"
@@ -224,7 +233,7 @@ const DM = () => {
           helperId={helperId}
           type={who}
         ></ImageUploader>
-      ) : null}
+      )}
     </DMContainer>
   );
 };

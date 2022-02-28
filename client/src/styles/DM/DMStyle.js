@@ -2,18 +2,24 @@ import styled from 'styled-components';
 
 export const DMContainer = styled.div`
   width: 100%;
-  /* height: 1000px; */
   padding: 40px;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 20px 10px;
+  }
 `;
 
 export const SubContainer = styled.div`
   width: 70%;
   margin: 0 auto;
   border: 1px solid ${({ theme }) => theme.color.lightGrey};
-  height: 870px;
+  height: 800px;
   margin-bottom: 40px;
   display: flex;
   flex-direction: row;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    flex-direction: column;
+  }
 `;
 
 // 왼쪽 부분
@@ -21,14 +27,28 @@ export const RoomContainer = styled.div`
   width: 30%;
   height: 100%;
   border-right: 1px solid ${({ theme }) => theme.color.lightGrey};
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
-export const RoomOwnerName = styled.div`
+export const RoomTop = styled.div`
   font-size: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-bottom: 1px solid ${({ theme }) => theme.color.lightGrey};
-  padding: 20px 0;
   font-weight: 500;
+  width: 100%;
+  height: 10%;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+  }
+`;
+
+export const RoomBottom = styled.div`
+  height: 90%;
+  overflow-y: scroll;
 `;
 
 export const ReceiverWrapper = styled.div`
@@ -58,6 +78,17 @@ export const ReceiverName = styled.div`
 export const ChatContainer = styled.div`
   width: 70%;
   height: 100%;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: ${(props) => (props.mobileDialogue ? 'block' : 'none')};
+  }
+`;
+
+export const MobileChatContainer = styled.div`
+  display: none;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    height: 100%;
+  }
 `;
 
 export const DialogueWrapper = styled.div`
@@ -181,6 +212,9 @@ export const NoroomContainer = styled.div`
   align-items: center;
   .icon {
     margin-bottom: 20px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
   }
 `;
 
