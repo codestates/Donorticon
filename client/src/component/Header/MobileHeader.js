@@ -27,7 +27,7 @@ const MobileHeader = ({
           )}
         </MobileNav>
       </MobileNavContainer>
-      {isToggled && isLoggedIn ? (
+      {isToggled && isLoggedIn && (
         <ListContainer isToggled={isToggled}>
           <StyledLink
             to="/helperlist/category/0?page=1&limit=9"
@@ -45,8 +45,8 @@ const MobileHeader = ({
             <ListItem>로그아웃</ListItem>
           </StyledLink>
         </ListContainer>
-      ) : null}
-      {isToggled && !isLoggedIn ? (
+      )}
+      {isToggled && !isLoggedIn && (
         <ListContainer isToggled={isToggled}>
           <StyledLink
             to="/helperlist/category/0?page=1&limit=9"
@@ -59,7 +59,7 @@ const MobileHeader = ({
             <ListItem>회원가입</ListItem>
           </StyledLink>
         </ListContainer>
-      ) : null}
+      )}
     </>
   );
 };

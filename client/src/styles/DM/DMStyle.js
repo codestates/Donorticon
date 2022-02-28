@@ -2,18 +2,24 @@ import styled from 'styled-components';
 
 export const DMContainer = styled.div`
   width: 100%;
-  /* height: 1000px; */
   padding: 40px;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 20px;
+  }
 `;
 
 export const SubContainer = styled.div`
   width: 70%;
   margin: 0 auto;
   border: 1px solid ${({ theme }) => theme.color.lightGrey};
-  height: 870px;
+  height: 800px;
   margin-bottom: 40px;
   display: flex;
   flex-direction: row;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    flex-direction: column;
+  }
 `;
 
 // 왼쪽 부분
@@ -21,14 +27,43 @@ export const RoomContainer = styled.div`
   width: 30%;
   height: 100%;
   border-right: 1px solid ${({ theme }) => theme.color.lightGrey};
+  height: 100%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    font-size: 18px;
+    border: none;
+    height: ${(props) => props.mobileDialogue && '75px'};
+  }
 `;
 
-export const RoomOwnerName = styled.div`
+export const RoomTop = styled.div`
   font-size: 20px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-bottom: 1px solid ${({ theme }) => theme.color.lightGrey};
-  padding: 20px 0;
   font-weight: 500;
+  width: 100%;
+  height: 10%;
+  position: relative;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    font-size: 18px;
+    height: 75px;
+  }
+`;
+
+export const RoomIcon = styled.div`
+  position: absolute;
+  left: 10px;
+`;
+
+export const RoomBottom = styled.div`
+  height: 90%;
+  overflow-y: scroll;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: ${(props) => props.mobileDialogue && 'none'};
+  }
 `;
 
 export const ReceiverWrapper = styled.div`
@@ -58,6 +93,11 @@ export const ReceiverName = styled.div`
 export const ChatContainer = styled.div`
   width: 70%;
   height: 100%;
+  @media ${({ theme }) => theme.device.mobile} {
+    display: ${(props) => !props.mobileDialogue && 'none'};
+    width: 100%;
+    height: 725px;
+  }
 `;
 
 export const DialogueWrapper = styled.div`
@@ -67,12 +107,9 @@ export const DialogueWrapper = styled.div`
   flex-direction: column-reverse;
   height: 90%;
   padding: 20px;
-`;
-
-export const ProfileImg = styled.img`
-  border-radius: 50px;
-  width: 40px;
-  height: 40px;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 10px;
+  }
 `;
 
 export const MessageBox = styled.div`
@@ -85,10 +122,15 @@ export const MessageBox = styled.div`
 
 export const MessageProfileImg = styled.div`
   background-image: url(${(props) => props.src});
+  background-size: cover;
   border-radius: 30px;
+  margin-right: 10px;
   width: 30px;
   height: 30px;
-  border: 1px solid red;
+  flex-direction: ${(props) => props.row && 'row'};
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 10px;
+  }
 `;
 
 export const MessageContent = styled.div`
@@ -98,6 +140,9 @@ export const MessageContent = styled.div`
     props.notMe ? `1px solid ${props.theme.color.main}` : 'none'};
   padding: 20px;
   border-radius: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 10px 20px;
+  }
 `;
 
 export const GifticonImage = styled.img`
@@ -113,6 +158,9 @@ export const GifticonImage = styled.img`
   &.yourMessage {
     border: 1px solid ${({ theme }) => theme.color.main};
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 200px;
+  }
 `;
 
 export const BottomWrapper = styled.div`
@@ -121,39 +169,60 @@ export const BottomWrapper = styled.div`
   height: 10%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   box-sizing: border-box;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 10px;
+  }
 `;
 
 export const BottomBox = styled.div`
   width: 100%;
   border: 1px solid ${({ theme }) => theme.color.lightGrey};
-  display: flex;
   border-radius: 30px;
+  display: flex;
+  justify-content: space-between;
 `;
 
 export const Input = styled.input`
   all: unset;
   width: 80%;
   padding: 10px 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 70%;
+    padding: 10px;
+    padding-right: 0;
+  }
 `;
 
 export const ButtonBox = styled.div`
   width: 20%;
   text-align: right;
   padding: 10px 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 20%;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    margin-right: 10px;
+  }
 `;
 
 export const ImgButton = styled.span`
   cursor: pointer;
-  padding: 0 20px;
+  padding-right: 20px;
   &:hover {
     color: ${({ theme }) => theme.color.main};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 0;
+    padding-right: 8px;
   }
 `;
 
 export const SendButton = styled.span`
   cursor: pointer;
+  /* padding: 10px; */
   &:hover {
     color: ${({ theme }) => theme.color.main};
   }
@@ -167,7 +236,8 @@ export const Time = styled.div`
   &.myMessage {
     text-align: right;
   }
-  &.yourMessage {
+  @media ${({ theme }) => theme.device.mobile} {
+    /* font-size: 5px; */
   }
 `;
 
@@ -181,6 +251,9 @@ export const NoroomContainer = styled.div`
   align-items: center;
   .icon {
     margin-bottom: 20px;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    display: none;
   }
 `;
 
