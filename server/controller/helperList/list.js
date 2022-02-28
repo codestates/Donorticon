@@ -13,10 +13,11 @@ module.exports = {
   getDetail: async (req, res) => {
     try {
       const helperId = req.params.id;
-      const data = await helper.findOne({ where: { id: helperId } });
-      delete data.password;
-      delete data.verification;
-      delete data.verify_hash;
+      const data = await helper.findOne({
+        raw: true, 
+        where: { id: helperId },
+        attributes: ['img', 'slogan', 'name', 'description', 'location']
+      });  
       const helper_vulnerableRow = await helper_vulnerable.findAll({
         where: { helper_id: helperId },
       });
@@ -34,15 +35,15 @@ module.exports = {
         (el) => el.dataValues.gifticon_category_id,
       );
       const galleryList = galleryRow.map((el) => el.dataValues.img);
-      res.status(200).json(
-        Object.assign(data.dataValues, {
-          gallery: galleryList,
-          vulnerable: vulnerableList,
-          gifticonCategory: gifticonCategoryList,
-        }),
-      );
+      const helperDetailInfo = Object.assign(data, {
+        id: helperId,
+        gallery: galleryList,
+        vulnerable: vulnerableList,
+        gifticonCategory: gifticonCategoryList,
+      });
+      res.status(200).json(helperDetailInfo);
     } catch (e) {
-      res.status(500).json({ message: 'intenal server error' });
+      res.status(500).json({ message: 'internal server error' });
     }
   },
   donate: async (req, res) => {
@@ -83,7 +84,7 @@ module.exports = {
 
       res.status(200).json({ url: url });
     } catch (e) {
-      res.status(500).json({ message: 'intenal server error' });
+      res.status(500).json({ message: 'internal server error' });
     }
   },
 };
