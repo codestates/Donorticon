@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
     try {
       const [ userInfo, created ] = await giver.findOrCreate({
         where: { email },
-        defaults: { name, password, mobile, user_type: 1 }
+        defaults: { name, password, mobile, user_type: 1, img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg'}
       }); 
       if ( created ) {
         res.status(201).json({ message: `welcome ${req.body.name}! you have sucessfully signed up`, id: userInfo.dataValues.id});

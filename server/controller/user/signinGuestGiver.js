@@ -9,6 +9,7 @@ module.exports = async (req, res) => {
       email: giverEmail,
       name: `guestGiver${giverEmailNumber + 1}`,
       user_type: 1,
+      img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg'
     });
     const giverGuestFinder = await giver.findOne({
       where: { email: giverEmail },
