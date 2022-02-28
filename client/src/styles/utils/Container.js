@@ -13,6 +13,13 @@ export const SubContainer = styled.div`
   padding-bottom: 20px;
 `;
 
+export const HelperContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
 export const HelperHeightContainer = styled.div`
   min-height: 1100px;
   width: 100%;
