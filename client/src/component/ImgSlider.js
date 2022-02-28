@@ -19,20 +19,20 @@ const ImgSlider = ({ data }) => {
   const [imageIdx, SetImageIdx] = useState(0);
   const moveLeft = () => {
     if (imageIdx === 0) {
-      SetImageIdx(list.length-1);  
+      SetImageIdx(list.length - 1);
     } else {
       SetImageIdx(imageIdx - 1);
     }
   };
   const moveRight = () => {
-    if (imageIdx === list.length-1) {
-      SetImageIdx(0);  
+    if (imageIdx === list.length - 1) {
+      SetImageIdx(0);
     } else {
       SetImageIdx(imageIdx + 1);
     }
   };
   const changeImg = (e) => {
-    SetImageIdx(e);  
+    SetImageIdx(e);
   };
 
   return (
@@ -63,10 +63,14 @@ const ImgSlider = ({ data }) => {
                   src={thum}
                   key={index}
                   className="current"
-                  onClick={()=>changeImg(index)}
+                  onClick={() => changeImg(index)}
                 ></Thumbnail>
               ) : (
-                <Thumbnail src={thum} key={index} onClick={()=>changeImg(index)}></Thumbnail>
+                <Thumbnail
+                  src={thum}
+                  key={index}
+                  onClick={() => changeImg(index)}
+                ></Thumbnail>
               ),
             )}
           </ThumbnailWrapper>

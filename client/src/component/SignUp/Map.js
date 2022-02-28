@@ -7,12 +7,17 @@ const Mapping = ({ address }) => {
   const geocoder = new kakao.maps.services.Geocoder();
 
   const mapLoader = (x, y) => {
-    var container = document.getElementById('map');
-    var options = {
+    const container = document.getElementById('map');
+    const options = {
       center: new kakao.maps.LatLng(y, x),
       level: 3,
     };
-    var map = new kakao.maps.Map(container, options);
+    const map = new kakao.maps.Map(container, options);
+    const marker = new kakao.maps.Marker({
+      position: new kakao.maps.LatLng(y, x),
+    });
+
+    marker.setMap(map);
   };
 
   const callback = (result, status) => {

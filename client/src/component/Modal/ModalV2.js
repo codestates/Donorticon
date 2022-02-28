@@ -39,7 +39,7 @@ const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
   };
 
   return (
-    <ModalBackground id={id} ref={background} onClick={buttonNo}>
+    <ModalBackground id={id ? id : 0} ref={background} onClick={buttonNo}>
       <ModalFrame>
         <Title>{title}</Title>
         <SubTitle>{subtitle && subtitle}</SubTitle>

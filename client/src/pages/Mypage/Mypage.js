@@ -389,7 +389,7 @@ const Mypage = () => {
                     mypage
                   />
                   <MultiContainer gallery>
-                    <InputName>갤러리</InputName>
+                    <InputName>사진 (최대 5개 등록가능)</InputName>
                     <GalleryBox>
                       {userInfo.gallery.map((url, idx) => {
                         return (
@@ -412,7 +412,7 @@ const Mypage = () => {
                     </GalleryAddLabel>
                   </MultiContainer>
                   <MultiContainer>
-                    <InputName>vulnerable</InputName>
+                    <InputName>어떤 분들을 돕고 있나요</InputName>
                     <Tag
                       tagList={vulnerableList}
                       targetTagList={userInfo.vulnerable}
@@ -420,7 +420,7 @@ const Mypage = () => {
                     />
                   </MultiContainer>
                   <MultiContainer>
-                    <InputName>gifticon</InputName>
+                    <InputName>지원을 원하시는 기프티콘</InputName>
                     <Tag
                       tagList={gifticonList}
                       targetTagList={userInfo.gifticonCategory}
