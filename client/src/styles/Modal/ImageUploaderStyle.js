@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ButtonContainer, ModalButton } from './ModalStyle';
+import { ButtonContainer } from './ModalStyle';
 
 export const ImgUploadContainer = styled.div`
   padding: 50px;
