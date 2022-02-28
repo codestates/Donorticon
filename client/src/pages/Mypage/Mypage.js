@@ -356,7 +356,8 @@ const Mypage = () => {
                   )
                 ) : (
                   <InputContent id={idx} onClick={handleFocus}>
-                    {userInfo[list.name].length > 50
+                    {typeof userInfo[list.name] === 'string' &&
+                    userInfo[list.name].length > 50
                       ? `${userInfo[list.name].slice(0, 50)}...`
                       : userInfo[list.name]}
                   </InputContent>
