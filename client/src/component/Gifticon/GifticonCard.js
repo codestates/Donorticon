@@ -10,6 +10,9 @@ import {
   GifticonInfo,
 } from '../../styles/CardStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
+import noimage from '../../img/noimg.png';
+
+const NOIMAGE = noimage;
 
 const GifticonCard = ({ data, name }) => {
   const who = useSelector((state) => state.user.user.who);
@@ -40,7 +43,7 @@ const GifticonCard = ({ data, name }) => {
         report: gifticonInfo.report,
         textStyle,
         point: gifticonInfo.point,
-        thanksImgUrl,
+        thanksImgUrl: thanksImgUrl === null ? NOIMAGE : thanksImgUrl,
       }),
     );
     navigate(`/gifticon/detail/${id}`);

@@ -60,6 +60,7 @@ const HelperFilter = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [helperCategoryId, setHelperCategoryId] = useState(0);
   const [gifticonCategoryId, setGifticonCategoryId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getList = async (id) => {
     try {
@@ -111,15 +112,6 @@ const HelperFilter = () => {
       navigate(`/helperlist/category/${id}?page=${currentPage}&limit=9`);
     } catch (e) {
       console.log(e);
-    }
-  };
-
-  const [isLoading, setIsLoading] = useState(true);
-  const getFirstGallery = (id) => {
-    for (let i = 0; i < galleryList.length; i++) {
-      if (galleryList[i].helper_id === id) {
-        return galleryList[i].img;
-      }
     }
   };
 
@@ -201,7 +193,7 @@ const HelperFilter = () => {
                           img={helper.img}
                           slogan={helper.slogan}
                           key={helper.id}
-                          gallery={getFirstGallery(helper.id)}
+                          gallery={galleryList}
                         />
                       );
                     })}
