@@ -10,7 +10,7 @@ import {
   ModalButton,
 } from '../../styles/Modal/ModalStyle';
 
-const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
+const ModalV2 = ({ title, subtitle, isMessage, callback, id, noSpace }) => {
   const [textMessage, setTextMessage] = useState('');
   const close = useRef();
   const background = useRef();
@@ -31,12 +31,12 @@ const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
 
   return (
     <ModalBackground id={id ? id : 0} ref={background} onClick={buttonNo}>
-      <ModalFrame>
-        <Title>{title}</Title>
+      <ModalFrame noSpace={noSpace}>
+        <Title noSpace={noSpace}>{title}</Title>
         {subtitle && <SubTitle>{subtitle}</SubTitle>}
         {isMessage && (
           <>
-            <MesaageTitle />
+            <MesaageTitle>거절 사유를 작성해주세요</MesaageTitle>
             <MessageArea onChange={(e) => setTextMessage(e.target.value)} />
           </>
         )}

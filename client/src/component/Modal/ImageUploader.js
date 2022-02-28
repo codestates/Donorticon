@@ -10,11 +10,8 @@ import {
   InputText,
   ImgWrapper,
   Button,
-  ButtonSection,
-  Label,
   Img,
   DragNDropWrapper,
-  DragNDropSpace,
   TxtWrapper,
   DragNDropText,
   DragNDropLabel,
@@ -98,7 +95,7 @@ const ImageUploader = ({
                 <>
                   <FaFileUpload size="4rem" />
                   {isDragActive ? (
-                    <>드랍해주세요! 🥳</>
+                    <DragNDropText>드랍해주세요! 🥳</DragNDropText>
                   ) : (
                     <>
                       <DragNDropText>Drag & Drop</DragNDropText>

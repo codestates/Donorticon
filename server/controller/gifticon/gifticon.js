@@ -89,6 +89,7 @@ module.exports = {
               statusId !== 0
                 ? { helper_id: id, status: getStatusName(statusId) }
                 : { helper_id: id },
+            order: [['id', 'DESC']],
             include: {
               model: giver,
               required: true,
