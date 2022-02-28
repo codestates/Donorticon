@@ -35,14 +35,16 @@ export const BottomContainer = styled.div`
 export const ContentContainer = styled.div`
   width: 70%;
   display: ${(props) => props.mypage && 'flex'};
+  min-height: 500px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     padding-top: 40px;
+    flex-direction: ${(props) => props.mypage && 'column-reverse'};
   }
 `;
 
 export const ContentTitle = styled.div`
-  font-size: 18px;
+  font-size: 20px;
   text-align: left;
   padding-bottom: 20px;
   padding-top: ${(props) => props.top && '20px'};

@@ -23,8 +23,8 @@ const GiticonFilter = ({ statusId, handleStatusClick }) => {
   const [startX, setStartX] = useState();
 
   const handleDragStart = (e) => {
-    console.log(e.pageX);
-    console.log(scroll.current.scrollLeft);
+    // console.log(e.pageX);
+    // console.log(scroll.current.scrollLeft);
     e.preventDefault();
     setIsDrag(true);
     setStartX(e.pageX + scroll.current.scrollLeft);

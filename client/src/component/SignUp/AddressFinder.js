@@ -28,14 +28,14 @@ const AddressFinder = ({ callback, location, mypage }) => {
   };
 
   return complete ? (
-    <AddressContainer>
+    <AddressContainer mypage={mypage}>
       <AddressBox>
         <AddressTitle mypage={mypage}>활동 지역</AddressTitle>
         <AddressEdit mypage={mypage} onClick={() => setComplete(false)}>
           수정
         </AddressEdit>
       </AddressBox>
-      <AddressInput readOnly defaultValue={location} />
+      <AddressInput mypage={mypage} readOnly defaultValue={location} />
     </AddressContainer>
   ) : (
     <DaumPostCode onComplete={handleComplete} className="post-code" />

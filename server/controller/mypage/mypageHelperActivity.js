@@ -17,7 +17,7 @@ module.exports = {
 				res.status(200).json({ message: 'data successfully changed' })
 			}
 		} catch(err) {
-			console.log(err);
+			res.status(500).json({ message: 'internal server error' })
 		}
 	}
 }

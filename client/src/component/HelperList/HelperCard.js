@@ -8,18 +8,20 @@ import {
 } from '../../styles/CardStyle';
 import { useNavigate } from 'react-router-dom';
 
-const Card = ({ id, name, img, slogan }) => {
-  //TODO: slogan 문구 길이가 예를들어 20개 이상인경우 slice 걸어야함
+const Card = ({ id, name, img, slogan, gallery }) => {
   const navigate = useNavigate();
+
+  const sliced =
+    slogan && slogan.length > 24 ? `${slogan.slice(0, 24)}...` : `${slogan}`;
 
   return (
     <CardBox onClick={() => navigate(`/helperlist/detail/${id}`)}>
-      <CardGallery />
+      <CardGallery src={gallery} />
       <CardContent>
         <HelperImage src={img} />
         <HelperName>{name}</HelperName>
       </CardContent>
-      <Slogan>{slogan}</Slogan>
+      <Slogan>{slogan === null ? '아직 정보가 없어요!' : `${sliced}`}</Slogan>
     </CardBox>
   );
 };

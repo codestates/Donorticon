@@ -57,7 +57,7 @@ const PasswordModal = ({ modalCloser }) => {
       ref={close}
       onClick={(e) => {
         if (close.current === e.target) {
-          modalCloser();
+          modalCloser(e);
         }
       }}
     >

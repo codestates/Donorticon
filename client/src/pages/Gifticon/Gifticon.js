@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import Loader from '../../component/Loader';
 import Pagination from '../../component/Pagination/Pagination';
 import GifticonCard from '../../component/Gifticon/GifticonCard';
 import GiticonFilter, {
@@ -16,7 +17,17 @@ import {
   ContentContainer,
   TopContainer,
 } from '../../styles/CommonStyle';
-import { SubTitle, Title } from '../../styles/utils/Container';
+import {
+  GifticonHeightContainer,
+  SubTitle,
+  Title,
+} from '../../styles/utils/Container';
+import {
+  BoldText,
+  CountMessage,
+  DonateButton,
+  NoGifticonMessage,
+} from '../../styles/Gifticon/GifticonStyle';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -63,17 +74,25 @@ const Gifticon = () => {
     }
   };
 
-  useEffect(() => getGifticonList(), [currentPage, statusId]);
+  const handleButton = () => {
+    navigate('/helperlist/category/0?page=1&limit=9');
+  };
 
-  //  {
-  //    who && who === 1 && <Div>Donorticon을 통해 기프티콘을 기부해보세요!</Div>;
-  //  }
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      getGifticonList();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  }, [currentPage, statusId]);
 
   return (
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{username}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
@@ -83,36 +102,60 @@ const Gifticon = () => {
             statusId={statusId}
             handleStatusClick={handleStatusClick}
           />
-          {who === 1 && <GifticonLevel point={point} count={count} />}
-          {who === 2 && count !== 0 && (
-            <div>현재까지 {count}회 기부를 받으셨네요!</div>
-          )}
-          {list.length === 0 ? (
-            <>
-              <div>해당 필터에 해당하는 기프티콘이 없네요!</div>
-            </>
+          {isLoading ? (
+            <Loader />
           ) : (
             <>
-              <CardContainer gifticon>
-                {list.map((gifticon) => {
-                  return (
-                    <GifticonCard
-                      key={gifticon.id}
-                      data={gifticon}
-                      name={
-                        who === 1 ? gifticon.helper.name : gifticon.giver.name
-                      }
+              {who === 1 && <GifticonLevel point={point} count={count} />}
+              {who === 1 && count === 0 && (
+                <NoGifticonMessage center>
+                  기부하신 기프티콘이 아직 없네요
+                  <br />
+                  기부하러 가보실까요?
+                  <br />
+                  <DonateButton onClick={handleButton}>기부하기</DonateButton>
+                </NoGifticonMessage>
+              )}
+              {who === 2 && count !== 0 && (
+                <CountMessage>
+                  <BoldText>{count}회 기부</BoldText>를 받으셨어요!
+                </CountMessage>
+              )}
+              {who === 2 && count === 0 && (
+                <NoGifticonMessage>
+                  아직 기프티콘 기부를 받지 못하셨어요
+                </NoGifticonMessage>
+              )}
+              {count !== 0 && list.length === 0 && (
+                <CountMessage>해당하는 기프티콘이 없네요!</CountMessage>
+              )}
+              {list.length !== 0 && (
+                <>
+                  <GifticonHeightContainer>
+                    <CardContainer gifticon>
+                      {list.map((gifticon) => {
+                        return (
+                          <GifticonCard
+                            key={gifticon.id}
+                            data={gifticon}
+                            name={
+                              who === 1
+                                ? gifticon.helper.name
+                                : gifticon.giver.name
+                            }
+                          />
+                        );
+                      })}
+                    </CardContainer>
+                  </GifticonHeightContainer>
+                  {maxPage > 0 && (
+                    <Pagination
+                      maxPage={maxPage}
+                      currentPage={currentPage}
+                      setCurrentPage={setCurrentPage}
                     />
-                  );
-                })}
-              </CardContainer>
-              {maxPage > 0 && (
-                <Pagination
-                  maxPage={maxPage}
-                  currentPage={currentPage}
-                  count={count}
-                  setCurrentPage={setCurrentPage}
-                />
+                  )}
+                </>
               )}
             </>
           )}

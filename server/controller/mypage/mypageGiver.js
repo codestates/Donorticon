@@ -29,38 +29,41 @@ module.exports ={
       try {
         const token = req.headers.authorization.split(' ')[1];
         const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
-          const { id } = tokenDecoded;
-          const url = await generateUploadURL();
-          if (req.body.mobile) {
-            const { mobile } = req.body;
-            await giver.update(
-              { mobile },
-              {
-                where: { id },
-              }
-            );
-          }
-          if (req.body.name) {
-            const { name } = req.body;
-            await giver.update(
-              { name },
-              {
-                where: { id },
-              }
-            );
-          }
-          if (req.body.tag === 'img') {
-            await giver.update(
-              { img: url.split('?')[0] },
-              {
-                where: { id },
-              },
-            );
-            return res.status(200).json({ url });
-          }
-          res.status(200).json({ message: "user information successfully changed" });
+        if (!tokenDecoded) {
+          return res.status(401).json({ message: 'invalid token' });
+        }
+        const { id } = tokenDecoded;
+        const url = await generateUploadURL();
+        if (req.body.mobile) {
+          const { mobile } = req.body;
+          await giver.update(
+            { mobile },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.name) {
+          const { name } = req.body;
+          await giver.update(
+            { name },
+            {
+              where: { id },
+            }
+          );
+        }
+        if (req.body.tag === 'img') {
+          await giver.update(
+            { img: url.split('?')[0] },
+            {
+              where: { id },
+            },
+          );
+          return res.status(200).json({ url });
+        }
+        res.status(200).json({ message: "user information successfully changed" });
       } catch (e) {
-      console.log(e);
+      res.status(500).json({ message: 'internal server error' });
       }
     } else {
       res.status(422).json({ message: 'insufficient parameters supplied' });

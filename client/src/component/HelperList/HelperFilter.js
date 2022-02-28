@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../../component/Pagination/Pagination';
+import HelperCard from '../../component/HelperList/HelperCard';
 import {
   HelperCategoryBox,
   HelperCategoryContainer,
@@ -15,6 +17,8 @@ import {
   GifticonCategoryContainer,
   GifticonContent,
 } from '../../styles/HelperList/GifticonCategoryStyle';
+import { CardContainer, HelperBox } from '../../styles/CardStyle';
+import { HelperHeightContainer } from '../../styles/utils/Container';
 import all from '../../img/helperCategory/1_all.png';
 import child from '../../img/helperCategory/2_child.png';
 import old from '../../img/helperCategory/3_old.png';
@@ -23,7 +27,7 @@ import global from '../../img/helperCategory/5_global.png';
 import women from '../../img/helperCategory/6_women.png';
 import mental from '../../img/helperCategory/7_mental.png';
 import etc from '../../img/helperCategory/8_etc.png';
-import CardList from './CardList';
+import Loader from '../Loader';
 
 const helperCategory = [
   { id: 0, name: '전체보기', src: all },
@@ -51,6 +55,7 @@ const gifticonCategory = [
 const HelperFilter = () => {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
+  const [galleryList, setGalleryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [helperCategoryId, setHelperCategoryId] = useState(0);
@@ -62,7 +67,8 @@ const HelperFilter = () => {
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
         { params: { gifticon: gifticonCategoryId } },
       );
-      const { list, maxPage } = data;
+      const { list, maxPage, galleryList } = data;
+      setGalleryList(galleryList);
       if (gifticonCategoryId !== 0) {
         const filteredList = list.map((x) => x.helper);
         setList(filteredList);
@@ -97,7 +103,8 @@ const HelperFilter = () => {
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
         { params: { gifticon: gifticonCategoryId } },
       );
-      const { list, maxPage } = data;
+      const { list, maxPage, galleryList } = data;
+      setGalleryList(galleryList);
       const filteredList = list.map((x) => x.helper);
       setList(filteredList);
       setMaxPage(maxPage);
@@ -107,12 +114,29 @@ const HelperFilter = () => {
     }
   };
 
-  useEffect(() => {
-    if (helperCategoryId === 0) {
-      getList(helperCategoryId);
-    } else {
-      getFilteredList(helperCategoryId);
+  const [isLoading, setIsLoading] = useState(true);
+  const getFirstGallery = (id) => {
+    for (let i = 0; i < galleryList.length; i++) {
+      if (galleryList[i].helper_id === id) {
+        return galleryList[i].img;
+      }
     }
+  };
+
+  useEffect(() => {
+    const getData = () => {
+      if (helperCategoryId === 0) {
+        getList(helperCategoryId);
+      } else {
+        getFilteredList(helperCategoryId);
+      }
+    };
+    setTimeout(() => {
+      getData();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
   }, [currentPage, helperCategoryId, gifticonCategoryId]);
 
   return (
@@ -158,15 +182,42 @@ const HelperFilter = () => {
           })}
         </GifticonCategoryBox>
       </GifticonCategoryContainer>
-      {list.length === 0 ? (
-        <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+      {isLoading ? (
+        <Loader />
       ) : (
-        <CardList
-          list={list}
-          maxPage={maxPage}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
+        <>
+          {list.length === 0 ? (
+            <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+          ) : (
+            <>
+              <HelperHeightContainer>
+                <HelperBox>
+                  <CardContainer>
+                    {list.map((helper) => {
+                      return (
+                        <HelperCard
+                          id={helper.id}
+                          name={helper.name}
+                          img={helper.img}
+                          slogan={helper.slogan}
+                          key={helper.id}
+                          gallery={getFirstGallery(helper.id)}
+                        />
+                      );
+                    })}
+                  </CardContainer>
+                </HelperBox>
+              </HelperHeightContainer>
+              {maxPage > 0 && (
+                <Pagination
+                  maxPage={maxPage}
+                  currentPage={currentPage}
+                  setCurrentPage={setCurrentPage}
+                />
+              )}
+            </>
+          )}
+        </>
       )}
     </>
   );

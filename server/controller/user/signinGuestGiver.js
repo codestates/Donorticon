@@ -3,15 +3,15 @@ const jwt = require('jsonwebtoken');
 
 module.exports = async (req, res) => {
   try {
-    const guestEmailNumber = await giver.count();
-    const guestEmail = `guest${guestEmailNumber + 1}@donorticon.com`;
+    const giverEmailNumber = await giver.count();
+    const giverEmail = `guestGiver${giverEmailNumber + 1}@donorticon.com`;
     const giverGuestCreated = await giver.create({
-      email: guestEmail,
-      name: `guest${guestEmailNumber + 1}`,
+      email: giverEmail,
+      name: `guestGiver${giverEmailNumber + 1}`,
       user_type: 1,
     });
     const giverGuestFinder = await giver.findOne({
-      where: { email: guestEmail },
+      where: { email: giverEmail },
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     });
     const giverGuestInfo = giverGuestFinder.dataValues;

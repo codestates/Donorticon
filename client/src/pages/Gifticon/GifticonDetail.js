@@ -15,10 +15,12 @@ import {
   TopContainer,
 } from '../../styles/CommonStyle';
 import {
+  DropDownContainer,
   InfoBox,
+  InputBox,
   InputContent,
+  InputLabel,
 } from '../../styles/Gifticon/GifticonDetailStyle';
-import { InputBox, InputLabel } from '../../styles/utils/Input';
 
 const GifticonDetail = () => {
   const username = useSelector((state) => state.user.user.name);
@@ -32,7 +34,6 @@ const GifticonDetail = () => {
     <CommonContainer>
       <TopContainer>
         <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-        {/* TODO: 모바일에서 출력 두줄로 해야함 */}
         <SubTitle>{username}님 반가워요!</SubTitle>
       </TopContainer>
       <BottomContainer>
@@ -62,9 +63,9 @@ const GifticonDetail = () => {
                 </div>
                 <div>
                   <InputLabel>진행상태</InputLabel>
-                  <div style={{ width: '70%' }}>
+                  <DropDownContainer>
                     <StatusDropDown />
-                  </div>
+                  </DropDownContainer>
                 </div>
               </InputBox>
             </InfoBox>
