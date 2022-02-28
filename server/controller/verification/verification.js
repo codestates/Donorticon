@@ -34,15 +34,15 @@ module.exports = {
     const message = {
       from: 'donorticon@gmail.com',
       to: `${req.headers.email}`,
-      subject: 'Donorticon: Please verify your email',
+      subject: '[Donorticon] 이메일 인증',
       template: 'email',
       context: {
-        src: `${process.env.BUCKET}/aintgottime.jpg`,
+        src: `${process.env.BUCKET}/logo.png`,
         redirection: `${process.env.CLIENT_URL}/verifyRedir/type=${type}/id=${id}/code=${code}`,
       },
     };
 
-    if (req.headers.type === '1') {
+    https: if (req.headers.type === '1') {
       await giver.update({ verify_hash: code }, { where: { id } });
       await transporter.sendMail(message, (err, info) => {
         if (err) {
