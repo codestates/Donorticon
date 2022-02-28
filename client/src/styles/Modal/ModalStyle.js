@@ -11,12 +11,18 @@ export const ModalBackground = styled.div`
   align-items: center;
   justify-content: center;
   z-index: 100;
+  margin-top: ${(props) => props.noSpace && '0'};
 `;
 
 export const ModalFrame = styled.div`
-  padding: 100px;
+  padding: ${(props) => (props.noSpace ? '50px' : '100px')};
+  width: ${(props) => props.noSpace && '500px'};
+  height: auto;
   background-color: #fff;
   text-align: center;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   @media ${({ theme }) => theme.device.mobile} {
     width: 80%;
     padding: 20px;
@@ -31,11 +37,23 @@ export const SubTitle = styled.div`
   padding: 25px 0;
 `;
 
-export const MesaageTitle = styled.div``;
+export const MesaageTitle = styled.div`
+  color: ${({ theme }) => theme.color.lightGrey};
+  font-size: 12px;
+  margin: 10px 0;
+`;
 
-export const MessageArea = styled.textarea``;
+export const MessageArea = styled.textarea`
+  all: unset;
+  border: 1px solid ${({ theme }) => theme.color.lightGrey};
+  padding: 10px;
+  height: 100px;
+  width: 85%;
+  text-align: start;
+`;
 
 export const ButtonContainer = styled.div`
+  width: 100%;
   padding-top: 25px;
   display: flex;
   justify-content: space-around;
