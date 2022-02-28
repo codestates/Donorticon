@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Button } from './utils/Button';
+import { Button } from '../utils/Button';
 
 export const ButtonContainer = styled.div`
   padding: 10px;
