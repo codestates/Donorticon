@@ -83,7 +83,13 @@ const DM = () => {
       setHelperId(dialogueRequest.data.dialogues[0].helper_id);
     }
     setCurrentRoom(data.id);
-    setProfileImg(data.img);
+
+    if (user.who === 1) {
+      setProfileImg(data.helper.img);
+    } else if (user.who === 2) {
+      setProfileImg(data.giver.img);
+    }
+    console.log(profileImg)
     setDialogues(dialogueRequest.data.dialogues);
   };
 
@@ -121,7 +127,7 @@ const DM = () => {
               {dialogues.map((item, index) => (
                 <div key={index}>
                   {item.img && (
-                    <>
+                    <><MessageProfileImg src={profileImg} />
                       <GifticonImage
                         className={
                           item.type === who ? 'myMessage' : 'yourMessage'

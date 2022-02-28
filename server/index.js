@@ -25,7 +25,7 @@ app.get('/', (res, req) => {
   req.status(200).json('hi');
 });
 app.use('/', router);
-const HTTPS_PORT = process.env.HTTPS_PORT || 80;
+const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 let server;
 if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
