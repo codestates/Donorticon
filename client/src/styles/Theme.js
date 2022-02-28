@@ -10,10 +10,10 @@ const color = {
 
 // 반응형 대응하기 위한 화면 크기
 const deviceSize = {
-  mobile: '414px',
-  tablet: '828px',
-  laptop: '1240px',
-  big: '2560px',
+  mobile: '540px',
+  tablet: '767px',
+  laptop: '1024px',
+  desktop: '1280px',
 };
 
 const device = {
