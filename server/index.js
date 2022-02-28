@@ -56,10 +56,16 @@ if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
         type: who,
         gifticon_id: 0
       })
-      io.emit('received-message', currentRoom)
+      io.to(currentRoom).emit('received-message', currentRoom)
     })
     socket.on('send-image', async (currentRoom) => {
-      io.emit('received-message', currentRoom)
+      io.to(currentRoom).emit('received-message', currentRoom)
+    })
+    socket.on('join-room', (currentRoom) => {
+      socket.join(currentRoom);
+    })
+    socket.on('leave-room', (currentRoom) => {
+      socket.leave(currentRoom);
     })
   })
 
