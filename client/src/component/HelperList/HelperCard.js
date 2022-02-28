@@ -8,7 +8,7 @@ import {
 } from '../../styles/CardStyle';
 import { useNavigate } from 'react-router-dom';
 
-const Card = ({ id, name, img, slogan }) => {
+const Card = ({ id, name, img, slogan, gallery }) => {
   const navigate = useNavigate();
 
   const sliced =
@@ -16,7 +16,7 @@ const Card = ({ id, name, img, slogan }) => {
 
   return (
     <CardBox onClick={() => navigate(`/helperlist/detail/${id}`)}>
-      <CardGallery />
+      <CardGallery src={gallery} />
       <CardContent>
         <HelperImage src={img} />
         <HelperName>{name}</HelperName>

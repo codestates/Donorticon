@@ -55,6 +55,7 @@ const gifticonCategory = [
 const HelperFilter = () => {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
+  const [galleryList, setGalleryList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [maxPage, setMaxPage] = useState(1);
   const [helperCategoryId, setHelperCategoryId] = useState(0);
@@ -66,7 +67,8 @@ const HelperFilter = () => {
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
         { params: { gifticon: gifticonCategoryId } },
       );
-      const { list, maxPage } = data;
+      const { list, maxPage, galleryList } = data;
+      setGalleryList(galleryList);
       if (gifticonCategoryId !== 0) {
         const filteredList = list.map((x) => x.helper);
         setList(filteredList);
@@ -101,7 +103,8 @@ const HelperFilter = () => {
         `/helperlist/category/${id}?page=${currentPage}&limit=9`,
         { params: { gifticon: gifticonCategoryId } },
       );
-      const { list, maxPage } = data;
+      const { list, maxPage, galleryList } = data;
+      setGalleryList(galleryList);
       const filteredList = list.map((x) => x.helper);
       setList(filteredList);
       setMaxPage(maxPage);
@@ -112,6 +115,13 @@ const HelperFilter = () => {
   };
 
   const [isLoading, setIsLoading] = useState(true);
+  const getFirstGallery = (id) => {
+    for (let i = 0; i < galleryList.length; i++) {
+      if (galleryList[i].helper_id === id) {
+        return galleryList[i].img;
+      }
+    }
+  };
 
   useEffect(() => {
     const getData = () => {
@@ -191,6 +201,7 @@ const HelperFilter = () => {
                           img={helper.img}
                           slogan={helper.slogan}
                           key={helper.id}
+                          gallery={getFirstGallery(helper.id)}
                         />
                       );
                     })}

@@ -2,6 +2,7 @@ const {
   helper,
   helper_vulnerable,
   helper_gifticon_category,
+  gallery,
 } = require('../../models');
 
 module.exports = {
@@ -32,8 +33,13 @@ module.exports = {
           attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
         });
         const { count, rows: list } = allList;
+        const galleryList = await gallery.findAll({
+          raw: true,
+          where: { helper_id: list.map((card) => card.id) },
+          attributes: ['helper_id', 'img'],
+        });
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage });
+        res.send({ list, maxPage, galleryList });
       } catch (e) {
         console.log(e);
       }
@@ -55,8 +61,13 @@ module.exports = {
           },
         });
         const { count, rows: list } = allList;
+        const galleryList = await gallery.findAll({
+          raw: true,
+          where: { helper_id: list.map((card) => card.helper_id) },
+          attributes: ['helper_id', 'img'],
+        });
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage });
+        res.send({ list, maxPage, galleryList });
       } catch (e) {
         console.log(e);
       }
@@ -82,8 +93,13 @@ module.exports = {
         });
 
         const { count, rows: list } = filteredList;
+        const galleryList = await gallery.findAll({
+          raw: true,
+          where: { helper_id: list.map((card) => card.helper_id) },
+          attributes: ['helper_id', 'img'],
+        });
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage });
+        res.send({ list, maxPage, galleryList });
       } catch (e) {
         console.log(e);
       }
@@ -125,8 +141,13 @@ module.exports = {
           order: [[{ model: helper }, 'id', 'DESC']],
         });
         const { count, rows: list } = filteredAgain;
+        const galleryList = await gallery.findAll({
+          raw: true,
+          where: { helper_id: list.map((card) => card.helper_id) },
+          attributes: ['helper_id', 'img'],
+        });
         const maxPage = Math.ceil(count / limit);
-        res.send({ list, maxPage });
+        res.send({ list, maxPage, galleryList });
       } catch (e) {
         console.log(e);
       }
