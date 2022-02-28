@@ -86,7 +86,9 @@ const DM = () => {
       setGiverId(dialogueRequest.data.dialogues[0].giver_id);
       setHelperId(dialogueRequest.data.dialogues[0].helper_id);
     }
+    socket.emit('leave-room', currentRoom);
     setCurrentRoom(data.id);
+    socket.emit('join-room', data.id);
 
     if (user.who === 1) {
       setProfileImg(data.helper.img);
