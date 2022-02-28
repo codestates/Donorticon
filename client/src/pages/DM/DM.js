@@ -1,9 +1,9 @@
-import ImageUploader from '../../component/ImageUploader';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
+import ImageUploader from '../../component/Modal/ImageUploader';
 import {
   RoomContainer,
   ReceiverImg,

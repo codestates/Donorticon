@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ModalBackground, ModalFrame } from '../../styles/utils/Modal';
+import { ModalBackground, ModalFrame } from '../../styles/Modal/ModalStyle';
 
 import styled from 'styled-components';
 import axios from 'axios';

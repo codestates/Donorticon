@@ -2,7 +2,8 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ImageUploader from '../../component/ImageUploader';
+import { setWho } from '../../redux/user/userSlice';
+import ImageUploader from '../../component/Modal/ImageUploader';
 import { setPrev } from '../../redux/page/pageSlice';
 import Map from '../../component/SignUp/Map';
 import {
@@ -21,7 +22,6 @@ import Loader from '../../component/Loader';
 import ModalV3 from '../../component/Modal/ModalV3';
 import ImgSlider from '../../component/ImgSlider';
 import ModalV2 from '../../component/Modal/ModalV2';
-import { setWho } from '../../redux/user/userSlice';
 
 const vulnerableList = [
   '아동/청소년',
@@ -136,7 +136,7 @@ const HelperDetail = () => {
           {isModalOpen &&
             (giverId === '' ? (
               <ModalV2
-                title="기부를 하려면 GIVER 로그인이 필요합니다"
+                title="기부를 하려면 GIVER 로그인이 필요합니다 🥲"
                 subtitle="로그인 페이지로 이동하시겠어요?"
                 callback={handleLoginModal}
               />
