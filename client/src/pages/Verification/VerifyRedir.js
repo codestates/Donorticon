@@ -1,23 +1,21 @@
-import styled from 'styled-components';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { updateVerification } from '../../redux/user/userThunk';
 import { useDispatch } from 'react-redux';
 import { unwrapResult } from '@reduxjs/toolkit';
-
-const Button = styled.div`
-  width: 100%;
-  border-bottom: 1px solid black;
-  cursor: pointer;
-  font-size: 30px;
-  &:hover {
-    color: black;
-  }
-`;
+import {
+  VeriButton,
+  VeriContainer,
+  WelcomeText,
+} from '../../styles/Verification/VerificationStyle';
+import ButtonModal from '../../component/Modal/ButtonModal';
+import Loader from '../../component/Loader';
 
 const VerifyRedir = () => {
   const dispatch = useDispatch();
   const [verification, setVerification] = useState(false);
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
   const url = window.location.pathname.split('/');
   const type = url[2].split('=')[1];
   const id = url[3].split('=')[1];
@@ -29,26 +27,50 @@ const VerifyRedir = () => {
     code: code,
   };
 
-  useEffect(async () => {
-    // const request = await axios.put(`/verification`, { headers: headers });
-    const response = await dispatch(updateVerification(info));
-    const verified = unwrapResult(response);
-    if (verified) {
-      setVerification(true);
-    }
+  const handleModal = () => {
+    setIsSignInOpen(true);
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      const response = await dispatch(updateVerification(info));
+      const verified = unwrapResult(response);
+      if (verified) {
+        setVerification(true);
+      }
+    };
+    setTimeout(() => {
+      getData();
+    }, 100);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
   }, []);
 
   return (
-    <div>
-      <div>
-        <img src={`${process.env.REACT_APP_BUCKET}/aintgottime.jpg`}></img>
-      </div>
-      {verification ? (
-        <Button>Verified! Please Sign in again</Button>
-      ) : (
-        <Button>Checking.....</Button>
+    <VeriContainer>
+      {isLoading && <Loader />}
+      {!isLoading && verification && (
+        <>
+          <WelcomeText>이메일 인증 완료 ✅</WelcomeText>
+          <VeriButton onClick={handleModal}>로그인 하러 가기</VeriButton>
+        </>
       )}
-    </div>
+      {!isLoading && !verification && (
+        <>
+          <WelcomeText>이메일 인증이 진행중 입니다.</WelcomeText>
+          <WelcomeText small>조금만 기다려 주세요 🙏🏻</WelcomeText>
+        </>
+      )}
+      {isSignInOpen && (
+        <ButtonModal
+          giverText={'GIVER 로그인'}
+          helperText={'HELPER 로그인'}
+          setIsSignInOpen={setIsSignInOpen}
+          isSignInOpen={isSignInOpen}
+        />
+      )}
+    </VeriContainer>
   );
 };
 
