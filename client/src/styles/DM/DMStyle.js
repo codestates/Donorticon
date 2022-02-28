@@ -16,8 +16,13 @@ export const SubContainer = styled.div`
   margin-bottom: 40px;
   display: flex;
   flex-direction: row;
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 80%;
+    height: 1000px;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
+    height: 800px;
     flex-direction: column;
   }
 `;
@@ -27,7 +32,6 @@ export const RoomContainer = styled.div`
   width: 30%;
   height: 100%;
   border-right: 1px solid ${({ theme }) => theme.color.lightGrey};
-  height: 100%;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
     font-size: 18px;
@@ -187,6 +191,9 @@ export const Input = styled.input`
   all: unset;
   width: 80%;
   padding: 10px 20px;
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 70%;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     width: 70%;
     padding: 10px;
@@ -198,6 +205,10 @@ export const ButtonBox = styled.div`
   width: 20%;
   text-align: right;
   padding: 10px 20px;
+  @media ${({ theme }) => theme.device.laptop} {
+    width: 30%;
+    padding: 10px;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     width: 20%;
     padding: 10px 0;
