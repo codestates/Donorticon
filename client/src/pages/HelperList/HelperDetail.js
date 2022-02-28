@@ -19,7 +19,6 @@ import {
   UpBoxContentWho,
 } from '../../styles/HelperList/HelperDetailStyle';
 import Loader from '../../component/Loader';
-import ModalV3 from '../../component/Modal/ModalV3';
 import ImgSlider from '../../component/ImgSlider';
 import ModalV2 from '../../component/Modal/ModalV2';
 
@@ -114,9 +113,11 @@ const HelperDetail = () => {
               ))}
               <UpBoxContentTitle>{helperInfo.slogan}</UpBoxContentTitle>
               <UpBoxContentWho>{helperInfo.name}</UpBoxContentWho>
-              <Button style={{ margin: 'auto' }} onClick={handleModalOpen}>
-                기부하기
-              </Button>
+              {who !== 2 && (
+                <Button style={{ margin: 'auto' }} onClick={handleModalOpen}>
+                  기부하기
+                </Button>
+              )}
             </UpBoxContent>
           </UpBox>
           <DownBox>
@@ -132,28 +133,23 @@ const HelperDetail = () => {
             <DownBoxTitle>활동 지역</DownBoxTitle>
             <Map address={helperInfo.location} />
           </DownBox>
-          <Button onClick={handleModalOpen}>기부하기</Button>
-          {isModalOpen &&
-            (giverId === '' ? (
-              <ModalV2
-                title="기부를 하려면 GIVER 로그인이 필요합니다 🥲"
-                subtitle="로그인 페이지로 이동하시겠어요?"
-                callback={handleLoginModal}
-              />
-            ) : who === 1 ? (
-              <ImageUploader
-                handleModalOpen={handleModalOpen}
-                includeMessage="true"
-                api={`/helperlist/${id}`}
-                giverId={giverId}
-                helperId={parseInt(id)}
-              ></ImageUploader>
-            ) : (
-              <ModalV3
-                title="GIVER 로그인으로만 이용 가능한 서비스 입니다"
-                closer={handleModalOpen}
-              />
-            ))}
+          {who !== 2 && <Button onClick={handleModalOpen}>기부하기</Button>}
+          {isModalOpen && giverId === '' && (
+            <ModalV2
+              title="기부를 하려면 GIVER 로그인이 필요합니다 🥲"
+              subtitle="로그인 페이지로 이동하시겠어요?"
+              callback={handleLoginModal}
+            />
+          )}
+          {isModalOpen && giverId !== '' && (
+            <ImageUploader
+              handleModalOpen={handleModalOpen}
+              includeMessage="true"
+              api={`/helperlist/${id}`}
+              giverId={giverId}
+              helperId={parseInt(id)}
+            />
+          )}
         </>
       )}
     </Container>

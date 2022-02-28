@@ -169,8 +169,10 @@ const StatusDropDown = () => {
       {isRejected && (
         <ModalV2
           title={'정말로 거부하시겠어요?'}
+          subtitle={'한번 거절하신 기프티콘은 다시 사용하실 수 없습니다.'}
           isMessage={true}
           callback={handleRejected}
+          noSpace={'no'}
         />
       )}
       {isUsed && (
@@ -178,7 +180,7 @@ const StatusDropDown = () => {
           title={
             '"사용함" 상태로 변경하시면, 추후 상태 변경은 절대 불가합니다.'
           }
-          subtitle={'신중하게 선택해 주세요.'}
+          subtitle={'"사용함"으로 변경하시겠어요?'}
           callback={handleUsed}
         />
       )}
