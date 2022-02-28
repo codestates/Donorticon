@@ -16,7 +16,7 @@ export const Img = styled.img`
   width: 40%;
   align-items: center;
   justify-content: space-between;
-  animation: fadein 3s ease-in-out;
+  animation: fadein 1s ease-in-out;
   @keyframes fadein{
     0% {
     opacity: 0;

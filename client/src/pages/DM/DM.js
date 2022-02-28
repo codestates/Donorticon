@@ -31,7 +31,6 @@ import {
 
 const socket = io(process.env.REACT_APP_SERVER);
 socket.on('connect', () => {
-  console.log('connected');
 });
 
 const DM = () => {
