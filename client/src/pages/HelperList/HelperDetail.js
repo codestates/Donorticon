@@ -1,14 +1,9 @@
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import {
-  FaAngleLeft,
-  FaAngleRight,
-  FaCircle,
-  FaRegCircle,
-} from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 import ImageUploader from '../../component/ImageUploader';
+import { setPrev } from '../../redux/page/pageSlice';
 import Map from '../../component/SignUp/Map';
 import {
   Container,
@@ -20,30 +15,52 @@ import {
   UpBoxProfile,
   UpBoxContent,
   UpBoxContentTitle,
-  Img,
   UpBoxContentWho,
 } from '../../styles/HelperList/HelperDetailStyle';
 import Loader from '../../component/Loader';
+import ModalV3 from '../../component/Modal/ModalV3';
+import ImgSlider from '../../component/ImgSlider';
+import ModalV2 from '../../component/Modal/ModalV2';
+import { setWho } from '../../redux/user/userSlice';
+
+const vulnerableList = [
+  '아동/청소년',
+  '어르신',
+  '장애인',
+  '다문화',
+  '가족/여성',
+  '정신질환자',
+  '그 외',
+];
+
+const gifticonList = [
+  '식품',
+  '화장품',
+  '임신/출산/유아동',
+  '디지털/가전',
+  '의류',
+  '리빙/주방/꽃',
+  '레저/스포츠',
+  '상품권/영화/도서',
+];
 
 const HelperDetail = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const giverId = useSelector((state) => state.user.user.id);
+  const who = useSelector((state) => state.user.user.who);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [helperInfo, setHelperInfo] = useState({
     img: '',
-    vulnerable: ['아동청소년', '그 외'], // 정보없어 임의 지정
     slogan: '',
     name: '',
     description: '',
-    gifticonCatergory: ['식품', '전자제품'], // 정보없어 임의 지정
-    gallery: [
-      'http://imagescdn.gettyimagesbank.com/500/201904/jv11349321.jpg',
-      'https://www.geumsan.go.kr/site/nanum/img/main/mvisual_img01.jpg',
-    ], // 정보없어 임의 지정
-    location: '부산 부산진구 경마장로 1 (범전동)', //정보있지만 수정 필요
+    location: '',
+    vulnerable: [],
+    gifticonCategory: [],
+    gallery: [],
   });
-  const [galleryPage, setGalleryPage] = useState(0);
-  const [galleryLocation, setGalleryLocation] = useState([]);
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
@@ -52,23 +69,18 @@ const HelperDetail = () => {
   const getDetail = async () => {
     try {
       const { data } = await axios.get(`/helperlist/${id}`);
-      setHelperInfo({ ...helperInfo, ...data });
-    } catch (e) {}
+      setHelperInfo(data);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
-  const makeLocationArr = (tureIndex) => {
-    const result = Array(helperInfo.gallery.length).fill(false);
-    result[tureIndex] = true;
-    return result;
-  };
-
-  const handlePage = (move) => {
-    if (
-      galleryPage + move >= 0 &&
-      galleryPage + move < helperInfo.gallery.length
-    ) {
-      setGalleryPage(galleryPage + move);
-      setGalleryLocation(makeLocationArr(galleryPage + move));
+  const handleLoginModal = (e) => {
+    handleModalOpen();
+    if (e.target.textContent === '네') {
+      dispatch(setPrev(window.location.pathname));
+      dispatch(setWho(1));
+      navigate('/signin');
     }
   };
 
@@ -77,9 +89,6 @@ const HelperDetail = () => {
   useEffect(() => {
     const getData = () => {
       getDetail();
-      const arr = Array(helperInfo.gallery.length).fill(false);
-      arr[0] = true;
-      setGalleryLocation(makeLocationArr(0));
     };
     setTimeout(() => {
       getData();
@@ -88,8 +97,6 @@ const HelperDetail = () => {
       setIsLoading(false);
     }, 1500);
   }, []);
-
-  console.log(helperInfo);
 
   return (
     <Container>
@@ -100,8 +107,10 @@ const HelperDetail = () => {
           <UpBox>
             <UpBoxProfile src={helperInfo.img} />
             <UpBoxContent>
-              {helperInfo.vulnerable.map((list, idx) => (
-                <ContentTag key={idx}>{`#${list}`}</ContentTag>
+              {helperInfo.vulnerable.map((id, idx) => (
+                <ContentTag key={idx}>{`#${
+                  vulnerableList[id - 1]
+                }`}</ContentTag>
               ))}
               <UpBoxContentTitle>{helperInfo.slogan}</UpBoxContentTitle>
               <UpBoxContentWho>{helperInfo.name}</UpBoxContentWho>
@@ -112,37 +121,42 @@ const HelperDetail = () => {
           </UpBox>
           <DownBox>
             <DownBoxTitle>소개글</DownBoxTitle>
+            <div>{helperInfo.description}</div>
             <DownBoxTitle>필요한 기프티콘</DownBoxTitle>
-            {helperInfo.gifticonCatergory.map((tag, idx) => (
-              <ContentTag key={idx}>{`#${tag}`}</ContentTag>
-            ))}
+            {helperInfo.gifticonCategory &&
+              helperInfo.gifticonCategory.map((id, idx) => (
+                <ContentTag key={idx}>{`#${gifticonList[id - 1]}`}</ContentTag>
+              ))}
             <DownBoxTitle>활동 갤러리</DownBoxTitle>
-            <Img src={helperInfo.gallery[galleryPage]} />
-            <FaAngleLeft onClick={() => handlePage(-1)} />
-            {galleryLocation.map((location, idx) =>
-              location ? <FaCircle key={idx} /> : <FaRegCircle key={idx} />,
-            )}
-            <FaAngleRight onClick={() => handlePage(1)} />
+            <ImgSlider data={helperInfo.gallery} />
             <DownBoxTitle>활동 지역</DownBoxTitle>
-            {/* 현재 서버에서 location 설정 제대로 해야함 */}
-            {/* <Map address={helperInfo.location}} />  */}
-            <Map address={'부산 부산진구 경마장로 1 (범전동)'} />
+            <Map address={helperInfo.location} />
           </DownBox>
-          {id}
           <Button onClick={handleModalOpen}>기부하기</Button>
-          {isModalOpen ? (
-            <ImageUploader
-              handleModalOpen={handleModalOpen}
-              includeMessage="true"
-              api={`/helperlist/${id}`}
-              giverId={giverId}
-              helperId={parseInt(id)}
-            ></ImageUploader>
-          ) : null}
+          {isModalOpen &&
+            (giverId === '' ? (
+              <ModalV2
+                title="기부를 하려면 GIVER 로그인이 필요합니다"
+                subtitle="로그인 페이지로 이동하시겠어요?"
+                callback={handleLoginModal}
+              />
+            ) : who === 1 ? (
+              <ImageUploader
+                handleModalOpen={handleModalOpen}
+                includeMessage="true"
+                api={`/helperlist/${id}`}
+                giverId={giverId}
+                helperId={parseInt(id)}
+              ></ImageUploader>
+            ) : (
+              <ModalV3
+                title="GIVER 로그인으로만 이용 가능한 서비스 입니다"
+                closer={handleModalOpen}
+              />
+            ))}
         </>
       )}
     </Container>
   );
 };
-
 export default HelperDetail;
