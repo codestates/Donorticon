@@ -161,7 +161,7 @@ const SignIn = () => {
                   <SocialIcon>
                     <FcGoogle size="18" />
                   </SocialIcon>
-                  <SocialText>구글 로그인</SocialText>
+                  <SocialText onClick={handleGoogle}>구글 로그인</SocialText>
                 </div>
                 <div></div>
               </SocialBox>
@@ -171,7 +171,7 @@ const SignIn = () => {
                   <SocialIcon>
                     <FaComment size="15" color="#181600" />
                   </SocialIcon>
-                  <SocialText>카카오 로그인</SocialText>
+                  <SocialText onClick={handleKakao}>카카오 로그인</SocialText>
                 </div>
                 <div></div>
               </SocialBox>
