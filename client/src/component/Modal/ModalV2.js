@@ -1,3 +1,4 @@
+import { useState, useRef } from 'react';
 import {
   ModalBackground,
   ModalFrame,
@@ -5,24 +6,14 @@ import {
   SubTitle,
   MesaageTitle,
   MessageArea,
-} from '../../styles/utils/Modal';
-import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
-import { useState, useRef } from 'react';
+  ButtonContainer,
+  ModalButton,
+} from '../../styles/Modal/ModalStyle';
 
 const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
   const [textMessage, setTextMessage] = useState('');
   const close = useRef();
   const background = useRef();
-
-  //!! callback 작성예시
-  /* callback = {(e) => {
-  if (e.target.textContent === '예') {
-    예를 눌렀을 때 하고싶은 기능
-  } else {
-    아니오를 눌렀을 때 하고 싶은 기능
-  }
-  공통 기능
-  }} */
 
   const buttonYes = (e) => {
     if (isMessage) {
@@ -39,10 +30,10 @@ const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
   };
 
   return (
-    <ModalBackground id={id} ref={background} onClick={buttonNo}>
+    <ModalBackground id={id ? id : 0} ref={background} onClick={buttonNo}>
       <ModalFrame>
         <Title>{title}</Title>
-        <SubTitle>{subtitle && subtitle}</SubTitle>
+        {subtitle && <SubTitle>{subtitle}</SubTitle>}
         {isMessage && (
           <>
             <MesaageTitle />
@@ -50,12 +41,10 @@ const ModalV2 = ({ title, subtitle, isMessage, callback, id }) => {
           </>
         )}
         <ButtonContainer>
-          <Btn id={id} onClick={buttonYes}>
-            네
-          </Btn>
-          <Btn id={id} ref={close} onClick={buttonNo}>
+          <ModalButton onClick={buttonYes}>네</ModalButton>
+          <ModalButton ref={close} onClick={buttonNo}>
             아니오
-          </Btn>
+          </ModalButton>
         </ButtonContainer>
       </ModalFrame>
     </ModalBackground>

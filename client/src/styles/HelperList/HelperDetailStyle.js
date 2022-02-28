@@ -13,6 +13,7 @@ export const UpBox = styled.div`
 `;
 
 export const UpBoxProfile = styled.img`
+  width: 100px;
   flex: 2;
   border-radius: 50%;
   margin: 0 auto;

@@ -1,9 +1,9 @@
-import ImageUploader from '../../component/ImageUploader';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
+import ImageUploader from '../../component/Modal/ImageUploader';
 import {
   RoomContainer,
   ReceiverImg,
@@ -26,8 +26,11 @@ import {
   ButtonBox,
   BottomWrapper,
   BottomBox,
-  RoomOwnerName,
+  RoomTop,
+  RoomBottom,
+  RoomIcon,
 } from '../../styles/DM/DMStyle';
+import { FaAngleLeft } from 'react-icons/fa';
 
 const socket = io(process.env.REACT_APP_SERVER);
 socket.on('connect', () => {
@@ -45,6 +48,8 @@ const DM = () => {
   const [giverId, setGiverId] = useState('');
   const [helperId, setHelperId] = useState('');
   const [profileImg, setProfileImg] = useState('');
+  const [mobileDialogue, setMobileDialoge] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const handleModalOpen = () => {
     setIsModalOpen(!isModalOpen);
@@ -88,11 +93,28 @@ const DM = () => {
     } else if (user.who === 2) {
       setProfileImg(data.giver.img);
     }
-    console.log(profileImg)
+
     setDialogues(dialogueRequest.data.dialogues);
+    setMobileDialoge(true);
   };
 
-  useEffect(() => getRooms(), []);
+  const handleBackIcon = () => {
+    setMobileDialoge(false);
+  };
+
+  const handleWidth = () => {
+    const width = window.innerWidth;
+    if (width <= 414) {
+      setIsMobile(true);
+    } else {
+      setIsMobile(false);
+    }
+  };
+
+  useEffect(() => {
+    getRooms();
+    handleWidth();
+  }, []);
 
   socket.on('received-message', async (currentRoom) => {
     let dialogueRequest = await axios.get(`/dm?room=${currentRoom}`);
@@ -102,42 +124,66 @@ const DM = () => {
   return (
     <DMContainer>
       <SubContainer>
-        <RoomContainer>
-          <RoomOwnerName>{user.name}</RoomOwnerName>
-          {rooms.map((item, index) => (
-            <ReceiverWrapper
-              value={item}
-              onClick={() => getDialogues(item)}
-              key={index}
-              className={item.id === currentRoom && 'current'}
-            >
-              <ReceiverImg
-                src={user.who === 1 ? item.helper.img : item.giver.img}
-              />
-              <ReceiverName>
-                {user.who === 1 ? item.helper.name : item.giver.name}
-              </ReceiverName>
-            </ReceiverWrapper>
-          ))}
+        <RoomContainer mobileDialogue={mobileDialogue}>
+          <RoomTop>
+            {isMobile && mobileDialogue && (
+              <RoomIcon>
+                <FaAngleLeft onClick={handleBackIcon} />
+              </RoomIcon>
+            )}
+            {user.name}
+          </RoomTop>
+          <RoomBottom mobileDialogue={mobileDialogue}>
+            {rooms.map((item, index) => (
+              <ReceiverWrapper
+                value={item}
+                onClick={() => getDialogues(item)}
+                key={index}
+                className={item.id === currentRoom && 'current'}
+              >
+                <ReceiverImg
+                  src={user.who === 1 ? item.helper.img : item.giver.img}
+                />
+                <ReceiverName>
+                  {user.who === 1 ? item.helper.name : item.giver.name}
+                </ReceiverName>
+              </ReceiverWrapper>
+            ))}
+          </RoomBottom>
         </RoomContainer>
         {dialogues.length > 0 ? (
-          <ChatContainer>
+          <ChatContainer mobileDialogue={mobileDialogue}>
             <DialogueWrapper>
               {dialogues.map((item, index) => (
                 <div key={index}>
-                  {item.img && (
-                    <><MessageProfileImg src={profileImg} />
+                  {item.img && item.type === who && (
+                    <>
                       <GifticonImage
                         className={
                           item.type === who ? 'myMessage' : 'yourMessage'
                         }
                         src={item.img}
                       />
-                      <Time
-                        className={
-                          item.type === who ? 'myMessage' : 'yourMessage'
-                        }
-                      >
+                      <Time className={item.type === who && 'myMessage'}>
+                        {`${item.createdAt.slice(
+                          5,
+                          7,
+                        )}월 ${item.createdAt.slice(8, 10)}일`}
+                      </Time>
+                    </>
+                  )}
+                  {item.img && item.type !== who && (
+                    <>
+                      <MessageBox notMe>
+                        <MessageProfileImg src={profileImg} />
+                        <GifticonImage
+                          className={
+                            item.type === who ? 'myMessage' : 'yourMessage'
+                          }
+                          src={item.img}
+                        />
+                      </MessageBox>
+                      <Time className={item.type === who && 'myMessage'}>
                         {`${item.createdAt.slice(
                           5,
                           7,
@@ -150,11 +196,7 @@ const DM = () => {
                       <MessageBox>
                         <MessageContent>{item.message}</MessageContent>
                       </MessageBox>
-                      <Time
-                        className={
-                          item.type === who ? 'myMessage' : 'yourMessage'
-                        }
-                      >
+                      <Time className={item.type === who && 'myMessage'}>
                         {`${item.createdAt.slice(
                           5,
                           7,
@@ -165,16 +207,10 @@ const DM = () => {
                   {item.message && item.type !== who && (
                     <>
                       <MessageBox notMe>
-                        <MessageProfileImg
-                          src={item.profileImg}
-                        ></MessageProfileImg>
+                        <MessageProfileImg src={profileImg} />
                         <MessageContent notMe>{item.message}</MessageContent>
                       </MessageBox>
-                      <Time
-                        className={
-                          item.type === who ? 'myMessage' : 'yourMessage'
-                        }
-                      >
+                      <Time className={item.type === who && 'myMessage'}>
                         {`${item.createdAt.slice(
                           5,
                           7,
@@ -195,11 +231,11 @@ const DM = () => {
                 />
                 <ButtonBox>
                   <ImgButton>
-                    <FaImage size="25" onClick={handleModalOpen}></FaImage>
+                    <FaImage size="20" onClick={handleModalOpen}></FaImage>
                   </ImgButton>
                   <SendButton>
                     <FaPaperPlane
-                      size="25"
+                      size="20"
                       onClick={sendMessage}
                     ></FaPaperPlane>
                   </SendButton>
@@ -214,7 +250,8 @@ const DM = () => {
           </NoroomContainer>
         )}
       </SubContainer>
-      {isModalOpen ? (
+
+      {isModalOpen && (
         <ImageUploader
           handleModalOpen={handleModalOpen}
           api="/dm"
@@ -223,7 +260,7 @@ const DM = () => {
           helperId={helperId}
           type={who}
         ></ImageUploader>
-      ) : null}
+      )}
     </DMContainer>
   );
 };

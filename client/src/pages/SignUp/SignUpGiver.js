@@ -82,6 +82,7 @@ const SignUpGiver = () => {
         setGiverInfo({ ...giverInfo, passwordCheck: sha256(e.target.value) });
         const validList = [...isValid];
         validList[3] = sha256(e.target.value) === giverInfo.password;
+        if (validList[3] && !validList[2]) validList[2] = true;
         setIsValid(validList);
         return sha256(e.target.value) !== giverInfo.password;
       },
@@ -123,7 +124,7 @@ const SignUpGiver = () => {
         dispatch(verifyUser(userInfo));
         navigate('../../verification');
       } catch (e) {
-        const status = e.status;
+        const status = e.response.status;
         if (status === 409) {
           setErrorMessage('이미 회원가입 된 이메일입니다');
         } else if (status === 500) {

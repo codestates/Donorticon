@@ -3,8 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setPrev } from '../../redux/page/pageSlice';
 import { setWho } from '../../redux/user/userSlice';
-import { Btn, ButtonContainer } from '../../styles/ButtonModalStyle';
-import { ModalBackground, ModalFrame } from '../../styles/utils/Modal';
+import { Btn, ButtonContainer } from '../../styles/Modal/ButtonModalStyle';
+import { ModalBackground, ModalFrame } from '../../styles/Modal/ModalStyle';
 
 const ButtonModal = ({
   giverText,
