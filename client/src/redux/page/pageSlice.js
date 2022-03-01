@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 const initialState = {
   page: 1,
   limit: 1,
-  prev: '',
+  prev: '/',
 };
 
 export const pageSlice = createSlice({

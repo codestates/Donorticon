@@ -15,11 +15,30 @@ import HelperList from './pages/HelperList/HelperList';
 import GifticonDetail from './pages/Gifticon/GifticonDetail';
 import HelperDetail from './pages/HelperList/HelperDetail';
 import DM from './pages/DM/DM';
+import { next } from './pages/SignIn/SignIn';
 import { useSelector } from 'react-redux';
 
 // 모든 라우트는 이 파일에 작성
 const Router = () => {
-  const { isLoggedIn } = useSelector((state) => state.user);
+  const {
+    user: { isLoggedIn },
+    user: {
+      user: { who },
+    },
+    page: { prev },
+  } = useSelector((state) => state);
+
+  const next = () => {
+    if (who === 1) {
+      if (prev.includes('/verif')) {
+        return '/helperlist/category/0?page=1&limit=9';
+      } else {
+        return prev;
+      }
+    } else {
+      return 'mypage';
+    }
+  };
   return (
     <BrowserRouter>
       <Header />
@@ -35,7 +54,7 @@ const Router = () => {
         />
         <Route
           path="/signin"
-          element={isLoggedIn ? <Navigate to="/" /> : <SignIn />}
+          element={isLoggedIn ? <Navigate to={next()} /> : <SignIn />}
         />
         <Route
           path="/mypage"

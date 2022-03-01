@@ -61,18 +61,7 @@ const SignIn = () => {
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       try {
-        if (who === 1) {
-          await dispatch(signInGiver(userInfo)).unwrap();
-          if (prev.includes('verifyRedir')) {
-            navigate('/helperlist/category/0?page=1&limit=9');
-          } else {
-            navigate(prev);
-          }
-        }
-        if (who === 2) {
-          const res = await dispatch(signInHelper(userInfo)).unwrap();
-          navigate('/mypage');
-        }
+        await dispatch(signInGiver(userInfo)).unwrap();
       } catch (e) {
         if (e.response.status === 401) {
           const { id, email, type } = e.response.data;
@@ -100,20 +89,10 @@ const SignIn = () => {
   };
 
   const handleGuest = async () => {
-    if (who === 1) {
-      try {
-        await dispatch(signInGiverGuest()).unwrap();
-        navigate(prev);
-      } catch (e) {
-        console.log(e);
-      }
-    } else if (who === 2) {
-      try {
-        await dispatch(signInHelperGuest()).unwrap();
-        navigate('/mypage');
-      } catch (e) {
-        console.log(e);
-      }
+    try {
+      await dispatch(signInGiverGuest()).unwrap();
+    } catch (e) {
+      console.log(e);
     }
   };
 
