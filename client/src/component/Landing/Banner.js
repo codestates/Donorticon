@@ -1,24 +1,35 @@
-import ilu2 from '../../img/ilu2.jpg';
+import bannerimg from '../../img/banner.png';
 import {
   BannerContainer,
-  Img,
-  TextContainer,
-  Title,
-  Text,
+  Bottom,
+  BottomInner,
+  ImageBox,
+  TextBox,
+  TitleInner,
+  Top,
+  TopInner,
 } from '../../styles/Landing/BannerStyle';
 
 const Banner = () => {
   return (
     <BannerContainer>
-      <Img src={ilu2}></Img>
-      <TextContainer>
-        <Title>Donate + Gifticon = Donorticon</Title>
-        <br></br>
-        <Text>
+      <TextBox>
+        <TitleInner>
+          <Top>
+            <TopInner>Donate + Gifticon</TopInner>
+          </Top>
+          <Bottom>
+            <BottomInner>Donorticon</BottomInner>
+          </Bottom>
+        </TitleInner>
+      </TextBox>
+      <ImageBox>
+        <img src={bannerimg} alt="banner" />
+      </ImageBox>
+      {/* <Text>
           <div>Donate your gifticons</div>
           <div>and support social vulnerables</div>
-        </Text>
-      </TextContainer>
+        </Text> */}
     </BannerContainer>
   );
 };
