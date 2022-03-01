@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import sha256 from 'js-sha256';
-import { setWho, signIn } from '../../redux/user/userSlice';
 import {
   signInGiver,
   signInGiverGuest,
@@ -11,8 +9,16 @@ import {
   signInHelperGuest,
   verifyUser,
 } from '../../redux/user/userThunk';
+import { FcGoogle } from 'react-icons/fc';
+import { FaComment } from 'react-icons/fa';
 import InputSet from '../../component/InputComponent';
-import { ButtonContainer, SignInContainer } from '../../styles/SignInStyle';
+import {
+  ButtonContainer,
+  SignInContainer,
+  SocialBox,
+  SocialIcon,
+  SocialText,
+} from '../../styles/SignInStyle';
 import {
   Container,
   SubContainer,
@@ -21,7 +27,6 @@ import {
 } from '../../styles/utils/Container';
 import { Button } from '../../styles/utils/Button';
 import { InputContainer, ErrorMessage } from '../../styles/utils/Input';
-import { unwrapResult } from '@reduxjs/toolkit';
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -148,12 +153,30 @@ const SignIn = () => {
         <ButtonContainer>
           <Button onClick={handleSignin}>로그인</Button>
           <Button onClick={handleGuest}>게스트로그인</Button>
-          {who === 1 ? (
+          {who === 1 && (
             <>
-              <Button onClick={handleGoogle}>구글로그인</Button>
-              <Button onClick={handleKakao}>카카오로그인</Button>
+              <SocialBox>
+                <div></div>
+                <div className="middle">
+                  <SocialIcon>
+                    <FcGoogle size="18" />
+                  </SocialIcon>
+                  <SocialText onClick={handleGoogle}>구글 로그인</SocialText>
+                </div>
+                <div></div>
+              </SocialBox>
+              <SocialBox>
+                <div></div>
+                <div className="middle">
+                  <SocialIcon>
+                    <FaComment size="15" color="#181600" />
+                  </SocialIcon>
+                  <SocialText onClick={handleKakao}>카카오 로그인</SocialText>
+                </div>
+                <div></div>
+              </SocialBox>
             </>
-          ) : null}
+          )}
         </ButtonContainer>
       </SignInContainer>
     </Container>

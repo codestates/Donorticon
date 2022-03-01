@@ -1,4 +1,3 @@
-import { useRef, useState } from 'react';
 import {
   FilterBox,
   FilterContainer,
@@ -17,18 +16,6 @@ export const gifticonStatus = [
 ];
 
 const GiticonFilter = ({ statusId, handleStatusClick }) => {
-  const scroll = useRef();
-
-  const [isDrag, setIsDrag] = useState(false);
-  const [startX, setStartX] = useState();
-
-  const handleDragStart = (e) => {
-    // console.log(e.pageX);
-    // console.log(scroll.current.scrollLeft);
-    e.preventDefault();
-    setIsDrag(true);
-    setStartX(e.pageX + scroll.current.scrollLeft);
-  };
   return (
     <FilterContainer>
       <FilterBox>
@@ -41,8 +28,6 @@ const GiticonFilter = ({ statusId, handleStatusClick }) => {
                 key={idx}
                 className={`${statusId === id && 'active'}`}
                 onClick={() => handleStatusClick(name)}
-                ref={scroll}
-                onMouseMove={handleDragStart}
               >
                 {category.name}
               </Filtered>

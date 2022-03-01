@@ -1,9 +1,9 @@
-import ImageUploader from '../../component/ImageUploader';
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
+import ImageUploader from '../../component/Modal/ImageUploader';
 import {
   RoomContainer,
   ReceiverImg,
@@ -34,7 +34,6 @@ import { FaAngleLeft } from 'react-icons/fa';
 
 const socket = io(process.env.REACT_APP_SERVER);
 socket.on('connect', () => {
-  console.log('connected');
 });
 
 const DM = () => {
@@ -87,7 +86,9 @@ const DM = () => {
       setGiverId(dialogueRequest.data.dialogues[0].giver_id);
       setHelperId(dialogueRequest.data.dialogues[0].helper_id);
     }
+    socket.emit('leave-room', currentRoom);
     setCurrentRoom(data.id);
+    socket.emit('join-room', data.id);
 
     if (user.who === 1) {
       setProfileImg(data.helper.img);

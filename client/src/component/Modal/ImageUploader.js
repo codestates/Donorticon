@@ -1,23 +1,23 @@
+import axios from 'axios';
+import { useState, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { FaFileUpload } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import {
-  Container,
+  ImgUploadContainer,
   InputImg,
   InputText,
   ImgWrapper,
   Button,
-  ButtonSection,
-  Label,
   Img,
   DragNDropWrapper,
-  DragNDropSpace,
   TxtWrapper,
-} from '../styles/ImageUploaderStyle';
-import { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-import { FaFileUpload } from 'react-icons/fa';
-import { ModalBackground } from '../styles/utils/Modal';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { setInfo } from '../redux/gifticon/gifticonSlice';
+  DragNDropText,
+  DragNDropLabel,
+  ButtonWrapper,
+} from '../../styles/Modal/ImageUploaderStyle';
+import { ModalBackground } from '../../styles/Modal/ModalStyle';
 
 const ImageUploader = ({
   includeMessage = false,
@@ -84,56 +84,52 @@ const ImageUploader = ({
 
   return (
     <ModalBackground>
-      <Container>
+      <ImgUploadContainer>
         <ImgWrapper>
           {uploadedImage ? (
             <Img src={uploadedImage}></Img>
           ) : (
-            <div>
-              <DragNDropWrapper>
-                <div {...getRootProps()}>
-                  <input {...getInputProps()} />
-                  <DragNDropSpace>
-                    <FaFileUpload size="5rem" />
-                    {isDragActive ? (
-                      <div>YESSSS DROP IT!</div>
-                    ) : (
-                      <div>
-                        <p>Drag & Drop</p>
-                        <p>OR</p>
-                      </div>
-                    )}
-                  </DragNDropSpace>
-                </div>
+            <>
+              <DragNDropWrapper {...getRootProps()}>
+                <input {...getInputProps()} />
+                <>
+                  <FaFileUpload size="4rem" />
+                  {isDragActive ? (
+                    <DragNDropText>드랍해주세요! 🥳</DragNDropText>
+                  ) : (
+                    <>
+                      <DragNDropText>Drag & Drop</DragNDropText>
+                      <DragNDropText middle>아니면</DragNDropText>
+                    </>
+                  )}
+                </>
               </DragNDropWrapper>
-              <Label>
+              <DragNDropLabel>
                 <InputImg
                   type="file"
                   accept="image/png, image/jpg, image/jpeg"
                   onChange={preview}
                 ></InputImg>
-                Click here
-              </Label>
-            </div>
+                여기를 클릭해주세요
+              </DragNDropLabel>
+            </>
           )}
         </ImgWrapper>
-        {includeMessage ? (
+        {includeMessage && (
           <TxtWrapper>
-            <div>Please send a message</div>
+            <>메세지도 같이 보내실까요?</>
             <InputText onChange={handleMessage}></InputText>
           </TxtWrapper>
-        ) : null}
-        <ButtonSection>
+        )}
+        <ButtonWrapper>
           {uploadedImage ? (
-            <Button onClick={handleSubmit}>Okay</Button>
+            <Button onClick={handleSubmit}>기부하기</Button>
           ) : (
-            <Button disabled="disabled" className="disabled">
-              Okay
-            </Button>
+            <Button className="disabled">기부하기</Button>
           )}
-          <Button onClick={handleModalOpen}>Cancle</Button>
-        </ButtonSection>
-      </Container>
+          <Button onClick={handleModalOpen}>다음에하기</Button>
+        </ButtonWrapper>
+      </ImgUploadContainer>
     </ModalBackground>
   );
 };

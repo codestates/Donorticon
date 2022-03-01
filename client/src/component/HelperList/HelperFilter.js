@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../component/Pagination/Pagination';
 import HelperCard from '../../component/HelperList/HelperCard';
+import Loader from '../Loader';
 import {
   HelperCategoryBox,
   HelperCategoryContainer,
@@ -27,7 +28,6 @@ import global from '../../img/helperCategory/5_global.png';
 import women from '../../img/helperCategory/6_women.png';
 import mental from '../../img/helperCategory/7_mental.png';
 import etc from '../../img/helperCategory/8_etc.png';
-import Loader from '../Loader';
 
 const helperCategory = [
   { id: 0, name: '전체보기', src: all },
@@ -60,6 +60,7 @@ const HelperFilter = () => {
   const [maxPage, setMaxPage] = useState(1);
   const [helperCategoryId, setHelperCategoryId] = useState(0);
   const [gifticonCategoryId, setGifticonCategoryId] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const getList = async (id) => {
     try {
@@ -114,7 +115,6 @@ const HelperFilter = () => {
     }
   };
 
-  const [isLoading, setIsLoading] = useState(true);
   const getFirstGallery = (id) => {
     for (let i = 0; i < galleryList.length; i++) {
       if (galleryList[i].helper_id === id) {
@@ -187,7 +187,7 @@ const HelperFilter = () => {
       ) : (
         <>
           {list.length === 0 ? (
-            <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+            <NoMessage>등록된 Helper가 없어요 🥲</NoMessage>
           ) : (
             <>
               <HelperHeightContainer>

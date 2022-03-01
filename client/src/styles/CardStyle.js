@@ -7,8 +7,12 @@ export const CardContainer = styled.div`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(3, 1fr);
+  @media ${({ theme }) => theme.device.tablet} {
+    width: ${(props) => (props.gifticon ? '100%' : '90%')};
+  }
   @media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: repeat(1, 1fr);
+    width: ${(props) => (props.gifticon ? '100%' : '80%')};
   }
 `;
 
@@ -23,10 +27,17 @@ export const CardBox = styled.div`
 `;
 
 export const CardGallery = styled.img`
-  justify-content: center;
-  align-items: center;
+  width: ${(props) => (props.empty ? '40%' : '100%')};
+  height: ${(props) => (props.empty ? '100px' : '200px')};
+`;
+
+export const EmptyBox = styled.div`
   width: 100%;
   height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 export const CardContent = styled.div`

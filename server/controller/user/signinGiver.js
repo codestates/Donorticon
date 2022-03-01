@@ -27,7 +27,10 @@ module.exports = async (req, res) => {
           .status(200)
           .json({ info, accessToken, messeage: 'successfully signed in' });
       } else {
-        res.status(401).json({ message: 'verify your email' });
+        const { id, email } = giverInfo;
+        res
+          .status(401)
+          .json({ message: 'verify your email', id, email, type: 1 });
       }
     }
   } catch (e) {
