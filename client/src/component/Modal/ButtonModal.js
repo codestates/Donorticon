@@ -19,7 +19,9 @@ const ButtonModal = ({
   const dispatch = useDispatch();
 
   const handleButton = (e) => {
-    dispatch(setPrev(window.location.pathname));
+    if (!window.location.pathname.includes('sign')) {
+      dispatch(setPrev(window.location.pathname));
+    }
     const text = e.target.innerText.split(' ');
     // 회원가입
     if (text[1] === '회원가입' && text[0] === 'GIVER') {
