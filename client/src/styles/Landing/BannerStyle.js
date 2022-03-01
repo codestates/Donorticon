@@ -90,7 +90,7 @@ export const ImageBox = styled.div`
   grid-row: 1;
   grid-column: 2;
   margin-left: 300px;
-  animation: image-in 5s cubic-bezier(0.5, 0, 0.1, 1) 2s backwards;
+  animation: image-in 3.5s cubic-bezier(0.5, 0, 0.1, 1) 2s backwards;
   width: 70%;
   z-index: 3;
   @keyframes image-in {

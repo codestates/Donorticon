@@ -26,10 +26,6 @@ const Banner = () => {
       <ImageBox>
         <img src={bannerimg} alt="banner" />
       </ImageBox>
-      {/* <Text>
-          <div>Donate your gifticons</div>
-          <div>and support social vulnerables</div>
-        </Text> */}
     </BannerContainer>
   );
 };

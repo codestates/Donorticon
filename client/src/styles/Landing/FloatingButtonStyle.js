@@ -15,6 +15,7 @@ export const Button = styled.button`
   padding: 20px;
   &:hover {
     box-shadow: 0 0 15px rgba(229, 185, 61);
+    transition: 0.7s;
   }
 `;
 
