@@ -3,9 +3,8 @@ import styled from 'styled-components';
 export const TagContainer = styled.div`
   width: 100%;
   height: auto;
-
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 export const TagAdder = styled.div`

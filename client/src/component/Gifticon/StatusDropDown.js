@@ -12,6 +12,9 @@ import {
   StatusContainer,
 } from '../../styles/Gifticon/StatusDropDownStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
+import noaccess from '../../img/noaccess.png';
+
+const NOACCESS_IMG = noaccess;
 
 const gifticonStatus = [
   { id: 1, name: '사용함' },
@@ -82,6 +85,7 @@ const StatusDropDown = () => {
         dispatch(setInfo({ ...gifticon, status: '확인중', textStyle: 1 }));
       }
       if (updated.status === 'rejected') {
+        setIsActive(false);
         setIsRejected(true);
         return;
       }
@@ -97,13 +101,19 @@ const StatusDropDown = () => {
 
   const handleRejected = async (e, textMessage) => {
     if (e.target.textContent === '네') {
-      dispatch(setInfo({ ...gifticon, status: '거절됨', textStyle: 2 }));
-      const message = textMessage ? textMessage : '';
+      dispatch(
+        setInfo({
+          ...gifticon,
+          status: '거절됨',
+          textStyle: 2,
+          img: NOACCESS_IMG,
+        }),
+      );
       try {
         const response = await axios.post(
           `/gifticon/detail/${gifticonId}`,
           {
-            message,
+            message: textMessage,
             giverId,
             helperId,
           },
@@ -111,6 +121,7 @@ const StatusDropDown = () => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
+
         if (response.status === 200) {
           setIsRejected(false);
           setIsActive(false);
@@ -170,6 +181,7 @@ const StatusDropDown = () => {
         <ModalV2
           title={'정말로 거부하시겠어요?'}
           subtitle={'한번 거절하신 기프티콘은 다시 사용하실 수 없습니다.'}
+          placeholder={'감사하지만 거절합니다'}
           isMessage={true}
           callback={handleRejected}
           noSpace={'no'}

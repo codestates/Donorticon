@@ -30,7 +30,7 @@ const GifticonLevel = ({ point }) => {
         setLevel({ id: 2, name: '골드 연탄', src: gold });
       } else if (point >= 6) {
         setLevel({ id: 1, name: '실버 연탄', src: silver });
-      } else if (point >= 0) {
+      } else if (point < 6) {
         setLevel({ id: 0, name: '브론즈 연탄', src: bronze });
       }
     } else {

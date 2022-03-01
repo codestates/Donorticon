@@ -9,6 +9,7 @@ export const Container = styled.div`
 `;
 
 export const SubContainer = styled.div`
+  width: 100%;
   border-bottom: 2px solid ${({ theme }) => theme.color.main};
   padding-bottom: 20px;
 `;

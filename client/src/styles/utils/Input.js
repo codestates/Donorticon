@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const InputContainer = styled.div`
-  padding-top: 40px;
+  width: 100%;
+  padding-top: ${(props) => (props.signup ? '0' : '40px')};
 `;
 
 // giver 회원가입 & helper 회원가입 마지막 페이지에 사용
@@ -20,6 +21,7 @@ export const Input = styled.input`
   margin: 10px 0;
   border: none;
   border-bottom: 1px solid #000;
+  font-size: 18px;
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
@@ -29,8 +31,11 @@ export const Input = styled.input`
     margin: 0;
   }
   ::placeholder {
-    font-size: 12px;
+    font-size: 15px;
     color: ${({ theme }) => theme.color.lightGrey};
+    @media ${({ theme }) => theme.device.mobile} {
+      font-size: 12px;
+    }
   }
   &:focus {
     outline: none;

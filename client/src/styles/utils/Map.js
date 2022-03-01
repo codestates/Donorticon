@@ -7,9 +7,9 @@ export const MapContainer = styled.div`
 `;
 
 export const NoInfoBox = styled.div`
-  height: 400px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
+  text-align: left;
+  font-size: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 15px;
+  }
 `;

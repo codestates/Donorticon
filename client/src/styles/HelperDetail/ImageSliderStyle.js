@@ -3,11 +3,19 @@ import styled from 'styled-components';
 export const SliderContainer = styled.div`
   height: 600px;
   display: flex;
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-direction: column;
+    height: 410px;
+  }
 `;
 
 export const LeftBox = styled.div`
   width: 90%;
   position: relative;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    height: 300px;
+  }
 `;
 
 export const SelectedImg = styled.img`
@@ -37,6 +45,9 @@ export const NextButton = styled.div`
 
 export const RightBox = styled.div`
   width: 10%;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+  }
 `;
 
 export const ThumbnailBox = styled.div`
@@ -47,6 +58,12 @@ export const ThumbnailBox = styled.div`
   .current {
     opacity: 1;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 100%;
+    flex-direction: row;
+    padding-top: 10px;
+    margin-left: 0;
+  }
 `;
 
 export const Thumbnail = styled.img`
@@ -55,5 +72,9 @@ export const Thumbnail = styled.img`
   opacity: 0.5;
   &:hover {
     opacity: 1;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 20%;
+    height: 100px;
   }
 `;

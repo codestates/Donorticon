@@ -29,12 +29,31 @@ export const ModalFrame = styled.div`
   }
 `;
 
+export const PasswordModalFrame = styled(ModalFrame)`
+  padding: 50px;
+  width: 400px;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    padding: 25px;
+  }
+`;
+
 export const Title = styled.div`
   font-size: 20px;
+  font-weight: 500;
+  padding-bottom: 10px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+    line-height: initial;
+  }
 `;
 
 export const SubTitle = styled.div`
   padding: 25px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 13px;
+    line-height: initial;
+  }
 `;
 
 export const MesaageTitle = styled.div`

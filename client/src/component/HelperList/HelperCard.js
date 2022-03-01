@@ -16,7 +16,7 @@ const NOIMAGE = noimg;
 const Card = ({ id, name, img, slogan, gallery }) => {
   const navigate = useNavigate();
   const sliced =
-    slogan && slogan.length > 24 ? `${slogan.slice(0, 24)}...` : `${slogan}`;
+    slogan && slogan.length > 20 ? `${slogan.slice(0, 15)}...` : `${slogan}`;
 
   return (
     <CardBox onClick={() => navigate(`/helperlist/detail/${id}`)}>

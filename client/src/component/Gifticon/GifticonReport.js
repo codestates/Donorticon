@@ -7,6 +7,9 @@ import {
 } from '../../styles/Gifticon/GifticonReportStyle';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import ModalV2 from '../Modal/ModalV2';
+import noaccess from '../../img/noaccess.png';
+
+const NOACCESS_IMG = noaccess;
 
 const GifticonReport = () => {
   const dispatch = useDispatch();
@@ -34,7 +37,13 @@ const GifticonReport = () => {
       );
       if (status === 'reported') {
         dispatch(
-          setInfo({ ...gifticon, report, status: '신고됨', textStyle: 2 }),
+          setInfo({
+            ...gifticon,
+            report,
+            status: '신고됨',
+            textStyle: 2,
+            img: NOACCESS_IMG,
+          }),
         );
       }
       setReportModal(false);

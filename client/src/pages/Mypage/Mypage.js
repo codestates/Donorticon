@@ -26,6 +26,7 @@ import {
   ActBox,
   TextareaChanger,
   LoaderBox,
+  Explanation,
 } from '../../styles/Mypage/MypageStyle';
 import {
   BottomContainer,
@@ -390,6 +391,9 @@ const Mypage = () => {
                   />
                   <MultiContainer gallery>
                     <InputName>사진 (최대 5개 등록가능)</InputName>
+                    <Explanation>
+                      사진 삭제: 사진 위에 마우스를 놓은 후 클릭
+                    </Explanation>
                     <GalleryBox>
                       {userInfo.gallery.map((url, idx) => {
                         return (
@@ -451,7 +455,7 @@ const Mypage = () => {
                       : '계정을 활성화 하시겠어요?'
                   }
                   subtitle={
-                    userInfo.activity ? '언제든 돌아오세요!' : '환영합니다'
+                    userInfo.activity ? '언제든 돌아오세요!' : '환영합니다 🥳'
                   }
                   callback={handleActivity}
                 />

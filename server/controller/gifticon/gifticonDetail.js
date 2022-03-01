@@ -84,7 +84,14 @@ module.exports = {
       if (req.body.status) {
         const status = req.body.status;
         try {
-          await gifticon.update({ status }, { where: { id: gifticonId } });
+          if (status === 'rejected' || status === 'expired') {
+            await gifticon.update(
+              { status, img: `${process.env.BUCKET}/logo.png` },
+              { where: { id: gifticonId } },
+            );
+          } else {
+            await gifticon.update({ status }, { where: { id: gifticonId } });
+          }
           const updated = await gifticon.findOne({
             raw: true,
             where: { id: gifticonId },
@@ -138,7 +145,12 @@ module.exports = {
       const gifticonId = parseInt(req.params.id);
 
       await gifticon.update(
-        { report: true, point: -1, status: 'reported' },
+        {
+          report: true,
+          point: -1,
+          status: 'reported',
+          img: `${process.env.BUCKET}/logo.png`,
+        },
         { where: { id: gifticonId } },
       );
 

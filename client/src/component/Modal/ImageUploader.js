@@ -28,6 +28,7 @@ const ImageUploader = ({
   roomId,
   gifticonId,
   type,
+  buttonText,
 }) => {
   const dispatch = useDispatch();
   const gifticon = useSelector((state) => state.gifticon);
@@ -123,9 +124,13 @@ const ImageUploader = ({
         )}
         <ButtonWrapper>
           {uploadedImage ? (
-            <Button onClick={handleSubmit}>기부하기</Button>
+            <Button onClick={handleSubmit}>
+              {buttonText ? buttonText : '기부하기'}
+            </Button>
           ) : (
-            <Button className="disabled">기부하기</Button>
+            <Button className="disabled">
+              {buttonText ? buttonText : '기부하기'}
+            </Button>
           )}
           <Button onClick={handleModalOpen}>다음에하기</Button>
         </ButtonWrapper>

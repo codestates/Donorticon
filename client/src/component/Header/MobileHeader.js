@@ -14,6 +14,7 @@ const MobileHeader = ({
   handleToggle,
   handleSignInModal,
   handleSignUpModal,
+  handleSignOut,
 }) => {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   return (
@@ -41,8 +42,8 @@ const MobileHeader = ({
           <StyledLink to="/mypage" onClick={handleToggle}>
             <ListItem>마이페이지</ListItem>
           </StyledLink>
-          <StyledLink to="/signout" onClick={handleToggle}>
-            <ListItem>로그아웃</ListItem>
+          <StyledLink to="/" onClick={handleSignOut}>
+            <ListItem onClick={handleToggle}>로그아웃</ListItem>
           </StyledLink>
         </ListContainer>
       )}
@@ -55,9 +56,7 @@ const MobileHeader = ({
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <ListItem onClick={handleSignInModal}>로그인</ListItem>
-          <StyledLink to="/signup" onClick={handleSignUpModal}>
-            <ListItem>회원가입</ListItem>
-          </StyledLink>
+          <ListItem onClick={handleSignUpModal}>회원가입</ListItem>
         </ListContainer>
       )}
     </>
