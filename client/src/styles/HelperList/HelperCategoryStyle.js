@@ -10,13 +10,30 @@ export const HelperCategoryContainer = styled.div`
 `;
 
 export const HelperCategoryBox = styled.div`
-  width: 50%;
+  width: 90%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   cursor: pointer;
+  @media ${({ theme }) => theme.device.tablet} {
+    overflow-x: scroll;
+    display: inline-block;
+    white-space: nowrap;
+    // 스크롤바 숨기기
+    ::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera*/
+    }
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 `;
+
 export const HelperContent = styled.div`
   text-align: center;
+  margin: 0 20px;
+  @media ${({ theme }) => theme.device.tablet} {
+    justify-content: space-around;
+    display: inline-block;
+  }
 `;
 
 export const ImageBackground = styled.div`
@@ -49,4 +66,8 @@ export const Name = styled.div`
 export const NoMessage = styled.div`
   padding: 200px 0;
   font-size: 20px;
+  height: 500px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+  }
 `;

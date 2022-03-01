@@ -23,6 +23,9 @@ export const HelperContainer = styled.div`
 export const HelperHeightContainer = styled.div`
   min-height: 1100px;
   width: 100%;
+  @media ${({ theme }) => theme.device.mobile} {
+    min-height: 0;
+  }
 `;
 
 export const GifticonHeightContainer = styled.div`
