@@ -7,7 +7,7 @@ import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import {
   ImgUploadContainer,
   InputImg,
-  InputText,
+  Text,
   ImgWrapper,
   Button,
   Img,
@@ -119,7 +119,7 @@ const ImageUploader = ({
         {includeMessage && (
           <TxtWrapper>
             <>메세지도 같이 보내실까요?</>
-            <InputText onChange={handleMessage}></InputText>
+            <Text onChange={handleMessage}></Text>
           </TxtWrapper>
         )}
         <ButtonWrapper>
