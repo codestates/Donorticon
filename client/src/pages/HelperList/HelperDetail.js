@@ -5,22 +5,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setWho } from '../../redux/user/userSlice';
 import ImageUploader from '../../component/Modal/ImageUploader';
 import { setPrev } from '../../redux/page/pageSlice';
-import Map from '../../component/SignUp/Map';
-import {
-  Container,
-  UpBox,
-  DownBox,
-  Button,
-  ContentTag,
-  DownBoxTitle,
-  UpBoxProfile,
-  UpBoxContent,
-  UpBoxContentTitle,
-  UpBoxContentWho,
-} from '../../styles/HelperList/HelperDetailStyle';
 import Loader from '../../component/Loader';
-import ImgSlider from '../../component/ImgSlider';
+import ImageSlider from '../../component/HelperDetail/ImageSlider';
+import Map from '../../component/SignUp/Map';
 import ModalV2 from '../../component/Modal/ModalV2';
+import { FaHeart } from 'react-icons/fa';
+import {
+  HelperDetailContainer,
+  HelperDetailBox,
+  ProfileImg,
+  Category,
+  CategoryName,
+  Slogan,
+  HelperName,
+  TopBox,
+  LeftBox,
+  RightBox,
+  DonateButton,
+  BottomBox,
+  Content,
+  Title,
+  Icon,
+  BottomButton,
+} from '../../styles/HelperDetail/HelperDetailStyle';
 
 const vulnerableList = [
   '아동/청소년',
@@ -98,42 +105,88 @@ const HelperDetail = () => {
   }, []);
 
   return (
-    <Container>
+    <HelperDetailContainer>
       {isLoading ? (
         <Loader />
       ) : (
-        <>
-          <UpBox>
-            <UpBoxProfile src={helperInfo.img} />
-            <UpBoxContent>
-              {helperInfo.vulnerable.map((id, idx) => (
-                <ContentTag key={idx}>{`#${
-                  vulnerableList[id - 1]
-                }`}</ContentTag>
-              ))}
-              <UpBoxContentTitle>{helperInfo.slogan}</UpBoxContentTitle>
-              <UpBoxContentWho>{helperInfo.name}</UpBoxContentWho>
+        <HelperDetailBox>
+          <TopBox>
+            <LeftBox>
+              <ProfileImg src={helperInfo.img} />
+            </LeftBox>
+            <RightBox>
+              <Category>
+                {helperInfo.vulnerable.map((id, idx) => (
+                  <CategoryName key={idx}>{`#${
+                    vulnerableList[id - 1]
+                  }`}</CategoryName>
+                ))}
+              </Category>
+              <Slogan>
+                {helperInfo.slogan
+                  ? helperInfo.slogan
+                  : '슬로건 정보가 없어요 🥲'}
+              </Slogan>
+              <HelperName>{helperInfo.name}</HelperName>
               {who !== 2 && (
-                <Button style={{ margin: 'auto' }} onClick={handleModalOpen}>
-                  기부하기
-                </Button>
+                <DonateButton onClick={handleModalOpen}>기부하기</DonateButton>
               )}
-            </UpBoxContent>
-          </UpBox>
-          <DownBox>
-            <DownBoxTitle>소개글</DownBoxTitle>
-            <div>{helperInfo.description}</div>
-            <DownBoxTitle>필요한 기프티콘</DownBoxTitle>
-            {helperInfo.gifticonCategory &&
-              helperInfo.gifticonCategory.map((id, idx) => (
-                <ContentTag key={idx}>{`#${gifticonList[id - 1]}`}</ContentTag>
-              ))}
-            <DownBoxTitle>활동 갤러리</DownBoxTitle>
-            <ImgSlider data={helperInfo.gallery} />
-            <DownBoxTitle>활동 지역</DownBoxTitle>
-            <Map address={helperInfo.location} />
-          </DownBox>
-          {who !== 2 && <Button onClick={handleModalOpen}>기부하기</Button>}
+            </RightBox>
+          </TopBox>
+          <BottomBox>
+            <Title>
+              <Icon>
+                <FaHeart color="#ffce44" />
+              </Icon>
+              소개글
+            </Title>
+            <Content>
+              {helperInfo.description
+                ? helperInfo.description
+                : '소개글 정보가 없어요 🥲'}
+            </Content>
+          </BottomBox>
+          <BottomBox>
+            <Title>
+              <Icon>
+                <FaHeart color="#ffce44" />
+              </Icon>
+              필요한 기프티콘
+            </Title>
+            <Content>
+              {helperInfo.gifticonCategory &&
+                helperInfo.gifticonCategory.map((id, idx) => (
+                  <CategoryName key={idx}>{`#${
+                    gifticonList[id - 1]
+                  }`}</CategoryName>
+                ))}
+            </Content>
+          </BottomBox>
+          <BottomBox>
+            <Title>
+              <Icon>
+                <FaHeart color="#ffce44" />
+              </Icon>
+              활동 내역
+            </Title>
+            {helperInfo.gallery.length !== 0 ? (
+              <ImageSlider data={helperInfo.gallery} />
+            ) : (
+              <Content>활동 내역 사진이 없어요 🥲</Content>
+            )}
+          </BottomBox>
+          <BottomBox>
+            <Title>
+              <Icon>
+                <FaHeart color="#ffce44" />
+              </Icon>
+              활동 지역
+            </Title>
+            <Map detail address={helperInfo.location} />
+          </BottomBox>
+          {who !== 2 && (
+            <BottomButton onClick={handleModalOpen}>기부하기</BottomButton>
+          )}
           {isModalOpen && giverId === '' && (
             <ModalV2
               title="기부를 하려면 GIVER 로그인이 필요합니다 🥲"
@@ -150,9 +203,9 @@ const HelperDetail = () => {
               helperId={parseInt(id)}
             />
           )}
-        </>
+        </HelperDetailBox>
       )}
-    </Container>
+    </HelperDetailContainer>
   );
 };
 export default HelperDetail;
