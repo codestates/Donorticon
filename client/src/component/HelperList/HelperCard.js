@@ -43,7 +43,7 @@ const Card = ({ id, name, img, slogan, gallery }) => {
         <HelperImage src={img} />
         <HelperName>{name}</HelperName>
       </CardContent>
-      <Slogan>{slogan === null ? '아직 정보가 없어요!' : `${sliced}`}</Slogan>
+      <Slogan>{slogan === null ? '아직 정보가 없어요 🥲' : `${sliced}`}</Slogan>
     </CardBox>
   );
 };
