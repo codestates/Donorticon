@@ -11,7 +11,6 @@ import {
   GifticonMessage,
   GifticonUsedButton,
   JustForStyle,
-  NoImgMessage,
   PointImage,
 } from '../../styles/Gifticon/GifticonUsedStyle';
 import black from '../../img/point_black.png';
@@ -34,9 +33,9 @@ const GifticonUsed = () => {
 
   const [clicked, setClicked] = useState([]);
   const [isImgModalOpen, setIsImgModalOpen] = useState(false);
-  const [val, setVal] = useState('');
   const [message, setMessage] = useState('');
   const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+  const [isReady, setIsReady] = useState(false);
 
   const handleModalOpen = () => {
     setIsImgModalOpen(!isImgModalOpen);
@@ -56,6 +55,21 @@ const GifticonUsed = () => {
     if (data.status === 200) {
       setMessage('');
       setIsCheckModalOpen(true);
+    }
+  };
+
+  const handleText = (event) => {
+    setMessage(event.target.value);
+    if (message !== '') {
+      setIsReady(true);
+    }
+  };
+
+  const handleCheckModal = (e) => {
+    if (e.target.textContent === '네') {
+      navigate('/dm');
+    } else {
+      setIsCheckModalOpen(false);
     }
   };
 
@@ -97,25 +111,12 @@ const GifticonUsed = () => {
     }
   };
 
-  const handleText = (event) => {
-    setMessage(event.target.value);
-    setVal(event.target.value);
-  };
-
-  const handleCheckModal = (e) => {
-    if (e.target.textContent === '네') {
-      navigate('/dm');
-    } else {
-      setIsCheckModalOpen(false);
-    }
-  };
-
   useEffect(() => getPoint(), []);
   useEffect(() => sendPoint(), [clicked]);
 
   return (
     <>
-      {who && who === 1 && thanksImgUrl !== null && (
+      {who && who === 1 && thanksImgUrl && (
         <>
           <ContentTitle top>{name}님이 보낸 인증사진</ContentTitle>
           <ContentBox>
@@ -127,12 +128,6 @@ const GifticonUsed = () => {
             </ImageBox>
           </ContentBox>
         </>
-      )}
-      {/*TODO: 인증 사진이 없는 경우 메세지 말고 다른 방법있을까? */}
-      {who && who === 1 && thanksImgUrl === null && (
-        <NoImgMessage>
-          웁스! 아직 {name}님께서 인증사진을 보내주시지 않았어요
-        </NoImgMessage>
       )}
       {who && who === 2 && (
         <>
@@ -155,17 +150,19 @@ const GifticonUsed = () => {
           <ContentBox>
             <GifticonMessage
               placeholder={'감사메세지를 적어주세요'}
-              value={val}
               onChange={handleText}
             />
             <ButtonBox>
               <JustForStyle />
-              <GifticonUsedButton onClick={handleMessage}>
-                {name}님에게 메세지 전송
+              <GifticonUsedButton
+                onClick={handleMessage}
+                className={`${!isReady && 'disable'}`}
+              >
+                메세지 전송
               </GifticonUsedButton>
             </ButtonBox>
           </ContentBox>
-          <ContentTitle top>
+          <ContentTitle top line>
             감사운 마음을 연탄 포인트로 표현하세요!
             <br />
             (최대 5개)
@@ -187,6 +184,7 @@ const GifticonUsed = () => {
               giverId={userId}
               helperId={user}
               gifticonId={id}
+              buttonText={'사진 업로드'}
             />
           )}
           {isCheckModalOpen && (

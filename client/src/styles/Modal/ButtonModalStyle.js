@@ -11,6 +11,7 @@ export const ButtonContainer = styled.div`
 
 export const Btn = styled(Button)`
   width: 250px;
+  letter-spacing: 1px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 100%;
   }
