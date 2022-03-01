@@ -4,10 +4,10 @@ import styled from 'styled-components';
 export const ButtonContainer = styled.div``;
 
 export const Button = styled.button`
-  z-index: 1000;
+  z-index: 100;
   position: fixed;
   bottom: 10%;
-  right: 5%;
+  left: 20px;
   cursor: pointer;
   background-color: ${({ theme }) => theme.color.main};
   font-weight: 500;
@@ -16,6 +16,9 @@ export const Button = styled.button`
   &:hover {
     box-shadow: 0 0 15px rgba(229, 185, 61);
     transition: 0.7s;
+  }
+  @media ${({ theme }) => theme.device.tablet} {
+    bottom: 50%;
   }
 `;
 
