@@ -7,9 +7,9 @@ export const SignUpContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 40px 0;
   @media ${({ theme }) => theme.device.mobile} {
     width: 90%;
-    padding: 50px 0;
   }
 `;
 
@@ -75,7 +75,7 @@ export const ButtonContainer = styled.div`
   padding-top: 20px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 100px;
+  margin-bottom: 40px;
 `;
 
 export const SignUpButton = styled.button`

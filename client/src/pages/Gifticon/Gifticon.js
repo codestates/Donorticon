@@ -109,7 +109,7 @@ const Gifticon = () => {
               {who === 1 && <GifticonLevel point={point} count={count} />}
               {who === 1 && count === 0 && (
                 <NoGifticonMessage center>
-                  기부하신 기프티콘이 아직 없네요
+                  기부하신 기프티콘이 아직 없네요 🥲
                   <br />
                   기부하러 가보실까요?
                   <br />
@@ -123,7 +123,7 @@ const Gifticon = () => {
               )}
               {who === 2 && count === 0 && (
                 <NoGifticonMessage>
-                  아직 기프티콘 기부를 받지 못하셨어요
+                  아직 기프티콘 기부를 받지 못하셨어요 🥲
                 </NoGifticonMessage>
               )}
               {count !== 0 && list.length === 0 && (

@@ -4,8 +4,13 @@ import InputSet from '../InputComponent';
 import { sha256 } from 'js-sha256';
 import { ErrorMessage } from '../../styles/utils/Input';
 import { InputLabel, InputBox } from '../../styles/utils/Input';
-import { ModalBackground, ModalFrame } from '../../styles/Modal/ModalStyle';
-import { Btn, ButtonContainer } from '../../styles/Modal/ButtonModalStyle';
+import {
+  ModalBackground,
+  Title,
+  ButtonContainer,
+  ModalButton,
+  PasswordModalFrame,
+} from '../../styles/Modal/ModalStyle';
 
 const PasswordModal = ({ modalCloser }) => {
   const [passwordChanger, setPasswordChanger] = useState({
@@ -61,7 +66,8 @@ const PasswordModal = ({ modalCloser }) => {
         }
       }}
     >
-      <ModalFrame>
+      <PasswordModalFrame>
+        <Title>비밀번호 변경</Title>
         {inputList.map((list, idx) => (
           <InputBox key={idx}>
             <InputLabel>{list.title}</InputLabel>
@@ -75,7 +81,7 @@ const PasswordModal = ({ modalCloser }) => {
         ))}
         <ErrorMessage>{errorMessage}</ErrorMessage>
         <ButtonContainer>
-          <Btn
+          <ModalButton
             id="8"
             onClick={async (e) => {
               if (passwordChanger.password === passwordChanger.newPassword) {
@@ -115,12 +121,12 @@ const PasswordModal = ({ modalCloser }) => {
             }}
           >
             확인
-          </Btn>
-          <Btn id="8" onClick={modalCloser}>
+          </ModalButton>
+          <ModalButton id="8" onClick={modalCloser}>
             취소
-          </Btn>
+          </ModalButton>
         </ButtonContainer>
-      </ModalFrame>
+      </PasswordModalFrame>
     </ModalBackground>
   );
 };

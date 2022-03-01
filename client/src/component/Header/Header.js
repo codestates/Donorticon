@@ -63,6 +63,7 @@ const Header = () => {
         isToggled={isToggled}
         setIsToggled={setIsToggled}
         handleToggle={handleToggle}
+        handleSignOut={handleSignOut}
         handleSignInModal={handleSignInModal}
         handleSignUpModal={handleSignUpModal}
       />

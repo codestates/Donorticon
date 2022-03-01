@@ -25,7 +25,7 @@ export const InputBox = styled.div`
 `;
 
 export const InputName = styled.div`
-  font-size: 13px;
+  font-size: 15px;
   text-align: left;
 `;
 
@@ -109,16 +109,17 @@ export const ActBox = styled.div`
 export const ActButton = styled.button`
   margin: 10px 0;
   cursor: pointer;
-  width: 90px;
+  width: 30%;
   &:hover {
     color: ${({ theme }) => theme.color.main};
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 50%;
+  }
 `;
 
-export const ProfileImg = styled.div`
+export const ProfileImg = styled.img`
   border-radius: 50%;
-  background-image: url(${(props) => props.src});
-  background-size: cover;
   width: 150px;
   height: 150px;
   @media ${({ theme }) => theme.device.tablet} {
@@ -153,4 +154,10 @@ export const ErrorReminder = styled.div`
 
 export const LoaderBox = styled.div`
   width: 100%;
+`;
+
+export const Explanation = styled.div`
+  text-align: left;
+  font-size: 13px;
+  margin: 10px 0;
 `;

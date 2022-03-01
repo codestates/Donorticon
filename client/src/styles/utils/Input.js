@@ -33,6 +33,9 @@ export const Input = styled.input`
   ::placeholder {
     font-size: 15px;
     color: ${({ theme }) => theme.color.lightGrey};
+    @media ${({ theme }) => theme.device.mobile} {
+      font-size: 12px;
+    }
   }
   &:focus {
     outline: none;
