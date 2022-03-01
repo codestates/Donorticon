@@ -7,10 +7,10 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
     }
     html,body {
-        font-size: 15px;
+        font-size: 18px;
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         @media (max-width: 414px) {
-            font-size: 14px;
+            font-size: 15px;
          }
     }
     a {

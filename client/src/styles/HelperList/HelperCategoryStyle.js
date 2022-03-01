@@ -7,6 +7,7 @@ export const HelperCategoryContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 16px;
 `;
 
 export const HelperCategoryBox = styled.div`

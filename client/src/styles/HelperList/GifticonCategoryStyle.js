@@ -6,6 +6,7 @@ export const GifticonCategoryContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 16px;
 `;
 
 export const GifticonCategoryBox = styled.div`

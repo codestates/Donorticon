@@ -76,6 +76,9 @@ export const ListItem = styled.li`
   list-style: none;
   padding: 0 20px;
   cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
   @media ${({ theme }) => theme.device.mobile} {
     margin: 20px 0;
     width: 100%;

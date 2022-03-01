@@ -52,7 +52,6 @@ export const ProfileImg = styled.img`
 
 export const Category = styled.div`
   padding-bottom: 20px;
-  font-size: 18px;
   div {
     display: inline-block;
     &:not(:last-child) {
@@ -64,9 +63,10 @@ export const CategoryName = styled.div`
   border: 1px solid #000;
   padding: 5px 10px;
   border-radius: 10px;
+  font-size: 16px;
+  margin-top: 10px;
   @media ${({ theme }) => theme.device.mobile} {
-    margin-top: 10px;
-    font-size: 15px;
+    font-size: 13px;
   }
 `;
 
@@ -130,7 +130,7 @@ export const Content = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 15px;
+    font-size: 18px;
   }
 `;
 
