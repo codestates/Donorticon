@@ -26,18 +26,18 @@ export const CardBox = styled.div`
   flex-direction: column;
 `;
 
-export const EmptyBox = styled.div`
-  width: 80%;
-  margin: 0 auto;
+export const CardGallery = styled.img`
+  width: ${(props) => (props.empty ? '40%' : '100%')};
+  height: ${(props) => (props.empty ? '100px' : '200px')};
 `;
 
-export const CardGallery = styled.div`
-  background-image: url(${(props) => props.src});
-  background-size: cover;
-  justify-content: center;
-  align-items: center;
+export const EmptyBox = styled.div`
   width: 100%;
   height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 export const CardContent = styled.div`
