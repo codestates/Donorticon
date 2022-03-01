@@ -313,7 +313,7 @@ const SignUpHelper = () => {
             </ContentBox>
           ) : (
             <ContentBox>
-              <InputContainer>
+              <InputContainer signup>
                 {signUpForm[page].input.map((card, idx) => (
                   <InputBox key={idx}>
                     <InputLabel>

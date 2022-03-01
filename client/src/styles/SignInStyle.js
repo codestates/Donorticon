@@ -1,9 +1,12 @@
 import styled from 'styled-components';
-import { Button } from './utils/Button';
 
 export const SignInContainer = styled.div`
   width: 350px;
-  padding: 100px 0;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   @media ${({ theme }) => theme.device.mobile} {
     width: 80%;
     padding: 50px 0;
@@ -11,6 +14,7 @@ export const SignInContainer = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
+  width: 100%;
   padding-top: 20px;
 `;
 
@@ -20,9 +24,8 @@ export const SocialBox = styled.div`
   margin: 10px 0;
   padding: 10px 0;
   border: 1px solid ${({ theme }) => theme.color.main};
-
   display: grid;
-  grid-template-columns: 33% 34% 33%;
+  grid-template-columns: 25% 50% 25%;
   div.middle {
     display: flex;
     flex-direction: row;
@@ -30,10 +33,9 @@ export const SocialBox = styled.div`
 `;
 
 export const SocialIcon = styled.div`
-  padding-right: 10px;
-  width: 30%;
+  width: 20%;
 `;
+
 export const SocialText = styled.div`
-  align-items: flex-end;
-  width: 70%;
+  width: 80%;
 `;

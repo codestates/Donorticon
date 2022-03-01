@@ -48,24 +48,22 @@ export const CardContent = styled.div`
 
 // ============================================
 // HelperCard
-export const HelperImage = styled.div`
+export const HelperImage = styled.img`
   border-radius: 50%;
   width: 50px;
   height: 50px;
-  background-image: url(${(props) => props.src});
-  background-size: cover;
 `;
 
 export const HelperName = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 10px;
+  margin-left: 15px;
+  font-size: 16px;
 `;
 
 export const Slogan = styled.div`
   text-align: left;
-  font-size: 18px;
-  padding-top: 10px;
+  padding-top: 20px;
 `;
 
 export const HelperBox = styled.div`

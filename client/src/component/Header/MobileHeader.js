@@ -55,9 +55,7 @@ const MobileHeader = ({
             <ListItem>기부하기</ListItem>
           </StyledLink>
           <ListItem onClick={handleSignInModal}>로그인</ListItem>
-          <StyledLink to="/signup" onClick={handleSignUpModal}>
-            <ListItem>회원가입</ListItem>
-          </StyledLink>
+          <ListItem onClick={handleSignUpModal}>회원가입</ListItem>
         </ListContainer>
       )}
     </>

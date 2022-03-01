@@ -6,8 +6,7 @@ export const ButtonContainer = styled.div`
   background-color: #fff;
   display: flex;
   flex-direction: column;
-  @media ${({ theme }) => theme.device.mobile} {
-  }
+  z-index: 10000;
 `;
 
 export const Btn = styled(Button)`

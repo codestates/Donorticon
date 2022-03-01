@@ -1,15 +1,20 @@
 import styled from 'styled-components';
 
 export const SignUpContainer = styled.div`
-  width: 450px;
-  padding: 100px 0;
+  width: 400px;
+  min-height: calc(100vh - 100px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   @media ${({ theme }) => theme.device.mobile} {
-    width: 80%;
+    width: 90%;
     padding: 50px 0;
   }
 `;
 
 export const ContentContainer = styled.div`
+  width: 100%;
   padding-top: 40px;
 `;
 
@@ -17,6 +22,9 @@ export const ContentTitle = styled.div`
   padding: 40px 0;
   font-weight: 500;
   font-size: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 18px;
+  }
 `;
 
 export const ContentBox = styled.div`
@@ -56,7 +64,6 @@ export const Label = styled.label`
   position: absolute;
   top: 4px;
   left: 30px;
-  font-size: 14px;
   &:hover {
     color: ${({ theme }) => theme.color.main};
   }
@@ -64,9 +71,11 @@ export const Label = styled.label`
 
 // button
 export const ButtonContainer = styled.div`
+  width: 100%;
   padding-top: 20px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 100px;
 `;
 
 export const SignUpButton = styled.button`
