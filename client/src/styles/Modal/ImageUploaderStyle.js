@@ -58,6 +58,7 @@ export const InputText = styled.input`
 export const ButtonWrapper = styled(ButtonContainer)`
   padding: 0;
   justify-content: space-between;
+  margin: 20px 0;
 `;
 
 export const Button = styled.button`

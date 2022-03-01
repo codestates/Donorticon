@@ -52,9 +52,7 @@ const GifticonDetail = () => {
               <GifticonReport />
               <InputBox giver={giver}>
                 <div>
-                  <InputLabel>
-                    {who === 1 ? 'helper 이름' : 'giver 이름'}
-                  </InputLabel>
+                  <InputLabel>{who === 1 ? 'HELPER' : 'GIVER'}</InputLabel>
                   <InputContent>{name}</InputContent>
                 </div>
                 <div>

@@ -48,6 +48,8 @@ export const ContentTitle = styled.div`
   text-align: left;
   padding-bottom: 20px;
   padding-top: ${(props) => props.top && '20px'};
+  line-height: ${(props) => props.line && 'initial'};
+  font-weight: 500;
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 16px;
   }
@@ -56,8 +58,11 @@ export const ContentTitle = styled.div`
 export const ContentBox = styled.div`
   display: flex;
   align-items: ${(props) => (props.center ? 'center' : 'end')};
+  padding-top: 20px;
+  padding-bottom: 40px;
   @media ${({ theme }) => theme.device.mobile} {
     flex-direction: ${(props) => (props.row ? 'row' : 'column')};
+    padding-bottom: 0;
   }
 `;
 

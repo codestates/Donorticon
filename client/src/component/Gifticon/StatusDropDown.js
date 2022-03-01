@@ -12,6 +12,9 @@ import {
   StatusContainer,
 } from '../../styles/Gifticon/StatusDropDownStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
+import noaccess from '../../img/noaccess.png';
+
+const NOACCESS_IMG = noaccess;
 
 const gifticonStatus = [
   { id: 1, name: '사용함' },
@@ -98,7 +101,14 @@ const StatusDropDown = () => {
 
   const handleRejected = async (e, textMessage) => {
     if (e.target.textContent === '네') {
-      dispatch(setInfo({ ...gifticon, status: '거절됨', textStyle: 2 }));
+      dispatch(
+        setInfo({
+          ...gifticon,
+          status: '거절됨',
+          textStyle: 2,
+          img: NOACCESS_IMG,
+        }),
+      );
       try {
         const response = await axios.post(
           `/gifticon/detail/${gifticonId}`,
@@ -111,6 +121,7 @@ const StatusDropDown = () => {
             headers: { Authorization: `Bearer ${token}` },
           },
         );
+
         if (response.status === 200) {
           setIsRejected(false);
           setIsActive(false);

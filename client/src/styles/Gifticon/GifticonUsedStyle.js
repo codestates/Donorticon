@@ -1,11 +1,6 @@
 import styled from 'styled-components';
 import { GifticonButton } from './GifticonDetailStyle';
 
-export const NoImgMessage = styled.div`
-  text-align: left;
-  padding-top: 40px;
-`;
-
 export const ButtonBox = styled.div`
   width: 60%;
   display: flex;
@@ -24,6 +19,11 @@ export const GifticonUsedButton = styled(GifticonButton)`
   width: 70%;
   @media ${({ theme }) => theme.device.mobile} {
     margin-top: 10px;
+  }
+  &.disable {
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 0.5;
   }
 `;
 
