@@ -31,10 +31,18 @@ export const ModalFrame = styled.div`
 
 export const Title = styled.div`
   font-size: 20px;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: initial;
+  }
 `;
 
 export const SubTitle = styled.div`
   padding: 25px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 13px;
+  }
 `;
 
 export const MesaageTitle = styled.div`
