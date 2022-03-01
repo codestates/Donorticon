@@ -61,7 +61,11 @@ const SignIn = () => {
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       try {
-        await dispatch(signInGiver(userInfo)).unwrap();
+        if (who === 1) {
+          await dispatch(signInGiver(userInfo)).unwrap();
+        } else if (who === 2) {
+          await dispatch(signInHelper(userInfo)).unwrap();
+        }
       } catch (e) {
         if (e.response.status === 401) {
           const { id, email, type } = e.response.data;
