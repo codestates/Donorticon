@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import '@fontsource/baloo-2';
 
 export const BannerContainer = styled.div`
   margin-top: 75px;
@@ -6,7 +7,7 @@ export const BannerContainer = styled.div`
   height: calc(100vh - 75px);
   position: relative;
   color: black;
-  z-index: 100;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
@@ -39,7 +40,7 @@ export const BannerContainer = styled.div`
 `;
 
 export const TextBox = styled.div`
-  font-family: 'baloo';
+  font-family: 'Baloo 2', sans-serif;
   padding-left: 20px;
   grid-column: 1 / -1;
   grid-row: 1;
@@ -58,7 +59,7 @@ export const TitleInner = styled.div`
 `;
 
 export const Top = styled.div`
-  font-size: 60px;
+  font-size: 55px;
   animation: outer-left 1s 1s cubic-bezier(0.5, 0, 0.1, 1) both;
   > div {
     display: inline-block;
@@ -69,7 +70,7 @@ export const Bottom = styled.div`
   font-size: 125px;
   margin-top: 25px;
   letter-spacing: 5px;
-
+  font-variation-settings: 'wght' 800;
   display: inline-block;
   animation: outer-left 1s 1s cubic-bezier(0.5, 0, 0.1, 1) both;
 `;
@@ -82,6 +83,7 @@ export const TopInner = styled.div`
 
 export const BottomInner = styled.div`
   animation: text-clip 1s 0s cubic-bezier(0.5, 0, 0.1, 1) both;
+  font-weight: 800;
 `;
 
 export const ImageBox = styled.div`
@@ -90,7 +92,7 @@ export const ImageBox = styled.div`
   margin-left: 300px;
   animation: image-in 5s cubic-bezier(0.5, 0, 0.1, 1) 2s backwards;
   width: 70%;
-  z-index: 100;
+  z-index: 3;
   @keyframes image-in {
     from {
       clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
