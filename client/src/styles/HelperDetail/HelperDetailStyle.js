@@ -66,7 +66,7 @@ export const CategoryName = styled.div`
   border-radius: 10px;
   @media ${({ theme }) => theme.device.mobile} {
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 15px;
   }
 `;
 
@@ -110,7 +110,7 @@ export const Title = styled.div`
   font-size: 22px;
   padding-bottom: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 20px;
+    font-size: 18px;
   }
 `;
 
@@ -130,7 +130,7 @@ export const Content = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 18px;
+    font-size: 15px;
   }
 `;
 
