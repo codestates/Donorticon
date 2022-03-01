@@ -6,7 +6,7 @@ import {
   Title,
   Wrapper,
 } from '../../styles/Landing/HelpersStyle';
-import ImgSlider from '../ImgSlider';
+
 import ilu3 from '../../img/ilu3.jpg';
 import ilu1 from '../../img/ilu1.jpg';
 
@@ -30,7 +30,6 @@ const Helpers = () => {
           </Text>
         </TextWrapper>
       </Wrapper>
-      <ImgSlider data={list} />
     </Container>
   );
 };
