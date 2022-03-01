@@ -4,4 +4,5 @@ module.exports = {
   verification: require('./verification'),
   helperList: require('./helperList'),
   gifticon: require('./gifticon'),
+  auth: require('./auth'),
 };

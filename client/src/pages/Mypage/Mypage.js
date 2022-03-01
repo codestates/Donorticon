@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { removeToken } from '../../redux/utils/auth';
+import { getToken, removeToken } from '../../redux/utils/auth';
 import { signOut } from '../../redux/user/userSlice';
 import AddressFinder from '../../component/SignUp/AddressFinder';
 import Tag from '../../component/Mypage/Tag';
@@ -59,7 +59,6 @@ const gifticonList = [
 ];
 
 const Mypage = () => {
-  const token = localStorage.getItem('token');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const who = useSelector((state) => state.user.user.who);
@@ -133,7 +132,7 @@ const Mypage = () => {
       await axios.post(
         '/mypage/vulnerable',
         { vulnerable_id: id },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${await getToken()}` } },
       );
     },
     delete: async (id) => {
@@ -142,7 +141,7 @@ const Mypage = () => {
         vulnerable: userInfo.vulnerable.filter((el) => el !== id),
       });
       await axios.delete('/mypage/vulnerable', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${await getToken()}` },
         params: { vulnerable_id: id },
       });
     },
@@ -157,7 +156,7 @@ const Mypage = () => {
       await axios.post(
         '/mypage/gifticon',
         { gifticon_id: id },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${await getToken()}` } },
       );
     },
     delete: async (id) => {
@@ -166,7 +165,7 @@ const Mypage = () => {
         gifticonCategory: userInfo.gifticonCategory.filter((el) => el !== id),
       });
       await axios.delete('/mypage/gifticon', {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${await getToken()}` },
         params: { gifticon_id: id },
       });
     },
@@ -203,7 +202,7 @@ const Mypage = () => {
         `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
         { tag: e.target.id },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${await getToken()}` },
         },
       );
       console.log(url);
@@ -224,7 +223,7 @@ const Mypage = () => {
         await axios.put(
           `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
           { [e.target.name]: e.target.value },
-          { headers: { Authorization: `Bearer ${token}` } },
+          { headers: { Authorization: `Bearer ${await getToken()}` } },
         );
       } catch (e) {
         console.log(e);
@@ -248,12 +247,12 @@ const Mypage = () => {
     }
   };
 
-  const handleAddress = (address) => {
+  const handleAddress = async (address) => {
     setUserInfo({ ...userInfo, location: address });
     axios.put(
       '/mypage/helper',
       { address: address },
-      { headers: { Authorization: `Bearer ${token}` } },
+      { headers: { Authorization: `Bearer ${await getToken()}` } },
     );
   };
 
@@ -273,7 +272,7 @@ const Mypage = () => {
     if (e.target.textContent === '네') {
       try {
         await axios.delete('mypage/delete', {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${await getToken()}` },
         });
         navigate('/');
         dispatch(signOut());
@@ -296,7 +295,7 @@ const Mypage = () => {
           'mypage/helper/activity',
           { activity: !userInfo.activity },
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${await getToken()}` },
           },
         );
       } catch (e) {}
@@ -308,7 +307,7 @@ const Mypage = () => {
       const { data } = await axios.get(
         `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${await getToken()}` },
         },
       );
       setUserInfo(data);
