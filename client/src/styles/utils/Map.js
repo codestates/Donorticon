@@ -10,6 +10,6 @@ export const NoInfoBox = styled.div`
   text-align: left;
   font-size: 20px;
   @media ${({ theme }) => theme.device.mobile} {
-    font-size: 18px;
+    font-size: 15px;
   }
 `;
