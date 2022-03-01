@@ -2,21 +2,33 @@ import styled from 'styled-components';
 import { ButtonContainer } from './ModalStyle';
 
 export const ImgUploadContainer = styled.div`
-  padding: 50px;
   width: 500px;
   height: auto;
   text-align: center;
   background-color: white;
-  z-index: 100;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 80%;
+  }
 `;
 
 export const ImgWrapper = styled.div`
-  height: 20rem;
+  width: 80%;
+  margin-top: 50px;
+  padding: 25px 0;
   border: 1px dashed ${({ theme }) => theme.color.lightGrey};
   display: flex;
   justify-content: center;
   align-content: center;
   flex-direction: column;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    margin-top: 25px;
+  }
 `;
 
 export const Img = styled.img`
@@ -38,9 +50,11 @@ export const DragNDropLabel = styled.label`
 `;
 
 export const TxtWrapper = styled.div`
-  margin: 25px 0;
-  > div {
-    position: relative;
+  width: 80%;
+  margin: 50px 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    width: 90%;
+    margin: 20px 0;
   }
 `;
 
@@ -48,21 +62,31 @@ export const InputImg = styled.input`
   display: none;
 `;
 
-export const InputText = styled.input`
-  width: 100%;
-  height: 100px;
+export const Text = styled.textarea`
+  all: unset;
+  text-align: left;
+  border: 1px solid #000;
+  width: 90%;
   padding: 25px;
   margin-top: 25px;
+  &:focus {
+    outline: none;
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 10px;
+    margin-top: 25px;
+  }
 `;
 
 export const ButtonWrapper = styled(ButtonContainer)`
   padding: 0;
-  justify-content: space-between;
-  margin: 20px 0;
+  width: 90%;
+  justify-content: space-around;
+  margin-bottom: 50px;
 `;
 
 export const Button = styled.button`
-  width: 45%;
+  width: 40%;
   border: 1px solid ${({ theme }) => theme.color.main};
   cursor: pointer;
   padding: 10px 0;
