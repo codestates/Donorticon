@@ -7,8 +7,12 @@ export const CardContainer = styled.div`
   display: grid;
   grid-gap: 20px;
   grid-template-columns: repeat(3, 1fr);
+  @media ${({ theme }) => theme.device.tablet} {
+    width: ${(props) => (props.gifticon ? '100%' : '90%')};
+  }
   @media ${({ theme }) => theme.device.mobile} {
     grid-template-columns: repeat(1, 1fr);
+    width: ${(props) => (props.gifticon ? '100%' : '80%')};
   }
 `;
 

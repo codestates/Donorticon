@@ -179,7 +179,7 @@ const HelperFilter = () => {
       ) : (
         <>
           {list.length === 0 ? (
-            <NoMessage>해당 카테고리에는 등록된 Helper가 없네요</NoMessage>
+            <NoMessage>등록된 Helper가 없어요 🥲</NoMessage>
           ) : (
             <>
               <HelperHeightContainer>

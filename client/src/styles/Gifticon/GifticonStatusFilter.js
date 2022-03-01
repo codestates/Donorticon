@@ -21,6 +21,8 @@ export const Scroll = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const Filtered = styled(GifticonContent)`

@@ -11,7 +11,7 @@ const color = {
 // 반응형 대응하기 위한 화면 크기
 const deviceSize = {
   mobile: '540px',
-  tablet: '767px',
+  tablet: '821px', // IPAD AIR 820px
   laptop: '1024px',
   desktop: '1280px',
 };
