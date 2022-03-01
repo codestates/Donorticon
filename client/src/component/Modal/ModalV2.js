@@ -41,8 +41,10 @@ const ModalV2 = ({ title, subtitle, isMessage, callback, id, noSpace }) => {
           </>
         )}
         <ButtonContainer>
-          <ModalButton onClick={buttonYes}>네</ModalButton>
-          <ModalButton ref={close} onClick={buttonNo}>
+          <ModalButton id={id ? id : 0} onClick={buttonYes}>
+            네
+          </ModalButton>
+          <ModalButton id={id ? id : 0} ref={close} onClick={buttonNo}>
             아니오
           </ModalButton>
         </ButtonContainer>
