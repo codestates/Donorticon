@@ -23,7 +23,7 @@
             <a href="https://github.com/seanswim">su young</a>
         </td>
        <td align="center" width="120px" height="80px">
-            <a href="https://github.com/tiatiahwang"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/153522007-d0491788-fa7e-4165-8209-b4543f04a092.png" /></a>
+            <a href="https://github.com/tiatiahwang"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156235482-1260bce0-ba48-4aa3-b1ee-4039e72fbaf6.jpeg" /></a>
             <br />
             <a href="https://github.com/tiatiahwang">tia</a>
         </td>
