@@ -36,7 +36,7 @@ const Router = () => {
         return prev;
       }
     } else {
-      return 'mypage';
+      return '/mypage';
     }
   };
   return (

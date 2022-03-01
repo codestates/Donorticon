@@ -9,7 +9,7 @@ const clientUrl = process.env.CLIENT_URL || 'http://localhost:3000';
 
 const http = require('http');
 const socketio = require('socket.io');
-const {room, message} = require('./models')
+const { room, message } = require('./models');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -40,35 +40,39 @@ if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
 } else {
   // server = app.listen(HTTPS_PORT);
   server = http.createServer(app);
-  const io = socketio(server, {cors: {
-        origin: process.env.CLIENT_URL,
-      }});
+  const io = socketio(server, {
+    cors: {
+      origin: process.env.CLIENT_URL,
+    },
+  });
 
-  io.on('connection', socket => {
-    console.log("New Ws connection....");
+  io.on('connection', (socket) => {
+    console.log('New Ws connection....');
     socket.on('send-message', async (text, currentRoom, who) => {
-      const user = await room.findOne({where: {id: currentRoom}})
+      const user = await room.findOne({ where: { id: currentRoom } });
       const saveMessage = await message.create({
         giver_id: user.dataValues.giver_id,
         helper_id: user.dataValues.helper_id,
         room_id: currentRoom,
         message: text,
         type: who,
-        gifticon_id: 0
-      })
-      io.to(currentRoom).emit('received-message', currentRoom)
-    })
+        gifticon_id: 0,
+      });
+      io.to(currentRoom).emit('received-message', currentRoom);
+    });
     socket.on('send-image', async (currentRoom) => {
-      io.to(currentRoom).emit('received-message', currentRoom)
-    })
+      io.to(currentRoom).emit('received-message', currentRoom);
+    });
     socket.on('join-room', (currentRoom) => {
       socket.join(currentRoom);
-    })
+    });
     socket.on('leave-room', (currentRoom) => {
       socket.leave(currentRoom);
-    })
-  })
+    });
+  });
 
-  server.listen(HTTPS_PORT, () => console.log(`Server running on port ${HTTPS_PORT}`))
+  server.listen(HTTPS_PORT, () =>
+    console.log(`Server running on port http://localshot:${HTTPS_PORT}`),
+  );
 }
 module.exports = server;
