@@ -22,6 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       verification: DataTypes.STRING,
       verify_hash: DataTypes.STRING,
       black_point: DataTypes.INTEGER,
+      social: DataTypes.BOOLEAN,
+
     },
     {
       sequelize,

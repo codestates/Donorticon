@@ -37,6 +37,9 @@ module.exports = {
       black_point: {
         type: Sequelize.INTEGER,
       },
+      social: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
