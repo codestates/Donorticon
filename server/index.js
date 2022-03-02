@@ -106,11 +106,7 @@ if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
   });
 
   server.listen(HTTPS_PORT, () =>
-<<<<<<< HEAD
-    console.log(`Server running on port http://localshot:${HTTPS_PORT}`),
-=======
-    console.log(`Server running on port ${HTTPS_PORT}`),
->>>>>>> feature/refreshToken
+    console.log(`Server running on port http://localhost:${HTTPS_PORT}`),
   );
 }
 
