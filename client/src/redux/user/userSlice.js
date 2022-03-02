@@ -93,7 +93,7 @@ export const userSlice = createSlice({
 
 axios.defaults.baseURL = `${process.env.REACT_APP_SERVER}`;
 
-// axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
+axios.defaults.withCredentials = true; // front, back 간 쿠키 공유
 
 // 회원가입
 

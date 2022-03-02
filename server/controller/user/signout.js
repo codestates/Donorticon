@@ -1,6 +1,7 @@
 module.exports = {
   signout: async (_, res) => {
     try {
+      res.clearCookie('refreshToken');
       res.status(205).send({ message: 'successfully logged out' });
     } catch (e) {
       console.log(e);

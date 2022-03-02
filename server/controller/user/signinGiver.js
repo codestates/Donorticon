@@ -1,7 +1,9 @@
 const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
+const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
+  console.log(cookieOption);
   const { email, password } = req.body;
   try {
     const giverFinder = await giver.findOne({
@@ -20,6 +22,7 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         });
         const info = giverInfo;
+        res.cookie('refreshToken', refreshToken, cookieOption);
         res
           .status(200)
           .json({ info, accessToken, messeage: 'successfully signed in' });
