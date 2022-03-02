@@ -76,6 +76,8 @@ export const ListContainer = styled.ul`
     transition: 0.5s all;
     margin: 0;
     background-color: #fff;
+    background-color: ${({ theme }) => theme.color.progressBar};
+    border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
   }
 `;
 

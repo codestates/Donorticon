@@ -7,9 +7,10 @@ export const SignInContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-top: 150px;
+  padding-bottom: 100px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 80%;
-    padding: 50px 0;
   }
 `;
 

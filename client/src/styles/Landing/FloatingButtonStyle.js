@@ -20,6 +20,9 @@ export const Button = styled.button`
   @media ${({ theme }) => theme.device.tablet} {
     bottom: 50%;
   }
+  @media ${({ theme }) => theme.device.mobile} {
+    bottom: 5%;
+  }
 `;
 
 export const StyledLink = styled(Link)`
