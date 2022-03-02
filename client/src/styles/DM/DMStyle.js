@@ -2,9 +2,9 @@ import styled from 'styled-components';
 
 export const DMContainer = styled.div`
   width: 100%;
-  padding: 40px;
+  padding: 150px 40px;
   @media ${({ theme }) => theme.device.mobile} {
-    padding: 20px;
+    padding: 100px 20px;
   }
 `;
 
@@ -59,6 +59,7 @@ export const RoomTop = styled.div`
 
 export const RoomIcon = styled.div`
   position: absolute;
+
   left: 10px;
 `;
 

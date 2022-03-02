@@ -33,8 +33,7 @@ import {
 import { FaAngleLeft } from 'react-icons/fa';
 
 const socket = io(process.env.REACT_APP_SERVER);
-socket.on('connect', () => {
-});
+socket.on('connect', () => {});
 
 const DM = () => {
   const user = useSelector((state) => state.user.user);
@@ -106,7 +105,7 @@ const DM = () => {
 
   const handleWidth = () => {
     const width = window.innerWidth;
-    if (width <= 414) {
+    if (width <= 528) {
       setIsMobile(true);
     } else {
       setIsMobile(false);
