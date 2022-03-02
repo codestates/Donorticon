@@ -44,7 +44,7 @@ module.exports = {
         });
 
         if (giverInfo) {
-          const { id, user_type } = giverFound;
+          const { id, user_type } = giverInfo;
           const accessToken = jwt.sign(
             { id, user_type },
             process.env.ACCESS_SECRET,
