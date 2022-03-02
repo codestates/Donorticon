@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { verification } = require('../controller/verification');
 const { gifticon, gifticonDetail } = require('../controller/gifticon');
-const { user, helperList, mypage } = require('../controller');
+const { user, helperList, mypage, auth } = require('../controller');
 const { dm } = require('../controller/dm');
 
 router.post('/signup/giver', user.signupGiver);
@@ -30,7 +30,7 @@ router.put('/verification', verification.put);
 router.get('/gifticon?', gifticon.get);
 router.get('/gifticon/detail/:id', gifticonDetail.getDetail);
 router.put('/gifticon/detail/:id', gifticonDetail.updateInfo);
-router.post('/gifticon/detail/:id', gifticonDetail.uploadImgMessage); 
+router.post('/gifticon/detail/:id', gifticonDetail.uploadImgMessage);
 router.put('/report/:id', gifticonDetail.report);
 
 router.post('/google/signin', user.googleLogin.getToken);
@@ -45,5 +45,8 @@ router.get('/helperlist/category/:id?', helperList.filterList.getFilteredList);
 
 router.get('/dm', dm.get);
 router.post('/dm', dm.post);
+
+router.get('/auth', auth.token.get);
+router.put('/auth', auth.token.put);
 
 module.exports = router;

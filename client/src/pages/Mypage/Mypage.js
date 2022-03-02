@@ -73,6 +73,7 @@ const Mypage = () => {
     gifticonCategory: [],
     vulnerable: [],
     gallery: [],
+    social: '',
     activity: true,
     img: '',
   });
@@ -250,21 +251,27 @@ const Mypage = () => {
 
   const handleAddress = async (address) => {
     setUserInfo({ ...userInfo, location: address });
-    axios.put(
+    await axios.put(
       '/mypage/helper',
       { address: address },
       { headers: { Authorization: `Bearer ${await getToken()}` } },
     );
   };
 
-  const removeGallery = (e) => {
+  const removeGallery = async (e) => {
     if (userInfo.gallery.length >= 2) {
-      setUserInfo({
-        ...userInfo,
-        gallery: userInfo.gallery.filter((el) => el !== e.target.src),
-      });
-    } else {
-      console.log('1개 이상 갤러리 이미지를 사용해주세요');
+      try {
+        const { data } = await axios.delete('/mypage/helper', {
+          headers: { Authorization: `Bearer ${await getToken()}` },
+          params: { url: e.target.src },
+        });
+        setUserInfo({
+          ...userInfo,
+          gallery: userInfo.gallery.filter((el) => el !== e.target.src),
+        });
+      } catch (e) {
+        console.log(e);
+      }
     }
   };
 
@@ -400,6 +407,7 @@ const Mypage = () => {
                             key={idx}
                             src={url}
                             onClick={removeGallery}
+                            onlyOne={userInfo.gallery.length === 1}
                           />
                         );
                       })}
@@ -438,9 +446,11 @@ const Mypage = () => {
                     {userInfo.activity ? '계정 비활성화' : '계정 활성화'}
                   </ActButton>
                 )}
-                <ActButton id="8" onClick={handleFocus}>
-                  비밀번호 변경
-                </ActButton>
+                {!userInfo.social && (
+                  <ActButton id="8" onClick={handleFocus}>
+                    비밀번호 변경
+                  </ActButton>
+                )}
                 <ActButton id="9" onClick={handleFocus}>
                   회원 탈퇴
                 </ActButton>

@@ -1,5 +1,6 @@
 const { helper } = require('../../models');
 const jwt = require('jsonwebtoken');
+const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   const { email, password } = req.body;
@@ -12,15 +13,27 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'invalid user' });
     } else {
       const helperInfo = helperFinder.dataValues;
-      const helperInfoForToken = { id: helperInfo.id, user_type: helperInfo.user_type };
+      const helperInfoForToken = {
+        id: helperInfo.id,
+        user_type: helperInfo.user_type,
+      };
       if (helperInfo.verification) {
-        const accessToken = jwt.sign(helperInfoForToken, process.env.ACCESS_SECRET, {
-          expiresIn: '1h',
-        });
-        const refreshToken = jwt.sign(helperInfoForToken, process.env.REFRESH_SECRET, {
-          expiresIn: '12h',
-        });
+        const accessToken = jwt.sign(
+          helperInfoForToken,
+          process.env.ACCESS_SECRET,
+          {
+            expiresIn: '1h',
+          },
+        );
+        const refreshToken = jwt.sign(
+          helperInfoForToken,
+          process.env.REFRESH_SECRET,
+          {
+            expiresIn: '12h',
+          },
+        );
         const info = helperInfo;
+        res.cookie('refreshToken', refreshToken, cookieOption);
         res.status(200).json({
           info,
           accessToken,

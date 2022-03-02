@@ -85,9 +85,9 @@ export const GalleryImg = styled.img`
   height: 100%;
   border: 1px solid ${({ theme }) => theme.color.lightGrey};
   &:hover {
-    cursor: pointer;
+    cursor: ${({ onlyOne }) => (onlyOne ? 'default' : 'pointer')};
     position: relative;
-    animation: ddd.1s infinite;
+    animation: ${({ onlyOne }) => !onlyOne && 'ddd.1s infinite'};
     animation-direction: alternate;
   }
   @keyframes ddd {

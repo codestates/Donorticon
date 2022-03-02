@@ -1,5 +1,6 @@
 const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
+const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   try {
@@ -9,8 +10,9 @@ module.exports = async (req, res) => {
       email: giverEmail,
       name: `guestGiver${giverEmailNumber + 1}`,
       user_type: 1,
-      img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg'
+      img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
     });
+    console.log(giverGuestCreated);
     const giverGuestFinder = await giver.findOne({
       where: { email: giverEmail },
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
@@ -27,10 +29,15 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         },
       );
+      res.cookie('refreshToken', refreshToken, cookieOption);
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',
-        data: { id: giverGuestInfo.id, email: giverGuestInfo.email, name: giverGuestInfo.name },
+        data: {
+          id: giverGuestInfo.id,
+          email: giverGuestInfo.email,
+          name: giverGuestInfo.name,
+        },
       });
     } else {
       res.status(500).json({ message: 'internal server error' });

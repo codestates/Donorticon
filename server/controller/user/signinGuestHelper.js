@@ -1,5 +1,6 @@
 const { helper } = require('../../models');
 const jwt = require('jsonwebtoken');
+const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   try {
@@ -9,14 +10,13 @@ module.exports = async (req, res) => {
       email: helperEmail,
       name: `guestHelper${helperEmailNumber + 1}`,
       user_type: 2,
-      img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg'
+      img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
     });
     const helperGuestFinder = await helper.findOne({
       where: { email: helperEmail },
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     });
     const helperGuestInfo = helperGuestFinder.dataValues;
-    console.log(helperGuestInfo);
     if (helperGuestCreated) {
       const accessToken = jwt.sign(helperGuestInfo, process.env.ACCESS_SECRET, {
         expiresIn: '1h',
@@ -28,10 +28,15 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         },
       );
+      res.cookie('refreshToken', refreshToken, cookieOption);
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',
-        data: { id: helperGuestInfo.id, email: helperGuestInfo.email, name: helperGuestInfo.name },
+        data: {
+          id: helperGuestInfo.id,
+          email: helperGuestInfo.email,
+          name: helperGuestInfo.name,
+        },
       });
     } else {
       res.status(500).json({ message: 'internal server error' });

@@ -94,7 +94,11 @@ const SignIn = () => {
 
   const handleGuest = async () => {
     try {
-      await dispatch(signInGiverGuest()).unwrap();
+      if (who === 1) {
+        await dispatch(signInGiverGuest()).unwrap();
+      } else if (who === 2) {
+        await dispatch(signInHelperGuest()).unwrap();
+      }
     } catch (e) {
       console.log(e);
     }

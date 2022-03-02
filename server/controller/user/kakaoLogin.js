@@ -1,6 +1,7 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const { giver } = require('../../models');
+const { cookieOption } = require('../auth/token');
 
 module.exports = {
   getToken: async (req, res) => {
@@ -38,15 +39,18 @@ module.exports = {
 
         const giverFound = await giver.findOne({
           where: { email: user.kakao_account.email },
-          attributes: {
-            exclude: ['createdAt', 'updatedAt', 'verification', 'verify_hash'],
-          },
+          attributes: ['id', 'user_type'],
         });
 
         if (giverFound) {
           const giverInfo = giverFound.dataValues;
-          delete giverInfo.password;
-          const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+          const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET, {
+            expiresIn: '1h',
+          });
+          const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
+            expiresIn: '12h',
+          });
+          res.cookie('refreshToken', refreshToken, cookieOption);
           res.status(200).send({
             accessToken,
             giverInfo,
@@ -58,11 +62,15 @@ module.exports = {
             name:
               user.properties.nickname === '' ? '' : user.properties.nickname,
             user_type: 1,
-            img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg'
+            img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
           });
-          const { id, email, name, user_type } = newGiver.dataValues;
-          const giverInfo = { id, email, name, user_type };
+          const { id, user_type } = newGiver.dataValues;
+          const giverInfo = { id, user_type };
           const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
+          const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
+            expiresIn: '12h',
+          });
+          res.cookie('refreshToken', refreshToken, cookieOption);
           res.status(200).send({
             accessToken,
             giverInfo,
