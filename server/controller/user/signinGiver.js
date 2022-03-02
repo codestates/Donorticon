@@ -14,11 +14,12 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'invalid user' });
     } else {
       const giverInfo = giverFinder.dataValues;
+      const giverInfoForToken = { id: giverInfo.id, user_type: giverInfo.user_type };
       if (giverInfo.verification) {
-        const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET, {
+        const accessToken = jwt.sign(giverInfoForToken, process.env.ACCESS_SECRET, {
           expiresIn: '1h',
         });
-        const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
+        const refreshToken = jwt.sign(giverInfoForToken, process.env.REFRESH_SECRET, {
           expiresIn: '12h',
         });
         const info = giverInfo;

@@ -12,11 +12,12 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'invalid user' });
     } else {
       const helperInfo = helperFinder.dataValues;
+      const helperInfoForToken = { id: helperInfo.id, user_type: helperInfo.user_type };
       if (helperInfo.verification) {
-        const accessToken = jwt.sign(helperInfo, process.env.ACCESS_SECRET, {
+        const accessToken = jwt.sign(helperInfoForToken, process.env.ACCESS_SECRET, {
           expiresIn: '1h',
         });
-        const refreshToken = jwt.sign(helperInfo, process.env.REFRESH_SECRET, {
+        const refreshToken = jwt.sign(helperInfoForToken, process.env.REFRESH_SECRET, {
           expiresIn: '12h',
         });
         const info = helperInfo;
