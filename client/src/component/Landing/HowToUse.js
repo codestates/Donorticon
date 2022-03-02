@@ -2,13 +2,12 @@ import {
   Img,
   Text,
   Card,
-  TopBox,
   BottomBox,
   ImgBox,
   CardTitle,
   CardContent,
 } from '../../styles/Landing/HowToUseStyle';
-import { LandingContainer } from '../../styles/Landing/CommonStyle';
+import { LandingContainer, TextBox } from '../../styles/Landing/CommonStyle';
 import one from '../../img/howIcons/step1.png';
 import two from '../../img/howIcons/step2.png';
 import three from '../../img/howIcons/step3.png';
@@ -40,10 +39,10 @@ const HowToUse = () => {
 
   return (
     <LandingContainer bg>
-      <TopBox>
+      <TextBox>
         기프티콘으로 간단하게 <br />
         그리고 원하는 곳에 기부하세요!
-      </TopBox>
+      </TextBox>
       <BottomBox>
         {list.map((item, index) => (
           <Card key={index}>

@@ -1,21 +1,5 @@
 import styled from 'styled-components';
 
-export const TopBox = styled.div`
-  text-align: center;
-  line-height: 1.5;
-  font-size: 40px;
-  font-weight: 700;
-  margin-bottom: 100px;
-  @media ${({ theme }) => theme.device.tablet} {
-    margin-bottom: 0;
-    font-size: 30px;
-  }
-  @media ${({ theme }) => theme.device.mobile} {
-    font-size: 25px;
-    margin-top: 50px;
-  }
-`;
-
 export const BottomBox = styled.div`
   width: 80%;
   display: flex;
