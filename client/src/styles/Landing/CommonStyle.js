@@ -8,6 +8,10 @@ export const LandingContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background-color: ${(props) => props.bg && props.theme.color.progressBar};
+  @media ${({ theme }) => theme.device.mobile} {
+    height: auto;
+  }
 `;
 
 export const TextBox = styled.div`
