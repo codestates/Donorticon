@@ -219,11 +219,37 @@ const SignUpHelper = () => {
     }
   };
 
-  // const handleKeyPress = (e) => {
-  //   if (e.key === 'Enter') {
-  //     handleButton();
-  //   }
-  // };
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      signUp();
+    }
+  };
+
+  const signUp = async () => {
+    setIsCheckStart(isValid.includes(false));
+    try {
+      const result = await dispatch(signUpHelper(helperInfo));
+      const id = unwrapResult(result);
+      setDelay(true);
+      const userInfo = {
+        email: helperInfo.email,
+        name: helperInfo.name,
+        type: 2,
+        id,
+      };
+      await dispatch(verifyUser(userInfo));
+      setDelay(false);
+      navigate(`../../verification`);
+    } catch (e) {
+      if (e.status === 409) {
+        setErrormessage('이미 회원가입 된 이메일입니다');
+      } else if (e.status === 500) {
+        setErrormessage('다시 시도해주세요');
+      } else if (e.status === 422) {
+        setErrormessage('입력 정보를 확인해 주세요');
+      }
+    }
+  };
 
   const handleButton = async (e) => {
     if (e.target.textContent === '다음') {
@@ -245,31 +271,7 @@ const SignUpHelper = () => {
         setButtonAble(isValid[page - 1]);
       }
     } else {
-      setIsCheckStart(isValid.includes(false));
-      if (!isValid.includes(false)) {
-        try {
-          const result = await dispatch(signUpHelper(helperInfo));
-          const id = unwrapResult(result);
-          setDelay(true);
-          const userInfo = {
-            email: helperInfo.email,
-            name: helperInfo.name,
-            type: 2,
-            id,
-          };
-          await dispatch(verifyUser(userInfo));
-          setDelay(false);
-          navigate(`../../verification`);
-        } catch (e) {
-          if (e.response.status === 409) {
-            setErrormessage('이미 회원가입 된 이메일입니다');
-          } else if (e.response.status === 500) {
-            setErrormessage('다시 시도해주세요');
-          } else if (e.response.status === 422) {
-            setErrormessage('입력 정보를 확인해 주세요');
-          }
-        }
-      }
+      signUp();
     }
   };
 
@@ -336,7 +338,7 @@ const SignUpHelper = () => {
                         callback={card.callback}
                         errorMessage={card.errorMessage}
                         check={isCheckStart}
-                        // handleKeyPress={handleKeyPress}
+                        handleKeyPress={handleKeyPress}
                       />
                     </InputBox>
                   ))}
@@ -349,8 +351,8 @@ const SignUpHelper = () => {
               ? signUpForm[page].errorMessage
               : ''}
           </ErrorMessage>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
           <ButtonContainer>
-            <ErrorMessage>{errorMessage}</ErrorMessage>
             <SignUpButton onClick={handleButton}>이전</SignUpButton>
             <SignUpButton
               onClick={(e) => {
