@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const SignUpContainer = styled.div`
   width: 400px;
-  min-height: calc(100vh - 100px);
+  height: calc(100vh + 75px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -28,7 +28,6 @@ export const ContentTitle = styled.div`
 `;
 
 export const ContentBox = styled.div`
-  min-height: 400px;
   border-top: ${(props) =>
     props.line && `1px solid ${props.theme.color.progressBar}`};
 `;

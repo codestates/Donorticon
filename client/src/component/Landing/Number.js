@@ -8,7 +8,6 @@ import {
   TopText,
   BottomText,
   Text,
-  NumberTextBox,
 } from '../../styles/Landing/NumberStyle';
 import heart from '../../img/landing4.png';
 

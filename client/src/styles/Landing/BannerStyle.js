@@ -4,11 +4,9 @@ import '@fontsource/baloo-2';
 export const BannerContainer = styled.div`
   margin-top: 75px;
   width: 100%;
-  /* height: calc(100vh - 75px); */
   height: 100vh;
   position: relative;
   color: black;
-  /* z-index: 1; */
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
@@ -52,7 +50,6 @@ export const TextBox = styled.div`
   grid-column: 1 / -1;
   grid-row: 1;
   width: 100%;
-  /* z-index: 2; */
   animation: outer-left 1s 1s ease both;
   height: 300px;
   width: 100%;
