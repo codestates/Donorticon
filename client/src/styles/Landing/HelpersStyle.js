@@ -17,10 +17,12 @@ export const SlideBox = styled.div`
     height: 200px;
     padding: 5px;
     :nth-of-type(2n) {
-      animation: ${(props) => props.isReady && 'fadeIn 5s ease-in-out'};
+      animation: ${(props) =>
+        props.isReady && 'fadeIn 5s ease-in-out infinite'};
     }
     :nth-of-type(2n-1) {
-      animation: ${(props) => props.isReady && 'fadeOut 5s ease-in-out'};
+      animation: ${(props) =>
+        props.isReady && 'fadeOut 5s ease-in-out infinite'};
     }
     @media ${({ theme }) => theme.device.tablet} {
       width: 150px;

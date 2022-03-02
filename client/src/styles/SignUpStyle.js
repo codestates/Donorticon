@@ -2,12 +2,12 @@ import styled from 'styled-components';
 
 export const SignUpContainer = styled.div`
   width: 400px;
-  height: calc(100vh + 75px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 40px 0;
+  padding-top: 150px;
+  padding-bottom: 100px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 90%;
   }
