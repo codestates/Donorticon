@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signIn, setUser } from '../../redux/user/userSlice';
+import { setToken } from '../../redux/utils/auth';
 
 const Google = () => {
   const dispatch = useDispatch();
@@ -35,12 +36,14 @@ const Google = () => {
     try {
       const {
         data: { giverInfo, accessToken },
-      } = await axios.get(`/google/user?accessToken=${token}`);
+      } = await axios.get(`/google/user?accessToken=${token}`, {
+        withCredentials: true,
+      });
       if (giverInfo) {
         const { id, email, name, user_type: who } = giverInfo;
         dispatch(signIn());
         dispatch(setUser({ id, email, name, who }));
-        localStorage.setItem('token', accessToken);
+        setToken(accessToken);
         navigate(prev);
       }
     } catch (e) {

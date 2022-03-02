@@ -3,12 +3,10 @@ const { giver, helper } = require('../../models');
 
 module.exports = {
   get: (req, res) => {
-    console.log('server auth get working');
     const token = req.headers.authorization.split(' ')[1];
     try {
       jwt.verify(token, process.env.ACCESS_SECRET);
       res.status(200).json({ message: 'ok' });
-      console.log('working auth');
     } catch (e) {
       if (e.name === 'TokenExpiredError') {
         res.status(401).json('access expired');

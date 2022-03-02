@@ -36,7 +36,9 @@ const Header = () => {
 
   const handleSignOut = async () => {
     try {
-      const result = await axios.post(`/signout`);
+      const result = await axios.post(`/signout`, null, {
+        withCredentials: true,
+      });
       if (result.status === 205) {
         navigate('/');
         localStorage.removeItem('token');
