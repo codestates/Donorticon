@@ -29,6 +29,9 @@ export const CardBox = styled.div`
 export const CardGallery = styled.img`
   width: ${(props) => (props.empty ? '40%' : '100%')};
   height: ${(props) => (props.empty ? '100px' : '200px')};
+  &:hover {
+    cursor: ${({ zoom }) => zoom && 'zoom-in'};
+  }
 `;
 
 export const EmptyBox = styled.div`

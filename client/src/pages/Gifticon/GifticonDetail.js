@@ -21,14 +21,21 @@ import {
   InputContent,
   InputLabel,
 } from '../../styles/Gifticon/GifticonDetailStyle';
+import { useState } from 'react';
+import ImageZoom from '../../component/ImageZoom';
 
 const GifticonDetail = () => {
   const username = useSelector((state) => state.user.user.name);
   const who = useSelector((state) => state.user.user.who);
   const gifticon = useSelector((state) => state.gifticon);
   const giver = who === 1 ? 1 : 0;
+  const [isZoomIn, setIsZoomIn] = useState(false);
 
   const { name, createdAt, status, img } = gifticon;
+
+  const handleZoomIn = (e) => {
+    setIsZoomIn(!isZoomIn);
+  };
 
   return (
     <CommonContainer>
@@ -46,6 +53,8 @@ const GifticonDetail = () => {
               <CardGallery
                 style={{ width: '100%', height: '300px' }}
                 src={img}
+                onClick={handleZoomIn}
+                zoom
               />
             </ImageBox>
             <InfoBox>
@@ -71,6 +80,7 @@ const GifticonDetail = () => {
           {status === '사용함' && <GifticonUsed />}
         </ContentContainer>
       </BottomContainer>
+      {isZoomIn && <ImageZoom closer={handleZoomIn} src={img} />}
     </CommonContainer>
   );
 };
