@@ -207,7 +207,6 @@ const Mypage = () => {
           headers: { Authorization: `Bearer ${await getToken()}` },
         },
       );
-      console.log(url);
       await axios.put(url, file, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -418,6 +417,7 @@ const Mypage = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleImageUpload}
+                        disabled={userInfo.gallery.length === 5}
                       />
                       이미지 추가
                     </GalleryAddLabel>

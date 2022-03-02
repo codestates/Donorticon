@@ -37,19 +37,28 @@ module.exports = {
         const user = kakaoUser.data;
         // const { nickname: name } = kakaoUser.data.properties;
 
-        const giverFound = await giver.findOne({
+        const giverInfo = await giver.findOne({
+          raw: true,
           where: { email: user.kakao_account.email },
-          attributes: ['id', 'user_type'],
+          attributes: ['id', 'user_type', 'name', 'email'],
         });
 
-        if (giverFound) {
-          const giverInfo = giverFound.dataValues;
-          const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET, {
-            expiresIn: '1h',
-          });
-          const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
-            expiresIn: '12h',
-          });
+        if (giverInfo) {
+          const { id, user_type } = giverFound;
+          const accessToken = jwt.sign(
+            { id, user_type },
+            process.env.ACCESS_SECRET,
+            {
+              expiresIn: '1h',
+            },
+          );
+          const refreshToken = jwt.sign(
+            { id, user_type },
+            process.env.REFRESH_SECRET,
+            {
+              expiresIn: '12h',
+            },
+          );
           res.cookie('refreshToken', refreshToken, cookieOption);
           res.status(200).send({
             accessToken,
@@ -64,12 +73,19 @@ module.exports = {
             user_type: 1,
             img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
           });
-          const { id, user_type } = newGiver.dataValues;
-          const giverInfo = { id, user_type };
-          const accessToken = jwt.sign(giverInfo, process.env.ACCESS_SECRET);
-          const refreshToken = jwt.sign(giverInfo, process.env.REFRESH_SECRET, {
-            expiresIn: '12h',
-          });
+          const { id, user_type, email, name } = newGiver.dataValues;
+          const giverInfo = { id, user_type, email, name };
+          const accessToken = jwt.sign(
+            { id, user_type },
+            process.env.ACCESS_SECRET,
+          );
+          const refreshToken = jwt.sign(
+            { id, user_type },
+            process.env.REFRESH_SECRET,
+            {
+              expiresIn: '12h',
+            },
+          );
           res.cookie('refreshToken', refreshToken, cookieOption);
           res.status(200).send({
             accessToken,
