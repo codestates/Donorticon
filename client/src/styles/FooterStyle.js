@@ -8,6 +8,9 @@ export const FooterContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media ${({ theme }) => theme.device.mobile} {
+    padding: 60px 0;
+  }
 `;
 
 export const Title = styled.div`

@@ -79,9 +79,7 @@ export const TitleInner = styled.div`
 export const Top = styled.div`
   font-size: 55px;
   animation: outer-left 1s 1s cubic-bezier(0.5, 0, 0.1, 1) both;
-  /* > div {
-    display: inline-block;
-  } */
+
   @media ${({ theme }) => theme.device.tablet} {
     font-size: 35px;
   }
@@ -150,8 +148,8 @@ export const ImageBox = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     height: 70%;
     animation: none;
+    margin-bottom: 125px;
   }
-
   img {
     display: block;
     width: 100%;
