@@ -7,6 +7,7 @@ export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 5;
   @media ${({ theme }) => theme.device.mobile} {
     flex-wrap: wrap;
   }
@@ -41,6 +42,7 @@ export const NavContainer = styled.div`
 export const MobileNavContainer = styled.div`
   display: none;
   position: relative;
+
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
   }

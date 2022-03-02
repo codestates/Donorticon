@@ -86,7 +86,7 @@ module.exports = {
         try {
           if (status === 'rejected' || status === 'expired') {
             await gifticon.update(
-              { status, img: `${process.env.BUCKET}/logo.png` },
+              { status, img: `${process.env.BUCKET}/noaccess.png` },
               { where: { id: gifticonId } },
             );
           } else {
@@ -149,7 +149,7 @@ module.exports = {
           report: true,
           point: -1,
           status: 'reported',
-          img: `${process.env.BUCKET}/logo.png`,
+          img: `${process.env.BUCKET}/noaccess.png`,
         },
         { where: { id: gifticonId } },
       );

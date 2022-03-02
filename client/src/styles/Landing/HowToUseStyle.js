@@ -1,80 +1,75 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-  padding: 20rem 0;
-  display:flex;
-  background-color: #FFE53B;
-  background-image: linear-gradient(180deg, #1793cb 0%, #fac711 30%, pink 100%);
+export const TextBox = styled.div`
+  text-align: center;
+  line-height: 1.5;
+  font-size: 40px;
+  font-weight: 700;
+  margin-bottom: 100px;
+`;
+
+export const SlideBox = styled.div`
+  width: 80%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 `;
 
 export const Slide = styled.div`
-  width: 60%auto;
-  margin: auto;
-`;
-
-export const Wrapper = styled.li`
-  width: 100%auto;
-  align-items: center;
-  background-color: white;
-  list-style-type: none;
-  box-shadow: 12px 12px 2px 1px rgba(0, 0, 255, .2);
-  justify-content: center;
-  border-radius: 30px;
+  width: 20%;
+  border: 1px solid #000;
+  padding: 20px;
 `;
 
 export const Img = styled.img`
-  border-radius: 30px;
-  box-shadow: 6px 6px 2px 1px rgba(0, 0, 255, .2);
+  width: 100%;
   animation: fadein 1s ease-in-out;
-  @keyframes fadein{
+  @keyframes fadein {
     0% {
-    opacity: 0;
-    transform: translateX(-100px);
+      opacity: 0;
+      transform: translateX(-100px);
     }
     100% {
-    opacity: 1;
-    transform: none;
+      opacity: 1;
+      transform: none;
     }
   }
 `;
 
-export const TextWrapper = styled.div`
-  border-radius: 30px;
-`;
+export const TextWrapper = styled.div``;
 
 export const Title = styled.div`
-  border-radius: 30px;
-  font-size: 3rem;
+  font-size: 30px;
   font-weight: 500;
-  color: white;
+  color: #fff;
+  margin: 20px 0;
   animation: fadein 1s ease-in-out;
-  text-shadow: -1px 0 black, 0 1px black, 2px 0 black, 0 -1px black;
-  @keyframes fadein{
+  text-shadow: -1px 0 #000, 0 1px #000, 2px 0 #000, 0 -1px #000;
+  @keyframes fadein {
     0% {
-    opacity: 0;
-    transform: translateY(20px);
+      opacity: 0;
+      transform: translateY(20px);
     }
     100% {
-    opacity: 1;
-    transform: none;
+      opacity: 1;
+      transform: none;
     }
   }
 `;
 
 export const Text = styled.div`
-  border-radius: 30px;
-  margin-top: 3rem;
-  font-size: 2rem;
-  font-weight: 300;
+  font-size: 25px;
+  line-height: 1.5;
+
   animation: fadein 1.3s ease-in-out;
-  @keyframes fadein{
+  @keyframes fadein {
     0% {
-    opacity: 0;
-    transform: translateY(20px);
+      opacity: 0;
+      transform: translateY(20px);
     }
     100% {
-    opacity: 1;
-    transform: none;
+      opacity: 1;
+      transform: none;
     }
   }
 `;
@@ -86,15 +81,16 @@ export const Bullet = styled.div`
   border-radius: 10px;
   background: #062744;
   opacity: 0.2;
-  transition: all .3s;
+  transition: all 0.3s;
   &-active {
-  opacity: 1;
-  background: #fd3838;
-  height: 30px;}
+    opacity: 1;
+    background: #fd3838;
+    height: 30px;
+  }
   box-shadow: 0px 0px 20px rgba(252, 56, 56, 0.3);
 `;
 
 export const BulletWrapper = styled.div`
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
 `;

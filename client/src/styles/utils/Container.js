@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 
+export const HomeContainer = styled.div`
+  margin-top: -75px; // 이 값은 HEADER 값과 동일해야함!!
+  position: relative;
+  width: 100%;
+  height: auto;
+`;
+
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
