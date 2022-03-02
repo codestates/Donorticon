@@ -10,7 +10,7 @@ export const getToken = async () => {
       try {
         const {
           data: { accessToken: token },
-        } = await axios.put('/auth');
+        } = await axios.put('/auth', null, { withCredentials: true });
         setToken(token);
       } catch (e) {
         console.log(e);
