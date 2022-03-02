@@ -31,6 +31,7 @@ import {
 } from '../../styles/utils/Input';
 import { signUpHelper, verifyUser } from '../../redux/user/userThunk';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Loader from '../../component/Loader';
 
 const SignUpHelper = () => {
   const navigate = useNavigate();
@@ -64,6 +65,8 @@ const SignUpHelper = () => {
   const [buttonAble, setButtonAble] = useState(false);
   const [isCheckStart, setIsCheckStart] = useState(false);
   const [displayError, setDisplayError] = useState(false);
+  const [delay, setDelay] = useState(false);
+
   const signUpForm = [
     {
       contentGuide: '어떤 분들을 돕고 계신가요?',
@@ -247,6 +250,7 @@ const SignUpHelper = () => {
         try {
           const result = await dispatch(signUpHelper(helperInfo));
           const id = unwrapResult(result);
+          setDelay(true);
           const userInfo = {
             email: helperInfo.email,
             name: helperInfo.name,
@@ -254,6 +258,7 @@ const SignUpHelper = () => {
             id,
           };
           await dispatch(verifyUser(userInfo));
+          setDelay(false);
           navigate(`../../verification`);
         } catch (e) {
           if (e.response.status === 409) {
@@ -276,89 +281,93 @@ const SignUpHelper = () => {
 
   return (
     <Container>
-      <SignUpContainer>
-        <SubContainer>
-          <Title>HELPER</Title>
-          <SubTitle>회원가입</SubTitle>
-        </SubContainer>
-        <ContentContainer>
-          <ProgressBar percent={percent} />
-          <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
-          {page < 2 ? (
-            <ContentBox line>
-              {signUpForm[page].lists.map((list, idx) => (
-                <CheckBoxContainer key={page * 7 + idx}>
-                  <Box>
-                    <CheckBox
-                      key={page * 7 + idx}
-                      id={page * 7 + idx}
-                      name={signUpForm[page].name}
-                      value={list}
-                      onClick={handleCheckBox}
-                      defaultChecked={helperInfo[
-                        signUpForm[page].name
-                      ].includes(list)}
-                    />
-                    <Label htmlFor={page * 7 + idx}>{list}</Label>
-                  </Box>
-                </CheckBoxContainer>
-              ))}
-            </ContentBox>
-          ) : page === 2 ? (
-            <ContentBox>
-              <AddressFinder
-                callback={signUpForm[2].callback}
-                location={helperInfo.location}
-              />
-            </ContentBox>
-          ) : (
-            <ContentBox>
-              <InputContainer signup>
-                {signUpForm[page].input.map((card, idx) => (
-                  <InputBox key={idx}>
-                    <InputLabel>
-                      {card.title === '휴대전화'
-                        ? card.title
-                        : `${card.title} *`}
-                    </InputLabel>
-                    <InputSet
-                      key={idx}
-                      title={card.title}
-                      inputPlaceHolder={card.inputPlaceHolder}
-                      callback={card.callback}
-                      errorMessage={card.errorMessage}
-                      check={isCheckStart}
-                      // handleKeyPress={handleKeyPress}
-                    />
-                  </InputBox>
+      {delay ? (
+        <Loader />
+      ) : (
+        <SignUpContainer>
+          <SubContainer>
+            <Title>HELPER</Title>
+            <SubTitle>회원가입</SubTitle>
+          </SubContainer>
+          <ContentContainer>
+            <ProgressBar percent={percent} />
+            <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
+            {page < 2 ? (
+              <ContentBox line>
+                {signUpForm[page].lists.map((list, idx) => (
+                  <CheckBoxContainer key={page * 7 + idx}>
+                    <Box>
+                      <CheckBox
+                        key={page * 7 + idx}
+                        id={page * 7 + idx}
+                        name={signUpForm[page].name}
+                        value={list}
+                        onClick={handleCheckBox}
+                        defaultChecked={helperInfo[
+                          signUpForm[page].name
+                        ].includes(list)}
+                      />
+                      <Label htmlFor={page * 7 + idx}>{list}</Label>
+                    </Box>
+                  </CheckBoxContainer>
                 ))}
-              </InputContainer>
-            </ContentBox>
-          )}
-        </ContentContainer>
-        <ErrorMessage center style={{ paddingTop: '40px' }}>
-          {page < 3 && !isValid[page] && displayError
-            ? signUpForm[page].errorMessage
-            : ''}
-        </ErrorMessage>
-        <ButtonContainer>
-          <ErrorMessage>{errorMessage}</ErrorMessage>
-          <SignUpButton onClick={handleButton}>이전</SignUpButton>
-          <SignUpButton
-            onClick={(e) => {
-              if (buttonAble) {
-                handleButton(e);
-                setDisplayError(false);
-              } else {
-                setDisplayError(true);
-              }
-            }}
-            buttonAble
-          >
-            {page === 3 ? '가입하기' : '다음'}
-          </SignUpButton>
-        </ButtonContainer>
-      </SignUpContainer>
+              </ContentBox>
+            ) : page === 2 ? (
+              <ContentBox>
+                <AddressFinder
+                  callback={signUpForm[2].callback}
+                  location={helperInfo.location}
+                />
+              </ContentBox>
+            ) : (
+              <ContentBox>
+                <InputContainer signup>
+                  {signUpForm[page].input.map((card, idx) => (
+                    <InputBox key={idx}>
+                      <InputLabel>
+                        {card.title === '휴대전화'
+                          ? card.title
+                          : `${card.title} *`}
+                      </InputLabel>
+                      <InputSet
+                        key={idx}
+                        title={card.title}
+                        inputPlaceHolder={card.inputPlaceHolder}
+                        callback={card.callback}
+                        errorMessage={card.errorMessage}
+                        check={isCheckStart}
+                        // handleKeyPress={handleKeyPress}
+                      />
+                    </InputBox>
+                  ))}
+                </InputContainer>
+              </ContentBox>
+            )}
+          </ContentContainer>
+          <ErrorMessage center style={{ paddingTop: '40px' }}>
+            {page < 3 && !isValid[page] && displayError
+              ? signUpForm[page].errorMessage
+              : ''}
+          </ErrorMessage>
+          <ButtonContainer>
+            <ErrorMessage>{errorMessage}</ErrorMessage>
+            <SignUpButton onClick={handleButton}>이전</SignUpButton>
+            <SignUpButton
+              onClick={(e) => {
+                if (buttonAble) {
+                  handleButton(e);
+                  setDisplayError(false);
+                } else {
+                  setDisplayError(true);
+                }
+              }}
+              buttonAble
+            >
+              {page === 3 ? '가입하기' : '다음'}
+            </SignUpButton>
+          </ButtonContainer>
+        </SignUpContainer>
+      )}
     </Container>
   );
 };

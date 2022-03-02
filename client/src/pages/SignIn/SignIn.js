@@ -12,6 +12,7 @@ import {
 import { FcGoogle } from 'react-icons/fc';
 import { FaComment } from 'react-icons/fa';
 import InputSet from '../../component/InputComponent';
+import Loader from '../../component/Loader';
 import {
   ButtonContainer,
   SignInContainer,
@@ -40,6 +41,7 @@ const SignIn = () => {
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [delay, setDelay] = useState(false);
 
   const handleInput = (e) => {
     setUserInfo(
@@ -68,9 +70,11 @@ const SignIn = () => {
         }
       } catch (e) {
         if (e.response.status === 401) {
+          setDelay(true);
           const { id, email, type } = e.response.data;
           const veriInfo = { id, email, type };
           await dispatch(verifyUser(veriInfo));
+          setDelay(false);
           navigate('/verification');
         }
         if (e.response.status === 404) {
@@ -116,56 +120,60 @@ const SignIn = () => {
 
   return (
     <Container>
-      <SignInContainer>
-        <SubContainer>
-          <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
-          <SubTitle>로그인</SubTitle>
-        </SubContainer>
-        <InputContainer>
-          <InputSet
-            title="이메일"
-            name="email"
-            inputPlaceHolder="이메일"
-            callback={handleInput}
-          />
-          <InputSet
-            title="비밀번호"
-            name="password"
-            inputPlaceHolder="비밀번호"
-            callback={handleInput}
-            handleKeyPress={handleKeyPress}
-          />
-          <ErrorMessage center>{errorMessage}</ErrorMessage>
-        </InputContainer>
-        <ButtonContainer>
-          <Button onClick={handleSignin}>로그인</Button>
-          <Button onClick={handleGuest}>게스트로그인</Button>
-          {who === 1 && (
-            <>
-              <SocialBox>
-                <div></div>
-                <div className="middle">
-                  <SocialIcon>
-                    <FcGoogle size="18" />
-                  </SocialIcon>
-                  <SocialText onClick={handleGoogle}>구글 로그인</SocialText>
-                </div>
-                <div></div>
-              </SocialBox>
-              <SocialBox>
-                <div></div>
-                <div className="middle">
-                  <SocialIcon>
-                    <FaComment size="15" color="#181600" />
-                  </SocialIcon>
-                  <SocialText onClick={handleKakao}>카카오 로그인</SocialText>
-                </div>
-                <div></div>
-              </SocialBox>
-            </>
-          )}
-        </ButtonContainer>
-      </SignInContainer>
+      {delay ? (
+        <Loader />
+      ) : (
+        <SignInContainer>
+          <SubContainer>
+            <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
+            <SubTitle>로그인</SubTitle>
+          </SubContainer>
+          <InputContainer>
+            <InputSet
+              title="이메일"
+              name="email"
+              inputPlaceHolder="이메일"
+              callback={handleInput}
+            />
+            <InputSet
+              title="비밀번호"
+              name="password"
+              inputPlaceHolder="비밀번호"
+              callback={handleInput}
+              handleKeyPress={handleKeyPress}
+            />
+            <ErrorMessage center>{errorMessage}</ErrorMessage>
+          </InputContainer>
+          <ButtonContainer>
+            <Button onClick={handleSignin}>로그인</Button>
+            <Button onClick={handleGuest}>게스트로그인</Button>
+            {who === 1 && (
+              <>
+                <SocialBox>
+                  <div></div>
+                  <div className="middle">
+                    <SocialIcon>
+                      <FcGoogle size="18" />
+                    </SocialIcon>
+                    <SocialText onClick={handleGoogle}>구글 로그인</SocialText>
+                  </div>
+                  <div></div>
+                </SocialBox>
+                <SocialBox>
+                  <div></div>
+                  <div className="middle">
+                    <SocialIcon>
+                      <FaComment size="15" color="#181600" />
+                    </SocialIcon>
+                    <SocialText onClick={handleKakao}>카카오 로그인</SocialText>
+                  </div>
+                  <div></div>
+                </SocialBox>
+              </>
+            )}
+          </ButtonContainer>
+        </SignInContainer>
+      )}
     </Container>
   );
 };

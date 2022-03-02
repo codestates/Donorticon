@@ -1,9 +1,7 @@
-import axios from 'axios';
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import sha256 from 'js-sha256';
-import { setUser } from '../../redux/user/userSlice';
 import InputSet from '../../component/InputComponent';
 import { SignUpContainer } from '../../styles/SignUpStyle';
 import {
@@ -16,6 +14,7 @@ import { Button } from '../../styles/utils/Button';
 import { InputBox, InputContainer, InputLabel } from '../../styles/utils/Input';
 import { signUpGiver, verifyUser } from '../../redux/user/userThunk';
 import { unwrapResult } from '@reduxjs/toolkit';
+import Loader from '../../component/Loader';
 
 const SignUpGiver = () => {
   const navigate = useNavigate();
@@ -30,6 +29,7 @@ const SignUpGiver = () => {
   });
   const [isValid, setIsValid] = useState([false, false, false, false, true]);
   const [errorMessage, setErrorMessage] = useState('');
+  const [delay, setDelay] = useState(false);
   const input = [
     {
       title: '이메일',
@@ -105,23 +105,25 @@ const SignUpGiver = () => {
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSingUpButton();
+      handleSignUpButton();
     }
   };
 
-  const handleSingUpButton = async () => {
+  const handleSignUpButton = async () => {
     setIsCheckStart(isValid.includes(false));
     if (!isValid.includes(false)) {
       try {
         const resultAction = await dispatch(signUpGiver(giverInfo));
         const id = unwrapResult(resultAction);
+        setDelay(true);
         const userInfo = {
           email: giverInfo.email,
           name: giverInfo.name,
           type: 1,
           id,
         };
-        dispatch(verifyUser(userInfo));
+        await dispatch(verifyUser(userInfo));
+        setDelay(false);
         navigate('../../verification');
       } catch (e) {
         const status = e.response.status;
@@ -138,33 +140,37 @@ const SignUpGiver = () => {
 
   return (
     <Container>
-      <SignUpContainer>
-        <SubContainer>
-          <Title>GIVER</Title>
-          <SubTitle>회원가입</SubTitle>
-        </SubContainer>
-        <InputContainer>
-          {input.map((card, idx) => (
-            <InputBox key={idx}>
-              <InputLabel>
-                {card.title === '휴대전화' ? card.title : `${card.title} *`}
-              </InputLabel>
-              <InputSet
-                title={card.title}
-                inputPlaceHolder={card.inputPlaceHolder}
-                callback={card.callback}
-                errorMessage={card.errorMessage}
-                check={isCheckStart}
-                handleKeyPress={handleKeyPress}
-              />
-            </InputBox>
-          ))}
-        </InputContainer>
-        {errorMessage && <div>{errorMessage}</div>}
-        <Button style={{ marginTop: '40px' }} onClick={handleSingUpButton}>
-          회원 가입
-        </Button>
-      </SignUpContainer>
+      {delay ? (
+        <Loader />
+      ) : (
+        <SignUpContainer>
+          <SubContainer>
+            <Title>GIVER</Title>
+            <SubTitle>회원가입</SubTitle>
+          </SubContainer>
+          <InputContainer>
+            {input.map((card, idx) => (
+              <InputBox key={idx}>
+                <InputLabel>
+                  {card.title === '휴대전화' ? card.title : `${card.title} *`}
+                </InputLabel>
+                <InputSet
+                  title={card.title}
+                  inputPlaceHolder={card.inputPlaceHolder}
+                  callback={card.callback}
+                  errorMessage={card.errorMessage}
+                  check={isCheckStart}
+                  handleKeyPress={handleKeyPress}
+                />
+              </InputBox>
+            ))}
+          </InputContainer>
+          {errorMessage && <div>{errorMessage}</div>}
+          <Button style={{ marginTop: '40px' }} onClick={handleSignUpButton}>
+            회원 가입
+          </Button>
+        </SignUpContainer>
+      )}
     </Container>
   );
 };
