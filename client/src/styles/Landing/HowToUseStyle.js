@@ -28,17 +28,6 @@ export const CardTitle = styled.div`
   font-weight: 500;
   color: ${({ theme }) => theme.color.lightGrey};
   margin: 20px 0;
-  animation: fadein 1s ease-in-out;
-  @keyframes fadein {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: none;
-    }
-  }
   @media ${({ theme }) => theme.device.tablet} {
     font-size: 20px;
   }
@@ -76,11 +65,11 @@ export const Img = styled.div`
   height: 150px;
   background-image: url(${(props) => props.src});
   background-size: cover;
-  animation: fadein 1s ease-in-out;
+  animation: ${(props) => props.isReady && 'fadein 1s ease-in-out'};
   @keyframes fadein {
     0% {
       opacity: 0;
-      transform: translateX(-100px);
+      transform: translateY(20px);
     }
     100% {
       opacity: 1;
@@ -96,17 +85,6 @@ export const Img = styled.div`
 export const Text = styled.div`
   font-size: 25px;
   padding-top: 60px;
-  animation: fadein 1.3s ease-in-out;
-  @keyframes fadein {
-    0% {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    100% {
-      opacity: 1;
-      transform: none;
-    }
-  }
   @media ${({ theme }) => theme.device.tablet} {
     font-size: 22px;
   }

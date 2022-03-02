@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const ButtonContainer = styled.div``;
 
 export const Button = styled.button`
-  z-index: 100;
+  z-index: 4;
   position: fixed;
   bottom: 10%;
   left: 20px;

@@ -4,9 +4,11 @@ import { Container, SubContainer } from './utils/Container';
 // 마이페이지 & 기부내역리스트 & 기부상세내역 공통 적용 사항
 export const CommonContainer = styled(Container)`
   width: 100%;
+  margin-top: 150px;
   @media ${({ theme }) => theme.device.tablet} {
     width: 80%;
     margin: 0 auto;
+    padding-top: 100px;
   }
 `;
 

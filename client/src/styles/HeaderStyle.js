@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
   background-color: #fff;
   height: 75px;
   width: 100%;

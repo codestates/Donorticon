@@ -5,6 +5,7 @@ import { Button } from '../utils/Button';
 export const HelperDetailContainer = styled(Container)`
   width: 100%;
   padding: 40px 0;
+  margin-top: 75px;
 `;
 
 export const HelperDetailBox = styled.div`
