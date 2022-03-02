@@ -137,12 +137,19 @@ module.exports = {
   },
   delete: async (req, res) => {
     try {
+      console.log({ url: req.query.url});
       const token = req.headers.authorization.split(' ')[1];
       const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       if (!tokenDecoded) {
         return res.status(401).json({ message: 'invalid token' });
       }
-      res.status(200).json({ message: '갤러리 삭제를 요청하셨군요! 서비스 제작중입니다!' })
+      const { id } = tokenDecoded;
+      const galleryUrl = req.query.url;
+      await gallery.destroy({
+        helper_id: id,
+        img: galleryUrl.split('?')[0]
+      })
+      res.status(200).json({ message: 'sucessfully deleted gallery image' })
     } catch(err) {
       res.status(500).json({ message: 'internal server error' })
     }
