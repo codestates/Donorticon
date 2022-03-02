@@ -4,7 +4,7 @@
 
 [🏠 Donorticon Homepage](https://d3a8nxwlsnbz91.cloudfront.net/)
 
-## Logo
+## 👀 Logo
 ![로고](https://user-images.githubusercontent.com/90431155/153132393-af99f33a-9507-41dc-8860-ef3a41412376.png)
 
 ## ✨ Feature
@@ -18,22 +18,22 @@
 <table>
     <tr>
         <td align="center" width="120px" height="80px">
-            <a href="https://github.com/seanswim"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/153522175-7ba28884-a91a-4111-90b1-b5a61a6f457b.png" /></a>
+            <a href="https://github.com/seanswim"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156327966-40b3788e-5ac5-4a2d-9f06-09a8f20d91a3.png" /></a>
             <br />
             <a href="https://github.com/seanswim">su young</a>
         </td>
        <td align="center" width="120px" height="80px">
-            <a href="https://github.com/tiatiahwang"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156235482-1260bce0-ba48-4aa3-b1ee-4039e72fbaf6.jpeg" /></a>
+            <a href="https://github.com/tiatiahwang"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156329849-d4e31b14-58d0-4f22-9658-928c07ee4b70.png" /></a>
             <br />
             <a href="https://github.com/tiatiahwang">tia</a>
         </td>
         <td align="center" width="120px" height="80px">
-            <a href="https://github.com/jin-hyeok2"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/153522175-7ba28884-a91a-4111-90b1-b5a61a6f457b.png" /></a>
+            <a href="https://github.com/jin-hyeok2"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156328028-d508c5d6-e640-4f1b-82b7-6a367e2db953.png" /></a>
             <br />
             <a href="https://github.com/jin-hyeok2">jin hyeok</a>
         </td>
          <td align="center" width="120px" height="80px">
-            <a href="https://github.com/mubarmig"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/153522175-7ba28884-a91a-4111-90b1-b5a61a6f457b.png" /></a>
+            <a href="https://github.com/mubarmig"><img height="100px" width="100px" src="https://user-images.githubusercontent.com/90431155/156328012-f73933d0-81b4-4555-9c56-39f8d60ce908.png" /></a>
             <br />
             <a href="https://github.com/mubarmig">ho min</a>
         </td>
@@ -53,3 +53,6 @@
         </td>
     </tr>
 </table>
+
+## 😎 More Info 
+➡️ [Donorticon Wiki page](https://github.com/codestates/Donorticon/wiki)
