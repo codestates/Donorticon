@@ -4,7 +4,8 @@ import '@fontsource/baloo-2';
 export const BannerContainer = styled.div`
   margin-top: 75px;
   width: 100%;
-  height: calc(100vh - 75px);
+  /* height: calc(100vh - 75px); */
+  height: 100vh;
   position: relative;
   color: black;
   /* z-index: 1; */
@@ -38,6 +39,7 @@ export const BannerContainer = styled.div`
     }
   }
   @media ${({ theme }) => theme.device.tablet} {
+    padding-top: 75px;
     display: flex;
     flex-direction: column;
     z-index: -1;

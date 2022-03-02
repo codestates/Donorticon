@@ -8,6 +8,9 @@ export const HeaderContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   z-index: 5;
+  position: fixed;
+  top: 0;
+  left: 0;
   @media ${({ theme }) => theme.device.mobile} {
     flex-wrap: wrap;
   }
