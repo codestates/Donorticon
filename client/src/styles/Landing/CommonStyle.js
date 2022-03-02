@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 
 export const LandingContainer = styled.div`
-  border: 1px solid red;
+  border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
+  padding-top: 75px;
   height: 100vh;
   padding: 0 20px;
   display: flex;
