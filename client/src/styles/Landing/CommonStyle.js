@@ -20,4 +20,14 @@ export const TextBox = styled.div`
   font-size: 40px;
   font-weight: 700;
   margin-bottom: 100px;
+  @media ${({ theme }) => theme.device.tablet} {
+    margin-bottom: 0;
+    font-size: 30px;
+    margin-bottom: ${(props) => (props.last ? '50px' : '0')};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    font-size: 22px;
+    margin-top: 50px;
+    margin-bottom: 0;
+  }
 `;

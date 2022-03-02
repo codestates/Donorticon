@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
+  background-color: #fff;
   height: 75px;
   width: 100%;
   display: flex;
