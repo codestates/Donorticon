@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: [clientUrl],
+    origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'DELETE', 'PUT'],
   }),
@@ -30,7 +30,7 @@ app.use('/', router);
 const HTTPS_PORT = process.env.HTTPS_PORT || 4000;
 
 let server;
-if (fs.existsSync('../key.pem') && fs.existsSync('../cert.pem')) {
+if (fs.existsSync('./key.pem') && fs.existsSync('./cert.pem')) {
   //https 서버
   const privateKey = fs.readFileSync(__dirname + '/../key.pem', 'utf8');
   const certificate = fs.readFileSync(__dirname + '/../cert.pem', 'utf8');
