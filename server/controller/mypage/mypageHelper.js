@@ -154,7 +154,6 @@ module.exports = {
       const tokenDecoded = jwt.verify(token, process.env.ACCESS_SECRET);
       const { id } = tokenDecoded;
       const galleryUrl = req.query.url;
-      console.log(req.query.url, id)
       await gallery.destroy({
         where: {
           helper_id: id,
