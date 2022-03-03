@@ -63,20 +63,7 @@ const Mypage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const who = useSelector((state) => state.user.user.who);
-  const [userInfo, setUserInfo] = useState({
-    id: 0,
-    email: '',
-    name: '',
-    mobile: '',
-    slogan: '',
-    description: '',
-    gifticonCategory: [],
-    vulnerable: [],
-    gallery: [],
-    social: '',
-    activity: true,
-    img: '',
-  });
+  const [userInfo, setUserInfo] = useState({});
 
   const [isChanging, setIsChanging] = useState([
     //        giver  helper

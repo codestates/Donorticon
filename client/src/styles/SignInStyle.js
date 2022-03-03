@@ -20,9 +20,10 @@ export const ButtonContainer = styled.div`
 `;
 
 export const SocialBox = styled.div`
+  box-sizing: border-box;
   width: 100%;
   cursor: pointer;
-  margin: 10px 0;
+  margin-top: ${(props) => (props.kakao ? '20px' : '10px')};
   padding: 10px 0;
   border: 1px solid ${({ theme }) => theme.color.main};
   display: grid;

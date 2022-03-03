@@ -16,6 +16,7 @@ export const HelperCategoryBox = styled.div`
   justify-content: center;
   cursor: pointer;
   @media ${({ theme }) => theme.device.tablet} {
+    overflow-y: hidden;
     overflow-x: scroll;
     display: inline-block;
     white-space: nowrap;

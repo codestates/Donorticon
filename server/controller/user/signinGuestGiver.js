@@ -12,18 +12,23 @@ module.exports = async (req, res) => {
       user_type: 1,
       img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
     });
-    console.log(giverGuestCreated);
     const giverGuestFinder = await giver.findOne({
       where: { email: giverEmail },
       attributes: { exclude: ['password', 'createdAt', 'updatedAt'] },
     });
     const giverGuestInfo = giverGuestFinder.dataValues;
     if (giverGuestCreated) {
-      const accessToken = jwt.sign(giverGuestInfo, process.env.ACCESS_SECRET, {
+      const giverGuestInfoForToken = {
+        id: giverGuestInfo.id,
+        user_type: giverGuestInfo.user_type
+      }
+      const accessToken = jwt.sign(
+        giverGuestInfoForToken, process.env.ACCESS_SECRET, {
         expiresIn: '1h',
       });
-      const refreshToken = jwt.sign(
-        giverGuestInfo,
+      const refreshToken = jwt.sign(Object.assign(
+        giverGuestInfoForToken
+        ),
         process.env.REFRESH_SECRET,
         {
           expiresIn: '12h',

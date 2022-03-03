@@ -159,7 +159,7 @@ const SignIn = () => {
                   </div>
                   <div></div>
                 </SocialBox>
-                <SocialBox>
+                <SocialBox kakao>
                   <div></div>
                   <div className="middle">
                     <SocialIcon>

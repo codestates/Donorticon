@@ -16,11 +16,14 @@ export const InputBox = styled.div`
 `;
 
 export const Input = styled.input`
+  all: unset;
   width: 100%;
   padding: 10px 0;
   margin: 10px 0;
+  border-radius: 0;
   border: none;
   border-bottom: 1px solid #000;
+  text-align: left;
   font-size: 18px;
   ::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -31,6 +34,7 @@ export const Input = styled.input`
     margin: 0;
   }
   ::placeholder {
+    text-align: left;
     font-size: 15px;
     color: ${({ theme }) => theme.color.lightGrey};
     @media ${({ theme }) => theme.device.mobile} {
