@@ -88,9 +88,19 @@ export const Counter = styled.div`
       --num: 350;
     }
   }
+
   @media ${({ theme }) => theme.device.tablet} {
-    animation: none;
-    counter-reset: 350;
+    display: none;
+  }
+`;
+
+export const CountNum = styled.div`
+  display: none;
+  color: ${({ theme }) => theme.color.main};
+  font-size: 70px;
+
+  @media ${({ theme }) => theme.device.tablet} {
+    display: block;
   }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 40px;
