@@ -19,11 +19,15 @@ module.exports = async (req, res) => {
     });
     const helperGuestInfo = helperGuestFinder.dataValues;
     if (helperGuestCreated) {
-      const accessToken = jwt.sign(helperGuestInfo, process.env.ACCESS_SECRET, {
+      const helperGuestInfoForToken = {
+        id: helperGuestInfo.id,
+        user_type: helperGuestInfo.user_type
+      }
+      const accessToken = jwt.sign(helperGuestInfoForToken, process.env.ACCESS_SECRET, {
         expiresIn: '1h',
       });
       const refreshToken = jwt.sign(
-        helperGuestInfo,
+        helperGuestInfoForToken,
         process.env.REFRESH_SECRET,
         {
           expiresIn: '12h',
