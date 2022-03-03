@@ -2,8 +2,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getToken, removeToken } from '../../redux/utils/auth';
-import { signOut } from '../../redux/user/userSlice';
+import {
+  getToken,
+  getTokenThunk,
+  refreshTokenThunk,
+  removeToken,
+} from '../../redux/utils/auth';
+import { setName, signOut } from '../../redux/user/userSlice';
 import AddressFinder from '../../component/SignUp/AddressFinder';
 import Tag from '../../component/Mypage/Tag';
 import SideBar from '../../component/SideBar';
@@ -84,7 +89,7 @@ const Mypage = () => {
   const inputList = {
     1: [
       { title: '이메일', name: 'email', errorMessage: '' },
-      { title: '이름', name: 'name', errorMessage: '8자 이상의 이름입니다' },
+      { title: '이름', name: 'name', errorMessage: '9자 이상의 이름입니다' },
       {
         title: '휴대전화',
         name: 'mobile',
@@ -96,7 +101,7 @@ const Mypage = () => {
       {
         title: '이름/단체명',
         name: 'name',
-        errorMessage: '8자 이상의 이름입니다',
+        errorMessage: '9자 이상의 이름입니다',
       },
       {
         title: '휴대전화',
@@ -112,6 +117,7 @@ const Mypage = () => {
     ],
   };
 
+  const token = localStorage.getItem('token');
   const vulnerableHandler = {
     create: async (id) => {
       setUserInfo({
@@ -121,7 +127,7 @@ const Mypage = () => {
       await axios.post(
         '/mypage/vulnerable',
         { vulnerable_id: id },
-        { headers: { Authorization: `Bearer ${await getToken()}` } },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
     },
     delete: async (id) => {
@@ -130,7 +136,7 @@ const Mypage = () => {
         vulnerable: userInfo.vulnerable.filter((el) => el !== id),
       });
       await axios.delete('/mypage/vulnerable', {
-        headers: { Authorization: `Bearer ${await getToken()}` },
+        headers: { Authorization: `Bearer ${token}` },
         params: { vulnerable_id: id },
       });
     },
@@ -145,7 +151,7 @@ const Mypage = () => {
       await axios.post(
         '/mypage/gifticon',
         { gifticon_id: id },
-        { headers: { Authorization: `Bearer ${await getToken()}` } },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
     },
     delete: async (id) => {
@@ -154,7 +160,7 @@ const Mypage = () => {
         gifticonCategory: userInfo.gifticonCategory.filter((el) => el !== id),
       });
       await axios.delete('/mypage/gifticon', {
-        headers: { Authorization: `Bearer ${await getToken()}` },
+        headers: { Authorization: `Bearer ${token}` },
         params: { gifticon_id: id },
       });
     },
@@ -191,7 +197,7 @@ const Mypage = () => {
         `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
         { tag: e.target.id },
         {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
       await axios.put(url, file, {
@@ -211,10 +217,13 @@ const Mypage = () => {
         await axios.put(
           `${who === 1 ? '/mypage/giver' : '/mypage/helper'}`,
           { [e.target.name]: e.target.value },
-          { headers: { Authorization: `Bearer ${await getToken()}` } },
+          { headers: { Authorization: `Bearer ${token}` } },
         );
       } catch (e) {
         console.log(e);
+      }
+      if (e.target.name === 'name') {
+        dispatch(setName(e.target.value));
       }
     } else {
       handleError(e, true);
@@ -240,7 +249,7 @@ const Mypage = () => {
     await axios.put(
       '/mypage/helper',
       { address: address },
-      { headers: { Authorization: `Bearer ${await getToken()}` } },
+      { headers: { Authorization: `Bearer ${token}` } },
     );
   };
 
@@ -248,7 +257,7 @@ const Mypage = () => {
     if (userInfo.gallery.length >= 2) {
       try {
         const { data } = await axios.delete('/mypage/helper', {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
           params: { url: e.target.src },
         });
         setUserInfo({
@@ -266,7 +275,7 @@ const Mypage = () => {
     if (e.target.textContent === '네') {
       try {
         await axios.delete('mypage/delete', {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         });
         navigate('/');
         dispatch(signOut());
@@ -289,7 +298,7 @@ const Mypage = () => {
           'mypage/helper/activity',
           { activity: !userInfo.activity },
           {
-            headers: { Authorization: `Bearer ${await getToken()}` },
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
       } catch (e) {}
@@ -301,7 +310,7 @@ const Mypage = () => {
       const { data } = await axios.get(
         `${who === 1 ? '/mypage/giver' : 'mypage/helper'}`,
         {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
         },
       );
       setUserInfo(data);
@@ -312,10 +321,35 @@ const Mypage = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+
   useEffect(() => {
+    verifyingToken();
     setTimeout(() => {
       handleWho();
-    }, 100);
+    }, 500);
     setTimeout(() => {
       setIsLoading(false);
     }, 1500);

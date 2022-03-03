@@ -58,26 +58,23 @@ const Router = () => {
         />
         <Route
           path="/mypage"
-          element={isLoggedIn ? <Mypage /> : <Navigate to="/signin" />}
+          element={isLoggedIn ? <Mypage /> : <Navigate to="/" />}
         />
         <Route path="/verification" element={<Verification />} />
         <Route path="/verifyRedir/:type/:id/:code" element={<VerifyRedir />} />
         <Route
           path="/gifticon"
-          element={isLoggedIn ? <Gifticon /> : <Navigate to="/signin" />}
+          element={isLoggedIn ? <Gifticon /> : <Navigate to="/" />}
         />
         <Route
           path="/gifticon/detail/:id"
-          element={isLoggedIn ? <GifticonDetail /> : <Navigate to="/signin" />}
+          element={isLoggedIn ? <GifticonDetail /> : <Navigate to="/" />}
         />
         <Route path="/google/signin" element={<Google />} />
         <Route path="/kakao/signin" element={<KaKao />} />
         <Route path="/helperlist/category/:id" element={<HelperList />} />
         <Route path="/helperlist/detail/:id" element={<HelperDetail />} />
-        <Route
-          path="/dm"
-          element={isLoggedIn ? <DM /> : <Navigate to="/signin" />}
-        />
+        <Route path="/dm" element={isLoggedIn ? <DM /> : <Navigate to="/" />} />
       </Routes>
       <Footer />
     </BrowserRouter>

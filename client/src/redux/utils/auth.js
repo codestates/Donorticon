@@ -1,39 +1,40 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getToken = async () => {
-  const token = localStorage.getItem('token');
-  try {
-    const {
-      data: { rest },
-    } = await axios.get('/auth', {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (rest < 60 * 30) {
+export const getTokenThunk = createAsyncThunk(
+  '/get/auth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
       const {
-        data: { accessToken: newToken },
-      } = await axios.put('/auth', null, {
-        withCredentials: true,
+        data: { rest },
+      } = await axios.get('/auth', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setToken(newToken);
+      return rest;
+    } catch (e) {
+      return rejectWithValue(e);
     }
-  } catch (e) {
-    if (e.response.status === 401) {
-      try {
-        const {
-          data: { accessToken: newToken },
-        } = await axios.put('/auth', null, {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setToken(newToken);
-      } catch (e) {
-        console.log(e);
-      }
+  },
+);
+
+export const refreshTokenThunk = createAsyncThunk(
+  'put/auth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const expiredToken = localStorage.getItem('token');
+      const {
+        data: { accessToken: token },
+      } = await axios.put('/auth', null, {
+        headers: { Authorization: `Bearer ${expiredToken}` },
+      });
+      setToken(token);
+    } catch (e) {
+      return rejectWithValue(e);
     }
-  }
-  return token;
-};
+  },
+);
+
 export const removeToken = () => {
   localStorage.removeItem('token');
 };

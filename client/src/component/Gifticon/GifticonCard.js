@@ -11,7 +11,7 @@ import {
 } from '../../styles/CardStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 import noimage from '../../img/noimg.png';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 
 const NOIMAGE = noimage;
 
@@ -26,10 +26,11 @@ const GifticonCard = ({ data, name }) => {
   const [textStyle, setTextStyle] = useState('');
 
   const handleClick = async () => {
+    const token = localStorage.getItem('token');
     const {
       data: { gifticonInfo, thanksImgUrl },
     } = await axios.get(`/gifticon/detail/${id}`, {
-      headers: { Authorization: `Bearer ${await getToken()}` },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     dispatch(
@@ -70,8 +71,33 @@ const GifticonCard = ({ data, name }) => {
       setTextStyle(2);
     }
   };
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
 
-  useEffect(() => getBtnText(), [data]);
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        // console.log('can not refresh');
+        console.log(e);
+      }
+    }
+  };
+  useEffect(() => {
+    verifyingToken();
+    getBtnText();
+  }, [data]);
 
   return (
     <CardBox onClick={handleClick}>

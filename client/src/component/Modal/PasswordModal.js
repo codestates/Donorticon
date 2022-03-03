@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import InputSet from '../InputComponent';
 import { sha256 } from 'js-sha256';
@@ -11,9 +11,11 @@ import {
   ModalButton,
   PasswordModalFrame,
 } from '../../styles/Modal/ModalStyle';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
+import { useDispatch } from 'react-redux';
 
 const PasswordModal = ({ modalCloser }) => {
+  const dispatch = useDispatch();
   const [passwordChanger, setPasswordChanger] = useState({
     password: '',
     newPassword: '',
@@ -57,6 +59,34 @@ const PasswordModal = ({ modalCloser }) => {
     },
   ];
 
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+
+  useEffect(() => {
+    verifyingToken();
+  }, []);
+
   return (
     <ModalBackground
       id="8"
@@ -85,6 +115,7 @@ const PasswordModal = ({ modalCloser }) => {
           <ModalButton
             id="8"
             onClick={async (e) => {
+              const token = localStorage.getItem('token');
               if (passwordChanger.password === passwordChanger.newPassword) {
                 setErrorMessage('현재 비밀번호와 새로운 비밀번호가 같습니다');
                 return;
@@ -102,7 +133,7 @@ const PasswordModal = ({ modalCloser }) => {
                     },
                     {
                       headers: {
-                        Authorization: `Bearer ${await getToken()}`,
+                        Authorization: `Bearer ${token}`,
                       },
                     },
                   );

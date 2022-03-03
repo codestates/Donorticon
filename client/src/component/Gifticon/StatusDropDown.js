@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AiOutlineDownSquare } from 'react-icons/ai';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import ModalV2 from '../Modal/ModalV2';
 import {
@@ -44,6 +44,7 @@ const StatusDropDown = () => {
   };
 
   const handleStatus = async (e) => {
+    const token = localStorage.getItem('token');
     const updatedText = e.target.innerText;
 
     let statusName;
@@ -69,7 +70,7 @@ const StatusDropDown = () => {
           status: statusName,
         },
         {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
 
@@ -99,6 +100,7 @@ const StatusDropDown = () => {
   };
 
   const handleRejected = async (e, textMessage) => {
+    const token = localStorage.getItem('token');
     if (e.target.textContent === '네') {
       dispatch(
         setInfo({
@@ -117,7 +119,7 @@ const StatusDropDown = () => {
             helperId,
           },
           {
-            headers: { Authorization: `Bearer ${await getToken()}` },
+            headers: { Authorization: `Bearer ${token}` },
           },
         );
 
@@ -142,6 +144,32 @@ const StatusDropDown = () => {
       setIsUsed(false);
     }
   };
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+  useEffect(() => {
+    verifyingToken();
+  }, []);
 
   return (
     <>

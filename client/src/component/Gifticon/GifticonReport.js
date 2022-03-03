@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   ReportButton,
@@ -8,7 +8,7 @@ import {
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import ModalV2 from '../Modal/ModalV2';
 import noaccess from '../../img/noaccess.png';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 
 const NOACCESS_IMG = noaccess;
 
@@ -24,6 +24,7 @@ const GifticonReport = () => {
   };
 
   const handleReport = async (e) => {
+    const token = localStorage.getItem('token');
     if (e.target.textContent === '네') {
       const {
         data: { report, status },
@@ -31,7 +32,7 @@ const GifticonReport = () => {
         `/report/${gifticon.id}`,
         {},
         {
-          headers: { Authorization: `Bearer ${await getToken()}` },
+          headers: { Authorization: `Bearer ${token}` },
         },
       );
       if (status === 'reported') {
@@ -50,6 +51,32 @@ const GifticonReport = () => {
       setReportModal(false);
     }
   };
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+  useEffect(() => {
+    verifyingToken();
+  }, []);
   return (
     <ReportButtonBox>
       {gifticon.status !== '사용함' && !gifticon.report && who === 2 && (

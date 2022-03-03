@@ -137,7 +137,7 @@ const SignUpHelper = () => {
             setIsValid(validList);
             return !(e.target.value.length <= 8);
           },
-          errorMessage: '8자 이상의 이름입니다',
+          errorMessage: '9자 이상의 이름입니다',
         },
         {
           title: '비밀번호',

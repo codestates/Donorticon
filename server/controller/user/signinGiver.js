@@ -21,14 +21,14 @@ module.exports = async (req, res) => {
           giverInfoForToken,
           process.env.ACCESS_SECRET,
           {
-            expiresIn: '1h',
+            expiresIn: '31m',
           },
         );
         const refreshToken = jwt.sign(
           giverInfoForToken,
           process.env.REFRESH_SECRET,
           {
-            expiresIn: '12h',
+            expiresIn: '1m',
           },
         );
         const info = giverInfo;
