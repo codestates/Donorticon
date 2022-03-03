@@ -6,9 +6,7 @@ export const signInGiver = createAsyncThunk(
   '/signin/giver',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/signin/giver', payload, {
-        withCredentials: true,
-      });
+      const response = await axios.post('/signin/giver', payload, {});
       const data = response.data;
       if (response.status === 200) {
         setToken(data.accessToken);
@@ -24,9 +22,7 @@ export const signInHelper = createAsyncThunk(
   '/signin/helper',
   async (payload, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/signin/helper', payload, {
-        withCredentials: true,
-      });
+      const response = await axios.post('/signin/helper', payload, {});
       const data = response.data;
       if (response.status === 200) {
         setToken(data.accessToken);
@@ -43,9 +39,7 @@ export const signInGiverGuest = createAsyncThunk(
   'signin/guest/giver',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/signin/guest/giver', null, {
-        withCredentials: true,
-      });
+      const response = await axios.post('/signin/guest/giver', null, {});
       const data = response.data;
       if (response.status === 200) {
         setToken(data.accessToken);
@@ -61,9 +55,7 @@ export const signInHelperGuest = createAsyncThunk(
   'signin/guest/helper',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post('/signin/guest/helper', null, {
-        withCredentials: true,
-      });
+      const response = await axios.post('/signin/guest/helper', null, {});
       const data = response.data;
       if (response.status === 200) {
         setToken(data.accessToken);

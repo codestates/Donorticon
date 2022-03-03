@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../component/Loader';
 import Pagination from '../../component/Pagination/Pagination';
@@ -28,9 +28,10 @@ import {
   DonateButton,
   NoGifticonMessage,
 } from '../../styles/Gifticon/GifticonStyle';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 
 const Gifticon = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const who = useSelector((state) => state.user.user.who);
   const username = useSelector((state) => state.user.user.name);
@@ -49,12 +50,13 @@ const Gifticon = () => {
   };
 
   const getGifticonList = async () => {
+    const token = localStorage.getItem('token');
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
         {
           headers: {
-            Authorization: `Bearer ${await getToken()}`,
+            Authorization: `Bearer ${token}`,
             Status: statusId,
           },
         },
@@ -79,8 +81,32 @@ const Gifticon = () => {
   };
 
   const [isLoading, setIsLoading] = useState(true);
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
 
   useEffect(() => {
+    verifyingToken();
     setTimeout(() => {
       getGifticonList();
     }, 100);

@@ -8,6 +8,7 @@ import {
   signUpGiver,
   verifyUser,
 } from './userThunk';
+import { refreshTokenThunk } from '../utils/auth';
 
 const initialState = {
   isLoading: false,
@@ -36,6 +37,9 @@ export const userSlice = createSlice({
     },
     setWho: (state, action) => {
       state.user.who = action.payload;
+    },
+    setName: (state, { payload }) => {
+      state.user.name = payload;
     },
   },
   extraReducers: {
@@ -88,6 +92,9 @@ export const userSlice = createSlice({
       state.user.who = payload.type;
       state.user.id = payload.id;
     },
+    [refreshTokenThunk.rejected]: () => {
+      return initialState;
+    },
   },
 });
 
@@ -97,6 +104,6 @@ axios.defaults.baseURL = `${process.env.REACT_APP_SERVER}`;
 
 // 회원가입
 
-export const { signIn, signOut, setUser, setWho } = userSlice.actions;
+export const { signIn, signOut, setUser, setWho, setName } = userSlice.actions;
 
 export default userSlice;

@@ -1,100 +1,55 @@
 const jwt = require('jsonwebtoken');
-const { 
-  giver, 
-  helper, 
-  helper_vulnerable, 
-  helper_gifticon_category, 
-  gifticon, message, 
-  room 
+const {
+  giver,
+  helper,
+  helper_vulnerable,
+  helper_gifticon_category,
+  gifticon,
+  message,
+  room,
 } = require('../../models');
 
 module.exports = {
   signout: async (req, res) => {
-    try {
-      const token = req.cookies.refreshToken;
-      const tokenDecoded = jwt.verify(token, process.env.REFRESH_SECRET);
-      const { id, user_type } = tokenDecoded;
-      if (user_type === 1) { 
-        const giverGuestFinder = await giver.findOne({
+    const token = req.headers.authorization.split(' ')[1];
+    if (token !== 'null') {
+      try {
+        const tokenDecoded = jwt.decode(token);
+        const { id, user_type } = tokenDecoded;
+        const user = user_type === 1 ? giver : helper;
+        const key = user_type === 1 ? 'giver_id' : 'helper_id';
+        const { email } = await user.findOne({
+          raw: true,
           where: {
-            id
-          }
+            id,
+          },
         });
-        const giverGuestInfo = giverGuestFinder.dataValues;
-        if (
-          !giverGuestInfo.password && 
-          giverGuestInfo.email.slice(0, 10) === 'guestGiver' && 
-          giverGuestInfo.email.split('@')[1] === 'donorticon.com'
-          ) {
-          await giver.destroy(
-            {
-              where: { id }
-            }
-          );
-          await gifticon.destroy(
-            {
-              where: { giver_id: id }
-            }
-          );
-          await message.destroy(
-            {
-              where: { giver_id: id }
-            }
-          );
-          await room.destroy(
-            {
-              where: { giver_id: id }
-            }
-          );
-        }
-      } else if (user_type === 2) { 
-        const helperGuestFinder = await helper.findOne({
-          where: {
-            id
+        if (email.split('@') === 'donorticon.com') {
+          user.destry({ where: { id } });
+          gifticon.destroy({ where: { [key]: id } });
+          message.destroy({ where: { [key]: id } });
+          room.destroy({ where: { [key]: id } });
+          if (user_type === 2) {
+            helper_vulnerable.destroy({ where: { [key]: id } });
+            helper_gifticon_category.destroy({ where: { [key]: id } });
           }
-        });
-        const helperGuestInfo = helperGuestFinder.dataValues;
-        if (
-          !helperGuestInfo.password &&
-          helperGuestInfo.email.slice(0, 11) === 'guestHelper' &&
-          helperGuestInfo.email.split('@')[1] === 'donorticon.com') {
-          await helper.destroy(
-            {
-              where: { id }
-            }
-          );
-          await helper_vulnerable.destroy(
-            {
-              where: { helper_id: id }
-            }
-          );
-          await helper_gifticon_category.destroy(
-            {
-              where: { helper_id: id }
-            }
-          );
-          await message.destroy(
-            {
-              where: { helper_id: id }
-            }
-          );
-          await room.destroy(
-            {
-              where: { helper_id: id }
-            }
-          )
-          await gifticon.destroy(
-            {
-              where: { helper_id: id }
-            }
-          )
+        } else {
+          user.update({ refresh_token: null }, { where: { id } });
         }
+        res.status(205).send({ message: 'successfully logged out' });
+      } catch (e) {
+        console.log(e.name, 'e. name');
+        if (e.name === 'TokenExpiredError') {
+          console.log('hi');
+          res
+            .status(205)
+            .send({ message: 'abnormally logged out with token expired' });
+        }
+        console.log(e);
+        res.status(500).send({ message: 'server error' });
       }
-      res.clearCookie('refreshToken');
-      res.status(205).send({ message: 'successfully logged out' });
-    } catch (e) {
-      console.log(e);
-      res.status(500).send({ message: 'server error' });
+    } else {
+      res.status(205).send({ message: 'abnormally logged out' });
     }
   },
 };

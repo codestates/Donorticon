@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { io } from 'socket.io-client';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaImage, FaPaperPlane, FaRegCommentDots } from 'react-icons/fa';
 import ImageUploader from '../../component/Modal/ImageUploader';
 import {
@@ -31,12 +31,13 @@ import {
   RoomIcon,
 } from '../../styles/DM/DMStyle';
 import { FaAngleLeft } from 'react-icons/fa';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 
 const socket = io(process.env.REACT_APP_SERVER);
 socket.on('connect', () => {});
 
 const DM = () => {
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
   const who = user.who;
   const [message, setMessage] = useState('');
@@ -74,8 +75,9 @@ const DM = () => {
   };
 
   const getRooms = async () => {
+    const token = localStorage.getItem('token');
     const roomRequest = await axios.get('/dm', {
-      headers: { token: await getToken(), who: who },
+      headers: { token, who: who },
     });
     setRooms(roomRequest.data.roomList);
   };
@@ -113,7 +115,32 @@ const DM = () => {
     }
   };
 
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+
   useEffect(() => {
+    verifyingToken();
     getRooms();
     handleWidth();
   }, []);

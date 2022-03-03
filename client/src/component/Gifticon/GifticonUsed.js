@@ -16,7 +16,7 @@ import {
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
 import ModalV2 from '../Modal/ModalV2';
-import { getToken } from '../../redux/utils/auth';
+import { getTokenThunk, refreshTokenThunk } from '../../redux/utils/auth';
 
 const BLACK = black;
 const RED = red;
@@ -96,6 +96,7 @@ const GifticonUsed = () => {
   };
 
   const sendPoint = async () => {
+    const token = localStorage.getItem('token');
     const point = clicked.filter((x) => x === true).length;
     try {
       const {
@@ -103,15 +104,40 @@ const GifticonUsed = () => {
       } = await axios.put(
         `/gifticon/detail/${id}`,
         { point, giverId: userId },
-        { headers: { Authorization: `Bearer ${await getToken()}` } },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       dispatch(setPoint(updatedPoint));
     } catch (e) {
       console.log(e);
     }
   };
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
 
-  useEffect(() => getPoint(), []);
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+  useEffect(() => {
+    verifyingToken();
+    getPoint();
+  }, []);
   useEffect(() => sendPoint(), [clicked]);
 
   return (

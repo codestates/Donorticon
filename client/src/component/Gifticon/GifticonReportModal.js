@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ModalBackground, ModalFrame } from '../../styles/Modal/ModalStyle';
 
 import styled from 'styled-components';
@@ -25,13 +25,14 @@ const GifticonReportModal = ({ reportModal, setReportModal }) => {
   };
 
   const handleYes = async () => {
+    const token = localStorage.getItem('token');
     const {
       data: { report, status },
     } = await axios.put(
       `/report/${gifticon.id}`,
       {},
       {
-        headers: { Authorization: `Bearer ${await getToken()}` },
+        headers: { Authorization: `Bearer ${token}` },
       },
     );
     if (status === 'reported') {
@@ -45,6 +46,33 @@ const GifticonReportModal = ({ reportModal, setReportModal }) => {
   const handleNo = () => {
     setReportModal(false);
   };
+  const verifyingToken = async () => {
+    try {
+      const rest = await dispatch(getTokenThunk()).unwrap();
+      if (rest < 60 * 10) {
+        refreshToken();
+      }
+    } catch (e) {
+      if (e.response.status === 401) {
+        refreshToken();
+      }
+    }
+  };
+
+  const refreshToken = async () => {
+    try {
+      await dispatch(refreshTokenThunk()).unwrap();
+    } catch (e) {
+      if (e.response.status === 401) {
+        console.log(e);
+        // console.log('can not refresh');
+      }
+    }
+  };
+
+  useEffect(() => {
+    verifyingToken();
+  });
 
   return (
     <ModalBackground ref={outside} onClick={(e) => handleModalClose(e)}>
