@@ -11,6 +11,8 @@ module.exports = async (req, res) => {
       name: `guestHelper${helperEmailNumber + 1}`,
       user_type: 2,
       img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
+      verification: true,
+      activity: true
     });
     const helperGuestFinder = await helper.findOne({
       where: { email: helperEmail },
