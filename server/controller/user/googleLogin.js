@@ -65,6 +65,7 @@ module.exports = {
             name: user.name === '' ? '' : user.name,
             user_type: 1,
             img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
+            social: true,
           });
           const { id, user_type, name, email } = newGiver.dataValues;
           const giverInfo = { id, user_type, name, email };
