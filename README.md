@@ -4,6 +4,8 @@
 
 [🏠 Donorticon Homepage](https://d3a8nxwlsnbz91.cloudfront.net/)
 
+![main](https://user-images.githubusercontent.com/90431155/156516783-8fb90a4f-b444-4367-8944-44f9d4a17eed.png)
+
 ## 👀 Logo
 ![로고](https://user-images.githubusercontent.com/90431155/153132393-af99f33a-9507-41dc-8860-ef3a41412376.png)
 
