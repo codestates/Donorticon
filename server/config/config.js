@@ -6,21 +6,22 @@ module.exports = {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME || 'donorticon',
-    host: "127.0.0.1",
     dialect: "mysql"
   },
   test: {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME || 'donorticon',
-    host: "127.0.0.1",
+    host: "donorticondb.ctt6ztqvzyip.ap-northeast-2.rds.amazonaws.com",
+    port: "13306",
     dialect: "mysql"
   },
   production: {
     username: process.env.DATABASE_USER,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME || 'donorticon',
-    host: "127.0.0.1",
+    host: "donorticondb.ctt6ztqvzyip.ap-northeast-2.rds.amazonaws.com",
+    port: "13306",
     dialect: "mysql"
   }
 }

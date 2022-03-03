@@ -1,9 +1,10 @@
 module.exports = {
-  signup_giver: require('./signup_giver'),
-  signup_helper: require('./signup_helper'),
-  signin_giver: require('./signin_giver'),
-  signin_helper: require('./signin_helper'),
-
+  signupGiver: require('./signupGiver'),
+  signupHelper: require('./signupHelper'),
+  signinGiver: require('./signinGiver'),
+  signinHelper: require('./signinHelper'),
+  signinGuestGiver: require('./signinGuestGiver'),
+  signinGuestHelper: require('./signinGuestHelper'),
   googleLogin: require('./googleLogin'),
   kakaoLogin: require('./kakaoLogin'),
   signout: require('./signout'),

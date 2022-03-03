@@ -3,12 +3,16 @@ import reset from 'styled-reset';
 
 const GlobalStyle = createGlobalStyle`
     ${reset}
+    @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;800&display=swap');
     * {
         box-sizing: border-box;
     }
     html,body {
-        font-size: 15px;
+        font-size: 18px;
         font-family: --apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        @media (max-width: 414px) {
+            font-size: 15px;
+         }
     }
     a {
         text-decoration:none;

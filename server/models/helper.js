@@ -1,7 +1,5 @@
 'use strict';
-const {
-  Model
-} = require('sequelize');
+const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class helper extends Model {
     /**
@@ -13,22 +11,26 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  helper.init({
-    user_type: DataTypes.STRING,
-    name: DataTypes.STRING,
-    email: DataTypes.STRING,
-    password: DataTypes.STRING,
-    mobile: DataTypes.STRING,
-    img: DataTypes.STRING,
-    slogan: DataTypes.STRING,
-    description: DataTypes.STRING,
-    location: DataTypes.STRING,
-    activity: DataTypes.BOOLEAN,
-    verification: DataTypes.BOOLEAN,
-    verify_hash: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'helper',
-  });
+  helper.init(
+    {
+      user_type: DataTypes.INTEGER,
+      name: DataTypes.STRING,
+      email: DataTypes.STRING,
+      password: DataTypes.STRING,
+      mobile: DataTypes.STRING,
+      img: DataTypes.STRING,
+      slogan: DataTypes.STRING,
+      description: DataTypes.STRING,
+      location: DataTypes.STRING,
+      activity: DataTypes.BOOLEAN,
+      verification: DataTypes.BOOLEAN,
+      verify_hash: DataTypes.STRING,
+      refresh_token: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: 'helper',
+    },
+  );
   return helper;
 };

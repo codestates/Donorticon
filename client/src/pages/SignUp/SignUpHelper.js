@@ -1,38 +1,54 @@
 import { useEffect, useState } from 'react';
-import ProgressBar from '../../component/ProgressBar';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { sha256 } from 'js-sha256';
+import AddressFinder from '../../component/SignUp/AddressFinder';
+import ProgressBar from '../../component/SignUp/ProgressBar';
+import InputSet from '../../component/InputComponent';
+import {
+  ButtonContainer,
+  CheckBoxContainer,
+  SignUpButton,
+  SignUpContainer,
+  CheckBox,
+  ContentContainer,
+  ContentTitle,
+  Label,
+  Box,
+  ContentBox,
+} from '../../styles/SignUpStyle';
 import {
   Container,
+  SubContainer,
+  SubTitle,
   Title,
-  ContentGuider,
-  ContentBox,
-  ButtonContainer,
-  SignUpButton,
-  Content,
-  Input,
-  Label,
-  CheckList,
-} from '../../styles/SignUpStyle';
-import { ErrorMessage } from '../../component/Input';
-import InputSet from '../../component/Input';
-import sha256 from 'js-sha256';
-import axios from 'axios';
-import Adresser from '../../component/AdressFinder';
-import { useNavigate } from 'react-router-dom';
-import { setSocialUser } from '../../redux/user/userSlice';
-import { useDispatch } from 'react-redux';
+} from '../../styles/utils/Container';
+import {
+  ErrorMessage,
+  InputBox,
+  InputContainer,
+  InputLabel,
+} from '../../styles/utils/Input';
+import { signUpHelper, verifyUser } from '../../redux/user/userThunk';
+import { unwrapResult } from '@reduxjs/toolkit';
+import Loader from '../../component/Loader';
 
 const SignUpHelper = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { prev } = useSelector((state) => state.page);
   const [helperInfo, setHelperInfo] = useState({
     email: '',
     password: '',
+    passwordCheck: '',
     name: '',
     mobile: '',
     location: '',
     vulnerableName: [],
     gifticonCategoryName: [],
   });
+
+  const [errorMessage, setErrormessage] = useState('');
 
   const [isValid, setIsValid] = useState([
     false, // 도움이필요한 사람
@@ -48,6 +64,9 @@ const SignUpHelper = () => {
   const [page, setPage] = useState(0);
   const [buttonAble, setButtonAble] = useState(false);
   const [isCheckStart, setIsCheckStart] = useState(false);
+  const [displayError, setDisplayError] = useState(false);
+  const [delay, setDelay] = useState(false);
+
   const signUpForm = [
     {
       contentGuide: '어떤 분들을 돕고 계신가요?',
@@ -61,7 +80,7 @@ const SignUpHelper = () => {
         '정신질환자',
         '그 외',
       ],
-      errorMessage: '최소 하나를 선택해 주세요',
+      errorMessage: '1개 이상 선택해주세요',
     },
     {
       contentGuide: '무엇을 지원 받고 싶으신가요?',
@@ -76,12 +95,12 @@ const SignUpHelper = () => {
         '레저/스포츠',
         '상품권/영화/도서',
       ],
-      errorMessage: '최소 하나를 선택해 주세요',
+      errorMessage: '1개 이상 선택해주세요',
     },
     {
       contentGuide: '주요 활동지역을 알려주세요',
       callback: (adress) => {
-        setHelperInfo(Object.assign(helperInfo, { location: adress }));
+        setHelperInfo({ ...helperInfo, location: adress });
         const validList = [...isValid];
         validList[2] = true;
         setIsValid(validList);
@@ -96,14 +115,15 @@ const SignUpHelper = () => {
           title: '이메일',
           inputPlaceHolder: '이메일을 입력해주세요',
           callback: (e) => {
-            setHelperInfo(Object.assign(helperInfo, { email: e.target.value }));
+            setHelperInfo({ ...helperInfo, email: e.target.value });
             const form = new RegExp(
               '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
             );
             const validList = [...isValid];
-            validList[3] = form.test(e.target.value);
+            validList[3] =
+              form.test(e.target.value) && e.target.value.length <= 50;
             setIsValid(validList);
-            return !form.test(e.target.value);
+            return !(form.test(e.target.value) && e.target.value.length <= 50);
           },
           errorMessage: '이메일 형식이 맞지 않습니다',
         },
@@ -111,7 +131,7 @@ const SignUpHelper = () => {
           title: '이름',
           inputPlaceHolder: '8자 이내로 입력해주세요',
           callback: (e) => {
-            setHelperInfo(Object.assign(helperInfo, { name: e.target.value }));
+            setHelperInfo({ ...helperInfo, name: e.target.value });
             const validList = [...isValid];
             validList[4] = e.target.value.length <= 8;
             setIsValid(validList);
@@ -123,22 +143,30 @@ const SignUpHelper = () => {
           title: '비밀번호',
           inputPlaceHolder: '비밀번호를 입력해주세요',
           callback: (e) => {
-            setHelperInfo(
-              Object.assign(helperInfo, { password: sha256(e.target.value) }),
-            );
+            setHelperInfo({ ...helperInfo, password: sha256(e.target.value) });
             const validList = [...isValid];
-            validList[5] = e.target.value.length >= 1;
+            validList[5] =
+              e.target.value.length >= 1 &&
+              sha256(e.target.value) === helperInfo.passwordCheck;
             setIsValid(validList);
-            return !(e.target.value.length >= 1);
+            return !(
+              e.target.value.length >= 1 &&
+              sha256(e.target.value) === helperInfo.passwordCheck
+            );
           },
-          errorMessage: '비밀번호를 입력해주세요',
+          errorMessage: '비밀번호를 확인해주세요',
         },
         {
           title: '비밀번호 확인',
           inputPlaceHolder: '비밀번호를 확인해주세요',
           callback: (e) => {
+            setHelperInfo({
+              ...helperInfo,
+              passwordCheck: sha256(e.target.value),
+            });
             const validList = [...isValid];
             validList[6] = sha256(e.target.value) === helperInfo.password;
+            if (validList[6] && !validList[5]) validList[5] = true;
             setIsValid(validList);
             return sha256(e.target.value) !== helperInfo.password;
           },
@@ -148,9 +176,7 @@ const SignUpHelper = () => {
           title: '휴대전화',
           inputPlaceHolder: '010-0000-0000 형식으로 입력해주세요',
           callback: (e) => {
-            setHelperInfo(
-              Object.assign(helperInfo, { mobile: e.target.value }),
-            );
+            setHelperInfo({ ...helperInfo, mobile: e.target.value });
             const form = new RegExp('^[0-9]{3}-[0-9]{3,4}-[0-9]{4}$');
             const validList = [...isValid];
             validList[7] = e.target.value ? form.test(e.target.value) : true;
@@ -193,6 +219,42 @@ const SignUpHelper = () => {
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      signUp();
+    }
+  };
+
+  const signUp = async () => {
+    setIsCheckStart(isValid.includes(false));
+    if (!isValid.includes(false)) {
+      try {
+        const result = await dispatch(signUpHelper(helperInfo));
+        const id = unwrapResult(result);
+        setDelay(true);
+        const userInfo = {
+          email: helperInfo.email,
+          name: helperInfo.name,
+          type: 2,
+          id,
+        };
+        await dispatch(verifyUser(userInfo));
+        setDelay(false);
+        navigate(`../../verification`);
+      } catch (e) {
+        if (e.status === 409) {
+          setErrormessage('이미 회원가입 된 이메일입니다');
+        } else if (e.status === 500) {
+          setErrormessage('다시 시도해주세요');
+        } else if (e.status === 422) {
+          setErrormessage('입력 정보를 확인해 주세요');
+        }
+      }
+    } else {
+      setErrormessage('입력 정보를 확인해 주세요');
+    }
+  };
+
   const handleButton = async (e) => {
     if (e.target.textContent === '다음') {
       if (page <= 2) {
@@ -201,91 +263,117 @@ const SignUpHelper = () => {
         setButtonAble(page === 2 ? true : isValid[page + 1]);
       }
     } else if (e.target.textContent === '이전') {
-      if (page >= 1) {
+      if (page === 0) {
+        if (prev.includes('verifyRedir')) {
+          navigate('/');
+        } else {
+          navigate(prev);
+        }
+      } else if (page >= 1) {
         setPercent(percent - 25);
         setPage(page - 1);
         setButtonAble(isValid[page - 1]);
       }
     } else {
-      console.log(isValid);
-      setIsCheckStart(isValid.includes(false));
-      if (!isValid.includes(false)) {
-        try {
-          const result = await axios.post('/signup/helper', helperInfo);
-          console.log(result);
-          if (result) {
-            const userInfo = {
-              email: helperInfo.email,
-              name: helperInfo.name,
-              type: 2,
-              id: result.data.id,
-            };
-            dispatch(setSocialUser(userInfo));
-            await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {
-              headers: userInfo,
-            });
-            navigate(`../../verification`);
-          }
-        } catch (e) {
-          console.log('error');
-          console.log(e);
-        }
-      }
+      signUp();
     }
   };
 
   useEffect(() => {
-    setPercent(percent + 25);
+    if (percent === 0) {
+      setPercent(percent + 25);
+    }
   }, []);
 
   return (
     <Container>
-      <ContentBox>
-        <Title>H E L P E R</Title>
-        <ProgressBar percent={percent} />
-        <ContentGuider>{signUpForm[page].contentGuide}</ContentGuider>
-        {page < 2 ? (
-          signUpForm[page].lists.map((list, idx) => (
-            <CheckList key={page * 7 + idx}>
-              <Input
-                id={page * 7 + idx}
-                name={signUpForm[page].name}
-                value={list}
-                type={'checkbox'}
-                onClick={handleCheckBox}
-                defaultChecked={helperInfo[signUpForm[page].name].includes(
-                  list,
-                )}
-              />
-              <Label htmlFor={page * 7 + idx}>{list}</Label>
-            </CheckList>
-          ))
-        ) : page === 2 ? (
-          <Adresser callback={signUpForm[2].callback} />
-        ) : (
-          signUpForm[page].input.map((card, idx) => (
-            <InputSet
-              key={idx}
-              title={card.title}
-              inputPlaceHolder={card.inputPlaceHolder}
-              callback={card.callback}
-              errorMessage={card.errorMessage}
-              check={isCheckStart}
-            />
-          ))
-        )}
-        <ErrorMessage>
-          {page < 3 && !isValid[page] ? signUpForm[page].errorMessage : ''}
-        </ErrorMessage>
-        <ButtonContainer>
-          <SignUpButton onClick={handleButton} disabled={page === 0}>
-            이전
-          </SignUpButton>
-          <SignUpButton onClick={handleButton} disabled={!buttonAble}>
-            {page === 3 ? '가입하기' : '다음'}
-          </SignUpButton>
-        </ButtonContainer>
-      </ContentBox>
+      {delay ? (
+        <Loader />
+      ) : (
+        <SignUpContainer>
+          <SubContainer>
+            <Title>HELPER</Title>
+            <SubTitle>회원가입</SubTitle>
+          </SubContainer>
+          <ContentContainer>
+            <ProgressBar percent={percent} />
+            <ContentTitle>{signUpForm[page].contentGuide}</ContentTitle>
+            {page < 2 ? (
+              <ContentBox line>
+                {signUpForm[page].lists.map((list, idx) => (
+                  <CheckBoxContainer key={page * 7 + idx}>
+                    <Box>
+                      <CheckBox
+                        key={page * 7 + idx}
+                        id={page * 7 + idx}
+                        name={signUpForm[page].name}
+                        value={list}
+                        onClick={handleCheckBox}
+                        defaultChecked={helperInfo[
+                          signUpForm[page].name
+                        ].includes(list)}
+                      />
+                      <Label htmlFor={page * 7 + idx}>{list}</Label>
+                    </Box>
+                  </CheckBoxContainer>
+                ))}
+              </ContentBox>
+            ) : page === 2 ? (
+              <ContentBox>
+                <AddressFinder
+                  callback={signUpForm[2].callback}
+                  location={helperInfo.location}
+                />
+              </ContentBox>
+            ) : (
+              <ContentBox>
+                <InputContainer signup>
+                  {signUpForm[page].input.map((card, idx) => (
+                    <InputBox key={idx}>
+                      <InputLabel>
+                        {card.title === '휴대전화'
+                          ? card.title
+                          : `${card.title} *`}
+                      </InputLabel>
+                      <InputSet
+                        key={idx}
+                        title={card.title}
+                        inputPlaceHolder={card.inputPlaceHolder}
+                        callback={card.callback}
+                        errorMessage={card.errorMessage}
+                        check={isCheckStart}
+                        handleKeyPress={handleKeyPress}
+                      />
+                    </InputBox>
+                  ))}
+                </InputContainer>
+              </ContentBox>
+            )}
+          </ContentContainer>
+          <ErrorMessage center style={{ paddingTop: '40px' }}>
+            {page < 3 && !isValid[page] && displayError
+              ? signUpForm[page].errorMessage
+              : ''}
+          </ErrorMessage>
+          <ErrorMessage>{errorMessage}</ErrorMessage>
+          <ButtonContainer>
+            <SignUpButton onClick={handleButton}>이전</SignUpButton>
+            <SignUpButton
+              onClick={(e) => {
+                if (buttonAble) {
+                  handleButton(e);
+                  setDisplayError(false);
+                } else {
+                  setDisplayError(true);
+                }
+              }}
+              buttonAble
+            >
+              {page === 3 ? '가입하기' : '다음'}
+            </SignUpButton>
+          </ButtonContainer>
+        </SignUpContainer>
+      )}
     </Container>
   );
 };

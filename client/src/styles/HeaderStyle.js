@@ -2,11 +2,17 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
+  background-color: #fff;
   height: 75px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  z-index: 5;
+  position: fixed;
+  top: 0;
+  left: 0;
   @media ${({ theme }) => theme.device.mobile} {
     flex-wrap: wrap;
   }
@@ -41,6 +47,7 @@ export const NavContainer = styled.div`
 export const MobileNavContainer = styled.div`
   display: none;
   position: relative;
+
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
   }
@@ -69,6 +76,8 @@ export const ListContainer = styled.ul`
     transition: 0.5s all;
     margin: 0;
     background-color: #fff;
+    background-color: ${({ theme }) => theme.color.progressBar};
+    border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
   }
 `;
 
@@ -76,6 +85,9 @@ export const ListItem = styled.li`
   list-style: none;
   padding: 0 20px;
   cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
   @media ${({ theme }) => theme.device.mobile} {
     margin: 20px 0;
     width: 100%;

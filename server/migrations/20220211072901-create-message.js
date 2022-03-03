@@ -6,41 +6,48 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       room_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       giver_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       helper_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       gifticon_id: {
         allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       message: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       img: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      type: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      thanksImg: {
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('messages');
-  }
+  },
 };

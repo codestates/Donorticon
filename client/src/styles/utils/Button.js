@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Button = styled.button`
-  width: 80%;
+  width: 100%;
   border: 1px solid ${({ theme }) => theme.color.main};
   cursor: pointer;
   padding: 10px 0;

@@ -1,41 +1,47 @@
-import React, { useEffect, useState } from 'react';
-import { sha256 } from 'js-sha256';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button } from '../../styles/utils/Button';
-import { Input } from '../../styles/utils/Input';
-import axios from 'axios';
-import { ErrorMessage } from '../../component/Input';
-import { socialSignIn } from '../../redux/user/userSlice';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const Container = styled.div`
-  width: 300px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+import { useDispatch, useSelector } from 'react-redux';
+import sha256 from 'js-sha256';
+import {
+  signInGiver,
+  signInGiverGuest,
+  signInHelper,
+  signInHelperGuest,
+  verifyUser,
+} from '../../redux/user/userThunk';
+import { FcGoogle } from 'react-icons/fc';
+import { FaComment } from 'react-icons/fa';
+import InputSet from '../../component/InputComponent';
+import Loader from '../../component/Loader';
+import {
+  ButtonContainer,
+  SignInContainer,
+  SocialBox,
+  SocialIcon,
+  SocialText,
+} from '../../styles/SignInStyle';
+import {
+  Container,
+  SubContainer,
+  SubTitle,
+  Title,
+} from '../../styles/utils/Container';
+import { Button } from '../../styles/utils/Button';
+import { InputContainer, ErrorMessage } from '../../styles/utils/Input';
 
 const SignIn = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { prev } = useSelector((state) => state.page);
   const who = useSelector((state) => state.user.user.who);
-  /* state.user = {
-    isLoggedIn: false,
-    user: {
-      email: '',
-      name: '',
-      who: '',
-    },
-  } */
+
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
 
   const [errorMessage, setErrorMessage] = useState('');
+  const [delay, setDelay] = useState(false);
 
   const handleInput = (e) => {
     setUserInfo(
@@ -48,38 +54,57 @@ const SignIn = () => {
     );
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleSignin();
+    }
+  };
+
   const handleSignin = async () => {
     if (userInfo.email !== '' && userInfo.password !== '') {
       try {
-        const result = await axios.post(`/signin/${who}`, userInfo);
-        const { accessToken } = result.data;
-        // console.log(result);
-        dispatch(socialSignIn());
-        localStorage.setItem('token', accessToken);
-        if (who === 'helper') {
-          navigate('/mypage');
-        } else {
-          navigate(prev);
+        if (who === 1) {
+          await dispatch(signInGiver(userInfo)).unwrap();
+        } else if (who === 2) {
+          await dispatch(signInHelper(userInfo)).unwrap();
         }
       } catch (e) {
-        switch (e.response.status) {
-          case 404: {
-            setErrorMessage('email 및 비밀번호를 잘못 입력했습니다');
-          }
+        if (e.response.status === 401) {
+          setDelay(true);
+          const { id, email, type } = e.response.data;
+          const veriInfo = { id, email, type };
+          await dispatch(verifyUser(veriInfo));
+          setDelay(false);
+          navigate('/verification');
+        }
+        if (e.response.status === 404) {
+          setErrorMessage('이메일 및 비밀번호를 잘못 입력했습니다');
         }
       }
     } else {
-      console.log('inficient params');
+      // console.log('inficient params');
       const form = new RegExp(
         '^[0-9a-zA-Z._%+-]+@[0-9a-zA-Z.-]+\\.[a-zA-Z]{2,6}$',
       );
       if (userInfo.email === '') {
-        setErrorMessage('email을 입력해주세요');
+        setErrorMessage('이메일을 입력해주세요');
       } else if (!form.test(userInfo.email)) {
-        setErrorMessage('email 형식을 확인하세요');
+        setErrorMessage('이메일 형식을 확인하세요');
       } else {
         setErrorMessage('비밀번호를 입력하세요');
       }
+    }
+  };
+
+  const handleGuest = async () => {
+    try {
+      if (who === 1) {
+        await dispatch(signInGiverGuest()).unwrap();
+      } else if (who === 2) {
+        await dispatch(signInHelperGuest()).unwrap();
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 
@@ -92,26 +117,63 @@ const SignIn = () => {
     const KAKAO_LOGIN_URL = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_REST_API}&redirect_uri=${process.env.REACT_APP_KAKAO_REDIRECT_URI}&response_type=code`;
     window.location.assign(KAKAO_LOGIN_URL);
   };
+
   return (
     <Container>
-      <div>이메일</div>
-      <Input name="email" placeholder="이메일" onChange={handleInput} />
-      <div>비밀번호</div>
-      <Input
-        name="password"
-        type={'password'}
-        placeholder="비밀번호"
-        onChange={handleInput}
-      />
-      <ErrorMessage>{errorMessage}</ErrorMessage>
-      <Button onClick={handleSignin}>로그인</Button>
-      <Button>게스트로그인</Button>
-      {who === 'giver' ? (
-        <>
-          <Button onClick={handleGoogle}>구글로그인</Button>
-          <Button onClick={handleKakao}>카카오로그인</Button>
-        </>
-      ) : null}
+      {delay ? (
+        <Loader />
+      ) : (
+        <SignInContainer>
+          <SubContainer>
+            <Title>{who === 1 ? 'GIVER' : 'HELPER'}</Title>
+            <SubTitle>로그인</SubTitle>
+          </SubContainer>
+          <InputContainer>
+            <InputSet
+              title="이메일"
+              name="email"
+              inputPlaceHolder="이메일"
+              callback={handleInput}
+            />
+            <InputSet
+              title="비밀번호"
+              name="password"
+              inputPlaceHolder="비밀번호"
+              callback={handleInput}
+              handleKeyPress={handleKeyPress}
+            />
+            <ErrorMessage center>{errorMessage}</ErrorMessage>
+          </InputContainer>
+          <ButtonContainer>
+            <Button onClick={handleSignin}>로그인</Button>
+            <Button onClick={handleGuest}>게스트로그인</Button>
+            {who === 1 && (
+              <>
+                <SocialBox>
+                  <div></div>
+                  <div className="middle">
+                    <SocialIcon>
+                      <FcGoogle size="18" />
+                    </SocialIcon>
+                    <SocialText onClick={handleGoogle}>구글 로그인</SocialText>
+                  </div>
+                  <div></div>
+                </SocialBox>
+                <SocialBox kakao>
+                  <div></div>
+                  <div className="middle">
+                    <SocialIcon>
+                      <FaComment size="15" color="#181600" />
+                    </SocialIcon>
+                    <SocialText onClick={handleKakao}>카카오 로그인</SocialText>
+                  </div>
+                  <div></div>
+                </SocialBox>
+              </>
+            )}
+          </ButtonContainer>
+        </SignInContainer>
+      )}
     </Container>
   );
 };

@@ -6,50 +6,54 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       user_type: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
       },
-      name: { // 게스트 로그인이 있을 수도 있으므로 allowNull을 아래 전부 표기하지 않았음
-        type: Sequelize.STRING
+      name: {
+        // 게스트 로그인이 있을 수도 있으므로 allowNull을 아래 전부 표기하지 않았음
+        type: Sequelize.STRING,
       },
       email: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       mobile: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       img: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       verification: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       verify_hash: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       black_point: {
-        type: Sequelize.INTEGER
-      },
-      grade_id: {
         type: Sequelize.INTEGER,
+      },
+      social: {
+        type: Sequelize.BOOLEAN,
+      },
+      refresh_token: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('givers');
-  }
+  },
 };

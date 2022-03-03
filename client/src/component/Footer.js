@@ -25,7 +25,7 @@ const Footer = () => {
           <FaGithub size="24" />
         </a>
         <a
-          href="https://github.com/codestates/Donorticon"
+          href="https://www.notion.so/5-K2H2-Donorticon-c44e3d4bedfb4e8a8d02ea5278572a52"
           target="_blank"
           rel="noreferrer noopener"
         >
@@ -47,14 +47,22 @@ const Footer = () => {
         <Content>
           <MemberName>황 지 수</MemberName>
           <MemberPoition>Full-Stack</MemberPoition>
-          <a href="https://github.com/tiatiahwang">
+          <a
+            href="https://github.com/tiatiahwang"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <MemberGithub>GitHub</MemberGithub>
           </a>
         </Content>
         <Content>
           <MemberName>허 진 혁</MemberName>
           <MemberPoition>Front-End</MemberPoition>
-          <a href="https://github.com/Jin-hyeok2">
+          <a
+            href="https://github.com/Jin-hyeok2"
+            target="_blank"
+            rel="noreferrer noopener"
+          >
             <MemberGithub>GitHub</MemberGithub>
           </a>
         </Content>

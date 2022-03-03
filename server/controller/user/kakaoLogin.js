@@ -1,23 +1,21 @@
-'use strict';
-require('dotenv').config();
 const axios = require('axios');
-const { create } = require('domain');
-const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
-const { access } = require('fs');
+const { giver } = require('../../models');
 
 module.exports = {
   getToken: async (req, res) => {
     const code = req.body.code;
     const url = `https://kauth.kakao.com/oauth/token?grant_type=${process.env.KAKAO_GRANT_TYPE}&client_id=${process.env.KAKAO_REST_API}&redirect_uri=${process.env.KAKAO_REDIRECT_URI}&code=${code}&scope=account_email`;
     try {
-      const token = await axios.post(url, {
+      const { data } = await axios.post(url, {
         headers: { 'content-type': 'application/x-www-form-urlencoded' },
       });
-      const data = token.data;
-      res.send(data);
+      //TODO: 나중에 리프레쉬 토큰 설정할때를 위해서 일단 정보 가져오기
+      const { access_token: token, refresh_token } = data;
+      res.status(200).send({ token, message: 'token generated successfully' });
     } catch (e) {
       console.log(e);
+      res.status(400).send({ message: 'bad request' });
     }
   },
   getUser: async (req, res) => {
@@ -33,19 +31,81 @@ module.exports = {
           Authorization: `Bearer ${token}`,
         },
       });
-      const { nickname: name } = kakaoUser.data.properties;
-      const { email } = kakaoUser.data.kakao_account;
 
-      const [newGiver, created] = await giver.findOrCreate({
-        where: {
-          email,
-          name: name ? name : '',
-          user_type: 'giver_kakao',
-        },
-      });
-      const userInfo = newGiver.dataValues;
-      const accessToken = jwt.sign(userInfo, process.env.ACCESS_SECRET);
-      res.send({ accessToken, userInfo });
+      if (token && kakaoUser) {
+        const user = kakaoUser.data;
+        // const { nickname: name } = kakaoUser.data.properties;
+
+        const giverInfo = await giver.findOne({
+          raw: true,
+          where: { email: user.kakao_account.email },
+          attributes: ['id', 'user_type', 'name', 'email'],
+        });
+
+        if (giverInfo) {
+          const { id, user_type } = giverInfo;
+          const accessToken = jwt.sign(
+            { id, user_type },
+            process.env.ACCESS_SECRET,
+            {
+              expiresIn: '1h',
+            },
+          );
+          const refreshToken = jwt.sign(
+            { id, user_type },
+            process.env.REFRESH_SECRET,
+            {
+              expiresIn: '12h',
+            },
+          );
+          await giver.update(
+            { refresh_token: refreshToken },
+            {
+              where: { id },
+            },
+          );
+          res.status(200).send({
+            accessToken,
+            giverInfo,
+            message: 'successfully get user information',
+          });
+        } else {
+          const newGiver = await giver.create({
+            email: user.kakao_account.email,
+            name:
+              user.properties.nickname === '' ? '' : user.properties.nickname,
+            user_type: 1,
+            img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
+            social: true,
+          });
+          const { id, user_type, email, name } = newGiver.dataValues;
+          const giverInfo = { id, user_type, email, name };
+          const accessToken = jwt.sign(
+            { id, user_type },
+            process.env.ACCESS_SECRET,
+          );
+          const refreshToken = jwt.sign(
+            { id, user_type },
+            process.env.REFRESH_SECRET,
+            {
+              expiresIn: '12h',
+            },
+          );
+          await giver.update(
+            { refresh_token: refreshToken },
+            {
+              where: { id },
+            },
+          );
+          res.status(200).send({
+            accessToken,
+            giverInfo,
+            message: 'successfully get user information',
+          });
+        }
+      } else {
+        res.status(404).send({ data: null, message: 'user not found' });
+      }
     } catch (e) {
       console.log(e);
     }
