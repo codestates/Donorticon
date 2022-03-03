@@ -88,6 +88,10 @@ export const Counter = styled.div`
       --num: 350;
     }
   }
+  @media ${({ theme }) => theme.device.tablet} {
+    animation: none;
+    counter-reset: 350;
+  }
   @media ${({ theme }) => theme.device.mobile} {
     font-size: 40px;
   }

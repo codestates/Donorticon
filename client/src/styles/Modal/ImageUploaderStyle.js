@@ -18,6 +18,7 @@ export const ImgUploadContainer = styled.div`
 
 export const ImgWrapper = styled.div`
   width: 80%;
+  height: 250px;
   margin-top: 50px;
   padding: 25px 0;
   border: 1px dashed ${({ theme }) => theme.color.lightGrey};
@@ -32,7 +33,7 @@ export const ImgWrapper = styled.div`
 `;
 
 export const Img = styled.img`
-  height: 100%;
+  height: 250px;
 `;
 
 export const DragNDropWrapper = styled.div``;

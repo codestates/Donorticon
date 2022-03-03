@@ -15,7 +15,6 @@ export const signInGiver = createAsyncThunk(
         return data.info;
       }
     } catch (e) {
-      // console.log('thunck file', e.response.data);
       return rejectWithValue(e);
     }
   },
@@ -35,7 +34,6 @@ export const signInHelper = createAsyncThunk(
       } else {
       }
     } catch (e) {
-      // console.log(e.response);
       return rejectWithValue(e);
     }
   },
@@ -96,7 +94,6 @@ export const signUpHelper = createAsyncThunk(
   async (payload, { rejectWithValue }) => {
     try {
       const response = await axios.post('/signup/helper', payload);
-      console.log(response.data.id);
       if (response.status === 201) {
         return response.data.id;
       }
