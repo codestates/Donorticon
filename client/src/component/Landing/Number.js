@@ -8,14 +8,15 @@ import {
   TopText,
   BottomText,
   Text,
+  CountNum,
 } from '../../styles/Landing/NumberStyle';
 import heart from '../../img/landing4.png';
 
 const HEART = heart;
 
 const Number = () => {
-  const maxScroll = document.body.scrollHeight;
   const [scrollPosition, setScrollPosition] = useState(0);
+  const maxScroll = document.body.scrollHeight;
   const handleScroll = () => {
     const position = window.pageYOffset;
     setScrollPosition(position);
@@ -40,6 +41,7 @@ const Number = () => {
         <CounterBox>
           <TopText>
             {(maxScroll * 3) / 5 < scrollPosition && <Counter />}
+            <CountNum>350</CountNum>
           </TopText>
           <BottomText bottom>개</BottomText>
         </CounterBox>
