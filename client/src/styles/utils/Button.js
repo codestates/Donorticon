@@ -2,10 +2,14 @@ import styled from 'styled-components';
 
 export const Button = styled.button`
   width: 100%;
-  background-color: #fff;
+  border: 1px solid ${({ theme }) => theme.color.main};
   cursor: pointer;
-  padding: 0.8em;
-  margin: 0.8em 0em;
-  border: 1px solid #000;
+  padding: 10px 0;
+  margin: 10px 0;
   text-align: center;
+  &:hover {
+    background: #fff;
+    background-color: ${({ theme }) => theme.color.main};
+    transition: 0.7s;
+  }
 `;

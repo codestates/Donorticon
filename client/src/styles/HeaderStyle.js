@@ -2,12 +2,20 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
+  border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
+  background-color: #fff;
   height: 75px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 20px;
+  z-index: 5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  @media ${({ theme }) => theme.device.mobile} {
+    flex-wrap: wrap;
+  }
 `;
 
 export const StyledLink = styled(Link)`
@@ -21,6 +29,7 @@ export const LogoContainer = styled.div`
   width: 100px;
   height: 52px;
   cursor: pointer;
+  padding-left: 20px;
   @media ${({ theme }) => theme.device.mobile} {
     width: 80px;
     height: 41px;
@@ -35,17 +44,10 @@ export const NavContainer = styled.div`
   }
 `;
 
-export const Nav = styled.div`
-  padding-right: 20px;
-  cursor: pointer;
-  @media ${({ theme }) => theme.device.mobile} {
-    padding-right: 0;
-    padding-bottom: 20px;
-  }
-`;
-
 export const MobileNavContainer = styled.div`
   display: none;
+  position: relative;
+
   @media ${({ theme }) => theme.device.mobile} {
     display: flex;
   }
@@ -54,14 +56,40 @@ export const MobileNavContainer = styled.div`
 export const MobileNav = styled.div`
   display: none;
   @media ${({ theme }) => theme.device.mobile} {
-    display: flex;
+    display: block;
     padding-right: 20px;
     width: 100%;
   }
 `;
 
-export const MobileNavContent = styled.div`
-  display: ${(props) => (props.isToggled ? 'flex' : 'none')};
-  flex-direction: column;
-  width: 100%;
+export const ListContainer = styled.ul`
+  list-style: none;
+  display: flex;
+
+  @media ${({ theme }) => theme.device.mobile} {
+    display: ${(props) => (props.isToggled ? 'flex' : 'none')};
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    top: 75px;
+    transition: 0.5s all;
+    margin: 0;
+    background-color: #fff;
+    background-color: ${({ theme }) => theme.color.progressBar};
+    border-bottom: 1px solid ${({ theme }) => theme.color.progressBar};
+  }
+`;
+
+export const ListItem = styled.li`
+  list-style: none;
+  padding: 0 20px;
+  cursor: pointer;
+  &:hover {
+    color: ${({ theme }) => theme.color.main};
+  }
+  @media ${({ theme }) => theme.device.mobile} {
+    margin: 20px 0;
+    width: 100%;
+  }
 `;

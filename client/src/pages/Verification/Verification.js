@@ -1,42 +1,40 @@
-import styled from 'styled-components';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
+import { verifyUser } from '../../redux/user/userThunk';
 import {
-  login,
-  setEmail,
-  setPassword,
-  userSelector,
-} from '../../redux/user/userSlice';
-
-
-const Button = styled.div`
-  width: 10%;
-  border-bottom: 1px solid black;
-  cursor: pointer;
-  font-size: 30px;
-  &:hover {
-    color: black;
-  }
-`;
+  VeriContainer,
+  WelcomeText,
+  VeriButton,
+  WelcomeDescription,
+} from '../../styles/Verification/VerificationStyle';
 
 const Verification = () => {
-  
-  const state = useSelector(userSelector);
-  const headers = {
-    email: `${state.email}`,
-    type: `${state.type}`,
-    id: `${state.id}`
-  }
-
-  const handleVerification = async () => {
-    const request = await axios.get(`${process.env.REACT_APP_SERVER}/verification`, {headers: headers});
-  }
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state.user.user);
+  const userInfo = {
+    email: state.email,
+    type: state.who,
+    id: state.id,
+  };
+  const handleVerification = () => {
+    // const request = await axios.get(
+    //   `${process.env.REACT_APP_SERVER}/verification`,
+    //   { headers: headers },
+    // );
+    dispatch(verifyUser(userInfo));
+  };
 
   return (
-    <div>
-      <div><img src={`${process.env.REACT_APP_BUCKET}/aintgottime.jpg`}></img></div>
-      <Button onClick={handleVerification}>Request a verification email</Button>
-    </div>
+    <VeriContainer>
+      <WelcomeText>Donorticon 회원이 되신 것을 환영합니다 😊</WelcomeText>
+      <WelcomeText small>이메일 인증을 위한 메일이 발송되었습니다.</WelcomeText>
+      <WelcomeDescription>
+        가입하신 메일 주소의 메일함을 확인해주세요.
+      </WelcomeDescription>
+      <WelcomeDescription>
+        인증 메일을 받지 못하셨다면 아래의 버튼을 눌러주세요!
+      </WelcomeDescription>
+      <VeriButton onClick={handleVerification}>인증 메일 다시 요청</VeriButton>
+    </VeriContainer>
   );
 };
 
