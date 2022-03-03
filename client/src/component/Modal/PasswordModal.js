@@ -11,6 +11,7 @@ import {
   ModalButton,
   PasswordModalFrame,
 } from '../../styles/Modal/ModalStyle';
+import { getToken } from '../../redux/utils/auth';
 
 const PasswordModal = ({ modalCloser }) => {
   const [passwordChanger, setPasswordChanger] = useState({
@@ -101,9 +102,7 @@ const PasswordModal = ({ modalCloser }) => {
                     },
                     {
                       headers: {
-                        Authorization: `Bearer ${localStorage.getItem(
-                          'token',
-                        )}`,
+                        Authorization: `Bearer ${await getToken()}`,
                       },
                     },
                   );

@@ -1,6 +1,5 @@
 const { helper } = require('../../models');
 const jwt = require('jsonwebtoken');
-const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   try {
@@ -12,7 +11,7 @@ module.exports = async (req, res) => {
       user_type: 2,
       img: 'https://s3.ap-northeast-2.amazonaws.com/donorticon.shop/defaultprofile.jpg',
       verification: true,
-      activity: true
+      activity: true,
     });
     const helperGuestFinder = await helper.findOne({
       where: { email: helperEmail },
@@ -30,7 +29,12 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         },
       );
-      res.cookie('refreshToken', refreshToken, cookieOption);
+      await giver.update(
+        { refresh_token: refreshToken },
+        {
+          where: { id: helperGuestInfo.id },
+        },
+      );
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',

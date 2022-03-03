@@ -49,7 +49,6 @@ const GifticonDetail = () => {
           <ContentTitle>기프티콘 상세정보</ContentTitle>
           <ContentBox>
             <ImageBox>
-              {/* TODO: 이미지 클릭시 이미지 확대 */}
               <CardGallery
                 style={{ width: '100%', height: '300px' }}
                 src={img}

@@ -8,6 +8,7 @@ import {
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
 import ModalV2 from '../Modal/ModalV2';
 import noaccess from '../../img/noaccess.png';
+import { getToken } from '../../redux/utils/auth';
 
 const NOACCESS_IMG = noaccess;
 
@@ -24,15 +25,13 @@ const GifticonReport = () => {
 
   const handleReport = async (e) => {
     if (e.target.textContent === '네') {
-      const token = localStorage.getItem('token');
-
       const {
         data: { report, status },
       } = await axios.put(
         `/report/${gifticon.id}`,
         {},
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${await getToken()}` },
         },
       );
       if (status === 'reported') {

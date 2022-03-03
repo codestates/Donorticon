@@ -12,6 +12,7 @@ import logo from '../../img/logo.png';
 import ButtonModal from '../Modal/ButtonModal';
 import MobileHeader from './MobileHeader';
 import WebHeader from './WebHeader';
+import { removeToken } from '../../redux/utils/auth';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ const Header = () => {
       });
       if (result.status === 205) {
         navigate('/');
-        localStorage.removeItem('token');
+        removeToken();
         dispatch(signOut());
       }
     } catch (e) {

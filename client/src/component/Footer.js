@@ -25,7 +25,7 @@ const Footer = () => {
           <FaGithub size="24" />
         </a>
         <a
-          href="https://github.com/codestates/Donorticon"
+          href="https://www.notion.so/5-K2H2-Donorticon-c44e3d4bedfb4e8a8d02ea5278572a52"
           target="_blank"
           rel="noreferrer noopener"
         >

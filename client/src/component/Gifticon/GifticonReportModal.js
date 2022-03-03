@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { setInfo } from '../../redux/gifticon/gifticonSlice';
+import { getToken } from '../../redux/utils/auth';
 
 const Button = styled.div`
   padding: 10px;
@@ -24,15 +25,13 @@ const GifticonReportModal = ({ reportModal, setReportModal }) => {
   };
 
   const handleYes = async () => {
-    const token = localStorage.getItem('token');
-
     const {
       data: { report, status },
     } = await axios.put(
       `/report/${gifticon.id}`,
       {},
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${await getToken()}` },
       },
     );
     if (status === 'reported') {

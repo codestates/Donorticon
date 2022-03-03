@@ -36,7 +36,6 @@ const StatusDropDown = () => {
   const [isUsed, setIsUsed] = useState(false);
 
   const filtered = gifticonStatus.filter((x) => x.name !== status);
-  const token = getToken();
 
   const handleActive = () => {
     if (status !== '신고됨' || !isUsed) {
@@ -70,7 +69,7 @@ const StatusDropDown = () => {
           status: statusName,
         },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${await getToken()}` },
         },
       );
 
@@ -118,7 +117,7 @@ const StatusDropDown = () => {
             helperId,
           },
           {
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${await getToken()}` },
           },
         );
 

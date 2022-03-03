@@ -1,6 +1,5 @@
 const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
-const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   try {
@@ -29,7 +28,12 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         },
       );
-      res.cookie('refreshToken', refreshToken, cookieOption);
+      await giver.update(
+        { refresh_token: refreshToken },
+        {
+          where: { id: giverGuestInfo.id },
+        },
+      );
       res.status(200).json({
         accessToken,
         messeage: 'successfully signed in',

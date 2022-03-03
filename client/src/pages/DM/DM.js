@@ -31,6 +31,7 @@ import {
   RoomIcon,
 } from '../../styles/DM/DMStyle';
 import { FaAngleLeft } from 'react-icons/fa';
+import { getToken } from '../../redux/utils/auth';
 
 const socket = io(process.env.REACT_APP_SERVER);
 socket.on('connect', () => {});
@@ -74,7 +75,7 @@ const DM = () => {
 
   const getRooms = async () => {
     const roomRequest = await axios.get('/dm', {
-      headers: { token: localStorage.getItem('token'), who: who },
+      headers: { token: await getToken(), who: who },
     });
     setRooms(roomRequest.data.roomList);
   };

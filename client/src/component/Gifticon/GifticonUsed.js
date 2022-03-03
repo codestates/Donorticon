@@ -16,6 +16,7 @@ import {
 import black from '../../img/point_black.png';
 import red from '../../img/point_red.png';
 import ModalV2 from '../Modal/ModalV2';
+import { getToken } from '../../redux/utils/auth';
 
 const BLACK = black;
 const RED = red;
@@ -95,7 +96,6 @@ const GifticonUsed = () => {
   };
 
   const sendPoint = async () => {
-    const token = localStorage.getItem('token');
     const point = clicked.filter((x) => x === true).length;
     try {
       const {
@@ -103,7 +103,7 @@ const GifticonUsed = () => {
       } = await axios.put(
         `/gifticon/detail/${id}`,
         { point, giverId: userId },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${await getToken()}` } },
       );
       dispatch(setPoint(updatedPoint));
     } catch (e) {

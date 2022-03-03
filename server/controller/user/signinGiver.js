@@ -1,9 +1,7 @@
 const { giver } = require('../../models');
 const jwt = require('jsonwebtoken');
-const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
-  console.log(cookieOption);
   const { email, password } = req.body;
   try {
     const giverFinder = await giver.findOne({
@@ -14,16 +12,32 @@ module.exports = async (req, res) => {
       res.status(404).json({ message: 'invalid user' });
     } else {
       const giverInfo = giverFinder.dataValues;
-      const giverInfoForToken = { id: giverInfo.id, user_type: giverInfo.user_type };
+      const giverInfoForToken = {
+        id: giverInfo.id,
+        user_type: giverInfo.user_type,
+      };
       if (giverInfo.verification) {
-        const accessToken = jwt.sign(giverInfoForToken, process.env.ACCESS_SECRET, {
-          expiresIn: '1h',
-        });
-        const refreshToken = jwt.sign(giverInfoForToken, process.env.REFRESH_SECRET, {
-          expiresIn: '12h',
-        });
+        const accessToken = jwt.sign(
+          giverInfoForToken,
+          process.env.ACCESS_SECRET,
+          {
+            expiresIn: '1h',
+          },
+        );
+        const refreshToken = jwt.sign(
+          giverInfoForToken,
+          process.env.REFRESH_SECRET,
+          {
+            expiresIn: '12h',
+          },
+        );
         const info = giverInfo;
-        res.cookie('refreshToken', refreshToken, cookieOption);
+        await giver.update(
+          { refresh_token: refreshToken },
+          {
+            where: { id: giverInfo.id },
+          },
+        );
         res
           .status(200)
           .json({ info, accessToken, messeage: 'successfully signed in' });

@@ -1,7 +1,6 @@
 const axios = require('axios');
 const jwt = require('jsonwebtoken');
 const { giver } = require('../../models');
-const { cookieOption } = require('../auth/token');
 
 module.exports = {
   getToken: async (req, res) => {
@@ -53,7 +52,12 @@ module.exports = {
               expiresIn: '12h',
             },
           );
-          res.cookie('refreshToken', refreshToken, cookieOption);
+          await giver.update(
+            { refresh_token: refreshToken },
+            {
+              where: { id },
+            },
+          );
           res.status(200).send({
             accessToken,
             giverInfo,
@@ -83,7 +87,12 @@ module.exports = {
               expiresIn: '12h',
             },
           );
-          res.cookie('refreshToken', refreshToken, cookieOption);
+          await giver.update(
+            { refresh_token: refreshToken },
+            {
+              where: { id },
+            },
+          );
           res.status(200).send({
             accessToken,
             giverInfo,

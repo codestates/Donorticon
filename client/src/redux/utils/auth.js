@@ -3,21 +3,36 @@ import axios from 'axios';
 export const getToken = async () => {
   const token = localStorage.getItem('token');
   try {
-    await axios.get('/auth', { headers: { Authorization: `Bearer ${token}` } });
-    return token;
+    const {
+      data: { rest },
+    } = await axios.get('/auth', {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (rest < 60 * 30) {
+      const {
+        data: { accessToken: newToken },
+      } = await axios.put('/auth', null, {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setToken(newToken);
+    }
   } catch (e) {
     if (e.response.status === 401) {
       try {
         const {
-          data: { accessToken: token },
-        } = await axios.put('/auth', null, { withCredentials: true });
-        setToken(token);
+          data: { accessToken: newToken },
+        } = await axios.put('/auth', null, {
+          withCredentials: true,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setToken(newToken);
       } catch (e) {
         console.log(e);
       }
     }
   }
-  return localStorage.getItem('token');
+  return token;
 };
 export const removeToken = () => {
   localStorage.removeItem('token');

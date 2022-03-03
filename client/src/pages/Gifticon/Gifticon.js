@@ -28,6 +28,7 @@ import {
   DonateButton,
   NoGifticonMessage,
 } from '../../styles/Gifticon/GifticonStyle';
+import { getToken } from '../../redux/utils/auth';
 
 const Gifticon = () => {
   const navigate = useNavigate();
@@ -48,13 +49,12 @@ const Gifticon = () => {
   };
 
   const getGifticonList = async () => {
-    const token = localStorage.getItem('token');
     try {
       const { data } = await axios.get(
         `/gifticon?page=${currentPage}&limit=9`,
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${await getToken()}`,
             Status: statusId,
           },
         },

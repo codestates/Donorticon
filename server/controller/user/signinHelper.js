@@ -1,6 +1,5 @@
 const { helper } = require('../../models');
 const jwt = require('jsonwebtoken');
-const { cookieOption } = require('../auth/token');
 
 module.exports = async (req, res) => {
   const { email, password } = req.body;
@@ -33,7 +32,10 @@ module.exports = async (req, res) => {
           },
         );
         const info = helperInfo;
-        res.cookie('refreshToken', refreshToken, cookieOption);
+        await helper.update(
+          { refresh_token: refreshToken },
+          { where: { id: helperInfo.id } },
+        );
         res.status(200).json({
           info,
           accessToken,

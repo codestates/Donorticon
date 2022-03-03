@@ -40,6 +40,9 @@ module.exports = {
       social: {
         type: Sequelize.BOOLEAN,
       },
+      refresh_token: {
+        type: Sequelize.STRING,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

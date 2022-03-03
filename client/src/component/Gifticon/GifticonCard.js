@@ -11,6 +11,7 @@ import {
 } from '../../styles/CardStyle';
 import { GifticonStatusButton } from '../../styles/Gifticon/GifticonStyle';
 import noimage from '../../img/noimg.png';
+import { getToken } from '../../redux/utils/auth';
 
 const NOIMAGE = noimage;
 
@@ -25,11 +26,10 @@ const GifticonCard = ({ data, name }) => {
   const [textStyle, setTextStyle] = useState('');
 
   const handleClick = async () => {
-    const token = localStorage.getItem('token');
     const {
       data: { gifticonInfo, thanksImgUrl },
     } = await axios.get(`/gifticon/detail/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${await getToken()}` },
     });
 
     dispatch(
