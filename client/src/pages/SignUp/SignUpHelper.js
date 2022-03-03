@@ -227,27 +227,31 @@ const SignUpHelper = () => {
 
   const signUp = async () => {
     setIsCheckStart(isValid.includes(false));
-    try {
-      const result = await dispatch(signUpHelper(helperInfo));
-      const id = unwrapResult(result);
-      setDelay(true);
-      const userInfo = {
-        email: helperInfo.email,
-        name: helperInfo.name,
-        type: 2,
-        id,
-      };
-      await dispatch(verifyUser(userInfo));
-      setDelay(false);
-      navigate(`../../verification`);
-    } catch (e) {
-      if (e.status === 409) {
-        setErrormessage('이미 회원가입 된 이메일입니다');
-      } else if (e.status === 500) {
-        setErrormessage('다시 시도해주세요');
-      } else if (e.status === 422) {
-        setErrormessage('입력 정보를 확인해 주세요');
+    if (!isValid.includes(false)) {
+      try {
+        const result = await dispatch(signUpHelper(helperInfo));
+        const id = unwrapResult(result);
+        setDelay(true);
+        const userInfo = {
+          email: helperInfo.email,
+          name: helperInfo.name,
+          type: 2,
+          id,
+        };
+        await dispatch(verifyUser(userInfo));
+        setDelay(false);
+        navigate(`../../verification`);
+      } catch (e) {
+        if (e.status === 409) {
+          setErrormessage('이미 회원가입 된 이메일입니다');
+        } else if (e.status === 500) {
+          setErrormessage('다시 시도해주세요');
+        } else if (e.status === 422) {
+          setErrormessage('입력 정보를 확인해 주세요');
+        }
       }
+    } else {
+      setErrormessage('입력 정보를 확인해 주세요');
     }
   };
 
