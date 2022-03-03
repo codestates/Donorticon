@@ -69,6 +69,11 @@ export const RoomBottom = styled.div`
   @media ${({ theme }) => theme.device.mobile} {
     display: ${(props) => props.mobileDialogue && 'none'};
   }
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `;
 
 export const ReceiverWrapper = styled.div`
@@ -112,6 +117,11 @@ export const DialogueWrapper = styled.div`
   flex-direction: column-reverse;
   height: 90%;
   padding: 20px;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
   @media ${({ theme }) => theme.device.mobile} {
     padding: 10px;
   }

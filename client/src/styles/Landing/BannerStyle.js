@@ -18,7 +18,6 @@ export const BannerContainer = styled.div`
       clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
   }
-
   @keyframes outer-left {
     from {
       transform: translateX(50%);
@@ -57,10 +56,10 @@ export const TextBox = styled.div`
   padding-top: 50px;
   @media ${({ theme }) => theme.device.tablet} {
     height: 40%;
+    animation: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
     height: 30%;
-    animation: none;
     padding-top: 0;
     padding-left: 20px;
     display: flex;
@@ -71,7 +70,7 @@ export const TextBox = styled.div`
 export const TitleInner = styled.div`
   display: inline-block;
   animation: inner-left 1s 1s ease both;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     animation: none;
   }
 `;
@@ -82,9 +81,9 @@ export const Top = styled.div`
 
   @media ${({ theme }) => theme.device.tablet} {
     font-size: 35px;
+    animation: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    animation: none;
     font-size: 25px;
   }
 `;
@@ -99,9 +98,9 @@ export const Bottom = styled.div`
   @media ${({ theme }) => theme.device.tablet} {
     font-size: 70px;
     letter-spacing: 2px;
+    animation: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
-    animation: none;
     font-size: 50px;
   }
 `;
@@ -110,7 +109,7 @@ export const TopInner = styled.div`
   display: inline-block;
   animation: inner-left 1s 1s ease both,
     text-clip 1s 0s cubic-bezier(0.5, 0, 0.1, 1) both;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     animation: none;
   }
 `;
@@ -118,7 +117,7 @@ export const TopInner = styled.div`
 export const BottomInner = styled.div`
   animation: text-clip 1s 0s cubic-bezier(0.5, 0, 0.1, 1) both;
   font-weight: 800;
-  @media ${({ theme }) => theme.device.mobile} {
+  @media ${({ theme }) => theme.device.tablet} {
     animation: none;
   }
 `;
@@ -144,10 +143,10 @@ export const ImageBox = styled.div`
     display: flex;
     align-items: flex-end;
     margin-bottom: 50px;
+    animation: none;
   }
   @media ${({ theme }) => theme.device.mobile} {
     height: 70%;
-    animation: none;
     margin-bottom: 125px;
   }
   img {
