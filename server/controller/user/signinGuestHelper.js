@@ -21,11 +21,15 @@ module.exports = async (req, res) => {
     if (helperGuestCreated) {
       const helperGuestInfoForToken = {
         id: helperGuestInfo.id,
-        user_type: helperGuestInfo.user_type
-      }
-      const accessToken = jwt.sign(helperGuestInfoForToken, process.env.ACCESS_SECRET, {
-        expiresIn: '1h',
-      });
+        user_type: helperGuestInfo.user_type,
+      };
+      const accessToken = jwt.sign(
+        helperGuestInfoForToken,
+        process.env.ACCESS_SECRET,
+        {
+          expiresIn: '1h',
+        },
+      );
       const refreshToken = jwt.sign(
         helperGuestInfoForToken,
         process.env.REFRESH_SECRET,
@@ -33,7 +37,7 @@ module.exports = async (req, res) => {
           expiresIn: '12h',
         },
       );
-      await giver.update(
+      await helper.update(
         { refresh_token: refreshToken },
         {
           where: { id: helperGuestInfo.id },
