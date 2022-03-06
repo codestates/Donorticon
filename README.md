@@ -6,14 +6,13 @@
 
 ![main](https://user-images.githubusercontent.com/90431155/156516783-8fb90a4f-b444-4367-8944-44f9d4a17eed.png)
 
-## 👀 Logo
-![로고](https://user-images.githubusercontent.com/90431155/153132393-af99f33a-9507-41dc-8860-ef3a41412376.png)
-
 ## ✨ Feature
-* 키워드 선택으로 원하는 분야에 기프티콘을 기부할 수 있습니다.  
-* 해쉬태그 선택으로 해당 기프티콘이 필요한 Helper에게 기프티콘을 기부할 수 있습니다.  
-* Helper는 취약계층 지원활동에 기프티콘을 사용할 수 있습니다.  
-* Helper는 감사인사와 인증사진을 Giver에게 남길 수 있습니다.  
+- 다양한 Helper들을 분야별로 필터링해서 기부할 수 있어요.
+- 기프티콘을 종류별로 필터링해서 해당 기프티콘이 필요한 Helper에게 기프티콘을 기부할 수 있어요.
+- Giver는 기프티콘을 기부하며 Helper에게 감사메세지를 함께 보낼 수 있어요.
+- Helper는 취약계층 지원활동에 기부받은 기프티콘을 사용할 수 있어요.
+- 사용할 수 없는 기프티콘을 기부 받은 Helper는 해당 기프티콘을 신고할 수 있어요.
+- 기프티콘을 사용한 후 Helper는 Giver에게 사용 인증 사진과 감사메세지를 보낼 수 있어요.
 
 ## 🙌🏻 Team K2H2
 
@@ -58,3 +57,4 @@
 
 ## 😎 More Info 
 ➡️ [Donorticon Wiki page](https://github.com/codestates/Donorticon/wiki)
+➡️ [Donorticon Notion page](https://www.notion.so/5-K2H2-Donorticon-c44e3d4bedfb4e8a8d02ea5278572a52#463588e1d24b467c86a9daa66f05e0ce)
