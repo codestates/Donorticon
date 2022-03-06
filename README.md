@@ -56,5 +56,5 @@
 </table>
 
 ## 😎 More Info 
-➡️ [Donorticon Wiki page](https://github.com/codestates/Donorticon/wiki)
-➡️ [Donorticon Notion page](https://www.notion.so/5-K2H2-Donorticon-c44e3d4bedfb4e8a8d02ea5278572a52#463588e1d24b467c86a9daa66f05e0ce)
+➡️ [Wiki](https://github.com/codestates/Donorticon/wiki)   
+➡️ [Notion](https://www.notion.so/5-K2H2-Donorticon-c44e3d4bedfb4e8a8d02ea5278572a52#463588e1d24b467c86a9daa66f05e0ce)
